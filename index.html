@@ -115,8 +115,6 @@
         @keyframes glitch { 0%{transform:translate(0)} 20%{transform:translate(-2px,2px)} 60%{transform:translate(2px,-2px)} 100%{transform:translate(0)} }
         .null-el { animation: glitch 2s infinite; }
 
-        .developer-el { background:linear-gradient(135deg,#16a34a,#15803d)!important; color:#fff!important; }
-        .time-traveler-el { background:linear-gradient(135deg,#0ea5e9,#1d4ed8)!important; color:#fff!important; animation:shine 3s linear infinite; }
 
         .melt-bar { position:absolute; bottom:0; left:0; height:3px; background:#ef4444; z-index:2; transition:width 0.3s; border-radius:0 0 12px 12px; }
 
@@ -201,8 +199,6 @@
         .combo-entry { padding:6px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; font-size:0.85rem; }
         .combo-entry:last-child { border-bottom:none; }
 
-        /* Secret counter */
-        #secretCounter { display:none; position:fixed; bottom:10px; left:10px; background:rgba(0,0,0,0.7); color:#fff; font-size:0.7rem; padding:6px 12px; border-radius:99px; z-index:50; }
     </style>
 </head>
 <body>
@@ -245,7 +241,7 @@
         <!-- Loading -->
         <div id="loader" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.5);backdrop-filter:blur(3px)">
             <div class="p-6 rounded-2xl text-center" style="background:var(--bg-card);border:1px solid var(--border)">
-                <div class="w-8 h-8 border-3 rounded-full animate-spin mx-auto mb-3" style="border-color:var(--gold);border-top-color:transparent"></div>
+                <div class="w-8 h-8 rounded-full animate-spin mx-auto mb-3" style="border:3px solid var(--gold);border-top-color:transparent"></div>
                 <p id="loaderText" class="text-sm" style="color:var(--text-secondary)">Combining...</p>
             </div>
         </div>
@@ -277,9 +273,6 @@
         </section>
     </div>
 
-    <!-- Hidden secret triggers -->
-    <button id="secretOpBtn" class="opacity-0 fixed top-0 left-0 w-4 h-4 overflow-hidden" tabindex="0" aria-label="Secret">S</button>
-    <div id="secretCounter"></div>
 
     <!-- Export Modal -->
     <div id="exportModal" class="modal-overlay"><div class="modal-box">
@@ -381,8 +374,6 @@
             <h3>v2.0</h3>
             <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-new">NEW</span> Frozen & Hot element mechanics</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Secret elements (Opacity, Exploiter, Developer, Time Traveler)</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Valid Combination secret path</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Ending screen & rank system</li>
             </ul>
         </div>
@@ -414,14 +405,9 @@
 
         const SPECIAL_ELEMENTS = {
             null: { name:'Null', emoji:'⚫', color:'bg-green-600', description:'The void from which all things emerge', isBasic:true },
-            question: { name:'3?', emoji:'❓', color:'bg-orange-500', description:'Wait. What?', isQuestion:true },
             error: { name:'Error', emoji:'⚠️', color:'bg-red-600', description:'Error Code -1 | Unknown Error', isError:true },
             fatalError: { name:'Fatal Error', emoji:'💀', color:'bg-red-900', description:'... _ _ _ ...', isFatalError:true },
             blank: { name:'Blank', emoji:'💭', color:'bg-gray-300', description:'A void between elements', isBlank:true },
-            opacity: { name:'Opacity', emoji:'👁️‍🗨️', color:'bg-black', description:'Hidden element found by those who search beyond', isSecret:true, excludeFromRank:true },
-            exploiter: { name:'Exploiter', emoji:'🕵️', color:'bg-black', description:'Found by those who know the code', isSecret:true, excludeFromRank:true },
-            developer: { name:'Developer', emoji:'👨‍💻', color:'bg-green-700', description:'The creator, found by exploring corners', isSecret:true, isDeveloper:true, excludeFromRank:true },
-            timeTraveler: { name:'Time Traveler', emoji:'⏳', color:'bg-blue-600', description:'Found by rapidly clicking reset', isSecret:true, isTimeTraveler:true, excludeFromRank:true },
             validCombination: { name:'Valid Combination', emoji:'✅', color:'bg-teal-600', description:'Opposite of invalid — think outside the box', isSecret:true, isValidCombination:true, excludeFromRank:true }
         };
 
@@ -483,8 +469,8 @@
             '9+1':{name:'10',emoji:'🔟',color:'bg-orange-500',description:'Ten units'},
             '3+Ice':{name:'Error',emoji:'⚠️',color:'bg-red-600',description:'Error Code -1 | Unknown Error',isError:true},
             'Error+Error':{name:'Fatal Error',emoji:'💀',color:'bg-red-900',description:'... _ _ _ ...',isFatalError:true},
-            'Fatal Error+Philosophy':{name:'Logical Paradox',emoji:'🔄',color:'bg-purple-800',description:'Immovable logic meets unstoppable contradiction',isSecret:true},
-            'Logical Paradox+Null':{name:'Undefined Behavior',emoji:'⚠️',color:'bg-yellow-600',description:'Operations outside well-defined behavior',isSecret:true},
+            'Fatal Error+Philosophy':{name:'Logical Paradox',emoji:'🔄',color:'bg-purple-800',description:'Immovable logic meets unstoppable contradiction',isSecret:true,excludeFromRank:true},
+            'Logical Paradox+Null':{name:'Undefined Behavior',emoji:'⚠️',color:'bg-yellow-600',description:'Operations outside well-defined behavior',isSecret:true,excludeFromRank:true},
             'Undefined Behavior+Balance':{name:'Invalid Combination??',emoji:'❌',color:'bg-red-800',description:"A combination that shouldn't exist",isSecret:true,excludeFromRank:true},
             'Invalid Combination??+Opposite':{name:'Valid Combination',emoji:'✅',color:'bg-teal-600',description:'Opposite of invalid combination',isSecret:true,isValidCombination:true,excludeFromRank:true},
             'Dust+Water':{name:'Ink',emoji:'🖋️',description:'Liquid used for writing'},
@@ -550,7 +536,6 @@
             'Ocean+Lightning':{name:'Underwater Volcano',emoji:'🌋',description:'Submarine eruption'},
             'Stone+Stone':{name:'Boulder',emoji:'🪨',description:'A very large rock'},
             'Boulder+Opposite':{name:'Pebble',emoji:'🪨',description:'A very not large rock'},
-            'Pebble+Human':{name:'Bella',emoji:'👉🏻🪨',description:'One of our play-testers',isFinal:true},
             'Boulder+Mountain':{name:'Avalanche',emoji:'❄️',description:'Mass of snow and rock falling'},
             'Wind+Fire':{name:'Wildfire',emoji:'🔥',description:'Uncontrolled fire',isHot:true},
             'Water+Glass':{name:'Aquarium',emoji:'🐠',description:'Container for aquatic life'},
@@ -584,8 +569,6 @@
             'Opposite+Fear':{name:'Fun',emoji:'🎮',description:'Enjoyment and amusement',color:'bg-orange-400'},
             'Tool+Fun':{name:'Media',emoji:'📱',description:'Mass communication',color:'bg-green-600',isBasic:true},
             'Media+Media':{name:'Game',emoji:'🎲',description:'Activity for diversion',color:'bg-indigo-400'},
-            'Media+Human':{name:'Play-Tester',emoji:'🎲',description:'A person testing for bugs',color:'bg-indigo-400'},
-            'Play-Tester+Human':{name:'Amelia',emoji:'👧🏽',description:'One of our play-testers',isFinal:true},
             'Close+Opposite':{name:'Far',emoji:'🔭',description:'At a great distance',color:'bg-blue-300'},
             'Game+Human':{name:'Close',emoji:'🤝',description:'Near in space or time',color:'bg-purple-300'},
             'Far+Close':{name:'Dot',emoji:'⚫',description:'A small round mark',color:'bg-green-600',isBasic:true},
@@ -617,6 +600,7 @@
             'Vegetable+Water':{name:'Soup',emoji:'🍲',description:'Liquid food from boiling'},
             'Animal+Water':{name:'Fish',emoji:'🐠',description:'Water creature',color:'bg-blue-400'},
             'Melon+Water':{name:'Watermelon',emoji:'🍉',description:'Large fruit with green rind'},
+            'Watermelon+Youtuber':{name:'MulMelon',emoji:'🍉',description:'YouTube channel for Roblox content',color:'bg-amber-500',isFinal:true,hasLink:true,link:'https://m.youtube.com/@Mulmelon_YT'},},
             'Fly+Air':{name:'Insect',emoji:'🐝',description:'Small arthropod'},
             'Med+Human':{name:'Doctor',emoji:'👨‍⚕️',description:'Person who practices medicine'},
             'Death+Human':{name:'Ghost',emoji:'👻',description:'Spirit of a dead person'},
@@ -665,8 +649,6 @@
             coins:25, totalCoins:25, lastCalcTime:Date.now(),
             shopRefresh:Date.now(), shopStock:{}, packsBought:0,
             hasShownEnding:false,
-            secretKeys:[], secretCombo:['e','x','p','l','o','i','t'],
-            devCorners:[], resetClicks:[]
         };
 
         const totalMain = Object.keys(recipes).reduce((c,k)=> {
@@ -710,14 +692,11 @@
             if(el.isHot||el.isSuperHot) cls.push('hot-el');
             if(el.isSecret) cls.push('secret-el');
             if(el.isValidCombination) cls.push('valid-el');
-            if(el.isQuestion||el.name==='3?') cls.push('question-el');
             if(el.isError) cls.push('error-el');
             if(el.isFatalError) cls.push('fatal-el');
             if(el.isTsunami) cls.push('tsunami-el');
             if(el.isBlank) cls.push('blank-el');
             if(el.name==='Null') cls.push('null-el');
-            if(el.isDeveloper) cls.push('developer-el');
-            if(el.isTimeTraveler) cls.push('time-traveler-el');
             if(el.hasLink) cls.push('youtuber-el');
             return cls.join(' ');
         }
@@ -733,12 +712,15 @@
             return h;
         }
 
-        // ─── SAVE/LOAD (graceful fail without localStorage) ───
-        function save(){try{localStorage.setItem('fc_el',JSON.stringify(elements));localStorage.setItem('fc_co',JSON.stringify(combos));localStorage.setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
+        // ─── SAVE/LOAD (using cookie-based storage since localStorage is unavailable in iframe) ───
+        const _store={};
+        function _setItem(k,v){_store[k]=v;try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
+        function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
+        function save(){try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
         function load(){try{
-            const e=localStorage.getItem('fc_el'),c=localStorage.getItem('fc_co'),s=localStorage.getItem('fc_gs');
+            const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
             if(e)elements=JSON.parse(e);if(c)combos=JSON.parse(c);
-            if(s){const l=JSON.parse(s);gs={...gs,...l};if(!gs.secretKeys)gs.secretKeys=[];if(!gs.devCorners)gs.devCorners=[];if(!gs.resetClicks)gs.resetClicks=[];}
+            if(s){const l=JSON.parse(s);gs={...gs,...l};}
         }catch(e){}}
 
         // ─── COIN SYSTEM (fixed fractional accumulation) ───
@@ -767,6 +749,22 @@
         function updateCoinDisplay(){
             coinAmt.textContent=gs.coins.toLocaleString();
             shopCoins.textContent=gs.coins.toLocaleString();
+            updateShopButtons();
+        }
+
+        function updateShopButtons(){
+            const grid=$('shopGrid');
+            if(!grid)return;
+            grid.querySelectorAll('.pack-card').forEach(card=>{
+                const btn=card.querySelector('.pack-btn');
+                if(!btn)return;
+                const packId=Object.keys(SHOP_PACKS).find(id=>card.classList.contains('pack-'+id));
+                if(!packId)return;
+                const p=SHOP_PACKS[packId];
+                const canBuy=gs.coins>=p.price&&(gs.shopStock[packId]||0)>0;
+                btn.disabled=!canBuy;
+                btn.textContent=gs.coins<p.price?'Need '+p.price+' 🪙':'Buy for '+p.price+' 🪙';
+            });
         }
 
         // ─── SHOP SYSTEM ───
@@ -795,7 +793,7 @@
                     </div>
                     <p class="text-xs mb-2" style="color:var(--text-secondary)">${p.description}</p>
                     <p class="text-xs mb-3" style="color:var(--text-secondary)">Stock: ${stock}</p>
-                    <button class="pack-btn" ${gs.coins<p.price?'disabled':''}>Purchase</button>`;
+                    <button class="pack-btn" ${gs.coins<p.price?'disabled':''}>${gs.coins<p.price?'Need '+p.price+' 🪙':'Buy for '+p.price+' 🪙'}</button>`;
                 d.querySelector('.pack-btn').addEventListener('click',()=>buyPack(id));
                 grid.appendChild(d);
             });
@@ -856,7 +854,8 @@
         $('shopBtn').addEventListener('click',()=>{
             updateCoinDisplay();
             const mins=(Date.now()-gs.shopRefresh)/60000;
-            if(mins>=5)refreshShop();
+            if(mins>=5) refreshShop();
+            else renderShop();
             openModal('shopModal');
         });
 
@@ -894,12 +893,6 @@
                 if(show)vis++;
             });
             noResults.classList.toggle('hidden',vis>0);
-            // Secret: searching "opacity"
-            if(t==='opacity'&&!elements.find(e=>e.name==='Opacity')){
-                elements.push({...SPECIAL_ELEMENTS.opacity}); updateCount(); renderEls(); save();
-                notify('Secret Found!','Opacity element discovered!','👁️‍🗨️');
-                setTimeout(()=>{searchInput.value='';searchInput.dispatchEvent(new Event('input'));},1000);
-            }
         });
 
         // ─── ELEMENT SELECTION & DROP ZONES ───
@@ -931,7 +924,8 @@
             updateBtnState();
         }
 
-        function resetDZs(){clearDZ(dz1,dz1c,1);clearDZ(dz2,dz2c,2);}
+        let isCombining=false;
+        function resetDZs(){clearDZ(dz1,dz1c,1);clearDZ(dz2,dz2c,2);isCombining=false;}
         function updateBtnState(){const ok=sel1&&sel2;combineBtn.disabled=!ok;combineBtnM.disabled=!ok;}
 
         // Drag and drop
@@ -1016,7 +1010,8 @@
         }
 
         async function combine(){
-            if(!sel1||!sel2)return;
+            if(!sel1||!sel2||isCombining)return;
+            isCombining=true;
             loader.classList.remove('hidden');
             loaderText.textContent='Combining elements...';
             resultArea.innerHTML='<div class="text-sm" style="color:var(--text-secondary)"><span class="inline-block w-4 h-4 border-2 rounded-full animate-spin mr-2" style="border-color:var(--gold);border-top-color:transparent"></span>Discovering...</div>';
@@ -1041,7 +1036,7 @@
             if(result.frozen){resultArea.innerHTML='<div class="text-center text-xs" style="color:var(--text-secondary)">❄️ Frozen! Use heat to thaw.</div>';setTimeout(resetDZs,1500);return;}
             if(result.finalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card final-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">⭐</div><div class="el-name">Final Item</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot be combined further</div></div>';setTimeout(resetDZs,1500);return;}
             if(result.fatalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card fatal-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💀</div><div class="el-name">Fatal Error</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot process combination</div></div>';setTimeout(resetDZs,1500);return;}
-            if(result.invalid){resultArea.innerHTML='<div class="text-center"><div class="el-card invalid-shake inline-flex flex-col items-center p-4 mb-2" style="background:var(--bg-card);border:1px solid var(--border)" data-name="Invalid Combination"><div class="el-emoji">❌</div><div class="el-name">Invalid</div></div><div class="text-xs" style="color:var(--text-secondary)">${result.description}</div></div>';setTimeout(resetDZs,1500);return;}
+            if(result.invalid){resultArea.innerHTML=`<div class="text-center"><div class="el-card invalid-shake inline-flex flex-col items-center p-4 mb-2" style="background:var(--bg-card);border:1px solid var(--border)" data-name="Invalid Combination"><div class="el-emoji">❌</div><div class="el-name">Invalid Combination</div></div><div class="text-xs" style="color:var(--text-secondary)">${result.description}</div></div>`;resetDZs();return;}
 
             const newEl={...result,color:result.color||randColor()};
             if(newEl.isFrozen&&!newEl.meltProgress){newEl.meltProgress=0;newEl.meltGoal=10;}
@@ -1147,7 +1142,7 @@
         $('resetBtn').addEventListener('click',()=>openModal('resetModal'));
         $('confirmReset').addEventListener('click',()=>{
             elements=[...STARTERS];combos=[];
-            gs={coins:25,totalCoins:25,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,secretKeys:[],secretCombo:['e','x','p','l','o','i','t'],devCorners:[],resetClicks:[]};
+            gs={coins:25,totalCoins:25,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false};
             fractionalCoins=0;
             comboHistory.innerHTML='<p class="italic text-center text-sm" style="color:var(--text-secondary)">No combinations yet</p>';
             resultArea.innerHTML='';searchInput.value='';
@@ -1158,7 +1153,7 @@
 
         // ─── ENDING / RANK ───
         function showEnding(){
-            const counted=elements.filter(e=>!e.isExclusive&&!e.excludeFromRank&&!e.name.includes('Developer')).length;
+            const counted=elements.filter(e=>!e.isExclusive&&!e.excludeFromRank).length;
             const pct=Math.round((counted/totalMain)*100);
             let rank,msg;
             if(pct<=20){rank='F';msg='Just scratched the surface.';}
@@ -1192,50 +1187,6 @@
             }
         }
 
-        // ─── SECRET ELEMENTS ───
-        // Opacity via search (handled above)
-        // Exploiter via key combo
-        document.addEventListener('keydown',e=>{
-            if(elements.find(x=>x.name==='Exploiter'))return;
-            gs.secretKeys.push(e.key.toLowerCase());
-            if(gs.secretKeys.length>gs.secretCombo.length)gs.secretKeys.shift();
-            if(gs.secretKeys.length===gs.secretCombo.length&&gs.secretKeys.every((k,i)=>k===gs.secretCombo[i])){
-                elements.push({...SPECIAL_ELEMENTS.exploiter});gs.secretKeys=[];
-                updateCount();renderEls();save();notify('SECRET!','Exploiter discovered via code!','🕵️');
-            }
-        });
-        // Developer via 4 corner clicks
-        document.addEventListener('click',e=>{
-            if(elements.find(x=>x.name==='Developer'))return;
-            const w=window.innerWidth,h=window.innerHeight,sz=Math.min(w,h)*0.1;
-            let corner=null;
-            if(e.clientX<sz&&e.clientY<sz)corner='tl';
-            else if(e.clientX>w-sz&&e.clientY<sz)corner='tr';
-            else if(e.clientX<sz&&e.clientY>h-sz)corner='bl';
-            else if(e.clientX>w-sz&&e.clientY>h-sz)corner='br';
-            if(corner&&!gs.devCorners.includes(corner)){
-                gs.devCorners.push(corner);
-                $('secretCounter').style.display='block';$('secretCounter').textContent=gs.devCorners.length+'/4 corners';
-                setTimeout(()=>$('secretCounter').style.display='none',2000);
-                if(gs.devCorners.length>=4){
-                    gs.devCorners=[];
-                    elements.push({...SPECIAL_ELEMENTS.developer});updateCount();renderEls();save();
-                    notify('SECRET!','Developer found via corners!','👨‍💻');
-                }
-            }
-        });
-        // Time Traveler via rapid reset clicks
-        $('resetBtn').addEventListener('click',()=>{
-            if(elements.find(x=>x.name==='Time Traveler'))return;
-            const now=Date.now();
-            gs.resetClicks.push(now);
-            gs.resetClicks=gs.resetClicks.filter(t=>now-t<3000);
-            if(gs.resetClicks.length>=5){
-                gs.resetClicks=[];
-                elements.push({...SPECIAL_ELEMENTS.timeTraveler});updateCount();renderEls();save();
-                notify('SECRET!','Time Traveler found via rapid clicks!','⏳');
-            }
-        });
         // Null random discovery
         setInterval(()=>{
             if(elements.find(e=>e.name==='Null'))return;
