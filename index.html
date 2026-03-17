@@ -361,7 +361,7 @@
         <button class="modal-close" data-close="changelogModal">&times;</button>
         <h2 class="font-display text-xl mb-5">Changelog</h2>
         <div class="changelog-version">
-            <h3>v3.0 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
+            <h3>v2.0 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
             <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-new">NEW</span> Coin system — earn coins passively from elements</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Element Shop with 6 pack rarities</li>
@@ -371,7 +371,7 @@
             </ul>
         </div>
         <div class="changelog-version">
-            <h3>v2.0</h3>
+            <h3>v1.1</h3>
             <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-new">NEW</span> Frozen & Hot element mechanics</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Ending screen & rank system</li>
@@ -1983,7 +1983,7 @@
         // ─── EXPORT / IMPORT ───
         $('exportBtn').addEventListener('click',()=>{
             try{
-                const data=JSON.stringify({elements,combos,gs,v:'3.0'});
+                const data=JSON.stringify({elements,combos,gs,v:'2.0'});
                 $('exportCode').value=safeB64Enc(data);
                 openModal('exportModal');
             }catch(e){notify('Export Error',e.message,'❌');}
