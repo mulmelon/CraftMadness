@@ -91,6 +91,11 @@
         .badge-divine { background: linear-gradient(135deg,#fef3c7,#fde68a,#fbbf24); color: #713f12; box-shadow: 0 0 8px rgba(251,191,36,0.5); }
         .badge-antimatter { background: linear-gradient(135deg,#1e1b4b,#312e81); color: #c7d2fe; }
         .badge-parasitic { background: linear-gradient(135deg,#365314,#4d7c0f); color: #ecfccb; }
+        .badge-magnetic { background: linear-gradient(135deg,#475569,#94a3b8,#475569); color: #f1f5f9; }
+        .badge-temporal { background: linear-gradient(135deg,#4338ca,#7c3aed,#2563eb); color: #e0e7ff; }
+        .badge-abyssal { background: linear-gradient(135deg,#0c4a6e,#164e63,#083344); color: #a5f3fc; }
+        .badge-celestial { background: linear-gradient(135deg,#1e1b4b,#312e81,#fbbf24); color: #fef3c7; }
+        .badge-electric { background: linear-gradient(135deg,#854d0e,#eab308,#facc15); color: #422006; }
 
         /* Special element styles */
         @keyframes pulseGlow { 0%,100%{box-shadow:0 0 6px rgba(0,200,83,0.4)} 50%{box-shadow:0 0 18px rgba(0,200,83,0.7)} }
@@ -107,6 +112,27 @@
         @keyframes frozenGlow { 0%,100%{box-shadow:0 0 5px rgba(96,165,250,0.4)} 50%{box-shadow:0 0 14px rgba(96,165,250,0.7)} }
         .frozen-el { animation: frozenGlow 3s infinite; }
         .frozen-el::after { content:'❄️'; position:absolute; top:3px; left:3px; font-size:0.65rem; z-index:2; }
+
+        /* Frozen tutorial demo */
+        .frost-tut-demo { margin: 0 auto 8px; }
+        .frost-tut-row { display:flex; align-items:center; justify-content:center; gap:12px; }
+        .frost-tut-plus { font-size:1.4rem; font-weight:700; color:var(--text-secondary); }
+        .frost-tut-arrow { display:flex; justify-content:center; margin:8px 0; animation:arrowBounce 1.2s ease-in-out infinite; }
+        @keyframes arrowBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+        .frost-tut-card { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100px; height:90px; border-radius:14px; border:2px solid var(--border); background:var(--bg-primary); overflow:hidden; }
+        .frost-tut-emoji { font-size:1.8rem; z-index:2; }
+        .frost-tut-label { font-size:0.7rem; font-weight:600; margin-top:4px; z-index:2; color:var(--text-primary); }
+        .frozen-demo { border-color:#60a5fa; animation: frozenGlow 3s infinite; }
+        .frozen-demo .frost-tut-snowflake { position:absolute; top:4px; left:6px; font-size:0.6rem; animation: snowflakeDrift 2s ease-in-out infinite; }
+        @keyframes snowflakeDrift { 0%,100%{transform:translateY(0) rotate(0deg);opacity:1} 50%{transform:translateY(6px) rotate(180deg);opacity:0.5} }
+        .frost-tut-ice-layer { position:absolute; inset:0; background:linear-gradient(180deg,rgba(96,165,250,0.08) 0%,rgba(96,165,250,0.2) 100%); z-index:1; animation:icePulse 2.5s ease-in-out infinite; }
+        @keyframes icePulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+        .heat-demo { border-color:#ef4444; animation: heatPulse 1.5s ease-in-out infinite; }
+        @keyframes heatPulse { 0%,100%{box-shadow:0 0 5px rgba(239,68,68,0.3)} 50%{box-shadow:0 0 18px rgba(239,68,68,0.6)} }
+        .thawed-demo { border-color:var(--gold); animation: thawedShine 2s ease-in-out infinite; }
+        @keyframes thawedShine { 0%,100%{box-shadow:0 0 6px rgba(234,179,8,0.3)} 50%{box-shadow:0 0 20px rgba(234,179,8,0.5)} }
+        .frost-tut-melt-bar { position:absolute; bottom:0; left:0; height:3px; width:100%; background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e); border-radius:0 0 12px 12px; animation: meltFill 2s ease-in-out infinite; }
+        @keyframes meltFill { 0%{width:0%} 70%{width:100%} 100%{width:100%} }
 
         @keyframes hotGlow { 0%,100%{box-shadow:0 0 5px rgba(239,68,68,0.4)} 50%{box-shadow:0 0 14px rgba(239,68,68,0.7)} }
         .hot-el { animation: hotGlow 3s infinite; }
@@ -243,6 +269,38 @@
         .parasitic-el { animation: parasiticCrawl 3s infinite; background:linear-gradient(135deg,#1a2e05,#365314)!important; color:#bef264!important; border:1px solid #4d7c0f!important; }
         .parasitic-el::after { content:'🕷️'; position:absolute; top:3px; left:3px; font-size:0.55rem; z-index:2; }
 
+        /* ─── MAGNETIC ─── */
+        @keyframes magneticPull { 0%,100%{box-shadow:0 0 8px rgba(148,163,184,0.4),inset 0 0 6px rgba(71,85,105,0.2)} 25%{box-shadow:4px 0 12px rgba(148,163,184,0.6),inset 2px 0 8px rgba(71,85,105,0.3)} 50%{box-shadow:0 0 16px rgba(148,163,184,0.7),inset 0 0 10px rgba(71,85,105,0.25)} 75%{box-shadow:-4px 0 12px rgba(148,163,184,0.6),inset -2px 0 8px rgba(71,85,105,0.3)} }
+        .magnetic-el { animation: magneticPull 2.5s infinite; background:linear-gradient(135deg,#1e293b,#475569,#94a3b8,#475569,#1e293b)!important; color:#e2e8f0!important; border:1px solid #64748b!important; }
+        .magnetic-el::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(239,68,68,0.1) 0%,transparent 30%,transparent 70%,rgba(59,130,246,0.1) 100%); border-radius:12px; }
+        .magnetic-el::after { content:'🧲'; position:absolute; top:3px; left:3px; font-size:0.55rem; z-index:2; }
+
+        /* ─── TEMPORAL ─── */
+        @keyframes temporalShift { 0%{box-shadow:0 0 8px rgba(99,102,241,0.5);filter:hue-rotate(0deg)} 33%{box-shadow:0 0 16px rgba(124,58,237,0.7);filter:hue-rotate(15deg)} 66%{box-shadow:0 0 12px rgba(37,99,235,0.6);filter:hue-rotate(-15deg)} 100%{box-shadow:0 0 8px rgba(99,102,241,0.5);filter:hue-rotate(0deg)} }
+        @keyframes temporalAfterimage { 0%,100%{text-shadow:0 0 0 transparent} 30%{text-shadow:3px 0 8px rgba(124,58,237,0.4)} 60%{text-shadow:-3px 0 8px rgba(37,99,235,0.4)} }
+        .temporal-el { animation: temporalShift 3s infinite; background:linear-gradient(135deg,#1e1b4b,#3730a3,#6366f1,#3730a3)!important; color:#c7d2fe!important; }
+        .temporal-el .el-name { animation: temporalAfterimage 3s infinite; }
+        .temporal-el::after { content:'⏳'; position:absolute; top:3px; left:3px; font-size:0.55rem; z-index:2; }
+        .temporal-el::before { content:''; position:absolute; inset:0; background:conic-gradient(from 0deg,transparent,rgba(99,102,241,0.1),transparent,rgba(124,58,237,0.1),transparent); animation:chromaticShift 8s linear infinite; border-radius:12px; }
+
+        /* ─── ABYSSAL ─── */
+        @keyframes abyssalPressure { 0%,100%{box-shadow:inset 0 4px 12px rgba(8,51,68,0.6),0 0 8px rgba(14,116,144,0.3)} 50%{box-shadow:inset 0 8px 20px rgba(8,51,68,0.9),0 0 16px rgba(14,116,144,0.5)} }
+        @keyframes abyssalBubble { 0%{transform:translateY(0);opacity:0} 10%{opacity:0.6} 90%{opacity:0.3} 100%{transform:translateY(-20px);opacity:0} }
+        .abyssal-el { animation: abyssalPressure 4s infinite; background:linear-gradient(180deg,#164e63,#0e7490,#083344,#042f2e)!important; color:#67e8f9!important; }
+        .abyssal-el::before { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 40%,rgba(8,51,68,0.5) 100%); border-radius:12px; }
+        .abyssal-el::after { content:'🌊'; position:absolute; top:3px; left:3px; font-size:0.55rem; z-index:2; }
+
+        /* ─── CELESTIAL ─── */
+        @keyframes celestialTwinkle { 0%,100%{box-shadow:0 0 10px rgba(251,191,36,0.3),0 0 30px rgba(99,102,241,0.15)} 25%{box-shadow:2px -2px 14px rgba(251,191,36,0.5),0 0 25px rgba(99,102,241,0.25)} 50%{box-shadow:0 0 20px rgba(251,191,36,0.4),-2px 2px 35px rgba(99,102,241,0.3)} 75%{box-shadow:-2px -2px 14px rgba(251,191,36,0.5),0 0 25px rgba(99,102,241,0.2)} }
+        .celestial-el { animation: celestialTwinkle 4s infinite; background:radial-gradient(ellipse at 30% 30%,#312e81,#1e1b4b,#0f172a)!important; color:#fde68a!important; border:1px solid rgba(251,191,36,0.3)!important; }
+        .celestial-el::before { content:''; position:absolute; inset:0; background:radial-gradient(1px 1px at 20% 30%,#fbbf24,transparent),radial-gradient(1px 1px at 60% 70%,#e0e7ff,transparent),radial-gradient(1px 1px at 80% 20%,#fbbf24,transparent),radial-gradient(1px 1px at 40% 80%,#c7d2fe,transparent),radial-gradient(1px 1px at 70% 40%,#fde68a,transparent); border-radius:12px; }
+        .celestial-el::after { content:'🌟'; position:absolute; top:3px; left:3px; font-size:0.55rem; z-index:2; }
+
+        /* ─── ELECTRIC ─── */
+        @keyframes electricSpark { 0%,100%{box-shadow:0 0 6px rgba(234,179,8,0.4)} 15%{box-shadow:3px -2px 12px rgba(250,204,21,0.8),0 0 4px rgba(234,179,8,0.3)} 30%{box-shadow:0 0 8px rgba(234,179,8,0.5)} 45%{box-shadow:-2px 3px 14px rgba(250,204,21,0.9),-3px -1px 6px rgba(234,179,8,0.4)} 60%{box-shadow:0 0 6px rgba(234,179,8,0.4)} 80%{box-shadow:2px 2px 10px rgba(250,204,21,0.7)} }
+        .electric-el { animation: electricSpark 1.5s infinite; background:linear-gradient(135deg,#422006,#854d0e,#eab308,#facc15,#eab308)!important; color:#fefce8!important; }
+        .electric-el::before { content:''; position:absolute; inset:0; background:linear-gradient(45deg,transparent 40%,rgba(250,204,21,0.2) 45%,transparent 50%,transparent 65%,rgba(250,204,21,0.15) 70%,transparent 75%); border-radius:12px; }
+        .electric-el::after { content:'⚡'; position:absolute; top:3px; left:3px; font-size:0.55rem; z-index:2; }
 
         .melt-bar { position:absolute; bottom:0; left:0; height:3px; background:#ef4444; z-index:2; transition:width 0.3s; border-radius:0 0 12px 12px; }
 
@@ -482,6 +540,45 @@
             </div>
         </div>
     </div>
+
+    <!-- Frozen Tutorial Modal -->
+    <div id="frozenTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:460px;border-color:#60a5fa">
+        <button class="modal-close" data-close="frozenTutModal">&times;</button>
+        <h2 class="font-display text-xl mb-2" style="color:#60a5fa">❄️ Frozen Element!</h2>
+        <p class="text-sm mb-5" style="color:var(--text-secondary)">Some elements are <strong style="color:#60a5fa">frozen</strong> and can't be combined normally. You need to <strong style="color:#ef4444">melt</strong> them first!</p>
+        <div class="frost-tut-demo">
+            <div class="frost-tut-row">
+                <div class="frost-tut-card frozen-demo">
+                    <span class="frost-tut-emoji">🧊</span>
+                    <span class="frost-tut-label">Frozen</span>
+                    <div class="frost-tut-snowflake">❄️</div>
+                    <div class="frost-tut-ice-layer"></div>
+                </div>
+                <div class="frost-tut-plus">+</div>
+                <div class="frost-tut-card heat-demo">
+                    <span class="frost-tut-emoji">🔥</span>
+                    <span class="frost-tut-label">Fire / Hot</span>
+                </div>
+            </div>
+            <div class="frost-tut-arrow">
+                <svg width="24" height="40" viewBox="0 0 24 40"><path d="M12 0 L12 30 M4 22 L12 30 L20 22" stroke="var(--gold)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <div class="frost-tut-row">
+                <div class="frost-tut-card thawed-demo">
+                    <span class="frost-tut-emoji">✨</span>
+                    <span class="frost-tut-label">Thawed!</span>
+                    <div class="frost-tut-melt-bar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-xl p-3 mt-4 mb-4 text-left text-xs space-y-2" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-secondary)">
+            <p>🔥 <strong style="color:var(--text-primary)">Fire</strong> — basic heat source (+1 per combine)</p>
+            <p>♨️ <strong style="color:var(--text-primary)">Hot elements</strong> — melt faster (+2 per combine)</p>
+            <p>🌋 <strong style="color:var(--text-primary)">Super Hot</strong> — melt much faster (+5 per combine)</p>
+            <p>📊 Each frozen element has a <strong style="color:#60a5fa">melt bar</strong> — keep applying heat until it's full!</p>
+        </div>
+        <button class="font-semibold text-sm py-2.5 px-8 rounded-full" style="background:var(--gold);color:#1a1a2e" data-close="frozenTutModal">Got it!</button>
+    </div></div>
 
     <!-- Changelog Button & Modal -->
     <button id="changelogBtn" class="fixed bottom-5 right-5 w-11 h-11 rounded-full flex items-center justify-center text-lg shadow-lg z-50 transition-transform hover:scale-110" style="background:var(--gold);color:#1a1a2e">📋</button>
@@ -1779,6 +1876,50 @@
             'Parasite+Technology':{name:'Techno-Parasite',emoji:'🔌',color:'bg-green-700',description:'Drains energy from machines',isParasitic:true},
             'Mind Flayer+Mind Flayer':{name:'Hive Mind',emoji:'🧠',color:'bg-green-950',description:'One consciousness consuming all',isParasitic:true,isFinal:true},
 
+            // ═══════════ MAGNETIC — Attracts properties from parents ═══════════
+            'Metal+Spell':{name:'Lodestone',emoji:'🧲',color:'bg-slate-500',description:'Naturally magnetic stone that draws things near',isMagnetic:true},
+            'Circuit+Magic':{name:'Electromagnet',emoji:'🧲',color:'bg-slate-600',description:'Electrically powered magnetic force',isMagnetic:true},
+            'Metal+Gravity':{name:'Magnetic Ore',emoji:'⛏️',color:'bg-slate-700',description:'Raw ore humming with attraction',isMagnetic:true},
+            'Lodestone+Lightning':{name:'Magnetic Tempest',emoji:'🌩️',color:'bg-slate-500',description:'A storm of magnetic fury',isMagnetic:true,isElectric:true},
+            'Electromagnet+Electromagnet':{name:'Magnetic Field',emoji:'🔄',color:'bg-slate-600',description:'Invisible force that moves the world',isMagnetic:true},
+            'Magnetic Ore+Magnetic Ore':{name:'Magnetic Pole',emoji:'🧭',color:'bg-slate-700',description:'Where all compasses point',isMagnetic:true},
+            'Magnetic Field+Singularity':{name:'Magnetar',emoji:'💫',color:'bg-slate-800',description:'Neutron star with universe-warping magnetism',isMagnetic:true,isCelestial:true,isFinal:true},
+
+            // ═══════════ TEMPORAL — Distorts time, ages results ═══════════
+            'Time+Spell':{name:'Time Warp',emoji:'⏳',color:'bg-indigo-700',description:'Fold time like paper',isTemporal:true},
+            'Prophecy+Paradox':{name:'Temporal Rift',emoji:'🌀',color:'bg-indigo-800',description:'A tear in the timeline',isTemporal:true},
+            'Eternity+Spell':{name:'Chronosphere',emoji:'🔵',color:'bg-indigo-600',description:'Sphere containing frozen time',isTemporal:true},
+            'Time Warp+Paradox':{name:'Time Loop',emoji:'🔁',color:'bg-violet-700',description:'The same moment, repeating forever',isTemporal:true},
+            'Time Loop+Time Loop':{name:'Déjà Vu',emoji:'👁️',color:'bg-violet-600',description:'Haven\'t we done this before?',isTemporal:true,isSecret:true},
+            'Chronosphere+Temporal Rift':{name:'Temporal Nexus',emoji:'⚛️',color:'bg-indigo-900',description:'Where all timelines converge',isTemporal:true},
+            'Temporal Nexus+Eternity':{name:'Master of Time',emoji:'⌛',color:'bg-indigo-950',description:'Controls past, present, and future',isTemporal:true,isFinal:true},
+
+            // ═══════════ ABYSSAL — Crushing depths, creates crystals ═══════════
+            'Ocean+Abyss':{name:'Deep Trench',emoji:'🌊',color:'bg-cyan-900',description:'Deepest cut in the ocean floor',isAbyssal:true},
+            'Abyss+Water':{name:'Hadal Zone',emoji:'🫧',color:'bg-cyan-950',description:'Below 6000m — the hadal realm',isAbyssal:true},
+            'Leviathan+Abyss':{name:'Abyssal Leviathan',emoji:'🐲',color:'bg-teal-900',description:'Ancient beast of the deep pressure',isAbyssal:true},
+            'Darkness+Ocean':{name:'Midnight Zone',emoji:'🌑',color:'bg-slate-900',description:'No light reaches here — only pressure',isAbyssal:true},
+            'Deep Trench+Deep Trench':{name:'Mariana',emoji:'🕳️',color:'bg-cyan-950',description:'The deepest point on Earth',isAbyssal:true},
+            'Abyssal Leviathan+Mariana':{name:'Charybdis',emoji:'🌀',color:'bg-teal-950',description:'The ocean\'s maw — swallows ships whole',isAbyssal:true},
+            'Charybdis+Hadal Zone':{name:'Lord of the Deep',emoji:'👑',color:'bg-slate-950',description:'Sovereign of the crushing dark',isAbyssal:true,isFinal:true},
+
+            // ═══════════ CELESTIAL — Cosmic power, blesses results ═══════════
+            'Star+Spell':{name:'Starforge',emoji:'🌟',color:'bg-indigo-800',description:'Where new stars are born from magic',isCelestial:true},
+            'Constellation+Energy':{name:'Celestial Power',emoji:'✨',color:'bg-indigo-700',description:'Energy drawn from the stars',isCelestial:true},
+            'Space+Blessing':{name:'Celestial Gate',emoji:'🚪',color:'bg-indigo-600',description:'Portal to the heavens',isCelestial:true,isBlessed:true},
+            'Starforge+Starforge':{name:'Stellar Core',emoji:'☀️',color:'bg-amber-700',description:'Heart of a newborn star',isCelestial:true},
+            'Celestial Power+Moon':{name:'Celestial Body',emoji:'🌙',color:'bg-indigo-500',description:'A moon touched by cosmic magic',isCelestial:true},
+            'Stellar Core+Celestial Gate':{name:'Cosmic Architect',emoji:'🌌',color:'bg-indigo-950',description:'Builder of galaxies and star systems',isCelestial:true,isDivine:true,isFinal:true},
+
+            // ═══════════ ELECTRIC — Charged, may short-circuit or overcharge ═══════════
+            'Lightning+Spell':{name:'Chain Lightning',emoji:'⚡',color:'bg-yellow-600',description:'Bolt that leaps from target to target',isElectric:true},
+            'Thunder+Metal':{name:'Conductor',emoji:'🔌',color:'bg-yellow-700',description:'Carries current without resistance',isElectric:true},
+            'Thunder+Spell':{name:'Thunderbolt',emoji:'🌩️',color:'bg-yellow-500',description:'Magical bolt from a clear sky',isElectric:true},
+            'Conductor+Water':{name:'Live Wire',emoji:'💀',color:'bg-yellow-800',description:'One touch and it\'s over',isElectric:true,isUnstable:true},
+            'Chain Lightning+Chain Lightning':{name:'Lightning Storm',emoji:'🌩️',color:'bg-yellow-600',description:'A thousand bolts at once',isElectric:true},
+            'Thunderbolt+Thunder':{name:'Mjolnir',emoji:'🔨',color:'bg-yellow-500',description:'The hammer of Thor — channels lightning',isElectric:true,isLegendary:true},
+            'Lightning Storm+Mjolnir':{name:'Thundergod',emoji:'⚡',color:'bg-yellow-900',description:'Incarnation of the storm itself',isElectric:true,isFinal:true},
+
             // ═══════════ CROSS-TYPE SPECIAL COMBOS ═══════════
             'Permafrost+Hellfire':{name:'Paradox Ice',emoji:'🔥',color:'bg-purple-700',description:'Ice that burns, fire that freezes',isPermafrost:true,isInfernal:true,isFinal:true},
             'Blessing+Dark Magic':{name:'Twilight Magic',emoji:'🌓',color:'bg-purple-500',description:'Neither light nor dark',isBlessed:true,isCursed:true,isSecret:true},
@@ -1789,7 +1930,18 @@
             'Lich+Paladin':{name:'Death Knight',emoji:'🗡️',color:'bg-slate-800',description:'A fallen paladin risen as undead',isCursed:true,isLegendary:true,isFinal:true},
             'Rogue AI+Pandemic':{name:'Extinction Event',emoji:'🌍',color:'bg-red-950',description:'The end of biological life',isViral:true,isCorrupted:true,isFinal:true},
             'Crystal Heart+Divine Grace':{name:'Genesis Crystal',emoji:'💎',color:'bg-yellow-300',description:'The crystal from which all creation sprang',isCrystalline:true,isDivine:true,isFinal:true},
-            'Oblivion+The Creator':{name:'Big Bang',emoji:'💥',color:'bg-orange-500',description:'Destruction births creation — the cycle begins anew',isDivine:true,isUnstable:true,isFinal:true}
+            'Oblivion+The Creator':{name:'Big Bang',emoji:'💥',color:'bg-orange-500',description:'Destruction births creation — the cycle begins anew',isDivine:true,isUnstable:true,isFinal:true},
+
+            // Cross-type combos for new elements
+            'Magnetar+Permafrost':{name:'Frozen Star',emoji:'❄️',color:'bg-cyan-800',description:'A magnetar encased in eternal ice',isMagnetic:true,isPermafrost:true,isFinal:true},
+            'Master of Time+Oblivion':{name:'Entropy',emoji:'🕳️',color:'bg-gray-900',description:'Time\'s final victory over all things',isTemporal:true,isVoid:true,isFinal:true},
+            'Lord of the Deep+Permafrost':{name:'Frozen Depths',emoji:'🧊',color:'bg-cyan-950',description:'The deep ocean locked in eternal ice',isAbyssal:true,isPermafrost:true,isFinal:true},
+            'Thundergod+Hellfire':{name:'Storm of Fire',emoji:'🔥',color:'bg-orange-700',description:'Lightning and hellfire merge into one cataclysm',isElectric:true,isInfernal:true,isFinal:true},
+            'Cosmic Architect+Master of Time':{name:'Primordial Architect',emoji:'🌟',color:'bg-amber-800',description:'Built the universe AND set its clock',isCelestial:true,isTemporal:true,isDivine:true,isFinal:true},
+            'Temporal Rift+Dark Magic':{name:'Chrono Curse',emoji:'⏳',color:'bg-purple-800',description:'A curse that echoes through all timelines',isTemporal:true,isCursed:true},
+            'Electromagnet+Enchanted Crystal':{name:'Magnetic Crystal',emoji:'💎',color:'bg-violet-500',description:'Crystal aligned by invisible force',isMagnetic:true,isCrystalline:true},
+            'Deep Trench+Uranium':{name:'Abyssal Reactor',emoji:'☢️',color:'bg-teal-800',description:'Nuclear power at crushing depth',isAbyssal:true,isRadioactive:true},
+            'Chain Lightning+Blessing':{name:'Divine Bolt',emoji:'⚡',color:'bg-yellow-300',description:'Lightning cast by the heavens',isElectric:true,isBlessed:true}
         };
 
         // ─── SHOP PACKS ───
@@ -1888,6 +2040,11 @@
             if(el.isDivine) cls.push('divine-el');
             if(el.isAntimatter) cls.push('antimatter-el');
             if(el.isParasitic) cls.push('parasitic-el');
+            if(el.isMagnetic) cls.push('magnetic-el');
+            if(el.isTemporal) cls.push('temporal-el');
+            if(el.isAbyssal) cls.push('abyssal-el');
+            if(el.isCelestial) cls.push('celestial-el');
+            if(el.isElectric) cls.push('electric-el');
             return cls.join(' ');
         }
 
@@ -1920,6 +2077,11 @@
             if(el.isDivine) h+='<span class="badge badge-divine">DIVINE</span>';
             if(el.isAntimatter) h+='<span class="badge badge-antimatter">ANTI-M</span>';
             if(el.isParasitic) h+='<span class="badge badge-parasitic">PARASITIC</span>';
+            if(el.isMagnetic) h+='<span class="badge badge-magnetic">MAGNETIC</span>';
+            if(el.isTemporal) h+='<span class="badge badge-temporal">TEMPORAL</span>';
+            if(el.isAbyssal) h+='<span class="badge badge-abyssal">ABYSSAL</span>';
+            if(el.isCelestial) h+='<span class="badge badge-celestial">CELESTIAL</span>';
+            if(el.isElectric) h+='<span class="badge badge-electric">ELECTRIC</span>';
             return h;
         }
 
@@ -1956,6 +2118,11 @@
                 if(el.isHoly) base+=7;
                 if(el.isPermafrost) base+=4;
                 if(el.isAntimatter) base+=12;
+                if(el.isMagnetic) base+=5;
+                if(el.isTemporal) base+=7;
+                if(el.isAbyssal) base+=6;
+                if(el.isCelestial) base+=9;
+                if(el.isElectric) base+=4;
                 // Penalties
                 if(el.isCursed) base=Math.max(1,base-3);
                 if(el.isCorrupted) base=Math.max(1,base-5);
@@ -2155,6 +2322,7 @@
         }
 
         let isCombining=false;
+        let frozenTutShown=false;
         function resetDZs(){clearDZ(dz1,dz1c,1);clearDZ(dz2,dz2c,2);isCombining=false;}
         function updateBtnState(){const ok=sel1&&sel2;combineBtn.disabled=!ok;combineBtnM.disabled=!ok;}
 
@@ -2202,9 +2370,11 @@
             if(n1==='Infinity Craft'||n2==='Infinity Craft'||n1==='Tomokuta Plays'||n2==='Tomokuta Plays')return{finalBlock:true};
             // Fatal error blocks (allow Fatal Error + Philosophy recipe)
             if((n1==='Fatal Error'&&n2!=='Philosophy')||(n2==='Fatal Error'&&n1!=='Philosophy'))return{fatalBlock:true};
-            // Error propagation
-            if((n1==='Error'&&n2!=='Error'&&n2!=='Philosophy')||(n2==='Error'&&n1!=='Error'&&n1!=='Philosophy'))
-                return{...SPECIAL_ELEMENTS.error};
+            // Error propagation (skip if a recipe exists for this combo)
+            if((n1==='Error'&&n2!=='Error'&&n2!=='Philosophy')||(n2==='Error'&&n1!=='Error'&&n1!=='Philosophy')){
+                const eKey1=n1+'+'+n2, eKey2=n2+'+'+n1;
+                if(!recipes[eKey1]&&!recipes[eKey2]) return{...SPECIAL_ELEMENTS.error};
+            }
             // Void absorption — void elements consume the other element
             if((p1.isVoid&&!p2.isVoid)||(p2.isVoid&&!p1.isVoid)){
                 const key1v=n1+'+'+n2, key2v=n2+'+'+n1;
@@ -2278,6 +2448,49 @@
                 else if(donor.isBlessed&&!result.isBlessed){result.isBlessed=true;}
             }
 
+            // ─── MAGNETIC attraction: 15% chance result inherits a random special property from a parent ───
+            if((p1.isMagnetic||p2.isMagnetic)&&!result.isFinal){
+                if(Math.random()<0.15){
+                    const donor=p1.isMagnetic?p2:p1;
+                    const stealable=['isHot','isSecret','isBlessed','isRadioactive','isCrystalline','isGolden','isElectric','isCelestial','isAncient'];
+                    const available=stealable.filter(k=>donor[k]&&!result[k]);
+                    if(available.length>0) result[available[Math.floor(Math.random()*available.length)]]=true;
+                }
+            }
+
+            // ─── TEMPORAL aging: 12% chance result becomes ancient; 8% time loop ───
+            if((p1.isTemporal||p2.isTemporal)&&!result.isFinal){
+                const roll=Math.random();
+                if(roll<0.08){
+                    return{timeLoop:true,loopedInto:p1.isTemporal?{...p2}:{...p1}};
+                } else if(roll<0.20&&!result.isAncient){
+                    result.isAncient=true;
+                }
+            }
+
+            // ─── ABYSSAL pressure: 18% chance result becomes crystalline ───
+            if((p1.isAbyssal||p2.isAbyssal)&&!result.isFinal&&!result.isCrystalline&&Math.random()<0.18){
+                result.isCrystalline=true;
+            }
+
+            // ─── CELESTIAL blessing: 15% chance result becomes blessed, purifies like holy ───
+            if(p1.isCelestial||p2.isCelestial){
+                if(!result.isFinal&&!result.isBlessed&&Math.random()<0.15){
+                    result.isBlessed=true;
+                }
+                delete result.isCursed; delete result.isCorrupted;
+            }
+
+            // ─── ELECTRIC shock: 10% short circuit→Error, 10% overcharge→isHot ───
+            if((p1.isElectric||p2.isElectric)&&!result.isFinal){
+                const eRoll=Math.random();
+                if(eRoll<0.10&&!result.isHoly&&!result.isBlessed){
+                    return{shortCircuit:true};
+                } else if(eRoll<0.20&&!result.isHot){
+                    result.isHot=true;
+                }
+            }
+
             // ─── Random freeze (original mechanic) ───
             const preventFreeze=p1.isHot||p2.isHot||p1.isSuperHot||p2.isSuperHot||result.isHot||result.isSuperHot||p1.isBlessed||p2.isBlessed||result.isBlessed||result.isInfernal||result.isPermafrost;
             if(Math.random()<0.05&&!result.isFinal&&!result.isError&&!result.isFatalError&&!result.isFrozen&&!preventFreeze&&!result.isPermafrost){
@@ -2306,25 +2519,26 @@
         async function combine(){
             if(!sel1||!sel2||isCombining)return;
             isCombining=true;
+
+            const isHeat1=sel1.isHot||sel1.isSuperHot||sel1.name==='Fire'||sel1.name==='Inferno';
+            const isHeat2=sel2.isHot||sel2.isSuperHot||sel2.name==='Fire'||sel2.name==='Inferno';
+
+            // ─── Frozen / Melt checks (instant, no delay) ───
+            // Frozen + non-heat (skip permafrost — they go through generateElement)
+            if((sel1.isFrozen&&!sel1.isPermafrost&&!isHeat2)||(sel2.isFrozen&&!sel2.isPermafrost&&!isHeat1)){
+                resultArea.innerHTML='<div class="text-center"><div class="el-card frozen-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">❄️</div><div class="el-name">Frozen!</div></div><div class="text-xs" style="color:var(--text-secondary)">Combine with Fire or Hot elements to thaw</div></div>';
+                resetDZs();return;
+            }
+            // Melt check (not for permafrost) — instant feedback
+            if(sel1.isFrozen&&!sel1.isPermafrost&&isHeat2){const r=processMelt(sel1,sel2);if(r){showMeltResult(r);return;}}
+            if(sel2.isFrozen&&!sel2.isPermafrost&&isHeat1){const r=processMelt(sel2,sel1);if(r){showMeltResult(r);return;}}
+
+            // ─── Normal combine path (with discovery delay) ───
             loader.classList.remove('hidden');
             loaderText.textContent='Combining elements...';
             resultArea.innerHTML='<div class="text-sm" style="color:var(--text-secondary)"><span class="inline-block w-4 h-4 border-2 rounded-full animate-spin mr-2" style="border-color:var(--gold);border-top-color:transparent"></span>Discovering...</div>';
 
             await new Promise(r=>setTimeout(r,400+Math.random()*800));
-
-            const isHeat1=sel1.isHot||sel1.isSuperHot||sel1.name==='Fire'||sel1.name==='Inferno';
-            const isHeat2=sel2.isHot||sel2.isSuperHot||sel2.name==='Fire'||sel2.name==='Inferno';
-
-            // Permafrost — completely uncombineable (unless recipe exists)
-            // handled in generateElement, but skip melt for permafrost
-            // Frozen + non-heat (skip permafrost — they go through generateElement)
-            if((sel1.isFrozen&&!sel1.isPermafrost&&!isHeat2)||(sel2.isFrozen&&!sel2.isPermafrost&&!isHeat1)){
-                resultArea.innerHTML='<div class="text-center"><div class="el-card frozen-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">❄️</div><div class="el-name">Frozen!</div></div><div class="text-xs" style="color:var(--text-secondary)">Combine with Fire or Hot elements to thaw</div></div>';
-                loader.classList.add('hidden');setTimeout(resetDZs,1500);return;
-            }
-            // Melt check (not for permafrost)
-            if(sel1.isFrozen&&!sel1.isPermafrost&&isHeat2){const r=processMelt(sel1,sel2);if(r){showMeltResult(r);loader.classList.add('hidden');return;}}
-            if(sel2.isFrozen&&!sel2.isPermafrost&&isHeat1){const r=processMelt(sel2,sel1);if(r){showMeltResult(r);loader.classList.add('hidden');return;}}
 
             const result=generateElement(sel1,sel2);
             loader.classList.add('hidden');
@@ -2335,6 +2549,8 @@
             if(result.phantomFail){resultArea.innerHTML=`<div class="text-center"><div class="el-card phantom-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">👻</div><div class="el-name">Phased Out!</div></div><div class="text-xs" style="color:var(--text-secondary)">${result.phantomName} flickered out of existence</div></div>`;setTimeout(resetDZs,1500);return;}
             if(result.cursedCorrupt){resultArea.innerHTML='<div class="text-center"><div class="el-card cursed-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💀</div><div class="el-name">Curse Activated!</div></div><div class="text-xs" style="color:var(--text-secondary)">The curse corrupted the combination!</div></div>';setTimeout(resetDZs,1500);return;}
             if(result.unstableExplode){const ex=result.explodedInto;resultArea.innerHTML=`<div class="text-center"><div class="el-card unstable-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💥</div><div class="el-name">Explosion!</div></div><div class="text-xs" style="color:var(--text-secondary)">Unstable element exploded into <strong>${ex.name}</strong>!</div></div>`;setTimeout(resetDZs,1500);return;}
+            if(result.timeLoop){const lp=result.loopedInto;resultArea.innerHTML=`<div class="text-center"><div class="el-card temporal-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">🔁</div><div class="el-name">Time Loop!</div></div><div class="text-xs" style="color:var(--text-secondary)">Time folded — you got <strong>${lp.name}</strong> again!</div></div>`;setTimeout(resetDZs,1500);return;}
+            if(result.shortCircuit){resultArea.innerHTML='<div class="text-center"><div class="el-card electric-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">⚡</div><div class="el-name">Short Circuit!</div></div><div class="text-xs" style="color:var(--text-secondary)">The electric charge fried the combination!</div></div>';setTimeout(resetDZs,1500);return;}
             if(result.finalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card final-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">⭐</div><div class="el-name">Final Item</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot be combined further</div></div>';setTimeout(resetDZs,1500);return;}
             if(result.fatalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card fatal-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💀</div><div class="el-name">Fatal Error</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot process combination</div></div>';setTimeout(resetDZs,1500);return;}
             if(result.invalid){resultArea.innerHTML=`<div class="text-center"><div class="el-card invalid-shake inline-flex flex-col items-center p-4 mb-2" style="background:var(--bg-card);border:1px solid var(--border)" data-name="Invalid Combination"><div class="el-emoji">❌</div><div class="el-name">Invalid Combination</div></div><div class="text-xs" style="color:var(--text-secondary)">${result.description}</div></div>`;resetDZs();return;}
@@ -2349,7 +2565,7 @@
         function showMeltResult(r){
             if(r.melted) resultArea.innerHTML=`<div class="text-center"><div class="el-card inline-flex flex-col items-center p-4 mb-2" data-name="${r.el.name}"><div class="el-emoji">${r.el.emoji}</div><div class="el-name">${r.el.name}</div></div><div class="text-xs font-semibold" style="color:var(--teal)">Thawed!</div></div>`;
             else resultArea.innerHTML=`<div class="text-center"><div class="el-card frozen-el inline-flex flex-col items-center p-4 mb-2 relative"><div class="el-emoji">${r.el.emoji}</div><div class="el-name">${r.el.name}</div><div class="melt-bar" style="width:${(r.prog/r.goal)*100}%"></div></div><div class="text-xs" style="color:var(--text-secondary)">Warming... ${r.prog}/${r.goal}</div></div>`;
-            setTimeout(resetDZs,1500);
+            resetDZs();
         }
 
         function addElement(newEl){
@@ -2374,7 +2590,7 @@
                 if(newEl.isFinal)notify('FINAL Element!','Discovered '+newEl.name+'!','⭐');
                 else if(newEl.isSecret)notify('SECRET Found!',newEl.name+' discovered!','🔮');
                 else if(newEl.isBasic)notify('BASIC Element!',newEl.name+' discovered!','💚');
-                else if(newEl.isFrozen)notify('Frozen!',newEl.name+' is frozen — use heat!','❄️');
+                else if(newEl.isFrozen){notify('Frozen!',newEl.name+' is frozen — use heat!','❄️');if(!frozenTutShown){frozenTutShown=true;openModal('frozenTutModal');}}
                 else if(newEl.isSuperHot)notify('SUPER HOT!',newEl.name+' — melts ice fast!','🔥');
                 else if(newEl.isHot)notify('Hot Element!',newEl.name+' created!','🔥');
                 else if(newEl.isQuestion)notify('Mysterious!',newEl.name+' discovered!','❓');
@@ -2444,7 +2660,7 @@
         $('confirmReset').addEventListener('click',()=>{
             elements=[...STARTERS];combos=[];
             gs={coins:25,totalCoins:25,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false};
-            fractionalCoins=0;
+            fractionalCoins=0;frozenTutShown=false;
             comboHistory.innerHTML='<p class="italic text-center text-sm" style="color:var(--text-secondary)">No combinations yet</p>';
             resultArea.innerHTML='';searchInput.value='';
             resetDZs();renderEls();updateCount();updateCoinDisplay();save();
