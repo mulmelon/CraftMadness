@@ -2697,8 +2697,8 @@
                 result.isToxic=true;
             }
 
-            // ─── RADIOACTIVE mutation: 8% chance result gets bonus property ───
-            if((p1.isRadioactive||p2.isRadioactive)&&!result.isFinal&&Math.random()<0.08){
+            // ─── RADIOACTIVE mutation: 20% chance result gets bonus property ───
+            if((p1.isRadioactive||p2.isRadioactive)&&!result.isFinal&&Math.random()<0.2){
                 const mutations=['isGolden','isCrystalline','isChromatic','isEthereal'];
                 result[mutations[Math.floor(Math.random()*mutations.length)]]=true;
             }
@@ -2721,12 +2721,12 @@
                 }
             }
 
-            // ─── TEMPORAL aging: 12% chance result becomes ancient; 8% time loop ───
+            // ─── TEMPORAL aging: 42% chance result becomes ancient; 18% time loop ───
             if((p1.isTemporal||p2.isTemporal)&&!result.isFinal){
                 const roll=Math.random();
-                if(roll<0.08){
+                if(roll<0.18){
                     return{timeLoop:true,loopedInto:p1.isTemporal?{...p2}:{...p1}};
-                } else if(roll<0.20&&!result.isAncient){
+                } else if(roll<0.60&&!result.isAncient){
                     result.isAncient=true;
                 }
             }
