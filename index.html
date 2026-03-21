@@ -3194,7 +3194,7 @@
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
-            const eligible=elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank);
+            const eligible=elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost);
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
             const count=Math.min(5,eligible.length);
             // Shuffle and pick
