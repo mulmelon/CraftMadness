@@ -542,6 +542,7 @@
                     <span class="text-[0.65rem] ml-1" style="color:var(--text-secondary)">+<span id="cpm">0</span>/min</span>
                 </div>
                 <button id="shopBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
+                <button id="battleBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(239,68,68,0.12);color:#ef4444">⚔️ Battle</button>
                 <div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span>
                 </div>
             </div>
@@ -3708,6 +3709,462 @@
         // Show changelog on first visit
         setTimeout(()=>openModal('changelogModal'),600);
     });
+    // ========== BATTLE SYSTEM ==========
+    const elementStats = {
+        'Water': { type: 'Water', baseSpeed: 70, baseAtk: 60, baseDef: 70, hp: 100, skills: ['Water Gun'] },
+        'Fire': { type: 'Fire', baseSpeed: 80, baseAtk: 75, baseDef: 50, hp: 90, skills: ['Ember'] },
+        'Earth': { type: 'Grass', baseSpeed: 50, baseAtk: 65, baseDef: 80, hp: 110, skills: ['Tackle'] },
+        'Air': { type: 'Air', baseSpeed: 90, baseAtk: 55, baseDef: 55, hp: 85, skills: ['Gust'] },
+        'Lightning': { type: 'Electric', baseSpeed: 120, baseAtk: 85, baseDef: 60, hp: 90, skills: ['Thunder Shock'] },
+        'Star Forge': { type: 'Steel', baseSpeed: 60, baseAtk: 95, baseDef: 90, hp: 120, skills: ['Forge'], customSkill: 'forge' },
+        'Bug Finder': { type: 'Bug', baseSpeed: 100, baseAtk: 80, baseDef: 70, hp: 95, skills: ['Find', 'Bug'], customSkill: 'find', customSkill2: 'bug' },
+        'Ultra Instinct Element': { type: 'Fighting', baseSpeed: 150, baseAtk: 100, baseDef: 80, hp: 130, skills: ['Counter', 'Heal Punch', '大爆発'], customSkill: 'counter', customSkill2: 'healpunch', customSkill3: 'explode', dodgeCount: 5, canOnlyUseOne: true },
+        'iPad': { type: 'Electric', baseSpeed: 40, baseAtk: 30, baseDef: 40, hp: 60, skills: [], passive: 'screenProtector' },
+        'Black Hole': { type: 'Dark', baseSpeed: 30, baseAtk: 50, baseDef: 120, hp: 150, skills: [], passive: 'lightAbsorber' },
+        'Permafrost': { type: 'Ice', baseSpeed: 20, baseAtk: 40, baseDef: 100, hp: 140, skills: [], isPermafrostType: true },
+        'default': { type: 'Normal', baseSpeed: 60, baseAtk: 60, baseDef: 60, hp: 100, skills: ['Struggle'] }
+    };
+
+    const typeEffectiveness = {
+        'Fire': { 'Grass': 2, 'Water': 0.5, 'Air': 2, 'Fire': 0.5, 'Ice': 2, 'Bug': 2, 'Steel': 0.5 },
+        'Water': { 'Fire': 2, 'Grass': 0.5, 'Earth': 2, 'Water': 0.5, 'Rock': 2 },
+        'Grass': { 'Water': 2, 'Fire': 0.5, 'Air': 0.5, 'Earth': 2, 'Grass': 0.5, 'Ice': 0.5 },
+        'Air': { 'Grass': 2, 'Fire': 0.5, 'Air': 0.5, 'Electric': 0.5 },
+        'Electric': { 'Water': 2, 'Air': 2, 'Grass': 0.5, 'Electric': 0.5, 'Earth': 0 },
+        'Ice': { 'Grass': 2, 'Air': 2, 'Earth': 2, 'Fire': 0.5, 'Water': 0.5, 'Ice': 0.5 },
+        'Fighting': { 'Ice': 2, 'Rock': 2, 'Dark': 2, 'Air': 0.5, 'Bug': 0.5 },
+        'Bug': { 'Grass': 2, 'Dark': 2, 'Fire': 0.5, 'Fighting': 0.5, 'Air': 0.5 },
+        'Dark': { 'Psychic': 2, 'Ghost': 2, 'Fighting': 0.5, 'Dark': 0.5 },
+        'Steel': { 'Ice': 2, 'Rock': 2, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Steel': 0.5 },
+        'Normal': {}
+    };
+
+    function getElementStats(name) {
+        if (elementStats[name]) return elementStats[name];
+        let type = 'Normal';
+        if (name.includes('Fire') || name.includes('Inferno') || name.includes('Lava')) type = 'Fire';
+        else if (name.includes('Water') || name.includes('Ocean') || name.includes('Ice') || name.includes('Frozen')) type = 'Water';
+        else if (name.includes('Earth') || name.includes('Tree') || name.includes('Plant') || name.includes('Grass') || name.includes('Forest')) type = 'Grass';
+        else if (name.includes('Air') || name.includes('Wind') || name.includes('Sky') || name.includes('Cloud')) type = 'Air';
+        else if (name.includes('Lightning') || name.includes('Electric') || name.includes('Thunder')) type = 'Electric';
+        return { type: type, baseSpeed: 60, baseAtk: 60, baseDef: 60, hp: 100, skills: ['Struggle'], name: name };
+    }
+
+    let battleState = {
+        active: false, p1Elements: [], p2Elements: [], p1Team: [], p2Team: [],
+        p1Current: null, p2Current: null, p1Ready: false, p2Ready: false,
+        turn: 'p1', p1AtkBoost: 1, p2AtkBoost: 1, p1DefBoost: 1, p2DefBoost: 1,
+        p1FindUsed: false, p2FindUsed: false, p1BugActive: false, p2BugActive: false,
+        p1CounterLocked: false, p2CounterLocked: false
+    };
+
+    function addBattleLog(msg, type) {
+        const log = document.getElementById('battleLog');
+        if (!log) return;
+        const colors = { damage: '#ef4444', skill: '#a855f7', system: '#eab308', dodge: '#14b8a6', block: '#60a5fa' };
+        const p = document.createElement('p');
+        p.style.color = colors[type] || '#888';
+        p.textContent = msg;
+        log.appendChild(p);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function loadPlayerElements(num, code) {
+        try {
+            const raw = atob(code);
+            const data = JSON.parse(raw);
+            const els = data.elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
+            if (num === 1) {
+                battleState.p1Elements = els;
+                document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements</div>`;
+                battleState.p1Ready = true;
+            } else {
+                battleState.p2Elements = els;
+                document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements</div>`;
+                battleState.p2Ready = true;
+            }
+            document.getElementById('startBattleBtn').disabled = !(battleState.p1Ready && battleState.p2Ready);
+        } catch(e) {
+            const err = `<div class="text-red-500">✗ Invalid code: ${e.message}</div>`;
+            if (num === 1) {
+                document.getElementById('p1Elements').innerHTML = err;
+                battleState.p1Ready = false;
+            } else {
+                document.getElementById('p2Elements').innerHTML = err;
+                battleState.p2Ready = false;
+            }
+            document.getElementById('startBattleBtn').disabled = true;
+        }
+    }
+
+    function selectTeam(player, name) {
+        const team = player === 1 ? battleState.p1Team : battleState.p2Team;
+        const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
+        const el = els.find(e => e.name === name);
+        const idx = team.indexOf(el);
+        if (idx !== -1) {
+            team.splice(idx, 1);
+            addBattleLog(`Player ${player} removed ${el.name} from team`, 'system');
+        } else if (team.length < 3) {
+            team.push(el);
+            addBattleLog(`Player ${player} added ${el.name} to team`, 'system');
+        } else {
+            addBattleLog(`Player ${player} - can only select 3 elements!`, 'system');
+            return;
+        }
+        const container = document.getElementById(player === 1 ? 'p1Team' : 'p2Team');
+        if (container) {
+            container.innerHTML = '';
+            els.forEach(e => {
+                const btn = document.createElement('button');
+                btn.textContent = `${e.emoji} ${e.name}`;
+                btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${team.includes(e) ? 'bg-green-500 text-white' : 'bg-gray-500 text-white opacity-60'}`;
+                btn.onclick = () => selectTeam(player, e.name);
+                container.appendChild(btn);
+            });
+        }
+    }
+
+    function updateBattleUI() {
+        const p1 = battleState.p1Current;
+        const p2 = battleState.p2Current;
+        if (p1) {
+            const hpPercent = Math.max(0, (p1.currentHp / p1.maxHp) * 100);
+            document.getElementById('p1HpFill').style.width = `${hpPercent}%`;
+            document.getElementById('p1Active').innerHTML = `${p1.emoji} ${p1.name}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
+            document.getElementById('p1Stats').innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
+            const stats = getElementStats(p1.name);
+            const skillsDiv = document.getElementById('p1Skills');
+            if (skillsDiv) {
+                skillsDiv.innerHTML = '';
+                stats.skills.forEach(s => {
+                    const btn = document.createElement('button');
+                    btn.textContent = s;
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white hover:bg-purple-600';
+                    btn.onclick = () => useSkill(s, 1, p1);
+                    skillsDiv.appendChild(btn);
+                });
+                if (p1.customSkill === 'forge') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Forge';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
+                    btn.onclick = () => useSkill('Forge', 1, p1);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p1.customSkill === 'find') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Find';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
+                    btn.onclick = () => useSkill('Find', 1, p1);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p1.customSkill2 === 'bug') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Bug';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-yellow-500 text-white hover:bg-yellow-600';
+                    btn.onclick = () => useSkill('Bug', 1, p1);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p1.customSkill2 === 'healpunch') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Heal Punch';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white hover:bg-green-600';
+                    btn.onclick = () => useSkill('Heal Punch', 1, p1);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p1.customSkill3 === 'explode') {
+                    const btn = document.createElement('button');
+                    btn.textContent = '大爆発';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-red-500 text-white hover:bg-red-600';
+                    btn.onclick = () => useSkill('大爆発', 1, p1);
+                    skillsDiv.appendChild(btn);
+                }
+            }
+        }
+        if (p2) {
+            const hpPercent = Math.max(0, (p2.currentHp / p2.maxHp) * 100);
+            document.getElementById('p2HpFill').style.width = `${hpPercent}%`;
+            document.getElementById('p2Active').innerHTML = `${p2.emoji} ${p2.name}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
+            document.getElementById('p2Stats').innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
+            const stats = getElementStats(p2.name);
+            const skillsDiv = document.getElementById('p2Skills');
+            if (skillsDiv) {
+                skillsDiv.innerHTML = '';
+                stats.skills.forEach(s => {
+                    const btn = document.createElement('button');
+                    btn.textContent = s;
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white hover:bg-purple-600';
+                    btn.onclick = () => useSkill(s, 2, p2);
+                    skillsDiv.appendChild(btn);
+                });
+                if (p2.customSkill === 'forge') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Forge';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
+                    btn.onclick = () => useSkill('Forge', 2, p2);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p2.customSkill === 'find') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Find';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
+                    btn.onclick = () => useSkill('Find', 2, p2);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p2.customSkill2 === 'bug') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Bug';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-yellow-500 text-white hover:bg-yellow-600';
+                    btn.onclick = () => useSkill('Bug', 2, p2);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p2.customSkill2 === 'healpunch') {
+                    const btn = document.createElement('button');
+                    btn.textContent = 'Heal Punch';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white hover:bg-green-600';
+                    btn.onclick = () => useSkill('Heal Punch', 2, p2);
+                    skillsDiv.appendChild(btn);
+                }
+                if (p2.customSkill3 === 'explode') {
+                    const btn = document.createElement('button');
+                    btn.textContent = '大爆発';
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-red-500 text-white hover:bg-red-600';
+                    btn.onclick = () => useSkill('大爆発', 2, p2);
+                    skillsDiv.appendChild(btn);
+                }
+            }
+        }
+    }
+
+    function useSkill(skill, player, el) {
+        if (!battleState.active) return;
+        const isP1 = player === 1;
+        const attacker = isP1 ? battleState.p1Current : battleState.p2Current;
+        const defender = isP1 ? battleState.p2Current : battleState.p1Current;
+
+        if (defender?.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発') {
+            defender.dodgesLeft--;
+            addBattleLog(`${defender.name} DODGED! ${defender.dodgesLeft} dodges left!`, 'dodge');
+            updateBattleUI();
+            endTurn();
+            return;
+        }
+
+        if (skill === 'Counter') {
+            if ((isP1 && battleState.p1CounterLocked) || (!isP1 && battleState.p2CounterLocked)) {
+                addBattleLog('Counter cannot be used twice in a row!', 'system');
+                return;
+            }
+            addBattleLog(`${attacker.name} used COUNTER!`, 'skill');
+            const dmg = 50;
+            defender.currentHp -= dmg;
+            addBattleLog(`${attacker.name} countered for ${dmg} damage!`, 'damage');
+            if (isP1) battleState.p1CounterLocked = true;
+            else battleState.p2CounterLocked = true;
+            setTimeout(() => {
+                if (isP1) battleState.p1CounterLocked = false;
+                else battleState.p2CounterLocked = false;
+            }, 2000);
+            updateBattleUI();
+            endTurn();
+            return;
+        }
+
+        if (skill === 'Heal Punch') {
+            const dmg = 40;
+            const heal = Math.floor(dmg / 4);
+            defender.currentHp -= dmg;
+            attacker.currentHp = Math.min(attacker.maxHp, attacker.currentHp + heal);
+            addBattleLog(`${attacker.name} used HEAL PUNCH! Dealt ${dmg} damage, healed ${heal} HP!`, 'skill');
+            updateBattleUI();
+            endTurn();
+            return;
+        }
+
+        if (skill === '大爆発') {
+            addBattleLog(`${attacker.name} used 大爆発! MASSIVE EXPLOSION!`, 'skill');
+            const dmg = 120;
+            defender.currentHp -= dmg;
+            attacker.currentHp = 0;
+            addBattleLog(`${attacker.name} dealt ${dmg} damage but fainted!`, 'damage');
+            if (defender.currentHp <= 0) addBattleLog(`${defender.name} fainted! DRAW!`, 'system');
+            updateBattleUI();
+            endTurn();
+            return;
+        }
+
+        if (skill === 'Forge') {
+            const dmg = 50;
+            defender.currentHp -= dmg;
+            if (isP1) { battleState.p1AtkBoost *= 1.5; battleState.p1DefBoost *= 1.5; }
+            else { battleState.p2AtkBoost *= 1.5; battleState.p2DefBoost *= 1.5; }
+            addBattleLog(`${attacker.name} used FORGE! Dealt ${dmg} damage, boosted stats! (1.5x)`, 'skill');
+            updateBattleUI();
+            endTurn();
+            return;
+        }
+
+        if (skill === 'Find') {
+            if ((isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed)) {
+                addBattleLog('Find can only be used once per match!', 'system');
+                return;
+            }
+            if (isP1) { battleState.p1FindUsed = true; battleState.p2DefBoost = 0.67; }
+            else { battleState.p2FindUsed = true; battleState.p1DefBoost = 0.67; }
+            addBattleLog(`${attacker.name} used FIND! Enemy defense lowered! (1.5x damage taken)`, 'skill');
+            endTurn();
+            return;
+        }
+
+        if (skill === 'Bug') {
+            addBattleLog(`${attacker.name} used BUG! 25% chance to immobilize!`, 'skill');
+            if (Math.random() < 0.25) {
+                if (isP1) battleState.p2BugActive = true;
+                else battleState.p1BugActive = true;
+                addBattleLog(`${defender.name} is BUGGED! May not be able to move!`, 'system');
+            }
+            endTurn();
+            return;
+        }
+
+        let dmg = 35;
+        const atkType = getElementStats(attacker.name).type;
+        const defType = getElementStats(defender.name).type;
+        let mult = typeEffectiveness[atkType]?.[defType] || 1;
+        if (defender.name === 'Permafrost') mult *= 0.9;
+        dmg = Math.floor(dmg * mult);
+        defender.currentHp -= dmg;
+        let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect! (x0)' : ''));
+        addBattleLog(`${attacker.name} used ${skill}! Dealt ${dmg} damage!${eff}`, 'damage');
+        updateBattleUI();
+        endTurn();
+    }
+
+    function endTurn() {
+        const p1 = battleState.p1Current;
+        const p2 = battleState.p2Current;
+
+        if (p1?.currentHp <= 0) {
+            addBattleLog(`${p1.name} fainted!`, 'system');
+            const idx = battleState.p1Team.findIndex(e => e === p1);
+            if (idx + 1 < battleState.p1Team.length) {
+                battleState.p1Current = battleState.p1Team[idx + 1];
+                addBattleLog(`Player 1 sends out ${battleState.p1Current.name}!`, 'system');
+                updateBattleUI();
+            } else {
+                addBattleLog('🎉 PLAYER 2 WINS THE BATTLE! 🎉', 'system');
+                battleState.active = false;
+                return;
+            }
+        }
+
+        if (p2?.currentHp <= 0) {
+            addBattleLog(`${p2.name} fainted!`, 'system');
+            const idx = battleState.p2Team.findIndex(e => e === p2);
+            if (idx + 1 < battleState.p2Team.length) {
+                battleState.p2Current = battleState.p2Team[idx + 1];
+                addBattleLog(`Player 2 sends out ${battleState.p2Current.name}!`, 'system');
+                updateBattleUI();
+            } else {
+                addBattleLog('🎉 PLAYER 1 WINS THE BATTLE! 🎉', 'system');
+                battleState.active = false;
+                return;
+            }
+        }
+
+        battleState.turn = battleState.turn === 'p1' ? 'p2' : 'p1';
+        addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'}'s turn!`, 'system');
+
+        if ((battleState.turn === 'p2' && battleState.p1BugActive) || (battleState.turn === 'p1' && battleState.p2BugActive)) {
+            if (Math.random() < 0.25) {
+                addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'} is BUGGED and cannot move!`, 'system');
+                endTurn();
+            }
+        }
+    }
+
+    function startBattle() {
+        if (battleState.p1Team.length === 0 || battleState.p2Team.length === 0) {
+            addBattleLog('Both players must select 3 elements!', 'system');
+            return;
+        }
+
+        battleState.active = true;
+        battleState.p1Current = battleState.p1Team[0];
+        battleState.p2Current = battleState.p2Team[0];
+        battleState.turn = 'p1';
+        battleState.p1AtkBoost = battleState.p2AtkBoost = 1;
+        battleState.p1DefBoost = battleState.p2DefBoost = 1;
+        battleState.p1FindUsed = battleState.p2FindUsed = false;
+        battleState.p1BugActive = battleState.p2BugActive = false;
+        battleState.p1CounterLocked = battleState.p2CounterLocked = false;
+
+        battleState.p1Team.forEach(el => {
+            const s = getElementStats(el.name);
+            el.currentHp = s.hp;
+            el.maxHp = s.hp;
+            if (el.name === 'Ultra Instinct Element') el.dodgesLeft = 5;
+            if (el.name === 'iPad') el.screenProtector = true;
+        });
+        battleState.p2Team.forEach(el => {
+            const s = getElementStats(el.name);
+            el.currentHp = s.hp;
+            el.maxHp = s.hp;
+            if (el.name === 'Ultra Instinct Element') el.dodgesLeft = 5;
+            if (el.name === 'iPad') el.screenProtector = true;
+        });
+
+        updateBattleUI();
+        document.getElementById('battleSetup').style.display = 'none';
+        document.getElementById('battleArena').style.display = 'block';
+        addBattleLog('⚔️ BATTLE STARTED! ⚔️', 'system');
+        addBattleLog(`Player 1: ${battleState.p1Team.map(e => e.name).join(', ')}`, 'system');
+        addBattleLog(`Player 2: ${battleState.p2Team.map(e => e.name).join(', ')}`, 'system');
+        addBattleLog('Player 1\'s turn!', 'system');
+    }
+
+    // Event listeners
+    if (document.getElementById('battleBtn')) {
+        document.getElementById('battleBtn').addEventListener('click', () => {
+            const modal = document.getElementById('battleModal');
+            if (modal) modal.style.display = 'block';
+        });
+    }
+    if (document.getElementById('p1LoadBtn')) {
+        document.getElementById('p1LoadBtn').addEventListener('click', () => {
+            const code = document.getElementById('p1Code').value;
+            if (!code) { document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Paste your export code</div>'; return; }
+            loadPlayerElements(1, code);
+        });
+    }
+    if (document.getElementById('p2LoadBtn')) {
+        document.getElementById('p2LoadBtn').addEventListener('click', () => {
+            const code = document.getElementById('p2Code').value;
+            if (!code) { document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Paste your export code</div>'; return; }
+            loadPlayerElements(2, code);
+        });
+    }
+    if (document.getElementById('startBattleBtn')) {
+        document.getElementById('startBattleBtn').addEventListener('click', startBattle);
+    }
+    if (document.getElementById('resetBattleBtn')) {
+        document.getElementById('resetBattleBtn').addEventListener('click', () => {
+            battleState.active = false;
+            battleState.p1Ready = battleState.p2Ready = false;
+            battleState.p1Elements = battleState.p2Elements = battleState.p1Team = battleState.p2Team = [];
+            battleState.p1Current = battleState.p2Current = null;
+            document.getElementById('battleSetup').style.display = 'block';
+            document.getElementById('battleArena').style.display = 'none';
+            document.getElementById('p1Elements').innerHTML = '';
+            document.getElementById('p2Elements').innerHTML = '';
+            document.getElementById('p1Code').value = '';
+            document.getElementById('p2Code').value = '';
+            document.getElementById('startBattleBtn').disabled = true;
+            const log = document.getElementById('battleLog');
+            if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
+        });
+    }
     </script>
+
 </body>
 </html>
