@@ -122,6 +122,7 @@
         .badge-purified { background: linear-gradient(135deg,#d1d5db,#f3f4f6,#ffffff); color: #374151; }
         @keyframes everythingBadgePulse { 0%,100%{text-shadow:0 0 4px rgba(0,255,200,0.8)} 50%{text-shadow:0 0 10px rgba(0,255,200,1),0 0 20px rgba(0,200,255,0.6)} }
         .badge-everything { background:linear-gradient(135deg,#020a0f,#0a1628,#061218); color:#00ffc8; border:1px solid rgba(0,255,200,0.6); animation:everythingBadgePulse 2s infinite; letter-spacing:1px; font-size:0.5rem; }
+        .badge-cymoney { background: linear-gradient(135deg,#0d9488,#14b8a6,#2dd4bf); color: #042f2e; font-weight:700; }
 
         /* Special element styles */
         @keyframes pulseGlow { 0%,100%{box-shadow:0 0 6px rgba(0,200,83,0.4)} 50%{box-shadow:0 0 18px rgba(0,200,83,0.7)} }
@@ -541,6 +542,8 @@
                     <span class="text-[0.65rem] ml-1" style="color:var(--text-secondary)">+<span id="cpm">0</span>/min</span>
                 </div>
                 <button id="shopBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
+                <div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span>
+                </div>
             </div>
         </header>
 
@@ -577,6 +580,7 @@
                 </div>
                 <div class="flex gap-1.5 order-2 sm:order-3 items-center">
                     <button id="starForgeBtn" title="Star Forge — Bestow 5 random elements with special blessings (5 min cooldown)">🌟 Star Forge<span class="sf-timer" id="sfTimer"></span></button>
+                    <button id="upgradeForgeBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-all ml-2" style="background:rgba(20,184,166,0.12);color:#14b8a6" title="Upgrade Star Forge (Cost: 1 CyMoney)">⬆️ Upgrade Forge</button>
                     <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
                     <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
                     <button id="resetBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(239,68,68,0.08);color:#ef4444">Reset</button>
@@ -911,7 +915,23 @@
         </div>
         <button class="font-semibold text-sm py-2.5 px-8 rounded-full" style="background:#7f1d1d;color:#fff" data-close="fatalErrorTutModal">Got it!</button>
     </div></div>
-
+        <!-- Everything Tutorial Modal -->
+    <div id="everythingTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:460px;border-color:#00ffc8">
+        <button class="modal-close" data-close="everythingTutModal">&times;</button>
+        <h2 class="font-display text-xl mb-2" style="color:#00ffc8">🌟 EVERYTHING Element!</h2>
+        <p class="text-sm mb-5" style="color:var(--text-secondary)">You got your first <strong style="color:#00ffc8">EVERYTHING</strong> modification! This is the rarest and most powerful mod in the game!</p>
+        <div class="rounded-xl p-4 mb-4 text-center" style="background:linear-gradient(135deg,#020a0f,#0a1628);border:1px solid #00ffc8">
+            <div class="text-4xl mb-2">💎</div>
+            <div class="font-bold text-lg" style="color:#14b8a6">+1 CyMoney!</div>
+            <p class="text-xs mt-2" style="color:#00ffc8">A new currency has been unlocked!</p>
+        </div>
+        <div class="rounded-xl p-3 mt-2 mb-4 text-left text-xs space-y-2" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-secondary)">
+            <p>💎 <strong style="color:#14b8a6">CyMoney</strong> — a special turquoise currency for upgrades</p>
+            <p>⭐ <strong style="color:#fbbf24">Upgrade Star Forge</strong> — costs 1 CyMoney, makes it give 2 extra elements with <strong style="color:#14b8a6">isCyMoney</strong> modification</p>
+            <p>🛒 <strong style="color:var(--gold)">More features coming soon!</strong> — New packs and more ways to spend CyMoney</p>
+        </div>
+        <button class="font-semibold text-sm py-2.5 px-8 rounded-full" style="background:linear-gradient(135deg,#0d9488,#14b8a6);color:#042f2e" data-close="everythingTutModal">Got it!</button>
+    </div></div>
     <!-- Penalty Tutorial Modal -->
     <div id="penaltyTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:460px;border-color:#ef4444">
         <button class="modal-close" data-close="penaltyTutModal">&times;</button>
@@ -2366,9 +2386,7 @@
         let sel1 = null, sel2 = null;
         let fractionalCoins = 0;
         let gs = {
-            coins:25, totalCoins:25, lastCalcTime:Date.now(),
-            shopRefresh:Date.now(), shopStock:{}, packsBought:0,
-            hasShownEnding:false, sfUnlocked:false,
+            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false
         };
 
         const totalMain = Object.keys(recipes).reduce((c,k)=> {
@@ -2474,12 +2492,15 @@
         function hasPenaltyMod(el){return !!(el.isToxic||el.isViral||el.isParasitic||el.isCorrupted||el.isCursed||el.isVoid);}
 
         const EVERYTHING_REQUIRED=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal'];
-        const ALL_MOD_FLAGS=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal','isHot','isSuperHot','isFinal','isSecret','isExclusive','isValidCombination','isQuestion','isFrozen','isPermafrost','isError','isFatalError','isBlank','isToxic','isViral','isParasitic','isCorrupted','isCursed','isVoid'];
+        const ALL_MOD_FLAGS=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal','isHot','isSuperHot','isFinal','isSecret','isExclusive','isValidCombination','isQuestion','isFrozen','isPermafrost','isError','isFatalError','isBlank','isToxic','isViral','isParasitic','isCorrupted','isCursed','isVoid','isCyMoney'];
         function checkIsEverything(el){
             if(el.isEverything)return true;
             if(hasPenaltyMod(el))return false;
             if(!(el.isHot||el.isSuperHot))return false;
             return EVERYTHING_REQUIRED.every(k=>!!el[k]);
+        }
+        function checkIsCyMoney(el){
+            return el.isCyMoney === true;
         }
         function stripToEverything(el){
             ALL_MOD_FLAGS.forEach(k=>{delete el[k];});
@@ -2584,6 +2605,7 @@
             if(el.isCelestial) h+='<span class="badge badge-celestial">CELESTIAL</span>';
             if(el.isElectric) h+='<span class="badge badge-electric">ELECTRIC</span>';
             if(el.isPurified) h+='<span class="badge badge-purified">PURIFIED</span>';
+            if(checkIsCyMoney(el)) h+='<span class="badge badge-cymoney">💎 CYMONEY</span>';
             return h;
         }
 
@@ -2730,6 +2752,15 @@
             coinAmt.textContent=gs.coins.toLocaleString();
             shopCoins.textContent=gs.coins.toLocaleString();
             updateShopButtons();
+        }
+        function awardCyMoney(amount){
+            gs.cyMoney = (gs.cyMoney || 0) + amount;
+            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney;
+            save();
+            notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
+        }
+        function updateCyMoneyDisplay(){
+            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
         }
 
 
@@ -3256,6 +3287,14 @@
                 showResult(elements[exists],false);
             } else {
                 elements.push(newEl);
+                // Check if this is the first Everything element
+                const isFirstEverything = checkIsEverything(newEl) && !elements.some(e => e !== newEl && checkIsEverything(e));
+                if(isFirstEverything){
+                    awardCyMoney(1);
+                    notify('🌟 EVERYTHING UNLOCKED!', 'You got your first EVERYTHING element! You earned 1 CyMoney! Use it to upgrade the Star Forge!', '🌟');
+                    // Show tutorial modal
+                    setTimeout(() => openModal('everythingTutModal'), 500);
+                }
                 showResult(newEl,true);
                 combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name});
                 addComboEntry(sel1,sel2,newEl);
@@ -3263,7 +3302,7 @@
                 const card=document.createElement('div');
                 card.className=`el-card new-el ${getElClasses(newEl)}`;
                 card.setAttribute('data-idx',elements.length-1);card.setAttribute('data-name',newEl.name);card.setAttribute('data-desc',newEl.description||'');card.setAttribute('draggable','true');card.title=newEl.description||'';
-                card.innerHTML=`<div class="el-emoji">${newEl.emoji}</div><div class="el-name">${newEl.name}</div>${getBadges(newEl)}`;
+                card.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>${getBadges(el)}${checkIsCyMoney(el) ? '<span class="badge badge-cymoney">💎 CYMONEY</span>' : ''}`;
                 if(newEl.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width='0%';card.appendChild(mb);}
                 if(newEl.hasLink)card.addEventListener('click',()=>window.open(newEl.link,'_blank'));
                 d.appendChild(card);elGrid.appendChild(d);
@@ -3340,7 +3379,7 @@
             if(sfCooldownEnd>Date.now())return;
             const eligible=elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
-            const count=Math.min(5,eligible.length);
+            let count = Math.min(5, eligible.length);
             // Shuffle and pick
             const shuffled=[...eligible].sort(()=>Math.random()-0.5);
             const chosen=shuffled.slice(0,count);
@@ -3360,6 +3399,22 @@
                 if(checkIsEverything(elements[idx])){stripToEverything(elements[idx]);}
                 results.push(elements[idx].emoji+' '+elements[idx].name+' → '+(elements[idx].isEverything?'EVERYTHING':picked.map(b=>b.replace('is','')).join(', ')));
             });
+            
+            // UPGRADED STAR FORGE: Add 2 extra elements with isCyMoney
+            if(gs.sfUpgraded){
+                const extraEligible = elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
+                if(extraEligible.length >= 2){
+                    const extraChosen = extraEligible.sort(()=>Math.random()-0.5).slice(0,2);
+                    extraChosen.forEach(target=>{
+                        const idx=elements.findIndex(e=>e.name===target.name);
+                        if(idx!==-1){
+                            elements[idx].isCyMoney = true;
+                            results.push(target.emoji+' '+target.name+' → 💎 CyMoney');
+                        }
+                    });
+                }
+            }
+    
             // Start cooldown
             sfCooldownEnd=Date.now()+SF_COOLDOWN;
             gs.sfCooldownEnd=sfCooldownEnd;
@@ -3377,6 +3432,23 @@
         }
 
         starForgeBtn.addEventListener('click',activateStarForge);
+            document.getElementById('upgradeForgeBtn').addEventListener('click', function(){
+                if(gs.sfUpgraded){
+                    notify('Already Upgraded!', 'Star Forge is already upgraded!', '💎');
+                    return;
+                }
+                if((gs.cyMoney || 0) < 1){
+                    notify('Need CyMoney!', 'You need 1 CyMoney to upgrade the Star Forge! Get your first EVERYTHING element!', '💎');
+                    return;
+                }
+                gs.cyMoney -= 1;
+                gs.sfUpgraded = true;
+                updateCyMoneyDisplay();
+                save();
+                notify('⭐ STAR FORGE UPGRADED!', 'Now gives 2 extra elements with isCyMoney modification!', '⭐');
+                document.getElementById('upgradeForgeBtn').disabled = true;
+                document.getElementById('upgradeForgeBtn').style.opacity = '0.5';
+            });
 
         // ─── COMBO HISTORY ───
         function addComboEntry(e1,e2,res){
