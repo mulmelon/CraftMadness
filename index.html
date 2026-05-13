@@ -2100,6 +2100,15 @@
             'Bullet+Bullet':{name:'Magazine',emoji:'🔴',description:'Container of rounds'},
             'Bullet+Water':{name:'Splash',emoji:'💦',description:'Hitting the water'},
             'Bullet+Magic':{name:'Homing Bullet',emoji:'🎯',description:'Never misses its target'},
+            'Star+Forge':{name:'Star Forge',emoji:'⭐',color:'bg-amber-500',description:'A legendary forge that blesses elements',isLegendary:true},
+            // Way to get Star Forge element
+            'Galaxy+Forge':{name:'Star Forge',emoji:'⭐',color:'bg-amber-500',description:'A legendary forge that blesses elements',isLegendary:true},
+            'Supernova+Forge':{name:'Star Forge',emoji:'⭐',color:'bg-amber-500',description:'A legendary forge that blesses elements',isLegendary:true},
+            'Star+Factory':{name:'Star Forge',emoji:'⭐',color:'bg-amber-500',description:'A legendary forge that blesses elements',isLegendary:true},
+            'Constellation+Forge':{name:'Star Forge',emoji:'⭐',color:'bg-amber-500',description:'A legendary forge that blesses elements',isLegendary:true},
+            'Fire+Metal':{name:'Forge',emoji:'⚒️',color:'bg-orange-700',description:'A place to shape metal with fire and hammer'},
+            'Tool+Fire':{name:'Forge',emoji:'⚒️',color:'bg-orange-700',description:'A place to shape metal with fire and hammer'},
+            'Blacksmith+Fire':{name:'Forge',emoji:'⚒️',color:'bg-orange-700',description:'A place to shape metal with fire and hammer'},
 
             // ─── MYTHICAL PACK ELEMENT RECIPES ───
             'Mythical+Water':{name:'Mermaid',emoji:'🧜',description:'Half-human half-fish'},
@@ -3370,8 +3379,18 @@
         function checkStarForgeUnlock(){
             const unlocked=gs.sfUnlocked||elements.some(e=>e.name==='Star Forge');
             if(unlocked&&!gs.sfUnlocked){gs.sfUnlocked=true;save();}
-            if(unlocked){starForgeBtn.classList.remove('sf-locked');starForgeBtn.style.pointerEvents='';}
-            else{starForgeBtn.classList.add('sf-locked');starForgeBtn.style.pointerEvents='none';}
+            if(unlocked){
+                starForgeBtn.classList.remove('sf-locked');
+                starForgeBtn.style.pointerEvents='';
+                // Also enable upgrade button if unlocked
+                const upgradeBtn = document.getElementById('upgradeForgeBtn');
+                if(upgradeBtn) upgradeBtn.style.pointerEvents = '';
+            } else {
+                starForgeBtn.classList.add('sf-locked');
+                starForgeBtn.style.pointerEvents='none';
+                const upgradeBtn = document.getElementById('upgradeForgeBtn');
+                if(upgradeBtn) upgradeBtn.style.pointerEvents = 'none';
+            }
         }
 
         function activateStarForge(){
