@@ -5153,5 +5153,82 @@
             <p class="text-xs" style="color:var(--text-secondary)">New items added as you collect more CyMoney!</p>
         </div>
     </div>
+        <script>
+// FIX: Make CyShop work independently
+(function() {
+    // Wait for DOM to be ready
+    function initCyShop() {
+        // Check if cyShopBtn already exists
+        if (document.getElementById('cyShopBtn')) return;
+        
+        const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
+        if (!headerDiv) {
+            setTimeout(initCyShop, 500);
+            return;
+        }
+        
+        const cyShopBtn = document.createElement('button');
+        cyShopBtn.id = 'cyShopBtn';
+        cyShopBtn.className = 'text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105';
+        cyShopBtn.style.background = 'rgba(20,184,166,0.12)';
+        cyShopBtn.style.color = '#14b8a6';
+        cyShopBtn.innerHTML = '💎 Exclusive Shop';
+        cyShopBtn.onclick = function(e) {
+            e.stopPropagation();
+            // Directly open the modal without calling any functions that might fail
+            const modal = document.getElementById('cyShopModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        };
+        headerDiv.appendChild(cyShopBtn);
+        console.log('CyShop button added successfully');
+    }
+    
+    // Try to initialize
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCyShop);
+    } else {
+        initCyShop();
+    }
+})();
+</script>
+        <script>
+// Force populate CyShop grid when modal opens
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'cyShopBtn' || (e.target.parentElement && e.target.parentElement.id === 'cyShopBtn')) {
+        setTimeout(function() {
+            const grid = document.getElementById('cyShopGrid');
+            if (grid && grid.children.length === 0) {
+                // Sample items if not populated
+                grid.innerHTML = `
+                    <div class="rounded-xl p-3 text-center" style="background:linear-gradient(135deg, rgba(20,184,166,0.15), rgba(13,148,136,0.08));border:2px solid #14b8a6">
+                        <div class="text-2xl mb-2">💎</div>
+                        <div class="font-semibold text-sm" style="color:#14b8a6">CyCrystal</div>
+                        <p class="text-xs my-2">A radiant crystal pulsing with cyber energy</p>
+                        <div class="flex items-center gap-2 justify-center mb-2">
+                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#14b8a6;color:#042f2e">⭐ EXCLUSIVE</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#0d9488;color:#fff">💎 CYMONEY</span>
+                        </div>
+                        <div class="text-sm font-bold" style="color:#14b8a6">5 💎</div>
+                        <button class="mt-2 w-full text-sm py-2 rounded-lg font-semibold" style="background:#6b6b80;color:#fff" disabled>Need 5 💎</button>
+                    </div>
+                    <div class="rounded-xl p-3 text-center" style="background:linear-gradient(135deg, rgba(20,184,166,0.15), rgba(13,148,136,0.08));border:2px solid #14b8a6">
+                        <div class="text-2xl mb-2">⚡</div>
+                        <div class="font-semibold text-sm" style="color:#14b8a6">CySpark</div>
+                        <p class="text-xs my-2">Electric spark infused with CyMoney</p>
+                        <div class="flex items-center gap-2 justify-center mb-2">
+                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#14b8a6;color:#042f2e">⭐ EXCLUSIVE</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#0d9488;color:#fff">💎 CYMONEY</span>
+                        </div>
+                        <div class="text-sm font-bold" style="color:#14b8a6">5 💎</div>
+                        <button class="mt-2 w-full text-sm py-2 rounded-lg font-semibold" style="background:#6b6b80;color:#fff" disabled>Need 5 💎</button>
+                    </div>
+                `;
+            }
+        }, 50);
+    }
+});
+</script>
 </body>
 </html>
