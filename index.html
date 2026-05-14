@@ -33,12 +33,14 @@
         #p1Team, #p2Team {
             transition: all 0.2s ease;
         }
-        
+        #cyShopModal.modal-overlay { z-index: 101; }
+        #battleModal.modal-overlay { z-index: 100; }
         #p1Team button, #p2Team button {
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+        .modal-overlay { display: none; align-items: center; justify-content: center; }
+        .modal-overlay.show, .modal-overlay[style*="display: block"] { display: flex !important; }
         #p1Team button:hover, #p2Team button:hover {
             transform: scale(1.05);
             opacity: 1 !important;
@@ -1304,10 +1306,14 @@
         
         function renderCyShop() {
             const grid = document.getElementById('cyShopGrid');
-            if (!grid) return;
+            if (!grid) {
+                console.error('cyShopGrid not found');
+                return;
+            }
             grid.innerHTML = '';
             
-            document.getElementById('cyShopAmt').textContent = gs.cyMoney || 0;
+            const cyShopAmt = document.getElementById('cyShopAmt');
+            if (cyShopAmt) cyShopAmt.textContent = gs.cyMoney || 0;
             
             Object.keys(cyShopItems).forEach(id => {
                 const item = cyShopItems[id];
@@ -1341,10 +1347,13 @@
             });
             
             document.querySelectorAll('.cy-shop-buy-btn').forEach(btn => {
-                btn.addEventListener('click', () => buyCyShopItem(btn.dataset.id));
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    buyCyShopItem(btn.dataset.id);
+                });
             });
         }
-                function buyCyShopItem(itemId) {
+        function buyCyShopItem(itemId) {
             const item = cyShopItems[itemId];
             if (!item) return;
             
@@ -1416,12 +1425,8 @@
             document.getElementById('cym').textContent = cymPerMin;
         }                
         function addCyShopButton() {
-            // Remove existing button if any
-            const existingBtn = document.getElementById('cyShopBtn');
-            if (existingBtn) existingBtn.remove();
-            
             const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
-            if (headerDiv) {
+            if (headerDiv && !document.getElementById('cyShopBtn')) {
                 const cyShopBtn = document.createElement('button');
                 cyShopBtn.id = 'cyShopBtn';
                 cyShopBtn.className = 'text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105';
@@ -1430,9 +1435,16 @@
                 cyShopBtn.innerHTML = '💎 Exclusive Shop';
                 cyShopBtn.onclick = function(e) {
                     e.stopPropagation();
-                    renderCyShop();
+                    // Make sure the modal exists and is hidden
                     const modal = document.getElementById('cyShopModal');
-                    if (modal) modal.style.display = 'block';
+                    if (modal) {
+                        // First render the shop content
+                        renderCyShop();
+                        // Then show the modal
+                        modal.style.display = 'block';
+                    } else {
+                        console.error('cyShopModal not found');
+                    }
                 };
                 headerDiv.appendChild(cyShopBtn);
             }
