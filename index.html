@@ -29,7 +29,169 @@
     <style>
         * { font-family: 'Lexend', sans-serif; }
         h1, h2, h3, .font-display { font-family: 'Righteous', cursive; }
-
+        /* Battle Modal Styles */
+        #p1Team, #p2Team {
+            transition: all 0.2s ease;
+        }
+        
+        #p1Team button, #p2Team button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        #p1Team button:hover, #p2Team button:hover {
+            transform: scale(1.05);
+            opacity: 1 !important;
+        }
+        
+        #p1MoveSelect, #p2MoveSelect {
+            scrollbar-width: thin;
+        }
+        
+        #p1MoveSelect button, #p2MoveSelect button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        #p1MoveSelect button:hover, #p2MoveSelect button:hover {
+            transform: scale(1.02);
+        }
+        
+        /* HP Bar animation */
+        #p1HpFill, #p2HpFill {
+            transition: width 0.3s ease-out;
+        }
+        
+        /* Battle log scrolling */
+        #battleLog {
+            scroll-behavior: smooth;
+        }
+        
+        #battleLog p {
+            margin: 4px 0;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        #battleLog p:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* Skill buttons */
+        #p1Skills button, #p2Skills button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        #p1Skills button:hover, #p2Skills button:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+        
+        #p1Skills button:active, #p2Skills button:active {
+            transform: scale(0.95);
+        }
+        
+        /* Get Code buttons */
+        #p1GetCodeBtn, #p2GetCodeBtn {
+            transition: all 0.2s ease;
+        }
+        
+        #p1GetCodeBtn:hover, #p2GetCodeBtn:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+        }
+        
+        /* Load buttons */
+        #p1LoadBtn, #p2LoadBtn {
+            transition: all 0.2s ease;
+        }
+        
+        #p1LoadBtn:hover, #p2LoadBtn:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+        }
+        
+        /* Start Battle button */
+        #startBattleBtn {
+            transition: all 0.2s ease;
+        }
+        
+        #startBattleBtn:hover:not(:disabled) {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+        
+        #startBattleBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Reset button */
+        #resetBattleBtn {
+            transition: all 0.2s ease;
+        }
+        
+        #resetBattleBtn:hover {
+            transform: scale(1.02);
+            background: var(--bg-card-hover);
+        }
+        
+        /* Textareas */
+        textarea {
+            resize: vertical;
+            font-family: monospace;
+        }
+        
+        /* Modal box for battle */
+        #battleModal .modal-box {
+            max-width: 950px;
+            width: 95%;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            #battleModal .modal-box {
+                max-width: 98%;
+                padding: 16px;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+        
+        /* Move selection container scrollbar */
+        #p1MoveSelect::-webkit-scrollbar,
+        #p2MoveSelect::-webkit-scrollbar,
+        #battleLog::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        #p1MoveSelect::-webkit-scrollbar-track,
+        #p2MoveSelect::-webkit-scrollbar-track,
+        #battleLog::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+        
+        #p1MoveSelect::-webkit-scrollbar-thumb,
+        #p2MoveSelect::-webkit-scrollbar-thumb,
+        #battleLog::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+        
+        /* Glow effects */
+        @keyframes battlePulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        #startBattleBtn:not(:disabled) {
+            animation: battlePulse 2s infinite;
+        }
         :root {
             --bg-primary: #f7f5f0; --bg-card: #ffffff; --bg-card-hover: #faf8f3;
             --border: #e0dcd2; --text-primary: #1a1a2e; --text-secondary: #6b6b80;
@@ -3710,51 +3872,213 @@
         setTimeout(()=>openModal('changelogModal'),600);
     });
     // ========== BATTLE SYSTEM ==========
-    const elementStats = {
-        'Water': { type: 'Water', baseSpeed: 70, baseAtk: 60, baseDef: 70, hp: 100, skills: ['Water Gun'] },
-        'Fire': { type: 'Fire', baseSpeed: 80, baseAtk: 75, baseDef: 50, hp: 90, skills: ['Ember'] },
-        'Earth': { type: 'Grass', baseSpeed: 50, baseAtk: 65, baseDef: 80, hp: 110, skills: ['Tackle'] },
-        'Air': { type: 'Air', baseSpeed: 90, baseAtk: 55, baseDef: 55, hp: 85, skills: ['Gust'] },
-        'Lightning': { type: 'Electric', baseSpeed: 120, baseAtk: 85, baseDef: 60, hp: 90, skills: ['Thunder Shock'] },
-        'Star Forge': { type: 'Steel', baseSpeed: 60, baseAtk: 95, baseDef: 90, hp: 120, skills: ['Forge'], customSkill: 'forge' },
-        'Bug Finder': { type: 'Bug', baseSpeed: 100, baseAtk: 80, baseDef: 70, hp: 95, skills: ['Find', 'Bug'], customSkill: 'find', customSkill2: 'bug' },
-        'Ultra Instinct Element': { type: 'Fighting', baseSpeed: 150, baseAtk: 100, baseDef: 80, hp: 130, skills: ['Counter', 'Heal Punch', '大爆発'], customSkill: 'counter', customSkill2: 'healpunch', customSkill3: 'explode', dodgeCount: 5, canOnlyUseOne: true },
-        'iPad': { type: 'Electric', baseSpeed: 40, baseAtk: 30, baseDef: 40, hp: 60, skills: [], passive: 'screenProtector' },
-        'Black Hole': { type: 'Dark', baseSpeed: 30, baseAtk: 50, baseDef: 120, hp: 150, skills: [], passive: 'lightAbsorber' },
-        'Permafrost': { type: 'Ice', baseSpeed: 20, baseAtk: 40, baseDef: 100, hp: 140, skills: [], isPermafrostType: true },
-        'default': { type: 'Normal', baseSpeed: 60, baseAtk: 60, baseDef: 60, hp: 100, skills: ['Struggle'] }
-    };
-
+    
+    // Type effectiveness chart
     const typeEffectiveness = {
-        'Fire': { 'Grass': 2, 'Water': 0.5, 'Air': 2, 'Fire': 0.5, 'Ice': 2, 'Bug': 2, 'Steel': 0.5 },
-        'Water': { 'Fire': 2, 'Grass': 0.5, 'Earth': 2, 'Water': 0.5, 'Rock': 2 },
-        'Grass': { 'Water': 2, 'Fire': 0.5, 'Air': 0.5, 'Earth': 2, 'Grass': 0.5, 'Ice': 0.5 },
-        'Air': { 'Grass': 2, 'Fire': 0.5, 'Air': 0.5, 'Electric': 0.5 },
-        'Electric': { 'Water': 2, 'Air': 2, 'Grass': 0.5, 'Electric': 0.5, 'Earth': 0 },
-        'Ice': { 'Grass': 2, 'Air': 2, 'Earth': 2, 'Fire': 0.5, 'Water': 0.5, 'Ice': 0.5 },
-        'Fighting': { 'Ice': 2, 'Rock': 2, 'Dark': 2, 'Air': 0.5, 'Bug': 0.5 },
-        'Bug': { 'Grass': 2, 'Dark': 2, 'Fire': 0.5, 'Fighting': 0.5, 'Air': 0.5 },
-        'Dark': { 'Psychic': 2, 'Ghost': 2, 'Fighting': 0.5, 'Dark': 0.5 },
-        'Steel': { 'Ice': 2, 'Rock': 2, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Steel': 0.5 },
-        'Normal': {}
+        'Fire': { 'Grass': 2, 'Water': 0.5, 'Air': 2, 'Fire': 0.5, 'Ice': 2, 'Bug': 2, 'Steel': 0.5, 'Dark': 2, 'Light': 0.5 },
+        'Water': { 'Fire': 2, 'Grass': 0.5, 'Earth': 2, 'Water': 0.5, 'Rock': 2, 'Ice': 1, 'Dark': 1 },
+        'Grass': { 'Water': 2, 'Fire': 0.5, 'Air': 0.5, 'Earth': 2, 'Grass': 0.5, 'Ice': 0.5, 'Rock': 2 },
+        'Air': { 'Grass': 2, 'Fire': 0.5, 'Air': 0.5, 'Electric': 0.5, 'Bug': 2, 'Rock': 0.5 },
+        'Electric': { 'Water': 2, 'Air': 2, 'Grass': 0.5, 'Electric': 0.5, 'Earth': 0, 'Steel': 1 },
+        'Ice': { 'Grass': 2, 'Air': 2, 'Earth': 2, 'Fire': 0.5, 'Water': 0.5, 'Ice': 0.5, 'Dragon': 2 },
+        'Fighting': { 'Ice': 2, 'Rock': 2, 'Dark': 2, 'Air': 0.5, 'Bug': 0.5, 'Psychic': 0.5, 'Fairy': 0.5 },
+        'Bug': { 'Grass': 2, 'Dark': 2, 'Fire': 0.5, 'Fighting': 0.5, 'Air': 0.5, 'Psychic': 2, 'Fairy': 0.5 },
+        'Dark': { 'Psychic': 2, 'Ghost': 2, 'Fighting': 0.5, 'Dark': 0.5, 'Fairy': 0.5, 'Light': 0 },
+        'Steel': { 'Ice': 2, 'Rock': 2, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Steel': 0.5, 'Fairy': 2 },
+        'Psychic': { 'Fighting': 2, 'Poison': 2, 'Dark': 0.5, 'Steel': 0.5, 'Psychic': 0.5 },
+        'Rock': { 'Fire': 2, 'Ice': 2, 'Air': 2, 'Water': 0.5, 'Grass': 0.5, 'Fighting': 0.5, 'Steel': 0.5 },
+        'Ghost': { 'Psychic': 2, 'Ghost': 2, 'Dark': 0.5, 'Normal': 0 },
+        'Poison': { 'Grass': 2, 'Fairy': 2, 'Poison': 0.5, 'Ground': 0.5, 'Rock': 0.5, 'Ghost': 0.5, 'Steel': 0 },
+        'Ground': { 'Fire': 2, 'Electric': 2, 'Poison': 2, 'Rock': 2, 'Steel': 2, 'Water': 0.5, 'Grass': 0.5, 'Ice': 0.5, 'Air': 0 },
+        'Dragon': { 'Dragon': 2, 'Steel': 0.5, 'Fairy': 0 },
+        'Fairy': { 'Fighting': 2, 'Dark': 2, 'Dragon': 2, 'Fire': 0.5, 'Poison': 0.5, 'Steel': 0.5 },
+        'Light': { 'Dark': 2, 'Ghost': 2, 'Light': 0.5 }
     };
 
-    function getElementStats(name) {
-        if (elementStats[name]) return elementStats[name];
-        let type = 'Normal';
-        if (name.includes('Fire') || name.includes('Inferno') || name.includes('Lava')) type = 'Fire';
-        else if (name.includes('Water') || name.includes('Ocean') || name.includes('Ice') || name.includes('Frozen')) type = 'Water';
-        else if (name.includes('Earth') || name.includes('Tree') || name.includes('Plant') || name.includes('Grass') || name.includes('Forest')) type = 'Grass';
-        else if (name.includes('Air') || name.includes('Wind') || name.includes('Sky') || name.includes('Cloud')) type = 'Air';
-        else if (name.includes('Lightning') || name.includes('Electric') || name.includes('Thunder')) type = 'Electric';
-        return { type: type, baseSpeed: 60, baseAtk: 60, baseDef: 60, hp: 100, skills: ['Struggle'], name: name };
+    // Black Hole special rule: deals x4 to Light, takes x0 from Light
+    function calculateDamageMultiplier(attacker, defender) {
+        const atkName = attacker.name;
+        const defName = defender.name;
+        
+        if (atkName === 'Black Hole' && defName === 'Light') return 4;
+        if (defName === 'Black Hole' && atkName === 'Light') return 0;
+        
+        const atkType = getElementType(attacker);
+        const defType = getElementType(defender);
+        
+        let mult = typeEffectiveness[atkType]?.[defType] || 1;
+        
+        if (defender.isPermafrost) mult *= 0.9;
+        
+        return mult;
+    }
+
+    function getElementType(el) {
+        const name = el.name;
+        
+        if (name === 'Black Hole') return 'Dark';
+        if (name === 'Light') return 'Light';
+        if (name === 'Null') return 'Dark';
+        if (name === 'Star Forge') return 'Steel';
+        if (name === 'Bug Finder') return 'Bug';
+        if (name === 'Ultra Instinct Element') return 'Fighting';
+        if (name === 'Permafrost') return 'Ice';
+        if (name === 'iPad' || name === 'iPhone' || name === 'Computer') return 'Electric';
+        
+        if (el.isInfernal) return 'Fire';
+        if (el.isHot) return 'Fire';
+        if (el.isFrozen) return 'Ice';
+        if (el.isPermafrost) return 'Ice';
+        if (el.isVoid) return 'Dark';
+        if (el.isCursed) return 'Dark';
+        if (el.isCorrupted) return 'Dark';
+        if (el.isBlessed) return 'Fairy';
+        if (el.isHoly) return 'Fairy';
+        if (el.isDivine) return 'Fairy';
+        if (el.isCelestial) return 'Fairy';
+        if (el.isGolden) return 'Steel';
+        if (el.isCrystalline) return 'Rock';
+        if (el.isLegendary) return 'Dragon';
+        if (el.isAncient) return 'Rock';
+        if (el.isAbyssal) return 'Water';
+        if (el.isElectric) return 'Electric';
+        if (el.isMagnetic) return 'Steel';
+        if (el.isTemporal) return 'Psychic';
+        if (el.isEthereal) return 'Ghost';
+        if (el.isPhantom) return 'Ghost';
+        if (el.isRadioactive) return 'Poison';
+        if (el.isToxic) return 'Poison';
+        if (el.isViral) return 'Poison';
+        if (el.isParasitic) return 'Bug';
+        if (el.isAntimatter) return 'Dark';
+        
+        if (name.includes('Fire') || name.includes('Inferno') || name.includes('Lava') || name.includes('Flame')) return 'Fire';
+        if (name.includes('Water') || name.includes('Ocean') || name.includes('Ice') || name.includes('Frozen') || name.includes('Snow')) return 'Water';
+        if (name.includes('Earth') || name.includes('Tree') || name.includes('Plant') || name.includes('Grass') || name.includes('Forest') || name.includes('Flower')) return 'Grass';
+        if (name.includes('Air') || name.includes('Wind') || name.includes('Sky') || name.includes('Cloud')) return 'Air';
+        if (name.includes('Lightning') || name.includes('Electric') || name.includes('Thunder')) return 'Electric';
+        if (name.includes('Dark') || name.includes('Shadow') || name.includes('Void')) return 'Dark';
+        if (name.includes('Light') || name.includes('Sun') || name.includes('Star')) return 'Light';
+        if (name.includes('Dragon')) return 'Dragon';
+        if (name.includes('Ghost') || name.includes('Spirit')) return 'Ghost';
+        if (name.includes('Rock') || name.includes('Stone') || name.includes('Mountain')) return 'Rock';
+        if (name.includes('Bug') || name.includes('Insect')) return 'Bug';
+        if (name.includes('Psychic') || name.includes('Magic') || name.includes('Wizard') || name.includes('Spell')) return 'Psychic';
+        
+        return 'Normal';
+    }
+
+    // Element move sets - EVERY element has damaging moves
+    const elementMoves = {
+        // Base elements (5 damaging moves each)
+        'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Hydro Pump', 'Surf'],
+        'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Fire Blast'],
+        'Earth': ['Tackle', 'Mud Shot', 'Rock Throw', 'Earth Power', 'Earthquake'],
+        'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Aerial Ace'],
+        
+        // Special elements
+        'Lightning': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Thunder'],
+        'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam'],
+        'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Leech Life', 'X-Scissor'],
+        'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'God Speed', 'Pressure', 'Limit Break', 'Mega Punch'],
+        'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Overload'],
+        'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Absorb Light', 'Dark Pulse'],
+        'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst'],
+        'Null': ['Void Touch', 'Erase', 'Oblivion', 'Nullify', 'Darkness', 'Nothingness'],
+        'Permafrost': ['Frozen Shield', 'Ice Age', 'Permafrost Armor', 'Glacier', 'Absolute Zero']
+    };
+
+    // Ensure EVERY element has Struggle as fallback
+    function getElementMoves(el) {
+        const name = el.name;
+        if (elementMoves[name]) return [...elementMoves[name], 'Struggle'];
+        
+        // Default moves based on type (always include Struggle)
+        const type = getElementType(el);
+        const defaultMoves = {
+            'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Struggle'],
+            'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Struggle'],
+            'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Struggle'],
+            'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Struggle'],
+            'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Struggle'],
+            'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Struggle'],
+            'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Struggle'],
+            'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Struggle'],
+            'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Struggle'],
+            'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Pulse', 'Struggle'],
+            'Steel': ['Metal Claw', 'Iron Head', 'Flash Cannon', 'Struggle'],
+            'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Struggle'],
+            'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Struggle'],
+            'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Struggle'],
+            'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Struggle'],
+            'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Struggle'],
+            'Light': ['Flash', 'Beam', 'Light Burst', 'Struggle']
+        };
+        
+        return defaultMoves[type] || ['Struggle', 'Tackle', 'Pound'];
+    }
+
+    function getElementStats(el) {
+        const name = el.name;
+        
+        // Special elements with custom stats
+        const specialStats = {
+            'Star Forge': { hp: 120, atk: 95, def: 90, speed: 60 },
+            'Bug Finder': { hp: 95, atk: 80, def: 70, speed: 100 },
+            'Ultra Instinct Element': { hp: 130, atk: 100, def: 80, speed: 150, dodgeCount: 5, canOnlyUseOne: true },
+            'iPad': { hp: 60, atk: 30, def: 40, speed: 40, passive: 'screenProtector' },
+            'Black Hole': { hp: 150, atk: 50, def: 120, speed: 30, passive: 'lightAbsorber' },
+            'Light': { hp: 80, atk: 70, def: 50, speed: 140 },
+            'Null': { hp: 100, atk: 75, def: 85, speed: 65 },
+            'Permafrost': { hp: 140, atk: 45, def: 110, speed: 25, isPermafrostType: true }
+        };
+        
+        if (specialStats[name]) {
+            return { ...specialStats[name], moves: getElementMoves(el) };
+        }
+        
+        // Auto-calculate stats based on element properties
+        let hp = 100;
+        let atk = 60;
+        let def = 60;
+        let speed = 60;
+        
+        if (el.isFinal) {
+            hp += 20; atk += 20; def += 20;
+        }
+        if (el.isSecret) {
+            atk += 15; speed += 10;
+        }
+        if (el.isHot || getElementType(el) === 'Fire') {
+            atk += 15; def -= 10; speed += 10;
+        }
+        if (el.isFrozen || getElementType(el) === 'Ice') {
+            def += 20; speed -= 15;
+        }
+        if (el.isPermafrost) {
+            def += 30; hp += 20;
+        }
+        if (el.isLegendary) {
+            hp += 15; atk += 15; def += 15; speed += 10;
+        }
+        if (el.isDivine) {
+            hp += 20; atk += 10; def += 15; speed += 10;
+        }
+        
+        return { hp, atk, def, speed, moves: getElementMoves(el) };
     }
 
     let battleState = {
-        active: false, p1Elements: [], p2Elements: [], p1Team: [], p2Team: [],
-        p1Current: null, p2Current: null, p1Ready: false, p2Ready: false,
-        turn: 'p1', p1AtkBoost: 1, p2AtkBoost: 1, p1DefBoost: 1, p2DefBoost: 1,
-        p1FindUsed: false, p2FindUsed: false, p1BugActive: false, p2BugActive: false,
+        active: false, moveSelection: true,
+        p1Elements: [], p2Elements: [], p1Team: [], p2Team: [],
+        p1Current: null, p2Current: null,
+        p1Ready: false, p2Ready: false,
+        p1Moves: {}, p2Moves: {},
+        turn: 'p1',
+        p1AtkBoost: 1, p2AtkBoost: 1,
+        p1DefBoost: 1, p2DefBoost: 1,
+        p1FindUsed: false, p2FindUsed: false,
+        p1BugActive: false, p2BugActive: false,
         p1CounterLocked: false, p2CounterLocked: false
     };
 
@@ -3769,23 +4093,57 @@
         log.scrollTop = log.scrollHeight;
     }
 
+    function decodeBattleCode(code) {
+        try {
+            const decoded = decodeURIComponent(escape(atob(code)));
+            return JSON.parse(decoded);
+        } catch(e) {
+            throw new Error('Invalid battle code: ' + e.message);
+        }
+    }
+
+    function initElementForBattle(el) {
+        const stats = getElementStats(el);
+        el.currentHp = stats.hp;
+        el.maxHp = stats.hp;
+        el.baseAtk = stats.atk;
+        el.baseDef = stats.def;
+        el.baseSpeed = stats.speed;
+        el.availableMoves = stats.moves;
+        if (stats.dodgeCount) el.dodgesLeft = stats.dodgeCount;
+        if (stats.canOnlyUseOne) el.canOnlyUseOne = stats.canOnlyUseOne;
+        if (stats.passive) el.passive = stats.passive;
+        if (el.name === 'iPad') el.screenProtector = true;
+        return el;
+    }
+
     function loadPlayerElements(num, code) {
         try {
-            const raw = atob(code);
-            const data = JSON.parse(raw);
+            const data = decodeBattleCode(code);
             const els = data.elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
+            
+            els.forEach(el => {
+                initElementForBattle(el);
+            });
+            
             if (num === 1) {
                 battleState.p1Elements = els;
-                document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements</div>`;
+                document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
                 battleState.p1Ready = true;
+                battleState.p1Team = [];
+                battleState.p1Moves = {};
+                updateTeamDisplay(1);
             } else {
                 battleState.p2Elements = els;
-                document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements</div>`;
+                document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
                 battleState.p2Ready = true;
+                battleState.p2Team = [];
+                battleState.p2Moves = {};
+                updateTeamDisplay(2);
             }
             document.getElementById('startBattleBtn').disabled = !(battleState.p1Ready && battleState.p2Ready);
         } catch(e) {
-            const err = `<div class="text-red-500">✗ Invalid code: ${e.message}</div>`;
+            const err = `<div class="text-red-500">✗ ${e.message}</div>`;
             if (num === 1) {
                 document.getElementById('p1Elements').innerHTML = err;
                 battleState.p1Ready = false;
@@ -3797,13 +4155,51 @@
         }
     }
 
+    function updateTeamDisplay(player) {
+        const team = player === 1 ? battleState.p1Team : battleState.p2Team;
+        const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
+        const container = document.getElementById(player === 1 ? 'p1Team' : 'p2Team');
+        if (container) {
+            container.innerHTML = '';
+            els.forEach(e => {
+                const btn = document.createElement('button');
+                const isSelected = team.includes(e);
+                btn.textContent = `${e.emoji} ${e.name}${e.canOnlyUseOne ? ' (ONLY)' : ''}`;
+                btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isSelected ? 'bg-green-500 text-white' : 'bg-gray-500 text-white opacity-60'}`;
+                btn.onclick = () => selectTeam(player, e.name);
+                container.appendChild(btn);
+            });
+        }
+    }
+
     function selectTeam(player, name) {
         const team = player === 1 ? battleState.p1Team : battleState.p2Team;
         const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
         const el = els.find(e => e.name === name);
-        const idx = team.indexOf(el);
-        if (idx !== -1) {
+        if (!el) return;
+        
+        const isSelected = team.includes(el);
+        
+        // Ultra Instinct Element can only be selected alone
+        if (el.name === 'Ultra Instinct Element' && !isSelected) {
+            team.length = 0;
+            team.push(el);
+            addBattleLog(`Player ${player} selected ${el.name}! Only one element can be used!`, 'system');
+            updateTeamDisplay(player);
+            showMoveSelection(player);
+            return;
+        }
+        
+        // If trying to add when Ultra Instinct is already in team
+        if (team.some(e => e.name === 'Ultra Instinct Element') && !isSelected) {
+            addBattleLog(`Cannot add more elements while ${team[0].name} is selected!`, 'system');
+            return;
+        }
+        
+        if (isSelected) {
+            const idx = team.indexOf(el);
             team.splice(idx, 1);
+            delete battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name];
             addBattleLog(`Player ${player} removed ${el.name} from team`, 'system');
         } else if (team.length < 3) {
             team.push(el);
@@ -3812,151 +4208,160 @@
             addBattleLog(`Player ${player} - can only select 3 elements!`, 'system');
             return;
         }
-        const container = document.getElementById(player === 1 ? 'p1Team' : 'p2Team');
-        if (container) {
-            container.innerHTML = '';
-            els.forEach(e => {
-                const btn = document.createElement('button');
-                btn.textContent = `${e.emoji} ${e.name}`;
-                btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${team.includes(e) ? 'bg-green-500 text-white' : 'bg-gray-500 text-white opacity-60'}`;
-                btn.onclick = () => selectTeam(player, e.name);
-                container.appendChild(btn);
-            });
+        updateTeamDisplay(player);
+        showMoveSelection(player);
+    }
+
+    function showMoveSelection(player) {
+        const team = player === 1 ? battleState.p1Team : battleState.p2Team;
+        const movesContainer = document.getElementById(player === 1 ? 'p1MoveSelect' : 'p2MoveSelect');
+        if (!movesContainer) return;
+        
+        if (team.length === 0) {
+            movesContainer.innerHTML = '<div class="text-center text-sm italic p-3" style="color:var(--text-secondary)">Select elements first</div>';
+            return;
         }
+        
+        movesContainer.innerHTML = '<div class="text-center text-sm font-bold mb-2">Select 4 moves for each element (click to select):</div>';
+        
+        team.forEach(el => {
+            const div = document.createElement('div');
+            div.className = 'mb-3 p-2 rounded-lg';
+            div.style.background = 'rgba(0,0,0,0.05)';
+            div.innerHTML = `<div class="font-semibold mb-1">${el.emoji} ${el.name}</div><div class="flex flex-wrap gap-1" id="moves-${player}-${el.name.replace(/[^a-z0-9]/gi, '_')}"></div>`;
+            movesContainer.appendChild(div);
+            
+            const movesDiv = div.querySelector(`[id^="moves-${player}-"]`);
+            const selectedMoves = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
+            
+            // Ensure Struggle is always available
+            const availableMoves = [...new Set([...el.availableMoves, 'Struggle'])];
+            
+            availableMoves.forEach(move => {
+                const isSelected = selectedMoves.includes(move);
+                const btn = document.createElement('button');
+                btn.textContent = move;
+                btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isSelected ? 'bg-green-500 text-white' : 'bg-purple-500 text-white opacity-60 hover:opacity-100'}`;
+                btn.onclick = () => {
+                    const currentSelected = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
+                    if (isSelected) {
+                        const idx = currentSelected.indexOf(move);
+                        currentSelected.splice(idx, 1);
+                        battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
+                        btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white opacity-60 hover:opacity-100';
+                    } else if (currentSelected.length < 4) {
+                        currentSelected.push(move);
+                        battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
+                        btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white';
+                    } else {
+                        addBattleLog(`Can only select 4 moves for ${el.name}!`, 'system');
+                    }
+                };
+                movesDiv.appendChild(btn);
+            });
+        });
     }
 
     function updateBattleUI() {
         const p1 = battleState.p1Current;
         const p2 = battleState.p2Current;
+        
         if (p1) {
             const hpPercent = Math.max(0, (p1.currentHp / p1.maxHp) * 100);
-            document.getElementById('p1HpFill').style.width = `${hpPercent}%`;
-            document.getElementById('p1Active').innerHTML = `${p1.emoji} ${p1.name}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
-            document.getElementById('p1Stats').innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
-            const stats = getElementStats(p1.name);
+            const hpFill = document.getElementById('p1HpFill');
+            if (hpFill) hpFill.style.width = `${hpPercent}%`;
+            const activeDiv = document.getElementById('p1Active');
+            if (activeDiv) activeDiv.innerHTML = `${p1.emoji} ${p1.name}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
+            const statsDiv = document.getElementById('p1Stats');
+            if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
+            
             const skillsDiv = document.getElementById('p1Skills');
             if (skillsDiv) {
                 skillsDiv.innerHTML = '';
-                stats.skills.forEach(s => {
+                const moves = battleState.p1Moves[p1.name] || p1.availableMoves.slice(0, 4);
+                moves.forEach(s => {
                     const btn = document.createElement('button');
                     btn.textContent = s;
                     btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white hover:bg-purple-600';
-                    btn.onclick = () => useSkill(s, 1, p1);
+                    btn.onclick = () => useSkill(s, 1);
                     skillsDiv.appendChild(btn);
                 });
-                if (p1.customSkill === 'forge') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Forge';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
-                    btn.onclick = () => useSkill('Forge', 1, p1);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p1.customSkill === 'find') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Find';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
-                    btn.onclick = () => useSkill('Find', 1, p1);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p1.customSkill2 === 'bug') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Bug';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-yellow-500 text-white hover:bg-yellow-600';
-                    btn.onclick = () => useSkill('Bug', 1, p1);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p1.customSkill2 === 'healpunch') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Heal Punch';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white hover:bg-green-600';
-                    btn.onclick = () => useSkill('Heal Punch', 1, p1);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p1.customSkill3 === 'explode') {
-                    const btn = document.createElement('button');
-                    btn.textContent = '大爆発';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-red-500 text-white hover:bg-red-600';
-                    btn.onclick = () => useSkill('大爆発', 1, p1);
-                    skillsDiv.appendChild(btn);
-                }
             }
         }
+        
         if (p2) {
             const hpPercent = Math.max(0, (p2.currentHp / p2.maxHp) * 100);
-            document.getElementById('p2HpFill').style.width = `${hpPercent}%`;
-            document.getElementById('p2Active').innerHTML = `${p2.emoji} ${p2.name}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
-            document.getElementById('p2Stats').innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
-            const stats = getElementStats(p2.name);
+            const hpFill = document.getElementById('p2HpFill');
+            if (hpFill) hpFill.style.width = `${hpPercent}%`;
+            const activeDiv = document.getElementById('p2Active');
+            if (activeDiv) activeDiv.innerHTML = `${p2.emoji} ${p2.name}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
+            const statsDiv = document.getElementById('p2Stats');
+            if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
+            
             const skillsDiv = document.getElementById('p2Skills');
             if (skillsDiv) {
                 skillsDiv.innerHTML = '';
-                stats.skills.forEach(s => {
+                const moves = battleState.p2Moves[p2.name] || p2.availableMoves.slice(0, 4);
+                moves.forEach(s => {
                     const btn = document.createElement('button');
                     btn.textContent = s;
                     btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white hover:bg-purple-600';
-                    btn.onclick = () => useSkill(s, 2, p2);
+                    btn.onclick = () => useSkill(s, 2);
                     skillsDiv.appendChild(btn);
                 });
-                if (p2.customSkill === 'forge') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Forge';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
-                    btn.onclick = () => useSkill('Forge', 2, p2);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p2.customSkill === 'find') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Find';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-orange-500 text-white hover:bg-orange-600';
-                    btn.onclick = () => useSkill('Find', 2, p2);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p2.customSkill2 === 'bug') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Bug';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-yellow-500 text-white hover:bg-yellow-600';
-                    btn.onclick = () => useSkill('Bug', 2, p2);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p2.customSkill2 === 'healpunch') {
-                    const btn = document.createElement('button');
-                    btn.textContent = 'Heal Punch';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white hover:bg-green-600';
-                    btn.onclick = () => useSkill('Heal Punch', 2, p2);
-                    skillsDiv.appendChild(btn);
-                }
-                if (p2.customSkill3 === 'explode') {
-                    const btn = document.createElement('button');
-                    btn.textContent = '大爆発';
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-red-500 text-white hover:bg-red-600';
-                    btn.onclick = () => useSkill('大爆発', 2, p2);
-                    skillsDiv.appendChild(btn);
-                }
             }
         }
     }
 
-    function useSkill(skill, player, el) {
+    function useSkill(skill, player) {
         if (!battleState.active) return;
+        
         const isP1 = player === 1;
         const attacker = isP1 ? battleState.p1Current : battleState.p2Current;
         const defender = isP1 ? battleState.p2Current : battleState.p1Current;
 
-        if (defender?.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発') {
+        if (!attacker || !defender) {
+            addBattleLog('No active element!', 'system');
+            return;
+        }
+
+        // Ultra Instinct dodge
+        if (defender.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発' && skill !== 'Counter') {
             defender.dodgesLeft--;
             addBattleLog(`${defender.name} DODGED! ${defender.dodgesLeft} dodges left!`, 'dodge');
             updateBattleUI();
             endTurn();
             return;
         }
+        
+        // iPad Screen Protector
+        if (defender.name === 'iPad' && defender.screenProtector && !defender.screenUsed) {
+            defender.screenUsed = true;
+            addBattleLog(`iPad's Screen Protector shattered! 💥💔`, 'block');
+            updateBattleUI();
+            endTurn();
+            return;
+        }
 
+        // Struggle always works and deals damage
+        if (skill === 'Struggle') {
+            let damage = Math.floor(attacker.baseAtk * 0.4);
+            damage = Math.max(1, damage);
+            defender.currentHp -= damage;
+            addBattleLog(`${attacker.name} used STRUGGLE! Dealt ${damage} damage!`, 'damage');
+            updateBattleUI();
+            endTurn();
+            return;
+        }
+
+        // Counter skill
         if (skill === 'Counter') {
             if ((isP1 && battleState.p1CounterLocked) || (!isP1 && battleState.p2CounterLocked)) {
                 addBattleLog('Counter cannot be used twice in a row!', 'system');
                 return;
             }
             addBattleLog(`${attacker.name} used COUNTER!`, 'skill');
-            const dmg = 50;
+            const dmg = Math.floor(attacker.baseAtk * 0.8);
             defender.currentHp -= dmg;
             addBattleLog(`${attacker.name} countered for ${dmg} damage!`, 'damage');
             if (isP1) battleState.p1CounterLocked = true;
@@ -3970,8 +4375,9 @@
             return;
         }
 
+        // Heal Punch
         if (skill === 'Heal Punch') {
-            const dmg = 40;
+            const dmg = Math.floor(attacker.baseAtk * 0.7);
             const heal = Math.floor(dmg / 4);
             defender.currentHp -= dmg;
             attacker.currentHp = Math.min(attacker.maxHp, attacker.currentHp + heal);
@@ -3981,20 +4387,22 @@
             return;
         }
 
+        // 大爆発
         if (skill === '大爆発') {
             addBattleLog(`${attacker.name} used 大爆発! MASSIVE EXPLOSION!`, 'skill');
-            const dmg = 120;
+            const dmg = attacker.baseAtk * 2.5;
             defender.currentHp -= dmg;
             attacker.currentHp = 0;
-            addBattleLog(`${attacker.name} dealt ${dmg} damage but fainted!`, 'damage');
+            addBattleLog(`${attacker.name} dealt ${Math.floor(dmg)} damage but fainted!`, 'damage');
             if (defender.currentHp <= 0) addBattleLog(`${defender.name} fainted! DRAW!`, 'system');
             updateBattleUI();
             endTurn();
             return;
         }
 
+        // Forge
         if (skill === 'Forge') {
-            const dmg = 50;
+            const dmg = Math.floor(attacker.baseAtk * 0.9);
             defender.currentHp -= dmg;
             if (isP1) { battleState.p1AtkBoost *= 1.5; battleState.p1DefBoost *= 1.5; }
             else { battleState.p2AtkBoost *= 1.5; battleState.p2DefBoost *= 1.5; }
@@ -4004,6 +4412,7 @@
             return;
         }
 
+        // Find
         if (skill === 'Find') {
             if ((isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed)) {
                 addBattleLog('Find can only be used once per match!', 'system');
@@ -4016,6 +4425,7 @@
             return;
         }
 
+        // Bug
         if (skill === 'Bug') {
             addBattleLog(`${attacker.name} used BUG! 25% chance to immobilize!`, 'skill');
             if (Math.random() < 0.25) {
@@ -4027,15 +4437,22 @@
             return;
         }
 
-        let dmg = 35;
-        const atkType = getElementStats(attacker.name).type;
-        const defType = getElementStats(defender.name).type;
-        let mult = typeEffectiveness[atkType]?.[defType] || 1;
-        if (defender.name === 'Permafrost') mult *= 0.9;
-        dmg = Math.floor(dmg * mult);
-        defender.currentHp -= dmg;
+        // Normal damaging move
+        let mult = calculateDamageMultiplier(attacker, defender);
+        let damage = Math.floor(attacker.baseAtk * 0.6 * mult);
+        damage = Math.max(1, damage);
+        
+        const atkBoost = isP1 ? battleState.p1AtkBoost : battleState.p2AtkBoost;
+        const defBoost = isP1 ? battleState.p2DefBoost : battleState.p1DefBoost;
+        damage = Math.floor(damage * (atkBoost / defBoost));
+        
+        const findActive = (isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed);
+        if (findActive) damage = Math.floor(damage * 1.5);
+        
+        defender.currentHp -= damage;
+        
         let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect! (x0)' : ''));
-        addBattleLog(`${attacker.name} used ${skill}! Dealt ${dmg} damage!${eff}`, 'damage');
+        addBattleLog(`${attacker.name} used ${skill}! Dealt ${damage} damage!${eff}`, 'damage');
         updateBattleUI();
         endTurn();
     }
@@ -4044,7 +4461,7 @@
         const p1 = battleState.p1Current;
         const p2 = battleState.p2Current;
 
-        if (p1?.currentHp <= 0) {
+        if (p1 && p1.currentHp <= 0) {
             addBattleLog(`${p1.name} fainted!`, 'system');
             const idx = battleState.p1Team.findIndex(e => e === p1);
             if (idx + 1 < battleState.p1Team.length) {
@@ -4058,7 +4475,7 @@
             }
         }
 
-        if (p2?.currentHp <= 0) {
+        if (p2 && p2.currentHp <= 0) {
             addBattleLog(`${p2.name} fainted!`, 'system');
             const idx = battleState.p2Team.findIndex(e => e === p2);
             if (idx + 1 < battleState.p2Team.length) {
@@ -4084,8 +4501,24 @@
     }
 
     function startBattle() {
+        // Check if all elements have 4 moves selected
+        for (const el of battleState.p1Team) {
+            const moves = battleState.p1Moves[el.name];
+            if (!moves || moves.length < 4) {
+                addBattleLog(`Player 1: ${el.name} needs 4 moves selected!`, 'system');
+                return;
+            }
+        }
+        for (const el of battleState.p2Team) {
+            const moves = battleState.p2Moves[el.name];
+            if (!moves || moves.length < 4) {
+                addBattleLog(`Player 2: ${el.name} needs 4 moves selected!`, 'system');
+                return;
+            }
+        }
+        
         if (battleState.p1Team.length === 0 || battleState.p2Team.length === 0) {
-            addBattleLog('Both players must select 3 elements!', 'system');
+            addBattleLog('Both players must select elements!', 'system');
             return;
         }
 
@@ -4099,72 +4532,215 @@
         battleState.p1BugActive = battleState.p2BugActive = false;
         battleState.p1CounterLocked = battleState.p2CounterLocked = false;
 
-        battleState.p1Team.forEach(el => {
-            const s = getElementStats(el.name);
-            el.currentHp = s.hp;
-            el.maxHp = s.hp;
-            if (el.name === 'Ultra Instinct Element') el.dodgesLeft = 5;
-            if (el.name === 'iPad') el.screenProtector = true;
-        });
-        battleState.p2Team.forEach(el => {
-            const s = getElementStats(el.name);
-            el.currentHp = s.hp;
-            el.maxHp = s.hp;
-            if (el.name === 'Ultra Instinct Element') el.dodgesLeft = 5;
-            if (el.name === 'iPad') el.screenProtector = true;
-        });
-
         updateBattleUI();
         document.getElementById('battleSetup').style.display = 'none';
         document.getElementById('battleArena').style.display = 'block';
         addBattleLog('⚔️ BATTLE STARTED! ⚔️', 'system');
         addBattleLog(`Player 1: ${battleState.p1Team.map(e => e.name).join(', ')}`, 'system');
         addBattleLog(`Player 2: ${battleState.p2Team.map(e => e.name).join(', ')}`, 'system');
-        addBattleLog('Player 1\'s turn!', 'system');
+        addBattleLog(`Player 1 starts with ${battleState.p1Current.name}!`, 'system');
+        addBattleLog('Click on a skill button to attack!', 'system');
     }
 
     // Event listeners
-    if (document.getElementById('battleBtn')) {
-        document.getElementById('battleBtn').addEventListener('click', () => {
-            const modal = document.getElementById('battleModal');
-            if (modal) modal.style.display = 'block';
-        });
-    }
-    if (document.getElementById('p1LoadBtn')) {
-        document.getElementById('p1LoadBtn').addEventListener('click', () => {
-            const code = document.getElementById('p1Code').value;
-            if (!code) { document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Paste your export code</div>'; return; }
-            loadPlayerElements(1, code);
-        });
-    }
-    if (document.getElementById('p2LoadBtn')) {
-        document.getElementById('p2LoadBtn').addEventListener('click', () => {
-            const code = document.getElementById('p2Code').value;
-            if (!code) { document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Paste your export code</div>'; return; }
-            loadPlayerElements(2, code);
-        });
-    }
-    if (document.getElementById('startBattleBtn')) {
-        document.getElementById('startBattleBtn').addEventListener('click', startBattle);
-    }
-    if (document.getElementById('resetBattleBtn')) {
-        document.getElementById('resetBattleBtn').addEventListener('click', () => {
-            battleState.active = false;
-            battleState.p1Ready = battleState.p2Ready = false;
-            battleState.p1Elements = battleState.p2Elements = battleState.p1Team = battleState.p2Team = [];
-            battleState.p1Current = battleState.p2Current = null;
-            document.getElementById('battleSetup').style.display = 'block';
-            document.getElementById('battleArena').style.display = 'none';
-            document.getElementById('p1Elements').innerHTML = '';
-            document.getElementById('p2Elements').innerHTML = '';
-            document.getElementById('p1Code').value = '';
-            document.getElementById('p2Code').value = '';
-            document.getElementById('startBattleBtn').disabled = true;
-            const log = document.getElementById('battleLog');
-            if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
-        });
-    }
-    </script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const battleBtn = document.getElementById('battleBtn');
+        if (battleBtn) {
+            battleBtn.addEventListener('click', () => {
+                const modal = document.getElementById('battleModal');
+                if (modal) modal.style.display = 'block';
+            });
+        }
 
+        const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
+        if (p1GetCodeBtn && window.generateBattleCode) {
+            p1GetCodeBtn.addEventListener('click', () => {
+                const code = window.generateBattleCode();
+                const textarea = document.getElementById('p1Code');
+                if (textarea) {
+                    textarea.value = code;
+                    textarea.style.background = '#e8f5e9';
+                    setTimeout(() => textarea.style.background = '', 1000);
+                }
+                addBattleLog('Player 1: Battle code generated!', 'system');
+            });
+        }
+
+        const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
+        if (p2GetCodeBtn && window.generateBattleCode) {
+            p2GetCodeBtn.addEventListener('click', () => {
+                const code = window.generateBattleCode();
+                const textarea = document.getElementById('p2Code');
+                if (textarea) {
+                    textarea.value = code;
+                    textarea.style.background = '#e8f5e9';
+                    setTimeout(() => textarea.style.background = '', 1000);
+                }
+                addBattleLog('Player 2: Battle code generated!', 'system');
+            });
+        }
+
+        const p1LoadBtn = document.getElementById('p1LoadBtn');
+        if (p1LoadBtn) {
+            p1LoadBtn.addEventListener('click', () => {
+                const code = document.getElementById('p1Code').value;
+                if (!code) { 
+                    document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
+                    return; 
+                }
+                loadPlayerElements(1, code);
+            });
+        }
+
+        const p2LoadBtn = document.getElementById('p2LoadBtn');
+        if (p2LoadBtn) {
+            p2LoadBtn.addEventListener('click', () => {
+                const code = document.getElementById('p2Code').value;
+                if (!code) { 
+                    document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
+                    return; 
+                }
+                loadPlayerElements(2, code);
+            });
+        }
+
+        const startBtn = document.getElementById('startBattleBtn');
+        if (startBtn) {
+            startBtn.addEventListener('click', startBattle);
+        }
+
+        const resetBattleBtn = document.getElementById('resetBattleBtn');
+        if (resetBattleBtn) {
+            resetBattleBtn.addEventListener('click', () => {
+                battleState.active = false;
+                battleState.moveSelection = true;
+                battleState.p1Ready = battleState.p2Ready = false;
+                battleState.p1Elements = battleState.p2Elements = [];
+                battleState.p1Team = battleState.p2Team = [];
+                battleState.p1Current = battleState.p2Current = null;
+                battleState.p1Moves = {};
+                battleState.p2Moves = {};
+                const setup = document.getElementById('battleSetup');
+                const arena = document.getElementById('battleArena');
+                if (setup) setup.style.display = 'block';
+                if (arena) arena.style.display = 'none';
+                const p1El = document.getElementById('p1Elements');
+                const p2El = document.getElementById('p2Elements');
+                if (p1El) p1El.innerHTML = '';
+                if (p2El) p2El.innerHTML = '';
+                const p1TeamDiv = document.getElementById('p1Team');
+                const p2TeamDiv = document.getElementById('p2Team');
+                if (p1TeamDiv) p1TeamDiv.innerHTML = '';
+                if (p2TeamDiv) p2TeamDiv.innerHTML = '';
+                const p1MoveDiv = document.getElementById('p1MoveSelect');
+                const p2MoveDiv = document.getElementById('p2MoveSelect');
+                if (p1MoveDiv) p1MoveDiv.innerHTML = '';
+                if (p2MoveDiv) p2MoveDiv.innerHTML = '';
+                const p1Code = document.getElementById('p1Code');
+                const p2Code = document.getElementById('p2Code');
+                if (p1Code) p1Code.value = '';
+                if (p2Code) p2Code.value = '';
+                const startBtnEl = document.getElementById('startBattleBtn');
+                if (startBtnEl) startBtnEl.disabled = true;
+                const log = document.getElementById('battleLog');
+                if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
+            });
+        }
+    });
+    </script>
+    <!-- Battle Modal -->
+    <div id="battleModal" class="modal-overlay"><div class="modal-box" style="max-width:950px"><button class="modal-close" data-close="battleModal">&times;</button>
+        <h2 class="font-display text-xl mb-4 text-center">⚔️ Element Battle</h2>
+        
+        <!-- Setup Phase -->
+        <div id="battleSetup" class="mb-4">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- Player 1 -->
+                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
+                    <h3 class="font-display text-md mb-2 text-center" style="color:#3b82f6">🔵 Player 1</h3>
+                    <div class="flex gap-2 mb-2">
+                        <button id="p1GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#3b82f6;color:#fff">📋 Get Battle Code</button>
+                    </div>
+                    <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                    <button id="p1LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
+                    <div id="p1Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
+                    
+                    <!-- Team Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#3b82f6">📋 Select Your Team (click to select/unselect):</div>
+                        <div id="p1Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(59,130,246,0.1)"></div>
+                    </div>
+                    
+                    <!-- Move Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
+                        <div id="p1MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
+                    </div>
+                </div>
+                
+                <!-- Player 2 -->
+                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
+                    <h3 class="font-display text-md mb-2 text-center" style="color:#ef4444">🔴 Player 2</h3>
+                    <div class="flex gap-2 mb-2">
+                        <button id="p2GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#ef4444;color:#fff">📋 Get Battle Code</button>
+                    </div>
+                    <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                    <button id="p2LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
+                    <div id="p2Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
+                    
+                    <!-- Team Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#ef4444">📋 Select Your Team (click to select/unselect):</div>
+                        <div id="p2Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(239,68,68,0.1)"></div>
+                    </div>
+                    
+                    <!-- Move Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
+                        <div id="p2MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="startBattleBtn" class="w-full font-semibold text-sm py-3 rounded-full transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e" disabled>⚔️ START BATTLE ⚔️</button>
+        </div>
+        
+        <!-- Battle Arena -->
+        <div id="battleArena" style="display:none">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- Player 1 Arena -->
+                <div class="rounded-xl p-3 text-center" style="background:rgba(59,130,246,0.1);border:1px solid #3b82f6">
+                    <div class="font-bold mb-2" style="color:#3b82f6">🔵 Player 1</div>
+                    <div id="p1Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
+                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
+                        <div id="p1HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
+                    </div>
+                    <div id="p1Stats" class="text-xs"></div>
+                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
+                    <div id="p1Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                </div>
+                
+                <!-- Player 2 Arena -->
+                <div class="rounded-xl p-3 text-center" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444">
+                    <div class="font-bold mb-2" style="color:#ef4444">🔴 Player 2</div>
+                    <div id="p2Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
+                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
+                        <div id="p2HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
+                    </div>
+                    <div id="p2Stats" class="text-xs"></div>
+                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
+                    <div id="p2Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                </div>
+            </div>
+            
+            <!-- Battle Log -->
+            <div id="battleLog" class="rounded-xl p-3 h-40 overflow-y-auto text-sm" style="background:var(--bg-primary);border:1px solid var(--border)">
+                <p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>
+            </div>
+            
+            <!-- Reset Button -->
+            <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
+        </div>
+    </div>
 </body>
 </html>
