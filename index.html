@@ -1414,10 +1414,14 @@
         function updateCyMoneyPerMinDisplay() {
             const cymPerMin = calcCyMoneyPerMin();
             document.getElementById('cym').textContent = cymPerMin;
-        }        
+        }                
         function addCyShopButton() {
+            // Remove existing button if any
+            const existingBtn = document.getElementById('cyShopBtn');
+            if (existingBtn) existingBtn.remove();
+            
             const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
-            if (headerDiv && !document.getElementById('cyShopBtn')) {
+            if (headerDiv) {
                 const cyShopBtn = document.createElement('button');
                 cyShopBtn.id = 'cyShopBtn';
                 cyShopBtn.className = 'text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105';
@@ -1432,7 +1436,7 @@
                 };
                 headerDiv.appendChild(cyShopBtn);
             }
-        }        
+        }
         const SPECIAL_ELEMENTS = {
             null: { name:'Null', emoji:'⚫', color:'bg-green-600', description:'The void from which all things emerge', isBasic:true },
             question: { name:'3?', emoji:'❓', color:'bg-orange-500', description:'Wait. What?', isQuestion:true },
@@ -2810,8 +2814,16 @@
             setTimeout(()=>{ n.style.opacity='0'; n.style.transition='opacity 0.3s'; setTimeout(()=>n.remove(),300); }, duration);
         }
 
-        function openModal(id) { $(id).style.display='block'; }
-        function closeModal(id) { $(id).style.display='none'; }
+        function openModal(id) { 
+            const modal = document.getElementById(id);
+            if (modal && modal.style.display !== 'block') {
+                modal.style.display = 'block';
+            }
+        }
+        function closeModal(id) { 
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'none';
+        }
         function ensureCyShopButton() {
             if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
                 addCyShopButton();
@@ -3476,9 +3488,10 @@
             const mins=(Date.now()-gs.shopRefresh)/60000;
             if(mins>=5) refreshShop();
             else renderShop();
-            openModal('shopModal');
+            const modal = document.getElementById('shopModal');
+            if (modal) modal.style.display = 'block';
         });
-
+        
         // ─── RENDER ELEMENTS ───
         function renderEls() {
             elGrid.innerHTML='';
@@ -4933,7 +4946,6 @@
                 if (modal) modal.style.display = 'block';
             });
         }
-
         const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
         if (p1GetCodeBtn && window.generateBattleCode) {
             p1GetCodeBtn.addEventListener('click', () => {
