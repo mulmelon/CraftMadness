@@ -1347,6 +1347,11 @@
                 notify('Already Owned', `You already own ${item.name}!`, '💎');
                 return;
             }
+            if (newElement.name === 'CyForge') {
+                addCyForgeButton();
+                cyForgeLoadCooldown();
+                notify('⚒️ CyForge Unlocked!', 'Use it to bless elements with isCyMoney!', '⚒️');
+            }
             
             gs.cyMoney -= item.price;
             
@@ -2759,9 +2764,9 @@
         let sel1 = null, sel2 = null;
         let fractionalCoins = 0;
         let gs = {
-            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false, coinBoost:0, hasSeenCyShop:false, hasSeenCyExclusive:false
+            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false, coinBoost:0, hasSeenCyShop:false, hasSeenCyExclusive:false, cyForgeCooldownEnd:0
         };
-
+        
         const totalMain = Object.keys(recipes).reduce((c,k)=> {
             const el=recipes[k]; return (!el.isExclusive && !el.excludeFromRank) ? c+1 : c;
         }, 0);
@@ -3084,6 +3089,10 @@
                 // AFTER loading, update displays
                 updateCyMoneyDisplay();
                 checkStarForgeUnlock();
+                if (elements.some(e => e.name === 'CyForge')) {
+                addCyForgeButton();
+                cyForgeLoadCooldown();
+            }
             }catch(e){}
         }
 
@@ -3141,29 +3150,168 @@
             const whole = Math.floor(fractionalCoins);
             if(whole>0){ gs.coins+=whole; gs.totalCoins+=whole; fractionalCoins-=whole; updateCoinDisplay(); save(); }
             cpm.textContent = cPerMin;
-            
-            // ===== CyMoney Generation from isCyMoney elements =====
-            const cyMoneyElements = elements.filter(e => checkIsCyMoney(e));
-            if (cyMoneyElements.length > 0) {
-                // Each isCyMoney element gives 1 CyMoney per minute (so every 60 seconds)
-                // Using the same 3-second interval, each gives 0.05 CyMoney per tick
-                const cyPerMin = cyMoneyElements.length;
-                const cyEarned = cyPerMin * (3/60);
-                gs.cyMoney = (gs.cyMoney || 0) + cyEarned;
-                const cyWhole = Math.floor(gs.cyMoney);
-                if (cyWhole > 0) {
-                    gs.cyMoney -= cyWhole;
-                    gs.totalCyMoney = (gs.totalCyMoney || 0) + cyWhole;
-                    updateCyMoneyDisplay();
-                    save();
-                    // Only show notification occasionally (every 20 seconds)
-                    if (Math.random() < 0.1) {
-                        notify('💎 CyMoney Earned!', `+${cyWhole} CyMoney from isCyMoney elements!`, '💎');
+        }
+                // CyMoney passive income (1 CyMoney per minute for each isCyMoney element - rounded down)
+        let cyMoneyInterval = null;
+        let fractionalCyMoney = 0;
+        
+        function startCyMoneyIncome() {
+            if (cyMoneyInterval) clearInterval(cyMoneyInterval);
+            cyMoneyInterval = setInterval(() => {
+                const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
+                if (cyMoneyElements.length > 0) {
+                    // Each element gives 1 CyMoney per minute (60 seconds)
+                    // So per second: elements.length / 60
+                    const earnedPerSecond = cyMoneyElements.length / 60;
+                    fractionalCyMoney += earnedPerSecond * 60; // Add for 60 seconds
+                    const whole = Math.floor(fractionalCyMoney);
+                    if (whole > 0) {
+                        gs.cyMoney = (gs.cyMoney || 0) + whole;
+                        fractionalCyMoney -= whole;
+                        updateCyMoneyDisplay();
+                        save();
+                        const battleModal = document.getElementById('battleModal');
+                        if (!battleModal || battleModal.style.display !== 'block') {
+                            notify('💎 CyMoney Earned!', `+${whole} CyMoney from ${cyMoneyElements.length} CyMoney element(s)!`, '💎', 3000);
+                        }
                     }
+                }
+            }, 60000); // 1 minute
+        }
+        // CyForge - Like Star Forge but uses CyMoney and gives isCyMoney blessing
+        let cyForgeCooldownEnd = 0;
+        let cyForgeInterval = null;
+        const CYFORGE_COOLDOWN = 10 * 60 * 1000; // 10 minutes
+        const CYFORGE_COST = 5; // 5 CyMoney per use
+        
+        function cyForgeStartTimer() {
+            const cyForgeBtn = document.getElementById('cyForgeBtn');
+            if (!cyForgeBtn) return;
+            cyForgeBtn.classList.add('sf-cooldown');
+            if (cyForgeInterval) clearInterval(cyForgeInterval);
+            cyForgeInterval = setInterval(() => {
+                const rem = cyForgeCooldownEnd - Date.now();
+                const timerSpan = document.getElementById('cyForgeTimer');
+                if (rem <= 0) {
+                    clearInterval(cyForgeInterval);
+                    cyForgeInterval = null;
+                    cyForgeBtn.classList.remove('sf-cooldown');
+                    cyForgeBtn.disabled = false;
+                    cyForgeBtn.style.opacity = '1';
+                    if (timerSpan) timerSpan.textContent = '';
+                    notify('CyForge Ready!', 'The CyForge can be used again!', '⚒️');
+                } else {
+                    const m = Math.floor(rem / 60000);
+                    const s = Math.floor((rem % 60000) / 1000);
+                    if (timerSpan) timerSpan.textContent = ` ${m}:${String(s).padStart(2, '0')}`;
+                }
+            }, 1000);
+            const rem = cyForgeCooldownEnd - Date.now();
+            const m = Math.floor(rem / 60000);
+            const s = Math.floor((rem % 60000) / 1000);
+            const timerSpan = document.getElementById('cyForgeTimer');
+            if (timerSpan) timerSpan.textContent = ` ${m}:${String(s).padStart(2, '0')}`;
+        }
+        
+        function activateCyForge() {
+            // Check if user owns CyForge
+            const hasCyForge = elements.some(e => e.name === 'CyForge');
+            if (!hasCyForge) {
+                notify('Locked', 'Purchase the CyForge from the Exclusive Shop first!', '🔒');
+                return;
+            }
+            
+            if (cyForgeCooldownEnd > Date.now()) {
+                const rem = cyForgeCooldownEnd - Date.now();
+                const m = Math.floor(rem / 60000);
+                const s = Math.floor((rem % 60000) / 1000);
+                notify('Cooldown', `CyForge ready in ${m}:${String(s).padStart(2, '0')}`, '⏳');
+                return;
+            }
+            
+            if ((gs.cyMoney || 0) < CYFORGE_COST) {
+                notify('Need CyMoney!', `CyForge requires ${CYFORGE_COST} CyMoney to use!`, '💎');
+                return;
+            }
+            
+            // Find eligible elements (not already isCyMoney, not final, not error)
+            const eligible = elements.filter(e => !checkIsCyMoney(e) && !e.isFinal && !e.isFatalError && !e.isError && !e.isBlank && !e.isPermafrost && !hasPenaltyMod(e));
+            
+            if (eligible.length < 1) {
+                notify('CyForge', 'No eligible elements to bless!', '⚠️');
+                return;
+            }
+            
+            gs.cyMoney -= CYFORGE_COST;
+            updateCyMoneyDisplay();
+            
+            // Bless 3 random elements with isCyMoney
+            const shuffled = [...eligible].sort(() => Math.random() - 0.5);
+            const chosen = shuffled.slice(0, Math.min(3, eligible.length));
+            const results = [];
+            
+            chosen.forEach(target => {
+                const idx = elements.findIndex(e => e.name === target.name);
+                if (idx !== -1) {
+                    elements[idx].isCyMoney = true;
+                    results.push(`${elements[idx].emoji} ${elements[idx].name} → 💎 CyMoney`);
+                }
+            });
+            
+            // Start cooldown
+            cyForgeCooldownEnd = Date.now() + CYFORGE_COOLDOWN;
+            gs.cyForgeCooldownEnd = cyForgeCooldownEnd;
+            save();
+            renderEls();
+            cyForgeStartTimer();
+            
+            // Animate button
+            const cyForgeBtn = document.getElementById('cyForgeBtn');
+            if (cyForgeBtn) {
+                cyForgeBtn.classList.add('sf-activate');
+                setTimeout(() => cyForgeBtn.classList.remove('sf-activate'), 700);
+            }
+            
+            if (results.length > 0) {
+                notify('⚒️ CyForge Activated!', results.join(' | '), '💎', 8000);
+            }
+        }
+        
+        // Add CyForge button next to Star Forge
+        function addCyForgeButton() {
+            const buttonContainer = document.querySelector('.flex.gap-1\\.5.order-2.sm\\:order-3.items-center');
+            if (buttonContainer && !document.getElementById('cyForgeBtn')) {
+                const cyForgeBtn = document.createElement('button');
+                cyForgeBtn.id = 'cyForgeBtn';
+                cyForgeBtn.className = 'text-xs font-medium px-3 py-1.5 rounded-lg transition-all';
+                cyForgeBtn.style.background = 'linear-gradient(135deg,#0d9488,#14b8a6)';
+                cyForgeBtn.style.color = '#fff';
+                cyForgeBtn.title = 'CyForge — Bless 3 random elements with isCyMoney (Cost: 5 CyMoney, 10 min cooldown)';
+                cyForgeBtn.innerHTML = '⚒️ CyForge<span class="sf-timer" id="cyForgeTimer"></span>';
+                cyForgeBtn.onclick = activateCyForge;
+                
+                // Insert after Star Forge button
+                const starForgeBtn = document.getElementById('starForgeBtn');
+                if (starForgeBtn) {
+                    starForgeBtn.insertAdjacentElement('afterend', cyForgeBtn);
+                } else {
+                    buttonContainer.appendChild(cyForgeBtn);
                 }
             }
         }
-
+        
+        // Load CyForge cooldown from save
+        function cyForgeLoadCooldown() {
+            if (gs.cyForgeCooldownEnd && gs.cyForgeCooldownEnd > Date.now()) {
+                cyForgeCooldownEnd = gs.cyForgeCooldownEnd;
+                cyForgeStartTimer();
+                const cyForgeBtn = document.getElementById('cyForgeBtn');
+                if (cyForgeBtn) {
+                    cyForgeBtn.disabled = true;
+                    cyForgeBtn.style.opacity = '0.6';
+                }
+            }
+        }
         function updateCoinDisplay(){
             coinAmt.textContent=gs.coins.toLocaleString();
             shopCoins.textContent=gs.coins.toLocaleString();
