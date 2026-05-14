@@ -35,6 +35,9 @@
         }
         #cyShopModal.modal-overlay { z-index: 101; }
         #battleModal.modal-overlay { z-index: 100; }
+        #cyShopModal { z-index: 110; }
+        #battleModal { z-index: 100; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
         #p1Team button, #p2Team button {
             cursor: pointer;
             transition: all 0.2s ease;
@@ -1423,7 +1426,7 @@
         function updateCyMoneyPerMinDisplay() {
             const cymPerMin = calcCyMoneyPerMin();
             document.getElementById('cym').textContent = cymPerMin;
-        }                
+        }       
         function addCyShopButton() {
             const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
             if (headerDiv && !document.getElementById('cyShopBtn')) {
@@ -1435,16 +1438,11 @@
                 cyShopBtn.innerHTML = '💎 Exclusive Shop';
                 cyShopBtn.onclick = function(e) {
                     e.stopPropagation();
-                    // Make sure the modal exists and is hidden
-                    const modal = document.getElementById('cyShopModal');
-                    if (modal) {
-                        // First render the shop content
+                    // Use the global openModal function
+                    if (typeof renderCyShop === 'function') {
                         renderCyShop();
-                        // Then show the modal
-                        modal.style.display = 'block';
-                    } else {
-                        console.error('cyShopModal not found');
                     }
+                    openModal('cyShopModal');
                 };
                 headerDiv.appendChild(cyShopBtn);
             }
@@ -4360,6 +4358,11 @@
         window.generateBattleCode = generateBattleCode;
         window.secureDecrypt = secureDecrypt;
         window.safeB64Dec = safeB64Dec;
+        // Make CyShop functions globally available
+        window.cyShopItems = cyShopItems;
+        window.cyShopBought = cyShopBought;
+        window.renderCyShop = renderCyShop;
+        window.buyCyShopItem = buyCyShopItem;
     });
             // ========== BATTLE SYSTEM ==========
     
