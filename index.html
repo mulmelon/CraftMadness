@@ -1426,12 +1426,12 @@
                 cyShopBtn.innerHTML = '💎 Exclusive Shop';
                 cyShopBtn.onclick = () => {
                     renderCyShop();
-                    openModal('cyShopModal');
+                    const modal = document.getElementById('cyShopModal');
+                    if (modal) modal.style.display = 'block';
                 };
                 headerDiv.appendChild(cyShopBtn);
             }
-        }
-        const SPECIAL_ELEMENTS = {
+        }        const SPECIAL_ELEMENTS = {
             null: { name:'Null', emoji:'⚫', color:'bg-green-600', description:'The void from which all things emerge', isBasic:true },
             question: { name:'3?', emoji:'❓', color:'bg-orange-500', description:'Wait. What?', isQuestion:true },
             error: { name:'Error', emoji:'⚠️', color:'bg-red-600', description:'Error Code -1 | Unknown Error', isError:true },
@@ -3111,13 +3111,21 @@
         const _store={};
         function _setItem(k,v){_store[k]=v;try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
-        function save(){try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
+        function save(){
+            try{
+                _setItem('fc_el',JSON.stringify(elements));
+                _setItem('fc_co',JSON.stringify(combos));
+                _setItem('fc_gs',JSON.stringify(gs));
+                _setItem('fc_cyBought',JSON.stringify(cyShopBought));
+            }catch(e){}
+        }
         function load(){
             try{
-                const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
+                const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs'),cyBought=_getItem('fc_cyBought');
                 if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
                 if(c)combos=JSON.parse(c);
                 if(s){const l=JSON.parse(s);gs={...gs,...l};}
+                if(cyBought) cyShopBought = JSON.parse(cyBought);
                 // AFTER loading, update displays
                 updateCyMoneyDisplay();
                 updateCyMoneyPerMinDisplay();
@@ -3125,7 +3133,6 @@
                 if (elements.some(e => e.name === 'CyForge')) {
                     addCyForgeButton();
                     cyForgeLoadCooldown();
-                    ensureCyShopButton();
                 }
                 // Show CyShop button for existing users who have CyMoney
                 if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
