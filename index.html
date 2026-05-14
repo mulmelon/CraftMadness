@@ -3125,6 +3125,7 @@
                 if (elements.some(e => e.name === 'CyForge')) {
                     addCyForgeButton();
                     cyForgeLoadCooldown();
+                    ensureCyShopButton();
                 }
                 // Show CyShop button for existing users who have CyMoney
                 if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
