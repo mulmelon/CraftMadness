@@ -3870,6 +3870,37 @@
 
         // Show changelog on first visit
         setTimeout(()=>openModal('changelogModal'),600);
+                // Generate battle code (creates a simple base64 code from your elements)
+        function generateBattleCode() {
+            const battleData = {
+                elements: elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError).map(e => ({
+                    name: e.name,
+                    emoji: e.emoji,
+                    customSkill: e.customSkill,
+                    customSkill2: e.customSkill2,
+                    customSkill3: e.customSkill3,
+                    isFinal: e.isFinal || false,
+                    isSecret: e.isSecret || false,
+                    isHot: e.isHot || false,
+                    isSuperHot: e.isSuperHot || false,
+                    isBasic: e.isBasic || false,
+                    isLegendary: e.isLegendary || false,
+                    isDivine: e.isDivine || false,
+                    isPermafrost: e.isPermafrost || false,
+                    isFrozen: e.isFrozen || false
+                })),
+                version: '1.0'
+            };
+            const json = JSON.stringify(battleData);
+            // Simple base64 encoding
+            const base64 = btoa(unescape(encodeURIComponent(json)));
+            return base64;
+        }
+        
+        // Make available globally for battle system
+        window.generateBattleCode = generateBattleCode;
+        window.secureDecrypt = secureDecrypt;
+        window.safeB64Dec = safeB64Dec;
     });
     // ========== BATTLE SYSTEM ==========
     
