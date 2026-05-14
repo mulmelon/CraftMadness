@@ -5230,5 +5230,43 @@ document.addEventListener('click', function(e) {
     }
 });
 </script>
+        <script>
+// DIRECT FIX - No dependencies on any functions
+(function() {
+    // Wait for page to load
+    function addButton() {
+        const header = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
+        if (!header) {
+            setTimeout(addButton, 500);
+            return;
+        }
+        
+        // Check if button already exists
+        if (document.getElementById('cyShopBtnDirect')) return;
+        
+        const btn = document.createElement('button');
+        btn.id = 'cyShopBtnDirect';
+        btn.textContent = '💎 Exclusive Shop';
+        btn.className = 'text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105';
+        btn.style.background = 'rgba(20,184,166,0.12)';
+        btn.style.color = '#14b8a6';
+        
+        btn.onclick = function() {
+            const modal = document.getElementById('cyShopModal');
+            if (modal) {
+                modal.style.display = 'block';
+                console.log('Modal opened');
+            } else {
+                alert('Modal not found! Check if cyShopModal exists in HTML');
+            }
+        };
+        
+        header.appendChild(btn);
+        console.log('Button added!');
+    }
+    
+    addButton();
+})();
+</script>
 </body>
 </html>
