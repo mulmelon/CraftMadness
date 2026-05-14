@@ -1414,7 +1414,7 @@
         function updateCyMoneyPerMinDisplay() {
             const cymPerMin = calcCyMoneyPerMin();
             document.getElementById('cym').textContent = cymPerMin;
-        }
+        }        
         function addCyShopButton() {
             const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
             if (headerDiv && !document.getElementById('cyShopBtn')) {
@@ -1424,14 +1424,16 @@
                 cyShopBtn.style.background = 'rgba(20,184,166,0.12)';
                 cyShopBtn.style.color = '#14b8a6';
                 cyShopBtn.innerHTML = '💎 Exclusive Shop';
-                cyShopBtn.onclick = () => {
+                cyShopBtn.onclick = function(e) {
+                    e.stopPropagation();
                     renderCyShop();
                     const modal = document.getElementById('cyShopModal');
                     if (modal) modal.style.display = 'block';
                 };
                 headerDiv.appendChild(cyShopBtn);
             }
-        }        const SPECIAL_ELEMENTS = {
+        }        
+        const SPECIAL_ELEMENTS = {
             null: { name:'Null', emoji:'⚫', color:'bg-green-600', description:'The void from which all things emerge', isBasic:true },
             question: { name:'3?', emoji:'❓', color:'bg-orange-500', description:'Wait. What?', isQuestion:true },
             error: { name:'Error', emoji:'⚠️', color:'bg-red-600', description:'Error Code -1 | Unknown Error', isError:true },
