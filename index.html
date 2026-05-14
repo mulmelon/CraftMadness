@@ -3999,54 +3999,84 @@
         return 'Normal';
     }
 
-    // Element move sets - EVERY element has damaging moves
     const elementMoves = {
-        // Base elements (5 damaging moves each)
-        'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Hydro Pump', 'Surf'],
-        'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Fire Blast'],
-        'Earth': ['Tackle', 'Mud Shot', 'Rock Throw', 'Earth Power', 'Earthquake'],
-        'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Aerial Ace'],
+        // Base elements (5-6 moves each)
+        'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Hydro Pump', 'Surf', 'Struggle'],
+        'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Fire Blast', 'Struggle'],
+        'Earth': ['Tackle', 'Mud Shot', 'Rock Throw', 'Earth Power', 'Earthquake', 'Struggle'],
+        'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Aerial Ace', 'Struggle'],
         
-        // Special elements
-        'Lightning': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Thunder'],
-        'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam'],
-        'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Leech Life', 'X-Scissor'],
-        'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'God Speed', 'Pressure', 'Limit Break', 'Mega Punch'],
-        'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Overload'],
-        'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Absorb Light', 'Dark Pulse'],
-        'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst'],
-        'Null': ['Void Touch', 'Erase', 'Oblivion', 'Nullify', 'Darkness', 'Nothingness'],
-        'Permafrost': ['Frozen Shield', 'Ice Age', 'Permafrost Armor', 'Glacier', 'Absolute Zero']
+        // Special elements (4+ moves each)
+        'Lightning': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Thunder', 'Struggle'],
+        'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam', 'Struggle'],
+        'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Leech Life', 'X-Scissor', 'Struggle'],
+        'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'God Speed', 'Pressure', 'Limit Break', 'Mega Punch', 'Struggle'],
+        'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Overload', 'Battery Drain', 'Struggle'],
+        'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Absorb Light', 'Dark Pulse', 'Blackout', 'Struggle'],
+        'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst', 'Radiant Shield', 'Struggle'],
+        'Null': ['Void Touch', 'Erase', 'Oblivion', 'Nullify', 'Darkness', 'Nothingness', 'Struggle'],
+        'Permafrost': ['Frozen Shield', 'Ice Age', 'Permafrost Armor', 'Glacier', 'Absolute Zero', 'Blizzard', 'Struggle'],
+        
+        // Additional elements from recipes
+        'Ocean': ['Tidal Wave', 'Whirlpool', 'Dive', 'Tsunami', 'Water Spout', 'Struggle'],
+        'Inferno': ['Fire Spin', 'Blast Burn', 'Eruption', 'Heat Wave', 'Magma Storm', 'Struggle'],
+        'Mountain': ['Rock Slide', 'Stone Edge', 'Landslide', 'Avalanche', 'Rock Polish', 'Struggle'],
+        'Forest': ['Razor Leaf', 'Wood Hammer', 'Leaf Storm', 'Seed Bomb', 'Forest's Curse', 'Struggle'],
+        'Volcano': ['Lava Plume', 'Eruption', 'Magma Storm', 'Fissure', 'Heat Crash', 'Struggle'],
+        'Tsunami': ['Surf', 'Hydro Pump', 'Waterfall', 'Aqua Tail', 'Muddy Water', 'Struggle'],
+        'Dragon': ['Dragon Breath', 'Dragon Claw', 'Outrage', 'Dragon Pulse', 'Draco Meteor', 'Struggle'],
+        'Phoenix': ['Sacred Fire', 'Brave Bird', 'Flare Blitz', 'Sky Attack', 'Rebirth', 'Struggle'],
+        'Ghost': ['Shadow Ball', 'Night Shade', 'Hex', 'Phantom Force', 'Curse', 'Struggle'],
+        'Robot': ['Metal Claw', 'Gear Grind', 'Flash Cannon', 'Iron Defense', 'Self Destruct', 'Struggle'],
+        'AI': ['Analyze', 'Predict', 'Overclock', 'System Crash', 'Data Drain', 'Struggle'],
+        'Wizard': ['Fireball', 'Ice Shard', 'Thunder Bolt', 'Magic Missile', 'Arcane Shield', 'Struggle'],
+        'Golem': ['Earthquake', 'Rock Throw', 'Iron Fist', 'Mega Punch', 'Defense Curl', 'Struggle'],
+        'Tree': ['Branch Poke', 'Razor Leaf', 'Wood Hammer', 'Ingrain', 'Synthesis', 'Struggle'],
+        'Ocean': ['Water Gun', 'Bubble', 'Whirlpool', 'Dive', 'Surf', 'Struggle'],
+        'Shadow': ['Shadow Sneak', 'Night Slash', 'Dark Pulse', 'Sucker Punch', 'Faint Attack', 'Struggle'],
+        'Light': ['Flash', 'Beam', 'Photon Blast', 'Light Screen', 'Solar Beam', 'Struggle'],
+        'Sun': ['Solar Beam', 'Heat Wave', 'Morning Sun', 'Sunny Day', 'Fire Blast', 'Struggle'],
+        'Moon': ['Moonblast', 'Night Shade', 'Lunar Dance', 'Moonlight', 'Dark Pulse', 'Struggle'],
+        'Star': ['Twinkle', 'Starfall', 'Cosmic Power', 'Meteor Mash', 'Wish', 'Struggle'],
+        
+        // Default for any element without predefined moves
+        'default': ['Struggle', 'Tackle', 'Pound', 'Scratch', 'Growl']
     };
 
-    // Ensure EVERY element has Struggle as fallback
     function getElementMoves(el) {
-        const name = el.name;
-        if (elementMoves[name]) return [...elementMoves[name], 'Struggle'];
+        // Check if element has custom moves defined
+        if (elementMoves[el.name]) {
+            return [...elementMoves[el.name]];
+        }
         
-        // Default moves based on type (always include Struggle)
+        // Check by type for elements without predefined moves
         const type = getElementType(el);
-        const defaultMoves = {
-            'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Struggle'],
-            'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Struggle'],
-            'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Struggle'],
-            'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Struggle'],
-            'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Struggle'],
-            'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Struggle'],
-            'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Struggle'],
-            'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Struggle'],
-            'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Struggle'],
-            'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Pulse', 'Struggle'],
-            'Steel': ['Metal Claw', 'Iron Head', 'Flash Cannon', 'Struggle'],
-            'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Struggle'],
-            'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Struggle'],
-            'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Struggle'],
-            'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Struggle'],
-            'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Struggle'],
-            'Light': ['Flash', 'Beam', 'Light Burst', 'Struggle']
+        const typeMoves = {
+            'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Struggle'],
+            'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Surf', 'Struggle'],
+            'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Leaf Tornado', 'Struggle'],
+            'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Tailwind', 'Struggle'],
+            'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunder Wave', 'Struggle'],
+            'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Avalanche', 'Struggle'],
+            'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Brick Break', 'Struggle'],
+            'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Snarl', 'Struggle'],
+            'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Future Sight', 'Struggle'],
+            'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Tail', 'Twister', 'Struggle'],
+            'Steel': ['Metal Claw', 'Iron Head', 'Bullet Punch', 'Magnet Bomb', 'Struggle'],
+            'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Charm', 'Struggle'],
+            'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Smack Down', 'Struggle'],
+            'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Astonish', 'Struggle'],
+            'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Acid Spray', 'Struggle'],
+            'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Bulldoze', 'Struggle'],
+            'Light': ['Flash', 'Beam', 'Light Burst', 'Radiance', 'Struggle']
         };
         
-        return defaultMoves[type] || ['Struggle', 'Tackle', 'Pound'];
+        if (typeMoves[type]) {
+            return [...typeMoves[type]];
+        }
+        
+        // Ultimate fallback - always has at least 4 moves
+        return ['Struggle', 'Tackle', 'Pound', 'Scratch'];
     }
 
     function getElementStats(el) {
