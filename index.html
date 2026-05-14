@@ -705,8 +705,8 @@
                 </div>
                 <button id="shopBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
                 <button id="battleBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(239,68,68,0.12);color:#ef4444">⚔️ Battle</button>
-                <div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span>
-                </div>
+<div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span><span class="text-[0.65rem] ml-1" style="color:var(--text-secondary)">+<span id="cym">0</span>/min</span>
+</div>            
             </div>
         </header>
 
@@ -1140,6 +1140,17 @@
         <button class="modal-close" data-close="changelogModal">&times;</button>
         <h2 class="font-display text-xl mb-5">Changelog</h2>
         <div class="changelog-version">
+            <h3>v2.2 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
+            <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
+                <li><span class="changelog-tag tag-new">NEW</span> CyMoney Shop with exclusive elements!</li>
+                <li><span class="changelog-tag tag-new">NEW</span> CyForge - upgrade elements with isCyMoney modifier</li>
+                <li><span class="changelog-tag tag-new">NEW</span> CyMoney per minute display</li>
+                <li><span class="changelog-tag tag-new">NEW</span> 2-Player Battle Mode with move selection</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> CyMoney income now properly rounds down</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> CyShop button shows for existing users</li>
+            </ul>
+        </div>
+        <div class="changelog-version">
             <h3>v2.1</h3>
             <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-new">NEW</span> Much more variations of elements</li>
@@ -1395,7 +1406,15 @@
             updateCyMoneyDisplay();
             renderCyShop();
         }
+        function calcCyMoneyPerMin() {
+            const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
+            return cyMoneyElements.length; // 1 per minute per element
+        }
         
+        function updateCyMoneyPerMinDisplay() {
+            const cymPerMin = calcCyMoneyPerMin();
+            document.getElementById('cym').textContent = cymPerMin;
+        }
         function addCyShopButton() {
             const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
             if (headerDiv && !document.getElementById('cyShopBtn')) {
@@ -2766,8 +2785,7 @@
         let fractionalCoins = 0;
         let gs = {
             coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false, coinBoost:0, hasSeenCyShop:false, hasSeenCyExclusive:false, cyForgeCooldownEnd:0
-        };
-        
+        };        
         const totalMain = Object.keys(recipes).reduce((c,k)=> {
             const el=recipes[k]; return (!el.isExclusive && !el.excludeFromRank) ? c+1 : c;
         }, 0);
@@ -2792,6 +2810,11 @@
 
         function openModal(id) { $(id).style.display='block'; }
         function closeModal(id) { $(id).style.display='none'; }
+        function ensureCyShopButton() {
+            if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
+                addCyShopButton();
+            }
+        }
 
         document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
         document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.style.display='none'; }));
@@ -3003,11 +3026,13 @@
             if(el.isCelestial) h+='<span class="badge badge-celestial">CELESTIAL</span>';
             if(el.isElectric) h+='<span class="badge badge-electric">ELECTRIC</span>';
             if(el.isPurified) h+='<span class="badge badge-purified">PURIFIED</span>';
-            if(checkIsCyMoney(el)) h+='<span class="badge badge-cymoney">💎 CYMONEY</span>';
-            if (el.isExclusive && checkIsCyMoney(el)) h += '<span class="badge badge-exclusive" style="background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff">💎 CYMONEY EXCLUSIVE</span>';
-            else if (el.isExclusive) h += '<span class="badge badge-exclusive">EXCLUSIVE</span>';
-            else if (checkIsCyMoney(el)) h += '<span class="badge badge-cymoney">💎 CYMONEY</span>';
-            return h;
+            if (el.isExclusive && checkIsCyMoney(el)) {
+                h += '<span class="badge badge-exclusive" style="background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff">💎 CYMONEY EXCLUSIVE</span>';
+            } else if (el.isExclusive) {
+                h += '<span class="badge badge-exclusive">EXCLUSIVE</span>';
+            } else if (checkIsCyMoney(el)) {
+                h += '<span class="badge badge-cymoney">💎 CYMONEY</span>';
+            }            return h;
         }
 
         // ─── ELEMENT TYPE CLASSIFICATION & SORTING ───
@@ -3095,11 +3120,17 @@
                 if(s){const l=JSON.parse(s);gs={...gs,...l};}
                 // AFTER loading, update displays
                 updateCyMoneyDisplay();
+                updateCyMoneyPerMinDisplay();
                 checkStarForgeUnlock();
                 if (elements.some(e => e.name === 'CyForge')) {
-                addCyForgeButton();
-                cyForgeLoadCooldown();
-            }
+                    addCyForgeButton();
+                    cyForgeLoadCooldown();
+                }
+                // Show CyShop button for existing users who have CyMoney
+                if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
+                    addCyShopButton();
+                }
+                startCyMoneyIncome();
             }catch(e){}
         }
 
@@ -3158,7 +3189,7 @@
             if(whole>0){ gs.coins+=whole; gs.totalCoins+=whole; fractionalCoins-=whole; updateCoinDisplay(); save(); }
             cpm.textContent = cPerMin;
         }
-                // CyMoney passive income (1 CyMoney per minute for each isCyMoney element - rounded down)
+        // CyMoney passive income (1 CyMoney per minute for each isCyMoney element - rounded down)
         let cyMoneyInterval = null;
         let fractionalCyMoney = 0;
         
@@ -3168,14 +3199,13 @@
                 const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
                 if (cyMoneyElements.length > 0) {
                     // Each element gives 1 CyMoney per minute (60 seconds)
-                    // So per second: elements.length / 60
-                    const earnedPerSecond = cyMoneyElements.length / 60;
-                    fractionalCyMoney += earnedPerSecond * 60; // Add for 60 seconds
+                    fractionalCyMoney += cyMoneyElements.length;
                     const whole = Math.floor(fractionalCyMoney);
                     if (whole > 0) {
                         gs.cyMoney = (gs.cyMoney || 0) + whole;
                         fractionalCyMoney -= whole;
                         updateCyMoneyDisplay();
+                        updateCyMoneyPerMinDisplay();
                         save();
                         const battleModal = document.getElementById('battleModal');
                         if (!battleModal || battleModal.style.display !== 'block') {
@@ -3323,9 +3353,10 @@
             coinAmt.textContent=gs.coins.toLocaleString();
             shopCoins.textContent=gs.coins.toLocaleString();
             updateShopButtons();
-        }
+        }        
         function updateCyMoneyDisplay(){
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
+            updateCyMoneyPerMinDisplay();
         }
 
 
@@ -3872,7 +3903,7 @@
                 if(newEl.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width='0%';card.appendChild(mb);}
                 if(newEl.hasLink)card.addEventListener('click',()=>window.open(newEl.link,'_blank'));
                 d.appendChild(card);elGrid.appendChild(d);
-                updateCount();save();checkStarForgeUnlock();
+                updateCount();save();checkStarForgeUnlock();updateCyMoneyPerMinDisplay();
                 // Notifications for special types
                 if(newEl.isFatalError){notify('FATAL ERROR!',newEl.name+' — critically glitched!','💀');if(!fatalErrorTutShown){fatalErrorTutShown=true;openModal('fatalErrorTutModal');}}
                 else if(newEl.isError){notify('ERROR!',newEl.name+' — glitched element!','⚠️');if(!errorTutShown){errorTutShown=true;openModal('errorTutModal');}}
@@ -3986,6 +4017,7 @@
                         if(idx!==-1){
                             elements[idx].isCyMoney = true;
                             results.push(target.emoji+' '+target.name+' → 💎 CyMoney');
+                            updateCyMoneyPerMinDisplay();
                         }
                     });
                 }
@@ -4251,6 +4283,10 @@
         if(gs.hasShownEnding)$('viewRankBtn').classList.remove('hidden');
         if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();
         else renderShop();
+        // Show CyShop button for existing users who have CyMoney
+        if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
+            addCyShopButton();
+        }
 
         setInterval(tickCoins,3000);
         setInterval(updateShopTimer,1000);
