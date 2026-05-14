@@ -1333,8 +1333,7 @@
                 btn.addEventListener('click', () => buyCyShopItem(btn.dataset.id));
             });
         }
-        
-        function buyCyShopItem(itemId) {
+                function buyCyShopItem(itemId) {
             const item = cyShopItems[itemId];
             if (!item) return;
             
@@ -1346,11 +1345,6 @@
             if (cyShopBought[itemId] === true && !item.isRandom) {
                 notify('Already Owned', `You already own ${item.name}!`, '💎');
                 return;
-            }
-            if (newElement.name === 'CyForge') {
-                addCyForgeButton();
-                cyForgeLoadCooldown();
-                notify('⚒️ CyForge Unlocked!', 'Use it to bless elements with isCyMoney!', '⚒️');
             }
             
             gs.cyMoney -= item.price;
@@ -1382,6 +1376,13 @@
                         setTimeout(() => {
                             notify('💎 CyMoney Exclusive!', 'These elements don\'t count toward rank but give extra CyMoney!', '💎', 5000);
                         }, 1000);
+                    }
+                    
+                    // Check if CyForge was purchased
+                    if (newElement.name === 'CyForge') {
+                        addCyForgeButton();
+                        cyForgeLoadCooldown();
+                        notify('⚒️ CyForge Unlocked!', 'Use it to bless elements with isCyMoney!', '⚒️');
                     }
                 } else {
                     gs.coins += 200;
@@ -2797,6 +2798,12 @@
 
         function safeB64Enc(s){return btoa(unescape(encodeURIComponent(s)));}
         function safeB64Dec(s){return decodeURIComponent(escape(atob(s)));}
+        function awardCyMoney(amount){
+            gs.cyMoney = (gs.cyMoney || 0) + amount;
+            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney;
+            save();
+            notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
+        }
         // Override awardCyMoney to show CyShop notification on first CyMoney
         const originalAwardCyMoney = awardCyMoney;
         awardCyMoney = function(amount) {
@@ -3316,12 +3323,6 @@
             coinAmt.textContent=gs.coins.toLocaleString();
             shopCoins.textContent=gs.coins.toLocaleString();
             updateShopButtons();
-        }
-        function awardCyMoney(amount){
-            gs.cyMoney = (gs.cyMoney || 0) + amount;
-            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney;
-            save();
-            notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
         }
         function updateCyMoneyDisplay(){
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
@@ -4246,6 +4247,7 @@
         rebuildHistory();
         checkStarForgeUnlock();
         sfLoadCooldown();
+        startCyMoneyIncome();
         if(gs.hasShownEnding)$('viewRankBtn').classList.remove('hidden');
         if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();
         else renderShop();
