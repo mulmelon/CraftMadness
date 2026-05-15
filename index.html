@@ -3049,6 +3049,7 @@
                 notify('Locked', 'Purchase the CyForge from the Exclusive Shop first!', '🔒');
                 return;
             }
+        }
             
             if (cyForgeCooldownEnd > Date.now()) {
                 const rem = cyForgeCooldownEnd - Date.now();
