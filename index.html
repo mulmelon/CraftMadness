@@ -691,6 +691,14 @@
 </head>
 <body>
     <script>
+        window.openModal = function(id) { 
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'flex';
+        };
+        window.closeModal = function(id) { 
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'none';
+        };
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => { e.matches ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark'); });
     </script>
@@ -4799,83 +4807,6 @@ if (resetBattleBtn) {
             </div>
         </div>
     </div>
-
-    <!-- ========== INITIALIZATION SCRIPT ========== -->
-    <script>
-    // Final initialization for all systems
-    (function() {
-        // Wait for DOM to be fully loaded
-        function initAll() {
-            // Fix modal close buttons
-            document.querySelectorAll('[data-close]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    var modalId = this.getAttribute('data-close');
-                    var modal = document.getElementById(modalId);
-                    if (modal) modal.style.display = 'none';
-                });
-            });
-            
-            // Fix modal overlays to close when clicking outside
-            document.querySelectorAll('.modal-overlay').forEach(overlay => {
-                overlay.addEventListener('click', function(e) {
-                    if (e.target === this) this.style.display = 'none';
-                });
-            });
-            
-            // Fix Changelog button
-            var changelogBtn = document.getElementById('changelogBtn');
-            if (changelogBtn) {
-                changelogBtn.addEventListener('click', function() {
-                    var modal = document.getElementById('changelogModal');
-                    if (modal) modal.style.display = 'flex';
-                });
-            }
-            
-            // Fix Battle button
-            var battleBtn = document.getElementById('battleBtn');
-            if (battleBtn) {
-                battleBtn.addEventListener('click', function() {
-                    var modal = document.getElementById('battleModal');
-                    if (modal) modal.style.display = 'flex';
-                });
-            }
-            
-            // Fix Shop button
-            var shopBtn = document.getElementById('shopBtn');
-            if (shopBtn) {
-                shopBtn.addEventListener('click', function() {
-                    var modal = document.getElementById('shopModal');
-                    if (modal) modal.style.display = 'flex';
-                });
-            }
-            
-            // Fix View Rank button
-            var viewRankBtn = document.getElementById('viewRankBtn');
-            if (viewRankBtn) {
-                viewRankBtn.addEventListener('click', function() {
-                    if (typeof showEnding === 'function') showEnding();
-                });
-            }
-            
-            // Fix Export button
-            var exportBtn = document.getElementById('exportBtn');
-            if (exportBtn && typeof openModal === 'function') {
-                exportBtn.addEventListener('click', function() { openModal('exportModal'); });
-            }
-            
-            // Fix Import button
-            var importBtn = document.getElementById('importBtn');
-            if (importBtn && typeof openModal === 'function') {
-                importBtn.addEventListener('click', function() { openModal('importModal'); });
-            }
-            
-            // Fix Reset button
-            var resetBtn = document.getElementById('resetBtn');
-            if (resetBtn && typeof openModal === 'function') {
-                resetBtn.addEventListener('click', function() { openModal('resetModal'); });
-            }
-        }
-        
         // Run init when DOM is ready
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initAll);
