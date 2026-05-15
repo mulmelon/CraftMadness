@@ -748,6 +748,7 @@
                 <div class="flex gap-1.5 order-2 sm:order-3 items-center">
                     <button id="starForgeBtn" title="Star Forge — Bestow 5 random elements with special blessings (5 min cooldown)">🌟 Star Forge<span class="sf-timer" id="sfTimer"></span></button>
                     <button id="upgradeForgeBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-all ml-2" style="background:rgba(20,184,166,0.12);color:#14b8a6;pointer-events:auto;opacity:1" title="Upgrade Star Forge (Cost: 1 CyMoney)">⬆️ Upgrade Forge</button>
+                    <button id="unlockCyForgeBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-all ml-2" style="background:linear-gradient(135deg,#d4a017,#f0c040);color:#1a1a2e" title="Unlock CyForge (Cost: 30 CyMoney)">🔓 Unlock CyForge (30💎)</button>
                     <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
                     <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
                     <button id="resetBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(239,68,68,0.08);color:#ef4444">Reset</button>
@@ -3817,6 +3818,10 @@
                 existingBtn.remove();
             }
         }
+            if (newEl.name === 'CyForge') {
+                const unlockBtn = document.getElementById('unlockCyForgeBtn');
+                if (unlockBtn) unlockBtn.style.display = 'none';
+            }
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
