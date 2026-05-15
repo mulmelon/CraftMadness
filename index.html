@@ -33,9 +33,8 @@
         #p1Team, #p2Team {
             transition: all 0.2s ease;
         }
-        #cyShopModal.modal-overlay { z-index: 101; }
+
         #battleModal.modal-overlay { z-index: 100; }
-        #cyShopModal { z-index: 110; }
         #battleModal { z-index: 100; }
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
         #p1Team button, #p2Team button {
@@ -1220,204 +1219,7 @@
             { name:'Earth', emoji:'🌎', color:'bg-amber-800', description:'Solid ground and minerals' },
             { name:'Air', emoji:'💨', color:'bg-sky-300', description:'Invisible gas we breathe' }
         ];
-        // CyMoney Shop Items - Exclusive CyMoney elements (not counted toward rank)
-        const cyShopItems = {
-            'cy_crystal': {
-                name: '💎 CyCrystal',
-                price: 5,
-                description: 'A radiant crystal pulsing with cyber energy',
-                icon: '💎',
-                element: { name: 'CyCrystal', emoji: '💎', description: 'A radiant crystal pulsing with cyber energy', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 5
-            },
-            'cy_spark': {
-                name: '⚡ CySpark',
-                price: 5,
-                description: 'Electric spark infused with CyMoney',
-                icon: '⚡',
-                element: { name: 'CySpark', emoji: '⚡', description: 'Electric spark infused with CyMoney', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 5
-            },
-            'cy_heart': {
-                name: '💚 CyHeart',
-                price: 8,
-                description: 'A pulsing heart of pure CyMoney',
-                icon: '💚',
-                element: { name: 'CyHeart', emoji: '💚', description: 'A pulsing heart of pure CyMoney', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 8
-            },
-            'cy_star': {
-                name: '⭐ CyStar',
-                price: 10,
-                description: 'A star forged from CyMoney itself',
-                icon: '⭐',
-                element: { name: 'CyStar', emoji: '⭐', description: 'A star forged from CyMoney itself', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 10
-            },
-            'cy_dragon': {
-                name: '🐉 CyDragon',
-                price: 20,
-                description: 'A mythical dragon made of CyMoney',
-                icon: '🐉',
-                element: { name: 'CyDragon', emoji: '🐉', description: 'A mythical dragon made of CyMoney', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 20
-            },
-            'cy_phoenix': {
-                name: '🔥 CyPhoenix',
-                price: 25,
-                description: 'An immortal phoenix burning with cyber flames',
-                icon: '🔥',
-                element: { name: 'CyPhoenix', emoji: '🔥', description: 'An immortal phoenix burning with cyber flames', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 25
-            },
-            'cy_forge': {
-                name: '⚒️ CyForge',
-                price: 30,
-                description: 'An upgraded version of the Star Forge',
-                icon: '⚒️',
-                element: { name: 'CyForge', emoji: '⚒️', description: 'An upgraded version of the Star Forge', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 30
-            },
-            'cy_titan': {
-                name: '🗿 CyTitan',
-                price: 40,
-                description: 'A colossal titan empowered by CyMoney',
-                icon: '🗿',
-                element: { name: 'CyTitan', emoji: '🗿', description: 'A colossal titan empowered by CyMoney', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 40
-            },
-            'cy_god': {
-                name: '👑 CyGod',
-                price: 50,
-                description: 'The ultimate CyMoney deity',
-                icon: '👑',
-                element: { name: 'CyGod', emoji: '👑', description: 'The ultimate CyMoney deity', isExclusive: true, isCyMoney: true, excludeFromRank: true },
-                requiredCyMoney: 50
-            },
-            'cy_random': {
-                name: '🎲 Random CyElement',
-                price: 3,
-                description: 'Get a random CyMoney exclusive element',
-                icon: '🎲',
-                isRandom: true,
-                randomPool: ['CyCrystal', 'CySpark', 'CyHeart', 'CyStar', 'CyDragon', 'CyPhoenix', 'CyForge', 'CyTitan', 'CyGod'],
-                requiredCyMoney: 3
-            }
-        };
         
-        let cyShopBought = {};
-        
-        function renderCyShop() {
-            const grid = document.getElementById('cyShopGrid');
-            if (!grid) {
-                console.error('cyShopGrid not found');
-                return;
-            }
-            grid.innerHTML = '';
-            
-            const cyShopAmt = document.getElementById('cyShopAmt');
-            if (cyShopAmt) cyShopAmt.textContent = gs.cyMoney || 0;
-            
-            Object.keys(cyShopItems).forEach(id => {
-                const item = cyShopItems[id];
-                const canBuy = (gs.cyMoney || 0) >= item.price;
-                const alreadyBought = cyShopBought[id] === true && !item.isRandom;
-                
-                if (alreadyBought) return;
-                
-                const div = document.createElement('div');
-                div.className = 'rounded-xl p-3 transition-all hover:scale-[1.02]';
-                div.style.background = 'linear-gradient(135deg, rgba(20,184,166,0.15), rgba(13,148,136,0.08))';
-                div.style.border = `2px solid ${canBuy ? '#14b8a6' : 'var(--border)'}`;
-                
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">${item.icon}</span>
-                            <span class="font-semibold text-sm" style="color:#14b8a6">${item.name}</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-sm font-bold" style="color:#14b8a6">${item.price} 💎</div>
-                    </div>
-                    <p class="text-xs mb-2" style="color:var(--text-secondary)">${item.description}</p>
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-xs px-2 py-0.5 rounded-full" style="background:#14b8a6;color:#042f2e">⭐ EXCLUSIVE</span>
-                        <span class="text-xs px-2 py-0.5 rounded-full" style="background:#0d9488;color:#fff">💎 CYMONEY</span>
-                    </div>
-                    <button class="cy-shop-buy-btn w-full text-sm py-2 rounded-lg font-semibold transition-all" style="background:${canBuy ? '#14b8a6' : '#6b6b80'};color:#fff" data-id="${id}" ${!canBuy ? 'disabled' : ''}>${canBuy ? '✨ Purchase' : `Need ${item.price} 💎`}</button>
-                `;
-                
-                grid.appendChild(div);
-            });
-            
-            document.querySelectorAll('.cy-shop-buy-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    buyCyShopItem(btn.dataset.id);
-                });
-            });
-        }
-        function buyCyShopItem(itemId) {
-            const item = cyShopItems[itemId];
-            if (!item) return;
-            
-            if ((gs.cyMoney || 0) < item.price) {
-                notify('Not Enough', `Need ${item.price} CyMoney!`, '💎');
-                return;
-            }
-            
-            if (cyShopBought[itemId] === true && !item.isRandom) {
-                notify('Already Owned', `You already own ${item.name}!`, '💎');
-                return;
-            }
-            
-            gs.cyMoney -= item.price;
-            
-            let newElement = null;
-            
-            if (item.isRandom) {
-                const randomName = item.randomPool[Math.floor(Math.random() * item.randomPool.length)];
-                const randomItem = Object.values(cyShopItems).find(i => i.element?.name === randomName);
-                if (randomItem && randomItem.element) {
-                    newElement = { ...randomItem.element };
-                }
-            } else if (item.element) {
-                newElement = { ...item.element };
-                cyShopBought[itemId] = true;
-            }
-            
-            if (newElement) {
-                newElement.color = randColor();
-                if (!elements.find(e => e.name === newElement.name)) {
-                    elements.push(newElement);
-                    renderEls();
-                    updateCount();
-                    notify('✨ New Exclusive Element!', `You obtained ${newElement.name}!`, newElement.emoji);
-                    
-                    // Check if this is the first CyMoney exclusive
-                    if (!gs.hasSeenCyExclusive) {
-                        gs.hasSeenCyExclusive = true;
-                        setTimeout(() => {
-                            notify('💎 CyMoney Exclusive!', 'These elements don\'t count toward rank but give extra CyMoney!', '💎', 5000);
-                        }, 1000);
-                    }
-                    
-                    // Check if CyForge was purchased
-                    if (newElement.name === 'CyForge') {
-                        addCyForgeButton();
-                        cyForgeLoadCooldown();
-                        notify('⚒️ CyForge Unlocked!', 'Use it to bless elements with isCyMoney!', '⚒️');
-                    }
-                } else {
-                    gs.coins += 200;
-                    updateCoinDisplay();
-                    notify('Duplicate!', `You already have ${newElement.name}. Got 200 coins instead!`, '🔄');
-                }
-            }
-            
-            save();
-            updateCyMoneyDisplay();
-            renderCyShop();
-        }
         function calcCyMoneyPerMin() {
             const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
             return cyMoneyElements.length; // 1 per minute per element
@@ -1427,26 +1229,6 @@
             const cymPerMin = calcCyMoneyPerMin();
             document.getElementById('cym').textContent = cymPerMin;
         }       
-        function addCyShopButton() {
-            const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
-            if (headerDiv && !document.getElementById('cyShopBtn')) {
-                const cyShopBtn = document.createElement('button');
-                cyShopBtn.id = 'cyShopBtn';
-                cyShopBtn.className = 'text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105';
-                cyShopBtn.style.background = 'rgba(20,184,166,0.12)';
-                cyShopBtn.style.color = '#14b8a6';
-                cyShopBtn.innerHTML = '💎 Exclusive Shop';
-                cyShopBtn.onclick = function(e) {
-                    e.stopPropagation();
-                    // Use the global openModal function
-                    if (typeof renderCyShop === 'function') {
-                        renderCyShop();
-                    }
-                    openModal('cyShopModal');
-                };
-                headerDiv.appendChild(cyShopBtn);
-            }
-        }
         const SPECIAL_ELEMENTS = {
             null: { name:'Null', emoji:'⚫', color:'bg-green-600', description:'The void from which all things emerge', isBasic:true },
             question: { name:'3?', emoji:'❓', color:'bg-orange-500', description:'Wait. What?', isQuestion:true },
@@ -2800,7 +2582,7 @@
         let sel1 = null, sel2 = null;
         let fractionalCoins = 0;
         let gs = {
-            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false, coinBoost:0, hasSeenCyShop:false, hasSeenCyExclusive:false, cyForgeCooldownEnd:0
+            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false, coinBoost:0, cyForgeCooldownEnd:0
         };        
         const totalMain = Object.keys(recipes).reduce((c,k)=> {
             const el=recipes[k]; return (!el.isExclusive && !el.excludeFromRank) ? c+1 : c;
@@ -2834,11 +2616,6 @@
             const modal = document.getElementById(id);
             if (modal) modal.style.display = 'none';
         }
-        function ensureCyShopButton() {
-            if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
-                addCyShopButton();
-            }
-        }
 
         document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
         document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.style.display='none'; }));
@@ -2848,23 +2625,11 @@
         function awardCyMoney(amount){
             gs.cyMoney = (gs.cyMoney || 0) + amount;
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney;
+            updateCyMoneyPerMinDisplay();
+            updateCyForgeUnlockButton();
             save();
             notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
         }
-        // Override awardCyMoney to show CyShop notification on first CyMoney
-        const originalAwardCyMoney = awardCyMoney;
-        awardCyMoney = function(amount) {
-            const hadCyMoney = (gs.cyMoney || 0) > 0;
-            originalAwardCyMoney(amount);
-            if ((gs.cyMoney || 0) >= 1 && !hadCyMoney) {
-                gs.hasSeenCyShop = true;
-                save();
-                setTimeout(() => {
-                    notify('💎 Exclusive Shop Unlocked!', 'Spend CyMoney on exclusive CyMoney elements!', '💎', 5000);
-                    addCyShopButton();
-                }, 1000);
-            }
-        };
 
         const CRYPTO_VERSION = 'CM3';
         const PBKDF2_ITERATIONS = 600000;
@@ -3140,16 +2905,14 @@
                 _setItem('fc_el',JSON.stringify(elements));
                 _setItem('fc_co',JSON.stringify(combos));
                 _setItem('fc_gs',JSON.stringify(gs));
-                _setItem('fc_cyBought',JSON.stringify(cyShopBought));
             }catch(e){}
         }
         function load(){
             try{
-                const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs'),cyBought=_getItem('fc_cyBought');
+                const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
                 if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
                 if(c)combos=JSON.parse(c);
                 if(s){const l=JSON.parse(s);gs={...gs,...l};}
-                if(cyBought) cyShopBought = JSON.parse(cyBought);
                 // AFTER loading, update displays
                 updateCyMoneyDisplay();
                 updateCyMoneyPerMinDisplay();
@@ -3157,10 +2920,8 @@
                 if (elements.some(e => e.name === 'CyForge')) {
                     addCyForgeButton();
                     cyForgeLoadCooldown();
+                    updateCyForgeUnlockButton();
                 }
-                // Show CyShop button for existing users who have CyMoney
-                if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
-                    addCyShopButton();
                 }
                 startCyMoneyIncome();
             }catch(e){}
@@ -3389,8 +3150,8 @@
         function updateCyMoneyDisplay(){
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
             updateCyMoneyPerMinDisplay();
+            updateCyForgeUnlockButton();
         }
-
 
 
 
@@ -4013,7 +3774,49 @@
                 if(upgradeBtn) upgradeBtn.style.pointerEvents = 'none';
             }
         }
-
+        // Show CyForge unlock button when user has 30+ CyMoney
+        function updateCyForgeUnlockButton() {
+            const buttonContainer = document.querySelector('.flex.gap-1\\.5.order-2.sm\\:order-3.items-center');
+            if (!buttonContainer) return;
+            
+            const existingBtn = document.getElementById('cyForgeUnlockBtn');
+            if ((gs.cyMoney || 0) >= 30 && !elements.some(e => e.name === 'CyForge')) {
+                if (!existingBtn) {
+                    const unlockBtn = document.createElement('button');
+                    unlockBtn.id = 'cyForgeUnlockBtn';
+                    unlockBtn.className = 'text-xs font-medium px-3 py-1.5 rounded-lg transition-all';
+                    unlockBtn.style.background = 'linear-gradient(135deg,#d4a017,#f0c040)';
+                    unlockBtn.style.color = '#1a1a2e';
+                    unlockBtn.innerHTML = '🔓 Unlock CyForge (30 💎)';
+                    unlockBtn.onclick = () => {
+                        if ((gs.cyMoney || 0) >= 30 && !elements.some(e => e.name === 'CyForge')) {
+                            gs.cyMoney -= 30;
+                            const cyForgeEl = { 
+                                name: 'CyForge', 
+                                emoji: '⚒️', 
+                                description: 'A legendary forge that blesses elements with CyMoney', 
+                                isExclusive: true, 
+                                isCyMoney: true,
+                                isCyForge: true,
+                                excludeFromRank: true,
+                                color: randColor()
+                            };
+                            elements.push(cyForgeEl);
+                            updateCyMoneyDisplay();
+                            renderEls();
+                            updateCount();
+                            save();
+                            notify('🔓 CyForge Unlocked!', 'You can now use the CyForge button to bless elements!', '⚒️');
+                            unlockBtn.remove();
+                            addCyForgeButton();
+                        }
+                    };
+                    buttonContainer.appendChild(unlockBtn);
+                }
+            } else if (existingBtn && ((gs.cyMoney || 0) < 30 || elements.some(e => e.name === 'CyForge'))) {
+                existingBtn.remove();
+            }
+        }
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
@@ -4316,10 +4119,6 @@
         if(gs.hasShownEnding)$('viewRankBtn').classList.remove('hidden');
         if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();
         else renderShop();
-        // Show CyShop button for existing users who have CyMoney
-        if ((gs.cyMoney || 0) > 0 && !document.getElementById('cyShopBtn')) {
-            addCyShopButton();
-        }
 
         setInterval(tickCoins,3000);
         setInterval(updateShopTimer,1000);
@@ -5138,97 +4937,6 @@
             <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
         </div>
     </div>
-    <!-- CyMoney Shop Modal -->
-    <div id="cyShopModal" class="modal-overlay"><div class="modal-box" style="max-width:700px"><button class="modal-close" data-close="cyShopModal">&times;</button>
-        <div class="flex justify-between items-center mb-5 pb-3" style="border-bottom:1px solid var(--border)">
-            <h2 class="font-display text-xl">💎 CyMoney Shop</h2>
-            <div class="flex items-center gap-1 font-semibold" style="color:#14b8a6">💎 <span id="cyShopAmt">0</span></div>
-        </div>
-        
-        <div id="cyShopGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-            <!-- Items will be populated here -->
-        </div>
-        
-        <div class="text-center pt-3" style="border-top:1px solid var(--border)">
-            <p class="text-xs" style="color:var(--text-secondary)">New items added as you collect more CyMoney!</p>
-        </div>
-    </div>
-        <script>
-// FIX: Make CyShop work independently
-(function() {
-    // Wait for DOM to be ready
-    function initCyShop() {
-        // Check if cyShopBtn already exists
-        if (document.getElementById('cyShopBtn')) return;
-        
-        const headerDiv = document.querySelector('.mt-3.flex.items-center.justify-center.gap-2.flex-wrap');
-        if (!headerDiv) {
-            setTimeout(initCyShop, 500);
-            return;
-        }
-        
-        const cyShopBtn = document.createElement('button');
-        cyShopBtn.id = 'cyShopBtn';
-        cyShopBtn.className = 'text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105';
-        cyShopBtn.style.background = 'rgba(20,184,166,0.12)';
-        cyShopBtn.style.color = '#14b8a6';
-        cyShopBtn.innerHTML = '💎 Exclusive Shop';
-        cyShopBtn.onclick = function(e) {
-            e.stopPropagation();
-            // Directly open the modal without calling any functions that might fail
-            const modal = document.getElementById('cyShopModal');
-            if (modal) {
-                modal.style.display = 'block';
-            }
-        };
-        headerDiv.appendChild(cyShopBtn);
-        console.log('CyShop button added successfully');
-    }
-    
-    // Try to initialize
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCyShop);
-    } else {
-        initCyShop();
-    }
-})();
-</script>
-        <script>
-// Force populate CyShop grid when modal opens
-document.addEventListener('click', function(e) {
-    if (e.target.id === 'cyShopBtn' || (e.target.parentElement && e.target.parentElement.id === 'cyShopBtn')) {
-        setTimeout(function() {
-            const grid = document.getElementById('cyShopGrid');
-            if (grid && grid.children.length === 0) {
-                // Sample items if not populated
-                grid.innerHTML = `
-                    <div class="rounded-xl p-3 text-center" style="background:linear-gradient(135deg, rgba(20,184,166,0.15), rgba(13,148,136,0.08));border:2px solid #14b8a6">
-                        <div class="text-2xl mb-2">💎</div>
-                        <div class="font-semibold text-sm" style="color:#14b8a6">CyCrystal</div>
-                        <p class="text-xs my-2">A radiant crystal pulsing with cyber energy</p>
-                        <div class="flex items-center gap-2 justify-center mb-2">
-                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#14b8a6;color:#042f2e">⭐ EXCLUSIVE</span>
-                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#0d9488;color:#fff">💎 CYMONEY</span>
-                        </div>
-                        <div class="text-sm font-bold" style="color:#14b8a6">5 💎</div>
-                        <button class="mt-2 w-full text-sm py-2 rounded-lg font-semibold" style="background:#6b6b80;color:#fff" disabled>Need 5 💎</button>
-                    </div>
-                    <div class="rounded-xl p-3 text-center" style="background:linear-gradient(135deg, rgba(20,184,166,0.15), rgba(13,148,136,0.08));border:2px solid #14b8a6">
-                        <div class="text-2xl mb-2">⚡</div>
-                        <div class="font-semibold text-sm" style="color:#14b8a6">CySpark</div>
-                        <p class="text-xs my-2">Electric spark infused with CyMoney</p>
-                        <div class="flex items-center gap-2 justify-center mb-2">
-                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#14b8a6;color:#042f2e">⭐ EXCLUSIVE</span>
-                            <span class="text-xs px-2 py-0.5 rounded-full" style="background:#0d9488;color:#fff">💎 CYMONEY</span>
-                        </div>
-                        <div class="text-sm font-bold" style="color:#14b8a6">5 💎</div>
-                        <button class="mt-2 w-full text-sm py-2 rounded-lg font-semibold" style="background:#6b6b80;color:#fff" disabled>Need 5 💎</button>
-                    </div>
-                `;
-            }
-        }, 50);
-    }
-});
 </script>
 </body>
 </html>
