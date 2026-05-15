@@ -33,16 +33,12 @@
         #p1Team, #p2Team {
             transition: all 0.2s ease;
         }
-
-        #battleModal.modal-overlay { z-index: 100; }
-        #battleModal { z-index: 100; }
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        
         #p1Team button, #p2Team button {
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .modal-overlay { display: none; align-items: center; justify-content: center; }
-        .modal-overlay.show, .modal-overlay[style*="display: block"] { display: flex !important; }
+        
         #p1Team button:hover, #p2Team button:hover {
             transform: scale(1.05);
             opacity: 1 !important;
@@ -691,14 +687,6 @@
 </head>
 <body>
     <script>
-        window.openModal = function(id) { 
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'flex';
-        };
-        window.closeModal = function(id) { 
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'none';
-        };
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => { e.matches ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark'); });
     </script>
@@ -717,8 +705,8 @@
                 </div>
                 <button id="shopBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
                 <button id="battleBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(239,68,68,0.12);color:#ef4444">⚔️ Battle</button>
-<div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span><span class="text-[0.65rem] ml-1" style="color:var(--text-secondary)">+<span id="cym">0</span>/min</span>
-</div>            
+                <div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span>
+                </div>
             </div>
         </header>
 
@@ -924,7 +912,9 @@
             <p>📊 Each frozen element has a <strong style="color:#60a5fa">melt bar</strong> — keep applying heat until it's full and thaw the element!</p>
         </div>
         <button class="font-semibold text-sm py-2.5 px-8 rounded-full" style="background:var(--gold);color:#1a1a2e" data-close="frozenTutModal">Got it!</button>
-    </div>
+    </div></div>
+        </div>
+    </div></div>
 
     <!-- isFinal Tutorial Modal -->
     <div id="finalTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:460px;border-color:var(--gold)">
@@ -1150,14 +1140,6 @@
         <button class="modal-close" data-close="changelogModal">&times;</button>
         <h2 class="font-display text-xl mb-5">Changelog</h2>
         <div class="changelog-version">
-            <h3>v2.2 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
-            <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-new">NEW</span> CyMoney per minute display</li>
-                <li><span class="changelog-tag tag-new">NEW</span> 2-Player Battle Mode with move selection</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> CyMoney income now properly rounds down</li>
-            </ul>
-        </div>
-        <div class="changelog-version">
             <h3>v2.1</h3>
             <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-new">NEW</span> Much more variations of elements</li>
@@ -1222,16 +1204,7 @@
             { name:'Earth', emoji:'🌎', color:'bg-amber-800', description:'Solid ground and minerals' },
             { name:'Air', emoji:'💨', color:'bg-sky-300', description:'Invisible gas we breathe' }
         ];
-        
-        function calcCyMoneyPerMin() {
-            const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
-            return cyMoneyElements.length; // 1 per minute per element
-        }
-        
-        function updateCyMoneyPerMinDisplay() {
-            const cymPerMin = calcCyMoneyPerMin();
-            document.getElementById('cym').textContent = cymPerMin;
-        }       
+
         const SPECIAL_ELEMENTS = {
             null: { name:'Null', emoji:'⚫', color:'bg-green-600', description:'The void from which all things emerge', isBasic:true },
             question: { name:'3?', emoji:'❓', color:'bg-orange-500', description:'Wait. What?', isQuestion:true },
@@ -2585,8 +2558,9 @@
         let sel1 = null, sel2 = null;
         let fractionalCoins = 0;
         let gs = {
-            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false, coinBoost:0
-        };        
+            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false
+        };
+
         const totalMain = Object.keys(recipes).reduce((c,k)=> {
             const el=recipes[k]; return (!el.isExclusive && !el.excludeFromRank) ? c+1 : c;
         }, 0);
@@ -2609,31 +2583,15 @@
             setTimeout(()=>{ n.style.opacity='0'; n.style.transition='opacity 0.3s'; setTimeout(()=>n.remove(),300); }, duration);
         }
 
-        function openModal(id) { 
-            const modal = document.getElementById(id);
-            if (modal && modal.style.display !== 'flex') {
-                modal.style.display = 'flex';
-                modal.style.alignItems = 'center';
-                modal.style.justifyContent = 'center';
-            }
-        }
-        function closeModal(id) { 
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'none';
-        }
+        function openModal(id) { $(id).style.display='block'; }
+        function closeModal(id) { $(id).style.display='none'; }
 
         document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
         document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.style.display='none'; }));
 
         function safeB64Enc(s){return btoa(unescape(encodeURIComponent(s)));}
         function safeB64Dec(s){return decodeURIComponent(escape(atob(s)));}
-        function awardCyMoney(amount){
-            gs.cyMoney = (gs.cyMoney || 0) + amount;
-            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney;
-            updateCyMoneyPerMinDisplay();
-            save();
-            notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
-        }
+
 
         const CRYPTO_VERSION = 'CM3';
         const PBKDF2_ITERATIONS = 600000;
@@ -2819,13 +2777,8 @@
             if(el.isCelestial) h+='<span class="badge badge-celestial">CELESTIAL</span>';
             if(el.isElectric) h+='<span class="badge badge-electric">ELECTRIC</span>';
             if(el.isPurified) h+='<span class="badge badge-purified">PURIFIED</span>';
-            if (el.isExclusive && checkIsCyMoney(el)) {
-                h += '<span class="badge badge-exclusive" style="background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff">💎 CYMONEY EXCLUSIVE</span>';
-            } else if (el.isExclusive) {
-                h += '<span class="badge badge-exclusive">EXCLUSIVE</span>';
-            } else if (checkIsCyMoney(el)) {
-                h += '<span class="badge badge-cymoney">💎 CYMONEY</span>';
-            }            return h;
+            if(checkIsCyMoney(el)) h+='<span class="badge badge-cymoney">💎 CYMONEY</span>';
+            return h;
         }
 
         // ─── ELEMENT TYPE CLASSIFICATION & SORTING ───
@@ -2895,6 +2848,15 @@
             }
             return indexed;
         }
+        // Add this function BEFORE the battle event listeners
+window.generateBattleCode = function() {
+    const exportData = {
+        elements: elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError),
+        version: '1.0'
+    };
+    const jsonStr = JSON.stringify(exportData);
+    return btoa(unescape(encodeURIComponent(jsonStr)));
+};
 
         function applySortBtnUI() {
             document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('sort-active', b.dataset.sort === currentSort));
@@ -2904,13 +2866,7 @@
         const _store={};
         function _setItem(k,v){_store[k]=v;try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
-        function save(){
-            try{
-                _setItem('fc_el',JSON.stringify(elements));
-                _setItem('fc_co',JSON.stringify(combos));
-                _setItem('fc_gs',JSON.stringify(gs));
-            }catch(e){}
-        }
+        function save(){try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
         function load(){
             try{
                 const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
@@ -2919,11 +2875,9 @@
                 if(s){const l=JSON.parse(s);gs={...gs,...l};}
                 // AFTER loading, update displays
                 updateCyMoneyDisplay();
-                updateCyMoneyPerMinDisplay();
                 checkStarForgeUnlock();
-                startCyMoneyIncome();
             }catch(e){}
-        } // Make sure this closing brace exists
+        }
 
         // ─── COIN SYSTEM (fixed fractional accumulation) ───
         function calcCoinsPerMin() {
@@ -2980,16 +2934,24 @@
             if(whole>0){ gs.coins+=whole; gs.totalCoins+=whole; fractionalCoins-=whole; updateCoinDisplay(); save(); }
             cpm.textContent = cPerMin;
         }
-        // CyMoney passive income (1 CyMoney per minute for each isCyMoney element - rounded down)
-        let cyMoneyInterval = null;
-        let fractionalCyMoney = 0;
-                        
-            
+
         function updateCoinDisplay(){
             coinAmt.textContent=gs.coins.toLocaleString();
             shopCoins.textContent=gs.coins.toLocaleString();
             updateShopButtons();
-        }        
+        }
+        function awardCyMoney(amount){
+            gs.cyMoney = (gs.cyMoney || 0) + amount;
+            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney;
+            save();
+            notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
+        }
+        function updateCyMoneyDisplay(){
+            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
+        }
+
+
+
 
         function updateShopButtons(){
             const grid=$('shopGrid');
@@ -3095,10 +3057,9 @@
             const mins=(Date.now()-gs.shopRefresh)/60000;
             if(mins>=5) refreshShop();
             else renderShop();
-            const modal = document.getElementById('shopModal');
-            if (modal) modal.style.display = 'block';
+            openModal('shopModal');
         });
-        
+
         // ─── RENDER ELEMENTS ───
         function renderEls() {
             elGrid.innerHTML='';
@@ -3502,28 +3463,7 @@
             else resultArea.innerHTML=`<div class="text-center"><div class="el-card frozen-el inline-flex flex-col items-center p-4 mb-2 relative"><div class="el-emoji">${r.el.emoji}</div><div class="el-name">${r.el.name}</div><div class="melt-bar" style="width:${(r.prog/r.goal)*100}%"></div></div><div class="text-xs" style="color:var(--text-secondary)">Warming... ${r.prog}/${r.goal}</div></div>`;
             resetDZs();
         }
-        // Fix startCyMoneyIncome - remove the orphaned code
-        function startCyMoneyIncome() {
-            if (cyMoneyInterval) clearInterval(cyMoneyInterval);
-            cyMoneyInterval = setInterval(() => {
-                const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
-                if (cyMoneyElements.length > 0) {
-                    fractionalCyMoney += cyMoneyElements.length;
-                    const whole = Math.floor(fractionalCyMoney);
-                    if (whole > 0) {
-                        gs.cyMoney = (gs.cyMoney || 0) + whole;
-                        fractionalCyMoney -= whole;
-                        updateCyMoneyDisplay();
-                        updateCyMoneyPerMinDisplay();
-                        save();
-                        const battleModal = document.getElementById('battleModal');
-                        if (!battleModal || battleModal.style.display !== 'block') {
-                            notify('💎 CyMoney Earned!', `+${whole} CyMoney from ${cyMoneyElements.length} CyMoney element(s)!`, '💎', 3000);
-                        }
-                    }
-                }
-            }, 60000);
-        }
+
         function addElement(newEl){
             // If element qualifies as Everything, strip all mods and set isEverything only
             if(checkIsEverything(newEl)){stripToEverything(newEl);}
@@ -3554,7 +3494,7 @@
                 if(newEl.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width='0%';card.appendChild(mb);}
                 if(newEl.hasLink)card.addEventListener('click',()=>window.open(newEl.link,'_blank'));
                 d.appendChild(card);elGrid.appendChild(d);
-                updateCount();save();checkStarForgeUnlock();updateCyMoneyPerMinDisplay();
+                updateCount();save();checkStarForgeUnlock();
                 // Notifications for special types
                 if(newEl.isFatalError){notify('FATAL ERROR!',newEl.name+' — critically glitched!','💀');if(!fatalErrorTutShown){fatalErrorTutShown=true;openModal('fatalErrorTutModal');}}
                 else if(newEl.isError){notify('ERROR!',newEl.name+' — glitched element!','⚠️');if(!errorTutShown){errorTutShown=true;openModal('errorTutModal');}}
@@ -3631,16 +3571,7 @@
                 if(upgradeBtn) upgradeBtn.style.pointerEvents = 'none';
             }
         }
-        // Add this missing function
-        function updateCyMoneyDisplay() {
-            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
-            updateCyMoneyPerMinDisplay();
-        }
-        // Add this missing function
-        function updateCyMoneyDisplay() {
-            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
-            updateCyMoneyPerMinDisplay();
-        }
+
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
@@ -3677,7 +3608,6 @@
                         if(idx!==-1){
                             elements[idx].isCyMoney = true;
                             results.push(target.emoji+' '+target.name+' → 💎 CyMoney');
-                            updateCyMoneyPerMinDisplay();
                         }
                     });
                 }
@@ -3934,11 +3864,11 @@
         renderEls();
         updateCount();
         updateCoinDisplay();
+        updateCoinDisplay();
         updateCyMoneyDisplay();
         rebuildHistory();
         checkStarForgeUnlock();
         sfLoadCooldown();
-        startCyMoneyIncome();
         if(gs.hasShownEnding)$('viewRankBtn').classList.remove('hidden');
         if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();
         else renderShop();
@@ -3949,47 +3879,8 @@
 
         // Show changelog on first visit
         setTimeout(()=>openModal('changelogModal'),600);
-                // Generate battle code (creates a simple base64 code from your elements)
-        function generateBattleCode() {
-            const battleData = {
-                elements: elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError).map(e => ({
-                    name: e.name,
-                    emoji: e.emoji,
-                    customSkill: e.customSkill,
-                    customSkill2: e.customSkill2,
-                    customSkill3: e.customSkill3,
-                    isFinal: e.isFinal || false,
-                    isSecret: e.isSecret || false,
-                    isHot: e.isHot || false,
-                    isSuperHot: e.isSuperHot || false,
-                    isBasic: e.isBasic || false,
-                    isLegendary: e.isLegendary || false,
-                    isDivine: e.isDivine || false,
-                    isPermafrost: e.isPermafrost || false,
-                    isFrozen: e.isFrozen || false
-                })),
-                version: '1.0'
-            };
-            const json = JSON.stringify(battleData);
-            // Simple base64 encoding
-            const base64 = btoa(unescape(encodeURIComponent(json)));
-            return base64;
-        }
-        
-        // Make available globally for battle system
-        window.generateBattleCode = generateBattleCode;
-        window.secureDecrypt = secureDecrypt;
-        window.safeB64Dec = safeB64Dec;
-        // Make these available globally for the unlock button
-        window.gs = gs;
-        window.elements = elements;
-        window.updateCyMoneyDisplay = updateCyMoneyDisplay;
-        window.renderEls = renderEls;
-        window.updateCount = updateCount;
-        window.save = save;
-        window.notify = notify;
     });
-            // ========== BATTLE SYSTEM ==========
+    // ========== BATTLE SYSTEM ==========
     
     // Type effectiveness chart
     const typeEffectiveness = {
@@ -4013,20 +3904,27 @@
         'Light': { 'Dark': 2, 'Ghost': 2, 'Light': 0.5 }
     };
 
+    // Black Hole special rule: deals x4 to Light, takes x0 from Light
     function calculateDamageMultiplier(attacker, defender) {
         const atkName = attacker.name;
         const defName = defender.name;
+        
         if (atkName === 'Black Hole' && defName === 'Light') return 4;
         if (defName === 'Black Hole' && atkName === 'Light') return 0;
+        
         const atkType = getElementType(attacker);
         const defType = getElementType(defender);
+        
         let mult = typeEffectiveness[atkType]?.[defType] || 1;
+        
         if (defender.isPermafrost) mult *= 0.9;
+        
         return mult;
     }
 
     function getElementType(el) {
         const name = el.name;
+        
         if (name === 'Black Hole') return 'Dark';
         if (name === 'Light') return 'Light';
         if (name === 'Null') return 'Dark';
@@ -4034,117 +3932,154 @@
         if (name === 'Bug Finder') return 'Bug';
         if (name === 'Ultra Instinct Element') return 'Fighting';
         if (name === 'Permafrost') return 'Ice';
+        if (name === 'iPad' || name === 'iPhone' || name === 'Computer') return 'Electric';
+        
         if (el.isInfernal) return 'Fire';
         if (el.isHot) return 'Fire';
         if (el.isFrozen) return 'Ice';
         if (el.isPermafrost) return 'Ice';
         if (el.isVoid) return 'Dark';
         if (el.isCursed) return 'Dark';
-        if (el.isLegendary) return 'Dragon';
+        if (el.isCorrupted) return 'Dark';
+        if (el.isBlessed) return 'Fairy';
+        if (el.isHoly) return 'Fairy';
         if (el.isDivine) return 'Fairy';
+        if (el.isCelestial) return 'Fairy';
+        if (el.isGolden) return 'Steel';
+        if (el.isCrystalline) return 'Rock';
+        if (el.isLegendary) return 'Dragon';
+        if (el.isAncient) return 'Rock';
+        if (el.isAbyssal) return 'Water';
+        if (el.isElectric) return 'Electric';
+        if (el.isMagnetic) return 'Steel';
+        if (el.isTemporal) return 'Psychic';
+        if (el.isEthereal) return 'Ghost';
+        if (el.isPhantom) return 'Ghost';
+        if (el.isRadioactive) return 'Poison';
+        if (el.isToxic) return 'Poison';
+        if (el.isViral) return 'Poison';
+        if (el.isParasitic) return 'Bug';
+        if (el.isAntimatter) return 'Dark';
         
-        // Name-based detection
-        if (name.includes('Fire') || name.includes('Inferno') || name.includes('Lava')) return 'Fire';
-        if (name.includes('Water') || name.includes('Ocean') || name.includes('Ice')) return 'Water';
-        if (name.includes('Earth') || name.includes('Tree') || name.includes('Plant') || name.includes('Grass')) return 'Grass';
-        if (name.includes('Air') || name.includes('Wind') || name.includes('Sky')) return 'Air';
-        if (name.includes('Lightning') || name.includes('Electric')) return 'Electric';
-        if (name.includes('Dark') || name.includes('Shadow')) return 'Dark';
+        if (name.includes('Fire') || name.includes('Inferno') || name.includes('Lava') || name.includes('Flame')) return 'Fire';
+        if (name.includes('Water') || name.includes('Ocean') || name.includes('Ice') || name.includes('Frozen') || name.includes('Snow')) return 'Water';
+        if (name.includes('Earth') || name.includes('Tree') || name.includes('Plant') || name.includes('Grass') || name.includes('Forest') || name.includes('Flower')) return 'Grass';
+        if (name.includes('Air') || name.includes('Wind') || name.includes('Sky') || name.includes('Cloud')) return 'Air';
+        if (name.includes('Lightning') || name.includes('Electric') || name.includes('Thunder')) return 'Electric';
+        if (name.includes('Dark') || name.includes('Shadow') || name.includes('Void')) return 'Dark';
         if (name.includes('Light') || name.includes('Sun') || name.includes('Star')) return 'Light';
         if (name.includes('Dragon')) return 'Dragon';
-        if (name.includes('Ghost')) return 'Ghost';
-        if (name.includes('Rock') || name.includes('Stone')) return 'Rock';
+        if (name.includes('Ghost') || name.includes('Spirit')) return 'Ghost';
+        if (name.includes('Rock') || name.includes('Stone') || name.includes('Mountain')) return 'Rock';
+        if (name.includes('Bug') || name.includes('Insect')) return 'Bug';
+        if (name.includes('Psychic') || name.includes('Magic') || name.includes('Wizard') || name.includes('Spell')) return 'Psychic';
         
         return 'Normal';
     }
 
-    // Generate moves for ANY element - always returns at least 4 moves
-    function generateMovesForElement(el) {
+    // Element move sets - EVERY element has damaging moves
+    const elementMoves = {
+        // Base elements (5 damaging moves each)
+        'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Hydro Pump', 'Surf'],
+        'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Fire Blast'],
+        'Earth': ['Tackle', 'Mud Shot', 'Rock Throw', 'Earth Power', 'Earthquake'],
+        'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Aerial Ace'],
+        
+        // Special elements
+        'Lightning': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Thunder'],
+        'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam'],
+        'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Leech Life', 'X-Scissor'],
+        'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'God Speed', 'Pressure', 'Limit Break', 'Mega Punch'],
+        'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Overload'],
+        'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Absorb Light', 'Dark Pulse'],
+        'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst'],
+        'Null': ['Void Touch', 'Erase', 'Oblivion', 'Nullify', 'Darkness', 'Nothingness'],
+        'Permafrost': ['Frozen Shield', 'Ice Age', 'Permafrost Armor', 'Glacier', 'Absolute Zero']
+    };
+
+    // Ensure EVERY element has Struggle as fallback
+    function getElementMoves(el) {
         const name = el.name;
+        if (elementMoves[name]) return [...elementMoves[name], 'Struggle'];
+        
+        // Default moves based on type (always include Struggle)
         const type = getElementType(el);
-        
-        // Predefined moves for known special elements
-        const specialMoves = {
-            'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Struggle'],
-            'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Struggle'],
-            'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'Struggle'],
-            'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Struggle'],
-            'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Dark Pulse', 'Struggle'],
-            'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Struggle'],
-            'Null': ['Void Touch', 'Erase', 'Oblivion', 'Darkness', 'Struggle'],
-            'Permafrost': ['Frozen Shield', 'Ice Age', 'Glacier', 'Absolute Zero', 'Struggle']
+        const defaultMoves = {
+            'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Struggle'],
+            'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Struggle'],
+            'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Struggle'],
+            'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Struggle'],
+            'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Struggle'],
+            'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Struggle'],
+            'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Struggle'],
+            'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Struggle'],
+            'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Struggle'],
+            'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Pulse', 'Struggle'],
+            'Steel': ['Metal Claw', 'Iron Head', 'Flash Cannon', 'Struggle'],
+            'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Struggle'],
+            'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Struggle'],
+            'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Struggle'],
+            'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Struggle'],
+            'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Struggle'],
+            'Light': ['Flash', 'Beam', 'Light Burst', 'Struggle']
         };
         
-        if (specialMoves[name]) {
-            return specialMoves[name];
-        }
-        
-        // Type-based moves (at least 4 moves each)
-        const typeMoves = {
-            'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Struggle'],
-            'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Surf', 'Struggle'],
-            'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Leaf Tornado', 'Struggle'],
-            'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Struggle'],
-            'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Struggle'],
-            'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Avalanche', 'Struggle'],
-            'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Brick Break', 'Struggle'],
-            'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Dark Pulse', 'Struggle'],
-            'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Future Sight', 'Struggle'],
-            'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Tail', 'Twister', 'Struggle'],
-            'Steel': ['Metal Claw', 'Iron Head', 'Bullet Punch', 'Flash Cannon', 'Struggle'],
-            'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Charm', 'Struggle'],
-            'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Smack Down', 'Struggle'],
-            'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Astonish', 'Struggle'],
-            'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Acid Spray', 'Struggle'],
-            'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Bulldoze', 'Struggle'],
-            'Light': ['Flash', 'Beam', 'Light Burst', 'Radiance', 'Struggle'],
-            'Normal': ['Tackle', 'Pound', 'Scratch', 'Growl', 'Struggle']
-        };
-        
-        if (typeMoves[type]) {
-            return typeMoves[type];
-        }
-        
-        // Ultimate fallback - always works
-        return ['Struggle', 'Tackle', 'Pound', 'Scratch'];
+        return defaultMoves[type] || ['Struggle', 'Tackle', 'Pound'];
     }
 
     function getElementStats(el) {
         const name = el.name;
         
+        // Special elements with custom stats
         const specialStats = {
             'Star Forge': { hp: 120, atk: 95, def: 90, speed: 60 },
             'Bug Finder': { hp: 95, atk: 80, def: 70, speed: 100 },
             'Ultra Instinct Element': { hp: 130, atk: 100, def: 80, speed: 150, dodgeCount: 5, canOnlyUseOne: true },
-            'iPad': { hp: 60, atk: 30, def: 40, speed: 40 },
-            'Black Hole': { hp: 150, atk: 50, def: 120, speed: 30 },
+            'iPad': { hp: 60, atk: 30, def: 40, speed: 40, passive: 'screenProtector' },
+            'Black Hole': { hp: 150, atk: 50, def: 120, speed: 30, passive: 'lightAbsorber' },
             'Light': { hp: 80, atk: 70, def: 50, speed: 140 },
             'Null': { hp: 100, atk: 75, def: 85, speed: 65 },
-            'Permafrost': { hp: 140, atk: 45, def: 110, speed: 25 }
+            'Permafrost': { hp: 140, atk: 45, def: 110, speed: 25, isPermafrostType: true }
         };
         
         if (specialStats[name]) {
-            return { ...specialStats[name] };
+            return { ...specialStats[name], moves: getElementMoves(el) };
         }
         
-        // Auto-calculate based on element properties
-        let hp = 100, atk = 60, def = 60, speed = 60;
+        // Auto-calculate stats based on element properties
+        let hp = 100;
+        let atk = 60;
+        let def = 60;
+        let speed = 60;
         
-        if (el.isFinal) { hp += 20; atk += 20; def += 20; }
-        if (el.isSecret) { atk += 15; speed += 10; }
-        if (el.isHot || getElementType(el) === 'Fire') { atk += 15; def -= 10; speed += 10; }
-        if (el.isFrozen || getElementType(el) === 'Ice') { def += 20; speed -= 15; }
-        if (el.isPermafrost) { def += 30; hp += 20; }
-        if (el.isLegendary) { hp += 15; atk += 15; def += 15; speed += 10; }
-        if (el.isDivine) { hp += 20; atk += 10; def += 15; speed += 10; }
+        if (el.isFinal) {
+            hp += 20; atk += 20; def += 20;
+        }
+        if (el.isSecret) {
+            atk += 15; speed += 10;
+        }
+        if (el.isHot || getElementType(el) === 'Fire') {
+            atk += 15; def -= 10; speed += 10;
+        }
+        if (el.isFrozen || getElementType(el) === 'Ice') {
+            def += 20; speed -= 15;
+        }
+        if (el.isPermafrost) {
+            def += 30; hp += 20;
+        }
+        if (el.isLegendary) {
+            hp += 15; atk += 15; def += 15; speed += 10;
+        }
+        if (el.isDivine) {
+            hp += 20; atk += 10; def += 15; speed += 10;
+        }
         
-        return { hp, atk, def, speed };
+        return { hp, atk, def, speed, moves: getElementMoves(el) };
     }
 
     let battleState = {
-        active: false,
-        p1Elements: [], p2Elements: [],
-        p1Team: [], p2Team: [],
+        active: false, moveSelection: true,
+        p1Elements: [], p2Elements: [], p1Team: [], p2Team: [],
         p1Current: null, p2Current: null,
         p1Ready: false, p2Ready: false,
         p1Moves: {}, p2Moves: {},
@@ -4183,28 +4118,33 @@
         el.baseAtk = stats.atk;
         el.baseDef = stats.def;
         el.baseSpeed = stats.speed;
-        el.availableMoves = generateMovesForElement(el);
+        el.availableMoves = stats.moves;
         if (stats.dodgeCount) el.dodgesLeft = stats.dodgeCount;
         if (stats.canOnlyUseOne) el.canOnlyUseOne = stats.canOnlyUseOne;
+        if (stats.passive) el.passive = stats.passive;
+        if (el.name === 'iPad') el.screenProtector = true;
         return el;
     }
 
     function loadPlayerElements(num, code) {
         try {
             const data = decodeBattleCode(code);
-            const els = data.elements;
-            els.forEach(el => initElementForBattle(el));
+            const els = data.elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
+            
+            els.forEach(el => {
+                initElementForBattle(el);
+            });
             
             if (num === 1) {
                 battleState.p1Elements = els;
-                document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements!</div>`;
+                document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
                 battleState.p1Ready = true;
                 battleState.p1Team = [];
                 battleState.p1Moves = {};
                 updateTeamDisplay(1);
             } else {
                 battleState.p2Elements = els;
-                document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements!</div>`;
+                document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
                 battleState.p2Ready = true;
                 battleState.p2Team = [];
                 battleState.p2Moves = {};
@@ -4231,9 +4171,9 @@
         if (container) {
             container.innerHTML = '';
             els.forEach(e => {
-                const isSelected = team.includes(e);
                 const btn = document.createElement('button');
-                btn.textContent = `${e.emoji} ${e.name}`;
+                const isSelected = team.includes(e);
+                btn.textContent = `${e.emoji} ${e.name}${e.canOnlyUseOne ? ' (ONLY)' : ''}`;
                 btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isSelected ? 'bg-green-500 text-white' : 'bg-gray-500 text-white opacity-60'}`;
                 btn.onclick = () => selectTeam(player, e.name);
                 container.appendChild(btn);
@@ -4249,6 +4189,7 @@
         
         const isSelected = team.includes(el);
         
+        // Ultra Instinct Element can only be selected alone
         if (el.name === 'Ultra Instinct Element' && !isSelected) {
             team.length = 0;
             team.push(el);
@@ -4258,6 +4199,7 @@
             return;
         }
         
+        // If trying to add when Ultra Instinct is already in team
         if (team.some(e => e.name === 'Ultra Instinct Element') && !isSelected) {
             addBattleLog(`Cannot add more elements while ${team[0].name} is selected!`, 'system');
             return;
@@ -4289,7 +4231,7 @@
             return;
         }
         
-        movesContainer.innerHTML = '<div class="text-center text-sm font-bold mb-2">📜 Select 4 moves for each element (click to select):</div>';
+        movesContainer.innerHTML = '<div class="text-center text-sm font-bold mb-2">Select 4 moves for each element (click to select):</div>';
         
         team.forEach(el => {
             const div = document.createElement('div');
@@ -4301,18 +4243,21 @@
             const movesDiv = div.querySelector(`[id^="moves-${player}-"]`);
             const selectedMoves = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
             
-            el.availableMoves.forEach(move => {
+            // Ensure Struggle is always available
+            const availableMoves = [...new Set([...el.availableMoves, 'Struggle'])];
+            
+            availableMoves.forEach(move => {
                 const isSelected = selectedMoves.includes(move);
                 const btn = document.createElement('button');
                 btn.textContent = move;
-                btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isSelected ? 'bg-green-500 text-white' : 'bg-purple-500 text-white opacity-60'}`;
+                btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isSelected ? 'bg-green-500 text-white' : 'bg-purple-500 text-white opacity-60 hover:opacity-100'}`;
                 btn.onclick = () => {
                     const currentSelected = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
                     if (isSelected) {
                         const idx = currentSelected.indexOf(move);
                         currentSelected.splice(idx, 1);
                         battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
-                        btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white opacity-60';
+                        btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white opacity-60 hover:opacity-100';
                     } else if (currentSelected.length < 4) {
                         currentSelected.push(move);
                         battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
@@ -4332,9 +4277,12 @@
         
         if (p1) {
             const hpPercent = Math.max(0, (p1.currentHp / p1.maxHp) * 100);
-            document.getElementById('p1HpFill').style.width = `${hpPercent}%`;
-            document.getElementById('p1Active').innerHTML = `${p1.emoji} ${p1.name}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
-            document.getElementById('p1Stats').innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
+            const hpFill = document.getElementById('p1HpFill');
+            if (hpFill) hpFill.style.width = `${hpPercent}%`;
+            const activeDiv = document.getElementById('p1Active');
+            if (activeDiv) activeDiv.innerHTML = `${p1.emoji} ${p1.name}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
+            const statsDiv = document.getElementById('p1Stats');
+            if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
             
             const skillsDiv = document.getElementById('p1Skills');
             if (skillsDiv) {
@@ -4352,9 +4300,12 @@
         
         if (p2) {
             const hpPercent = Math.max(0, (p2.currentHp / p2.maxHp) * 100);
-            document.getElementById('p2HpFill').style.width = `${hpPercent}%`;
-            document.getElementById('p2Active').innerHTML = `${p2.emoji} ${p2.name}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
-            document.getElementById('p2Stats').innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
+            const hpFill = document.getElementById('p2HpFill');
+            if (hpFill) hpFill.style.width = `${hpPercent}%`;
+            const activeDiv = document.getElementById('p2Active');
+            if (activeDiv) activeDiv.innerHTML = `${p2.emoji} ${p2.name}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
+            const statsDiv = document.getElementById('p2Stats');
+            if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
             
             const skillsDiv = document.getElementById('p2Skills');
             if (skillsDiv) {
@@ -4377,16 +4328,31 @@
         const isP1 = player === 1;
         const attacker = isP1 ? battleState.p1Current : battleState.p2Current;
         const defender = isP1 ? battleState.p2Current : battleState.p1Current;
-        if (!attacker || !defender) return;
 
-        if (defender.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発') {
+        if (!attacker || !defender) {
+            addBattleLog('No active element!', 'system');
+            return;
+        }
+
+        // Ultra Instinct dodge
+        if (defender.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発' && skill !== 'Counter') {
             defender.dodgesLeft--;
-            addBattleLog(`${defender.name} DODGED! ${defender.dodgesLeft} left!`, 'dodge');
+            addBattleLog(`${defender.name} DODGED! ${defender.dodgesLeft} dodges left!`, 'dodge');
             updateBattleUI();
             endTurn();
             return;
         }
         
+        // iPad Screen Protector
+        if (defender.name === 'iPad' && defender.screenProtector && !defender.screenUsed) {
+            defender.screenUsed = true;
+            addBattleLog(`iPad's Screen Protector shattered! 💥💔`, 'block');
+            updateBattleUI();
+            endTurn();
+            return;
+        }
+
+        // Struggle always works and deals damage
         if (skill === 'Struggle') {
             let damage = Math.floor(attacker.baseAtk * 0.4);
             damage = Math.max(1, damage);
@@ -4397,6 +4363,7 @@
             return;
         }
 
+        // Counter skill
         if (skill === 'Counter') {
             if ((isP1 && battleState.p1CounterLocked) || (!isP1 && battleState.p2CounterLocked)) {
                 addBattleLog('Counter cannot be used twice in a row!', 'system');
@@ -4417,17 +4384,19 @@
             return;
         }
 
+        // Heal Punch
         if (skill === 'Heal Punch') {
             const dmg = Math.floor(attacker.baseAtk * 0.7);
             const heal = Math.floor(dmg / 4);
             defender.currentHp -= dmg;
             attacker.currentHp = Math.min(attacker.maxHp, attacker.currentHp + heal);
-            addBattleLog(`${attacker.name} used HEAL PUNCH! Dealt ${dmg} damage, healed ${heal}!`, 'skill');
+            addBattleLog(`${attacker.name} used HEAL PUNCH! Dealt ${dmg} damage, healed ${heal} HP!`, 'skill');
             updateBattleUI();
             endTurn();
             return;
         }
 
+        // 大爆発
         if (skill === '大爆発') {
             addBattleLog(`${attacker.name} used 大爆発! MASSIVE EXPLOSION!`, 'skill');
             const dmg = attacker.baseAtk * 2.5;
@@ -4440,6 +4409,7 @@
             return;
         }
 
+        // Forge
         if (skill === 'Forge') {
             const dmg = Math.floor(attacker.baseAtk * 0.9);
             defender.currentHp -= dmg;
@@ -4451,6 +4421,7 @@
             return;
         }
 
+        // Find
         if (skill === 'Find') {
             if ((isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed)) {
                 addBattleLog('Find can only be used once per match!', 'system');
@@ -4458,22 +4429,24 @@
             }
             if (isP1) { battleState.p1FindUsed = true; battleState.p2DefBoost = 0.67; }
             else { battleState.p2FindUsed = true; battleState.p1DefBoost = 0.67; }
-            addBattleLog(`${attacker.name} used FIND! Enemy defense lowered!`, 'skill');
+            addBattleLog(`${attacker.name} used FIND! Enemy defense lowered! (1.5x damage taken)`, 'skill');
             endTurn();
             return;
         }
 
+        // Bug
         if (skill === 'Bug') {
             addBattleLog(`${attacker.name} used BUG! 25% chance to immobilize!`, 'skill');
             if (Math.random() < 0.25) {
                 if (isP1) battleState.p2BugActive = true;
                 else battleState.p1BugActive = true;
-                addBattleLog(`${defender.name} is BUGGED!`, 'system');
+                addBattleLog(`${defender.name} is BUGGED! May not be able to move!`, 'system');
             }
             endTurn();
             return;
         }
 
+        // Normal damaging move
         let mult = calculateDamageMultiplier(attacker, defender);
         let damage = Math.floor(attacker.baseAtk * 0.6 * mult);
         damage = Math.max(1, damage);
@@ -4487,7 +4460,7 @@
         
         defender.currentHp -= damage;
         
-        let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect!' : ''));
+        let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect! (x0)' : ''));
         addBattleLog(`${attacker.name} used ${skill}! Dealt ${damage} damage!${eff}`, 'damage');
         updateBattleUI();
         endTurn();
@@ -4535,17 +4508,9 @@
             }
         }
     }
-        function addBattleLog(msg, type) {
-            const log = document.getElementById('battleLog');
-            if (!log) return;
-            const colors = { damage: '#ef4444', skill: '#a855f7', system: '#eab308', dodge: '#14b8a6', block: '#60a5fa' };
-            const p = document.createElement('p');
-            p.style.color = colors[type] || '#888';
-            p.textContent = msg;
-            log.appendChild(p);
-            log.scrollTop = log.scrollHeight;
-        }
+
     function startBattle() {
+        // Check if all elements have 4 moves selected
         for (const el of battleState.p1Team) {
             const moves = battleState.p1Moves[el.name];
             if (!moves || moves.length < 4) {
@@ -4586,234 +4551,205 @@
         addBattleLog('Click on a skill button to attack!', 'system');
     }
 
-// Event listeners - Fix battle button
-const battleBtn = document.getElementById('battleBtn');
-if (battleBtn) {
-    // Remove any existing listeners
-    const newBattleBtn = battleBtn.cloneNode(true);
-    battleBtn.parentNode.replaceChild(newBattleBtn, battleBtn);
-    
-    newBattleBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const modal = document.getElementById('battleModal');
-        if (modal) {
-            modal.style.display = 'flex';
-            // Also ensure the modal overlay shows properly
-            modal.classList.add('show');
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        const battleBtn = document.getElementById('battleBtn');
+        if (battleBtn) {
+            battleBtn.addEventListener('click', () => {
+                const modal = document.getElementById('battleModal');
+                if (modal) modal.style.display = 'block';
+            });
+        }
+
+        const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
+        if (p1GetCodeBtn && window.generateBattleCode) {
+            p1GetCodeBtn.addEventListener('click', () => {
+                const code = window.generateBattleCode();
+                const textarea = document.getElementById('p1Code');
+                if (textarea) {
+                    textarea.value = code;
+                    textarea.style.background = '#e8f5e9';
+                    setTimeout(() => textarea.style.background = '', 1000);
+                }
+                addBattleLog('Player 1: Battle code generated!', 'system');
+            });
+        }
+
+        const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
+        if (p2GetCodeBtn && window.generateBattleCode) {
+            p2GetCodeBtn.addEventListener('click', () => {
+                const code = window.generateBattleCode();
+                const textarea = document.getElementById('p2Code');
+                if (textarea) {
+                    textarea.value = code;
+                    textarea.style.background = '#e8f5e9';
+                    setTimeout(() => textarea.style.background = '', 1000);
+                }
+                addBattleLog('Player 2: Battle code generated!', 'system');
+            });
+        }
+
+        const p1LoadBtn = document.getElementById('p1LoadBtn');
+        if (p1LoadBtn) {
+            p1LoadBtn.addEventListener('click', () => {
+                const code = document.getElementById('p1Code').value;
+                if (!code) { 
+                    document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
+                    return; 
+                }
+                loadPlayerElements(1, code);
+            });
+        }
+
+        const p2LoadBtn = document.getElementById('p2LoadBtn');
+        if (p2LoadBtn) {
+            p2LoadBtn.addEventListener('click', () => {
+                const code = document.getElementById('p2Code').value;
+                if (!code) { 
+                    document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
+                    return; 
+                }
+                loadPlayerElements(2, code);
+            });
+        }
+
+        const startBtn = document.getElementById('startBattleBtn');
+        if (startBtn) {
+            startBtn.addEventListener('click', startBattle);
+        }
+
+        const resetBattleBtn = document.getElementById('resetBattleBtn');
+        if (resetBattleBtn) {
+            resetBattleBtn.addEventListener('click', () => {
+                battleState.active = false;
+                battleState.moveSelection = true;
+                battleState.p1Ready = battleState.p2Ready = false;
+                battleState.p1Elements = battleState.p2Elements = [];
+                battleState.p1Team = battleState.p2Team = [];
+                battleState.p1Current = battleState.p2Current = null;
+                battleState.p1Moves = {};
+                battleState.p2Moves = {};
+                const setup = document.getElementById('battleSetup');
+                const arena = document.getElementById('battleArena');
+                if (setup) setup.style.display = 'block';
+                if (arena) arena.style.display = 'none';
+                const p1El = document.getElementById('p1Elements');
+                const p2El = document.getElementById('p2Elements');
+                if (p1El) p1El.innerHTML = '';
+                if (p2El) p2El.innerHTML = '';
+                const p1TeamDiv = document.getElementById('p1Team');
+                const p2TeamDiv = document.getElementById('p2Team');
+                if (p1TeamDiv) p1TeamDiv.innerHTML = '';
+                if (p2TeamDiv) p2TeamDiv.innerHTML = '';
+                const p1MoveDiv = document.getElementById('p1MoveSelect');
+                const p2MoveDiv = document.getElementById('p2MoveSelect');
+                if (p1MoveDiv) p1MoveDiv.innerHTML = '';
+                if (p2MoveDiv) p2MoveDiv.innerHTML = '';
+                const p1Code = document.getElementById('p1Code');
+                const p2Code = document.getElementById('p2Code');
+                if (p1Code) p1Code.value = '';
+                if (p2Code) p2Code.value = '';
+                const startBtnEl = document.getElementById('startBattleBtn');
+                if (startBtnEl) startBtnEl.disabled = true;
+                const log = document.getElementById('battleLog');
+                if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
+            });
         }
     });
-}
-
-// Fix close functionality for battle modal
-const battleModalClose = document.querySelector('#battleModal .modal-close');
-if (battleModalClose) {
-    battleModalClose.addEventListener('click', () => {
-        const modal = document.getElementById('battleModal');
-        if (modal) {
-            modal.style.display = 'none';
-            modal.classList.remove('show');
-        }
-    });
-}
-
-// Also handle clicking outside the modal
-const battleModal = document.getElementById('battleModal');
-if (battleModal) {
-    battleModal.addEventListener('click', (e) => {
-        if (e.target === battleModal) {
-            battleModal.style.display = 'none';
-            battleModal.classList.remove('show');
-        }
-    });
-}
-
-// Keep the rest of the battle event listeners
-const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
-if (p1GetCodeBtn && window.generateBattleCode) {
-    p1GetCodeBtn.addEventListener('click', () => {
-        const code = window.generateBattleCode();
-        const textarea = document.getElementById('p1Code');
-        if (textarea) {
-            textarea.value = code;
-            textarea.style.background = '#e8f5e9';
-            setTimeout(() => textarea.style.background = '', 1000);
-        }
-        addBattleLog('Player 1: Battle code generated! Share with opponent.', 'system');
-    });
-}
-
-const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
-if (p2GetCodeBtn && window.generateBattleCode) {
-    p2GetCodeBtn.addEventListener('click', () => {
-        const code = window.generateBattleCode();
-        const textarea = document.getElementById('p2Code');
-        if (textarea) {
-            textarea.value = code;
-            textarea.style.background = '#e8f5e9';
-            setTimeout(() => textarea.style.background = '', 1000);
-        }
-        addBattleLog('Player 2: Battle code generated! Share with opponent.', 'system');
-    });
-}
-
-const p1LoadBtn = document.getElementById('p1LoadBtn');
-if (p1LoadBtn) {
-    p1LoadBtn.addEventListener('click', () => {
-        const code = document.getElementById('p1Code').value;
-        if (!code) { 
-            document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Paste a battle code first</div>'; 
-            return; 
-        }
-        loadPlayerElements(1, code);
-    });
-}
-
-const p2LoadBtn = document.getElementById('p2LoadBtn');
-if (p2LoadBtn) {
-    p2LoadBtn.addEventListener('click', () => {
-        const code = document.getElementById('p2Code').value;
-        if (!code) { 
-            document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Paste a battle code first</div>'; 
-            return; 
-        }
-        loadPlayerElements(2, code);
-    });
-}
-
-const startBtn = document.getElementById('startBattleBtn');
-if (startBtn) {
-    startBtn.addEventListener('click', startBattle);
-}
-
-const resetBattleBtn = document.getElementById('resetBattleBtn');
-if (resetBattleBtn) {
-    resetBattleBtn.addEventListener('click', () => {
-        battleState.active = false;
-        battleState.p1Ready = battleState.p2Ready = false;
-        battleState.p1Elements = battleState.p2Elements = [];
-        battleState.p1Team = battleState.p2Team = [];
-        battleState.p1Current = battleState.p2Current = null;
-        battleState.p1Moves = {};
-        battleState.p2Moves = {};
-        document.getElementById('battleSetup').style.display = 'block';
-        document.getElementById('battleArena').style.display = 'none';
-        document.getElementById('p1Elements').innerHTML = '';
-        document.getElementById('p2Elements').innerHTML = '';
-        document.getElementById('p1Team').innerHTML = '';
-        document.getElementById('p2Team').innerHTML = '';
-        document.getElementById('p1MoveSelect').innerHTML = '';
-        document.getElementById('p2MoveSelect').innerHTML = '';
-        document.getElementById('p1Code').value = '';
-        document.getElementById('p2Code').value = '';
-        document.getElementById('startBattleBtn').disabled = true;
-        document.getElementById('battleLog').innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
-    });
-}
     </script>
     <!-- Battle Modal -->
-    <div id="battleModal" class="modal-overlay">
-        <div class="modal-box" style="max-width:950px">
-            <button class="modal-close" data-close="battleModal">&times;</button>
-            <h2 class="font-display text-xl mb-4 text-center">⚔️ Element Battle</h2>
-            
-            <!-- Setup Phase -->
-            <div id="battleSetup" class="mb-4">
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <!-- Player 1 -->
-                    <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
-                        <h3 class="font-display text-md mb-2 text-center" style="color:#3b82f6">🔵 Player 1</h3>
-                        <div class="flex gap-2 mb-2">
-                            <button id="p1GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#3b82f6;color:#fff">📋 Get Battle Code</button>
-                        </div>
-                        <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
-                        <button id="p1LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
-                        <div id="p1Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
-                        
-                        <!-- Team Selection Area -->
-                        <div class="mt-3 text-center">
-                            <div class="text-xs font-semibold mb-2" style="color:#3b82f6">📋 Select Your Team (click to select/unselect):</div>
-                            <div id="p1Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(59,130,246,0.1)"></div>
-                        </div>
-                        
-                        <!-- Move Selection Area -->
-                        <div class="mt-3 text-center">
-                            <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
-                            <div id="p1MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
-                        </div>
+    <div id="battleModal" class="modal-overlay"><div class="modal-box" style="max-width:950px"><button class="modal-close" data-close="battleModal">&times;</button>
+        <h2 class="font-display text-xl mb-4 text-center">⚔️ Element Battle</h2>
+        
+        <!-- Setup Phase -->
+        <div id="battleSetup" class="mb-4">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- Player 1 -->
+                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
+                    <h3 class="font-display text-md mb-2 text-center" style="color:#3b82f6">🔵 Player 1</h3>
+                    <div class="flex gap-2 mb-2">
+                        <button id="p1GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#3b82f6;color:#fff">📋 Get Battle Code</button>
+                    </div>
+                    <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                    <button id="p1LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
+                    <div id="p1Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
+                    
+                    <!-- Team Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#3b82f6">📋 Select Your Team (click to select/unselect):</div>
+                        <div id="p1Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(59,130,246,0.1)"></div>
                     </div>
                     
-                    <!-- Player 2 -->
-                    <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
-                        <h3 class="font-display text-md mb-2 text-center" style="color:#ef4444">🔴 Player 2</h3>
-                        <div class="flex gap-2 mb-2">
-                            <button id="p2GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#ef4444;color:#fff">📋 Get Battle Code</button>
-                        </div>
-                        <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
-                        <button id="p2LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
-                        <div id="p2Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
-                        
-                        <!-- Team Selection Area -->
-                        <div class="mt-3 text-center">
-                            <div class="text-xs font-semibold mb-2" style="color:#ef4444">📋 Select Your Team (click to select/unselect):</div>
-                            <div id="p2Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(239,68,68,0.1)"></div>
-                        </div>
-                        
-                        <!-- Move Selection Area -->
-                        <div class="mt-3 text-center">
-                            <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
-                            <div id="p2MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
-                        </div>
+                    <!-- Move Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
+                        <div id="p1MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
                     </div>
                 </div>
                 
-                <button id="startBattleBtn" class="w-full font-semibold text-sm py-3 rounded-full transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e" disabled>⚔️ START BATTLE ⚔️</button>
-            </div>
-            
-            <!-- Battle Arena -->
-            <div id="battleArena" style="display:none">
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <!-- Player 1 Arena -->
-                    <div class="rounded-xl p-3 text-center" style="background:rgba(59,130,246,0.1);border:1px solid #3b82f6">
-                        <div class="font-bold mb-2" style="color:#3b82f6">🔵 Player 1</div>
-                        <div id="p1Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
-                        <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
-                            <div id="p1HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
-                        </div>
-                        <div id="p1Stats" class="text-xs"></div>
-                        <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
-                        <div id="p1Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                <!-- Player 2 -->
+                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
+                    <h3 class="font-display text-md mb-2 text-center" style="color:#ef4444">🔴 Player 2</h3>
+                    <div class="flex gap-2 mb-2">
+                        <button id="p2GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#ef4444;color:#fff">📋 Get Battle Code</button>
+                    </div>
+                    <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                    <button id="p2LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
+                    <div id="p2Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
+                    
+                    <!-- Team Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#ef4444">📋 Select Your Team (click to select/unselect):</div>
+                        <div id="p2Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(239,68,68,0.1)"></div>
                     </div>
                     
-                    <!-- Player 2 Arena -->
-                    <div class="rounded-xl p-3 text-center" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444">
-                        <div class="font-bold mb-2" style="color:#ef4444">🔴 Player 2</div>
-                        <div id="p2Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
-                        <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
-                            <div id="p2HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
-                        </div>
-                        <div id="p2Stats" class="text-xs"></div>
-                        <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
-                        <div id="p2Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                    <!-- Move Selection Area -->
+                    <div class="mt-3 text-center">
+                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
+                        <div id="p2MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
                     </div>
                 </div>
-                
-                <!-- Battle Log -->
-                <div id="battleLog" class="rounded-xl p-3 h-40 overflow-y-auto text-sm" style="background:var(--bg-primary);border:1px solid var(--border)">
-                    <p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>
+            </div>
+            
+            <button id="startBattleBtn" class="w-full font-semibold text-sm py-3 rounded-full transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e" disabled>⚔️ START BATTLE ⚔️</button>
+        </div>
+        
+        <!-- Battle Arena -->
+        <div id="battleArena" style="display:none">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <!-- Player 1 Arena -->
+                <div class="rounded-xl p-3 text-center" style="background:rgba(59,130,246,0.1);border:1px solid #3b82f6">
+                    <div class="font-bold mb-2" style="color:#3b82f6">🔵 Player 1</div>
+                    <div id="p1Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
+                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
+                        <div id="p1HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
+                    </div>
+                    <div id="p1Stats" class="text-xs"></div>
+                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
+                    <div id="p1Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
                 </div>
                 
-                <!-- Reset Button -->
-                <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
+                <!-- Player 2 Arena -->
+                <div class="rounded-xl p-3 text-center" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444">
+                    <div class="font-bold mb-2" style="color:#ef4444">🔴 Player 2</div>
+                    <div id="p2Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
+                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
+                        <div id="p2HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
+                    </div>
+                    <div id="p2Stats" class="text-xs"></div>
+                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
+                    <div id="p2Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                </div>
             </div>
+            
+            <!-- Battle Log -->
+            <div id="battleLog" class="rounded-xl p-3 h-40 overflow-y-auto text-sm" style="background:var(--bg-primary);border:1px solid var(--border)">
+                <p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>
+            </div>
+            
+            <!-- Reset Button -->
+            <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
         </div>
     </div>
-        // Run init when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initAll);
-        } else {
-            initAll();
-        }
-    })();
-    </script>
 </body>
 </html>
