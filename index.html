@@ -2603,8 +2603,10 @@
 
         function openModal(id) { 
             const modal = document.getElementById(id);
-            if (modal && modal.style.display !== 'block') {
-                modal.style.display = 'block';
+            if (modal && modal.style.display !== 'flex') {
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
             }
         }
         function closeModal(id) { 
@@ -4525,7 +4527,16 @@
             }
         }
     }
-
+        function addBattleLog(msg, type) {
+            const log = document.getElementById('battleLog');
+            if (!log) return;
+            const colors = { damage: '#ef4444', skill: '#a855f7', system: '#eab308', dodge: '#14b8a6', block: '#60a5fa' };
+            const p = document.createElement('p');
+            p.style.color = colors[type] || '#888';
+            p.textContent = msg;
+            log.appendChild(p);
+            log.scrollTop = log.scrollHeight;
+        }
     function startBattle() {
         for (const el of battleState.p1Team) {
             const moves = battleState.p1Moves[el.name];
@@ -4567,192 +4578,311 @@
         addBattleLog('Click on a skill button to attack!', 'system');
     }
 
-    // Event listeners
-    document.addEventListener('DOMContentLoaded', function() {
-        const battleBtn = document.getElementById('battleBtn');
-        if (battleBtn) {
-            battleBtn.addEventListener('click', () => {
-                const modal = document.getElementById('battleModal');
-                if (modal) modal.style.display = 'block';
-            });
-        }
-        const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
-        if (p1GetCodeBtn && window.generateBattleCode) {
-            p1GetCodeBtn.addEventListener('click', () => {
-                const code = window.generateBattleCode();
-                const textarea = document.getElementById('p1Code');
-                if (textarea) {
-                    textarea.value = code;
-                    textarea.style.background = '#e8f5e9';
-                    setTimeout(() => textarea.style.background = '', 1000);
-                }
-                addBattleLog('Player 1: Battle code generated! Share with opponent.', 'system');
-            });
-        }
-
-        const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
-        if (p2GetCodeBtn && window.generateBattleCode) {
-            p2GetCodeBtn.addEventListener('click', () => {
-                const code = window.generateBattleCode();
-                const textarea = document.getElementById('p2Code');
-                if (textarea) {
-                    textarea.value = code;
-                    textarea.style.background = '#e8f5e9';
-                    setTimeout(() => textarea.style.background = '', 1000);
-                }
-                addBattleLog('Player 2: Battle code generated! Share with opponent.', 'system');
-            });
-        }
-
-        const p1LoadBtn = document.getElementById('p1LoadBtn');
-        if (p1LoadBtn) {
-            p1LoadBtn.addEventListener('click', () => {
-                const code = document.getElementById('p1Code').value;
-                if (!code) { 
-                    document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Paste a battle code first</div>'; 
-                    return; 
-                }
-                loadPlayerElements(1, code);
-            });
-        }
-
-        const p2LoadBtn = document.getElementById('p2LoadBtn');
-        if (p2LoadBtn) {
-            p2LoadBtn.addEventListener('click', () => {
-                const code = document.getElementById('p2Code').value;
-                if (!code) { 
-                    document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Paste a battle code first</div>'; 
-                    return; 
-                }
-                loadPlayerElements(2, code);
-            });
-        }
-
-        const startBtn = document.getElementById('startBattleBtn');
-        if (startBtn) {
-            startBtn.addEventListener('click', startBattle);
-        }
-
-        const resetBattleBtn = document.getElementById('resetBattleBtn');
-        if (resetBattleBtn) {
-            resetBattleBtn.addEventListener('click', () => {
-                battleState.active = false;
-                battleState.p1Ready = battleState.p2Ready = false;
-                battleState.p1Elements = battleState.p2Elements = [];
-                battleState.p1Team = battleState.p2Team = [];
-                battleState.p1Current = battleState.p2Current = null;
-                battleState.p1Moves = {};
-                battleState.p2Moves = {};
-                document.getElementById('battleSetup').style.display = 'block';
-                document.getElementById('battleArena').style.display = 'none';
-                document.getElementById('p1Elements').innerHTML = '';
-                document.getElementById('p2Elements').innerHTML = '';
-                document.getElementById('p1Team').innerHTML = '';
-                document.getElementById('p2Team').innerHTML = '';
-                document.getElementById('p1MoveSelect').innerHTML = '';
-                document.getElementById('p2MoveSelect').innerHTML = '';
-                document.getElementById('p1Code').value = '';
-                document.getElementById('p2Code').value = '';
-                document.getElementById('startBattleBtn').disabled = true;
-                document.getElementById('battleLog').innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
-            });
+// Event listeners - Fix battle button
+const battleBtn = document.getElementById('battleBtn');
+if (battleBtn) {
+    // Remove any existing listeners
+    const newBattleBtn = battleBtn.cloneNode(true);
+    battleBtn.parentNode.replaceChild(newBattleBtn, battleBtn);
+    
+    newBattleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const modal = document.getElementById('battleModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            // Also ensure the modal overlay shows properly
+            modal.classList.add('show');
         }
     });
+}
+
+// Fix close functionality for battle modal
+const battleModalClose = document.querySelector('#battleModal .modal-close');
+if (battleModalClose) {
+    battleModalClose.addEventListener('click', () => {
+        const modal = document.getElementById('battleModal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+        }
+    });
+}
+
+// Also handle clicking outside the modal
+const battleModal = document.getElementById('battleModal');
+if (battleModal) {
+    battleModal.addEventListener('click', (e) => {
+        if (e.target === battleModal) {
+            battleModal.style.display = 'none';
+            battleModal.classList.remove('show');
+        }
+    });
+}
+
+// Keep the rest of the battle event listeners
+const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
+if (p1GetCodeBtn && window.generateBattleCode) {
+    p1GetCodeBtn.addEventListener('click', () => {
+        const code = window.generateBattleCode();
+        const textarea = document.getElementById('p1Code');
+        if (textarea) {
+            textarea.value = code;
+            textarea.style.background = '#e8f5e9';
+            setTimeout(() => textarea.style.background = '', 1000);
+        }
+        addBattleLog('Player 1: Battle code generated! Share with opponent.', 'system');
+    });
+}
+
+const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
+if (p2GetCodeBtn && window.generateBattleCode) {
+    p2GetCodeBtn.addEventListener('click', () => {
+        const code = window.generateBattleCode();
+        const textarea = document.getElementById('p2Code');
+        if (textarea) {
+            textarea.value = code;
+            textarea.style.background = '#e8f5e9';
+            setTimeout(() => textarea.style.background = '', 1000);
+        }
+        addBattleLog('Player 2: Battle code generated! Share with opponent.', 'system');
+    });
+}
+
+const p1LoadBtn = document.getElementById('p1LoadBtn');
+if (p1LoadBtn) {
+    p1LoadBtn.addEventListener('click', () => {
+        const code = document.getElementById('p1Code').value;
+        if (!code) { 
+            document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Paste a battle code first</div>'; 
+            return; 
+        }
+        loadPlayerElements(1, code);
+    });
+}
+
+const p2LoadBtn = document.getElementById('p2LoadBtn');
+if (p2LoadBtn) {
+    p2LoadBtn.addEventListener('click', () => {
+        const code = document.getElementById('p2Code').value;
+        if (!code) { 
+            document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Paste a battle code first</div>'; 
+            return; 
+        }
+        loadPlayerElements(2, code);
+    });
+}
+
+const startBtn = document.getElementById('startBattleBtn');
+if (startBtn) {
+    startBtn.addEventListener('click', startBattle);
+}
+
+const resetBattleBtn = document.getElementById('resetBattleBtn');
+if (resetBattleBtn) {
+    resetBattleBtn.addEventListener('click', () => {
+        battleState.active = false;
+        battleState.p1Ready = battleState.p2Ready = false;
+        battleState.p1Elements = battleState.p2Elements = [];
+        battleState.p1Team = battleState.p2Team = [];
+        battleState.p1Current = battleState.p2Current = null;
+        battleState.p1Moves = {};
+        battleState.p2Moves = {};
+        document.getElementById('battleSetup').style.display = 'block';
+        document.getElementById('battleArena').style.display = 'none';
+        document.getElementById('p1Elements').innerHTML = '';
+        document.getElementById('p2Elements').innerHTML = '';
+        document.getElementById('p1Team').innerHTML = '';
+        document.getElementById('p2Team').innerHTML = '';
+        document.getElementById('p1MoveSelect').innerHTML = '';
+        document.getElementById('p2MoveSelect').innerHTML = '';
+        document.getElementById('p1Code').value = '';
+        document.getElementById('p2Code').value = '';
+        document.getElementById('startBattleBtn').disabled = true;
+        document.getElementById('battleLog').innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
+    });
+}
     </script>
     <!-- Battle Modal -->
-    <div id="battleModal" class="modal-overlay"><div class="modal-box" style="max-width:950px"><button class="modal-close" data-close="battleModal">&times;</button>
-        <h2 class="font-display text-xl mb-4 text-center">⚔️ Element Battle</h2>
-        
-        <!-- Setup Phase -->
-        <div id="battleSetup" class="mb-4">
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <!-- Player 1 -->
-                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
-                    <h3 class="font-display text-md mb-2 text-center" style="color:#3b82f6">🔵 Player 1</h3>
-                    <div class="flex gap-2 mb-2">
-                        <button id="p1GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#3b82f6;color:#fff">📋 Get Battle Code</button>
+    <div id="battleModal" class="modal-overlay">
+        <div class="modal-box" style="max-width:950px">
+            <button class="modal-close" data-close="battleModal">&times;</button>
+            <h2 class="font-display text-xl mb-4 text-center">⚔️ Element Battle</h2>
+            
+            <!-- Setup Phase -->
+            <div id="battleSetup" class="mb-4">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <!-- Player 1 -->
+                    <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
+                        <h3 class="font-display text-md mb-2 text-center" style="color:#3b82f6">🔵 Player 1</h3>
+                        <div class="flex gap-2 mb-2">
+                            <button id="p1GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#3b82f6;color:#fff">📋 Get Battle Code</button>
+                        </div>
+                        <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                        <button id="p1LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
+                        <div id="p1Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
+                        
+                        <!-- Team Selection Area -->
+                        <div class="mt-3 text-center">
+                            <div class="text-xs font-semibold mb-2" style="color:#3b82f6">📋 Select Your Team (click to select/unselect):</div>
+                            <div id="p1Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(59,130,246,0.1)"></div>
+                        </div>
+                        
+                        <!-- Move Selection Area -->
+                        <div class="mt-3 text-center">
+                            <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
+                            <div id="p1MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
+                        </div>
                     </div>
-                    <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
-                    <button id="p1LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
-                    <div id="p1Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
                     
-                    <!-- Team Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#3b82f6">📋 Select Your Team (click to select/unselect):</div>
-                        <div id="p1Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(59,130,246,0.1)"></div>
-                    </div>
-                    
-                    <!-- Move Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
-                        <div id="p1MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
+                    <!-- Player 2 -->
+                    <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
+                        <h3 class="font-display text-md mb-2 text-center" style="color:#ef4444">🔴 Player 2</h3>
+                        <div class="flex gap-2 mb-2">
+                            <button id="p2GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#ef4444;color:#fff">📋 Get Battle Code</button>
+                        </div>
+                        <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                        <button id="p2LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
+                        <div id="p2Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
+                        
+                        <!-- Team Selection Area -->
+                        <div class="mt-3 text-center">
+                            <div class="text-xs font-semibold mb-2" style="color:#ef4444">📋 Select Your Team (click to select/unselect):</div>
+                            <div id="p2Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(239,68,68,0.1)"></div>
+                        </div>
+                        
+                        <!-- Move Selection Area -->
+                        <div class="mt-3 text-center">
+                            <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
+                            <div id="p2MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Player 2 -->
-                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
-                    <h3 class="font-display text-md mb-2 text-center" style="color:#ef4444">🔴 Player 2</h3>
-                    <div class="flex gap-2 mb-2">
-                        <button id="p2GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#ef4444;color:#fff">📋 Get Battle Code</button>
-                    </div>
-                    <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
-                    <button id="p2LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
-                    <div id="p2Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
-                    
-                    <!-- Team Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#ef4444">📋 Select Your Team (click to select/unselect):</div>
-                        <div id="p2Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(239,68,68,0.1)"></div>
-                    </div>
-                    
-                    <!-- Move Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
-                        <div id="p2MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
-                    </div>
-                </div>
+                <button id="startBattleBtn" class="w-full font-semibold text-sm py-3 rounded-full transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e" disabled>⚔️ START BATTLE ⚔️</button>
             </div>
             
-            <button id="startBattleBtn" class="w-full font-semibold text-sm py-3 rounded-full transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e" disabled>⚔️ START BATTLE ⚔️</button>
-        </div>
-        
-        <!-- Battle Arena -->
-        <div id="battleArena" style="display:none">
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <!-- Player 1 Arena -->
-                <div class="rounded-xl p-3 text-center" style="background:rgba(59,130,246,0.1);border:1px solid #3b82f6">
-                    <div class="font-bold mb-2" style="color:#3b82f6">🔵 Player 1</div>
-                    <div id="p1Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
-                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
-                        <div id="p1HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
+            <!-- Battle Arena -->
+            <div id="battleArena" style="display:none">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <!-- Player 1 Arena -->
+                    <div class="rounded-xl p-3 text-center" style="background:rgba(59,130,246,0.1);border:1px solid #3b82f6">
+                        <div class="font-bold mb-2" style="color:#3b82f6">🔵 Player 1</div>
+                        <div id="p1Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
+                        <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
+                            <div id="p1HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
+                        </div>
+                        <div id="p1Stats" class="text-xs"></div>
+                        <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
+                        <div id="p1Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
                     </div>
-                    <div id="p1Stats" class="text-xs"></div>
-                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
-                    <div id="p1Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                    
+                    <!-- Player 2 Arena -->
+                    <div class="rounded-xl p-3 text-center" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444">
+                        <div class="font-bold mb-2" style="color:#ef4444">🔴 Player 2</div>
+                        <div id="p2Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
+                        <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
+                            <div id="p2HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
+                        </div>
+                        <div id="p2Stats" class="text-xs"></div>
+                        <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
+                        <div id="p2Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                    </div>
                 </div>
                 
-                <!-- Player 2 Arena -->
-                <div class="rounded-xl p-3 text-center" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444">
-                    <div class="font-bold mb-2" style="color:#ef4444">🔴 Player 2</div>
-                    <div id="p2Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
-                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
-                        <div id="p2HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
-                    </div>
-                    <div id="p2Stats" class="text-xs"></div>
-                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
-                    <div id="p2Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
+                <!-- Battle Log -->
+                <div id="battleLog" class="rounded-xl p-3 h-40 overflow-y-auto text-sm" style="background:var(--bg-primary);border:1px solid var(--border)">
+                    <p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>
                 </div>
+                
+                <!-- Reset Button -->
+                <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
             </div>
-            
-            <!-- Battle Log -->
-            <div id="battleLog" class="rounded-xl p-3 h-40 overflow-y-auto text-sm" style="background:var(--bg-primary);border:1px solid var(--border)">
-                <p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>
-            </div>
-            
-            <!-- Reset Button -->
-            <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
         </div>
     </div>
-</script>
+
+    <!-- ========== INITIALIZATION SCRIPT ========== -->
+    <script>
+    // Final initialization for all systems
+    (function() {
+        // Wait for DOM to be fully loaded
+        function initAll() {
+            // Fix modal close buttons
+            document.querySelectorAll('[data-close]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    var modalId = this.getAttribute('data-close');
+                    var modal = document.getElementById(modalId);
+                    if (modal) modal.style.display = 'none';
+                });
+            });
+            
+            // Fix modal overlays to close when clicking outside
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === this) this.style.display = 'none';
+                });
+            });
+            
+            // Fix Changelog button
+            var changelogBtn = document.getElementById('changelogBtn');
+            if (changelogBtn) {
+                changelogBtn.addEventListener('click', function() {
+                    var modal = document.getElementById('changelogModal');
+                    if (modal) modal.style.display = 'flex';
+                });
+            }
+            
+            // Fix Battle button
+            var battleBtn = document.getElementById('battleBtn');
+            if (battleBtn) {
+                battleBtn.addEventListener('click', function() {
+                    var modal = document.getElementById('battleModal');
+                    if (modal) modal.style.display = 'flex';
+                });
+            }
+            
+            // Fix Shop button
+            var shopBtn = document.getElementById('shopBtn');
+            if (shopBtn) {
+                shopBtn.addEventListener('click', function() {
+                    var modal = document.getElementById('shopModal');
+                    if (modal) modal.style.display = 'flex';
+                });
+            }
+            
+            // Fix View Rank button
+            var viewRankBtn = document.getElementById('viewRankBtn');
+            if (viewRankBtn) {
+                viewRankBtn.addEventListener('click', function() {
+                    if (typeof showEnding === 'function') showEnding();
+                });
+            }
+            
+            // Fix Export button
+            var exportBtn = document.getElementById('exportBtn');
+            if (exportBtn && typeof openModal === 'function') {
+                exportBtn.addEventListener('click', function() { openModal('exportModal'); });
+            }
+            
+            // Fix Import button
+            var importBtn = document.getElementById('importBtn');
+            if (importBtn && typeof openModal === 'function') {
+                importBtn.addEventListener('click', function() { openModal('importModal'); });
+            }
+            
+            // Fix Reset button
+            var resetBtn = document.getElementById('resetBtn');
+            if (resetBtn && typeof openModal === 'function') {
+                resetBtn.addEventListener('click', function() { openModal('resetModal'); });
+            }
+        }
+        
+        // Run init when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAll);
+        } else {
+            initAll();
+        }
+    })();
+    </script>
 </body>
 </html>
