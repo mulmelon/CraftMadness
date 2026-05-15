@@ -2912,9 +2912,8 @@
                 updateCyMoneyPerMinDisplay();
                 checkStarForgeUnlock();
                 startCyMoneyIncome();
-                }
             }catch(e){}
-        }
+        } // Make sure this closing brace exists
 
         // ─── COIN SYSTEM (fixed fractional accumulation) ───
         function calcCoinsPerMin() {
@@ -2974,31 +2973,7 @@
         // CyMoney passive income (1 CyMoney per minute for each isCyMoney element - rounded down)
         let cyMoneyInterval = null;
         let fractionalCyMoney = 0;
-        function startCyMoneyIncome() {
-            if (cyMoneyInterval) clearInterval(cyMoneyInterval);
-            cyMoneyInterval = setInterval(() => {
-                const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
-                if (cyMoneyElements.length > 0) {
-                    fractionalCyMoney += cyMoneyElements.length;
-                    const whole = Math.floor(fractionalCyMoney);
-                    if (whole > 0) {
-                        gs.cyMoney = (gs.cyMoney || 0) + whole;
-                        fractionalCyMoney -= whole;
-                        updateCyMoneyDisplay();
-                        updateCyMoneyPerMinDisplay();
-                        save();
-                        const battleModal = document.getElementById('battleModal');
-                        if (!battleModal || battleModal.style.display !== 'block') {
-                            notify('💎 CyMoney Earned!', `+${whole} CyMoney from ${cyMoneyElements.length} CyMoney element(s)!`, '💎', 3000);
-                        }
-                    }
-                }
-            }, 60000);
-        }
-            
-            // Find eligible elements (not already isCyMoney, not final, not error)
-            const eligible = elements.filter(e => !checkIsCyMoney(e) && !e.isFinal && !e.isFatalError && !e.isError && !e.isBlank && !e.isPermafrost && !hasPenaltyMod(e));
-            
+                        
             
         function updateCoinDisplay(){
             coinAmt.textContent=gs.coins.toLocaleString();
@@ -3517,7 +3492,28 @@
             else resultArea.innerHTML=`<div class="text-center"><div class="el-card frozen-el inline-flex flex-col items-center p-4 mb-2 relative"><div class="el-emoji">${r.el.emoji}</div><div class="el-name">${r.el.name}</div><div class="melt-bar" style="width:${(r.prog/r.goal)*100}%"></div></div><div class="text-xs" style="color:var(--text-secondary)">Warming... ${r.prog}/${r.goal}</div></div>`;
             resetDZs();
         }
-
+        // Fix startCyMoneyIncome - remove the orphaned code
+        function startCyMoneyIncome() {
+            if (cyMoneyInterval) clearInterval(cyMoneyInterval);
+            cyMoneyInterval = setInterval(() => {
+                const cyMoneyElements = elements.filter(el => checkIsCyMoney(el));
+                if (cyMoneyElements.length > 0) {
+                    fractionalCyMoney += cyMoneyElements.length;
+                    const whole = Math.floor(fractionalCyMoney);
+                    if (whole > 0) {
+                        gs.cyMoney = (gs.cyMoney || 0) + whole;
+                        fractionalCyMoney -= whole;
+                        updateCyMoneyDisplay();
+                        updateCyMoneyPerMinDisplay();
+                        save();
+                        const battleModal = document.getElementById('battleModal');
+                        if (!battleModal || battleModal.style.display !== 'block') {
+                            notify('💎 CyMoney Earned!', `+${whole} CyMoney from ${cyMoneyElements.length} CyMoney element(s)!`, '💎', 3000);
+                        }
+                    }
+                }
+            }, 60000);
+        }
         function addElement(newEl){
             // If element qualifies as Everything, strip all mods and set isEverything only
             if(checkIsEverything(newEl)){stripToEverything(newEl);}
@@ -3624,6 +3620,16 @@
                 const upgradeBtn = document.getElementById('upgradeForgeBtn');
                 if(upgradeBtn) upgradeBtn.style.pointerEvents = 'none';
             }
+        }
+        // Add this missing function
+        function updateCyMoneyDisplay() {
+            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
+            updateCyMoneyPerMinDisplay();
+        }
+        // Add this missing function
+        function updateCyMoneyDisplay() {
+            document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
+            updateCyMoneyPerMinDisplay();
         }
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
@@ -4747,31 +4753,6 @@
             <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
         </div>
     </div>
-</script>
-<script>
-        // Try to update every second until we have access to gs
-        const interval = setInterval(function() {
-            if (window.gs && window.elements) {
-                updateUnlockButton();
-                // Also hook into existing functions
-                const origUpdateCyMoneyDisplay = window.updateCyMoneyDisplay;
-                if (origUpdateCyMoneyDisplay) {
-                    window.updateCyMoneyDisplay = function() {
-                        if (origUpdateCyMoneyDisplay) origUpdateCyMoneyDisplay();
-                        updateUnlockButton();
-                    };
-                }
-                clearInterval(interval);
-            }
-        }, 500);
-    }
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-})();
 </script>
 </body>
 </html>
