@@ -2625,7 +2625,6 @@
             gs.cyMoney = (gs.cyMoney || 0) + amount;
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney;
             updateCyMoneyPerMinDisplay();
-            updateCyForgeUnlockButton();
             save();
             notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
         }
@@ -2921,8 +2920,9 @@
                     cyForgeLoadCooldown();
                     updateCyForgeUnlockButton();
                 }
-                }
                 startCyMoneyIncome();
+                setupUnlockCyForge();
+                }
             }catch(e){}
         }
 
@@ -3007,93 +3007,10 @@
                 }
             }, 60000); // 1 minute
         }
-        // CyForge - Like Star Forge but uses CyMoney and gives isCyMoney blessing
-        let cyForgeCooldownEnd = 0;
-        let cyForgeInterval = null;
-        const CYFORGE_COOLDOWN = 10 * 60 * 1000; // 10 minutes
-        const CYFORGE_COST = 5; // 5 CyMoney per use
-        
-        function cyForgeStartTimer() {
-            const cyForgeBtn = document.getElementById('cyForgeBtn');
-            if (!cyForgeBtn) return;
-            cyForgeBtn.classList.add('sf-cooldown');
-            if (cyForgeInterval) clearInterval(cyForgeInterval);
-            cyForgeInterval = setInterval(() => {
-                const rem = cyForgeCooldownEnd - Date.now();
-                const timerSpan = document.getElementById('cyForgeTimer');
-                if (rem <= 0) {
-                    clearInterval(cyForgeInterval);
-                    cyForgeInterval = null;
-                    cyForgeBtn.classList.remove('sf-cooldown');
-                    cyForgeBtn.disabled = false;
-                    cyForgeBtn.style.opacity = '1';
-                    if (timerSpan) timerSpan.textContent = '';
-                    notify('CyForge Ready!', 'The CyForge can be used again!', '⚒️');
-                } else {
-                    const m = Math.floor(rem / 60000);
-                    const s = Math.floor((rem % 60000) / 1000);
-                    if (timerSpan) timerSpan.textContent = ` ${m}:${String(s).padStart(2, '0')}`;
-                }
-            }, 1000);
-            const rem = cyForgeCooldownEnd - Date.now();
-            const m = Math.floor(rem / 60000);
-            const s = Math.floor((rem % 60000) / 1000);
-            const timerSpan = document.getElementById('cyForgeTimer');
-            if (timerSpan) timerSpan.textContent = ` ${m}:${String(s).padStart(2, '0')}`;
-        }
-        
-        function activateCyForge() {
-            // Check if user owns CyForge
-            const hasCyForge = elements.some(e => e.name === 'CyForge');
-            if (!hasCyForge) {
-                notify('Locked', 'Purchase the CyForge from the Exclusive Shop first!', '🔒');
-                return;
-            }
-        }
-            
-            if (cyForgeCooldownEnd > Date.now()) {
-                const rem = cyForgeCooldownEnd - Date.now();
-                const m = Math.floor(rem / 60000);
-                const s = Math.floor((rem % 60000) / 1000);
-                notify('Cooldown', `CyForge ready in ${m}:${String(s).padStart(2, '0')}`, '⏳');
-                return;
-            }
-            
-            if ((gs.cyMoney || 0) < CYFORGE_COST) {
-                notify('Need CyMoney!', `CyForge requires ${CYFORGE_COST} CyMoney to use!`, '💎');
-                return;
-            }
             
             // Find eligible elements (not already isCyMoney, not final, not error)
             const eligible = elements.filter(e => !checkIsCyMoney(e) && !e.isFinal && !e.isFatalError && !e.isError && !e.isBlank && !e.isPermafrost && !hasPenaltyMod(e));
             
-            if (eligible.length < 1) {
-                notify('CyForge', 'No eligible elements to bless!', '⚠️');
-                return;
-            }
-            
-            gs.cyMoney -= CYFORGE_COST;
-            updateCyMoneyDisplay();
-            
-            // Bless 3 random elements with isCyMoney
-            const shuffled = [...eligible].sort(() => Math.random() - 0.5);
-            const chosen = shuffled.slice(0, Math.min(3, eligible.length));
-            const results = [];
-            
-            chosen.forEach(target => {
-                const idx = elements.findIndex(e => e.name === target.name);
-                if (idx !== -1) {
-                    elements[idx].isCyMoney = true;
-                    results.push(`${elements[idx].emoji} ${elements[idx].name} → 💎 CyMoney`);
-                }
-            });
-            
-            // Start cooldown
-            cyForgeCooldownEnd = Date.now() + CYFORGE_COOLDOWN;
-            gs.cyForgeCooldownEnd = cyForgeCooldownEnd;
-            save();
-            renderEls();
-            cyForgeStartTimer();
             
             // Animate button
             const cyForgeBtn = document.getElementById('cyForgeBtn');
@@ -3107,87 +3024,6 @@
             }
         }
         
-        // Add CyForge button next to Star Forge
-        function addCyForgeButton() {
-            const buttonContainer = document.querySelector('.flex.gap-1\\.5.order-2.sm\\:order-3.items-center');
-            if (buttonContainer && !document.getElementById('cyForgeBtn')) {
-                const cyForgeBtn = document.createElement('button');
-                cyForgeBtn.id = 'cyForgeBtn';
-                cyForgeBtn.className = 'text-xs font-medium px-3 py-1.5 rounded-lg transition-all';
-                cyForgeBtn.style.background = 'linear-gradient(135deg,#0d9488,#14b8a6)';
-                cyForgeBtn.style.color = '#fff';
-                cyForgeBtn.title = 'CyForge — Bless 3 random elements with isCyMoney (Cost: 5 CyMoney, 10 min cooldown)';
-                cyForgeBtn.innerHTML = '⚒️ CyForge<span class="sf-timer" id="cyForgeTimer"></span>';
-                cyForgeBtn.onclick = activateCyForge;
-                
-                // Insert after Star Forge button
-                const starForgeBtn = document.getElementById('starForgeBtn');
-                if (starForgeBtn) {
-                    starForgeBtn.insertAdjacentElement('afterend', cyForgeBtn);
-                } else {
-                    buttonContainer.appendChild(cyForgeBtn);
-                }
-            }
-        }
-                // Unlock CyForge button handler
-        const unlockCyForgeBtn = document.getElementById('unlockCyForgeBtn');
-        if (unlockCyForgeBtn) {
-            unlockCyForgeBtn.addEventListener('click', function() {
-                const currentCyMoney = gs.cyMoney || 0;
-                const alreadyHasCyForge = elements.some(e => e.name === 'CyForge');
-                
-                if (alreadyHasCyForge) {
-                    notify('Already Unlocked!', 'You already have CyForge!', '⚒️');
-                    unlockCyForgeBtn.style.display = 'none';
-                    return;
-                }
-                
-                if (currentCyMoney >= 30) {
-                    gs.cyMoney = currentCyMoney - 30;
-                    
-                    const cyForgeEl = { 
-                        name: 'CyForge', 
-                        emoji: '⚒️', 
-                        description: 'A legendary forge that blesses elements with CyMoney', 
-                        isExclusive: true, 
-                        isCyMoney: true,
-                        isCyForge: true,
-                        excludeFromRank: true,
-                        color: 'bg-amber-500'
-                    };
-                    
-                    elements.push(cyForgeEl);
-                    updateCyMoneyDisplay();
-                    renderEls();
-                    updateCount();
-                    save();
-                    notify('🔓 CyForge Unlocked!', 'You can now use the CyForge button to bless elements!', '⚒️');
-                    unlockCyForgeBtn.style.display = 'none';
-                    addCyForgeButton();
-                } else {
-                    const needed = 30 - currentCyMoney;
-                    notify('Need More CyMoney!', `You need ${needed} more CyMoney to unlock CyForge!`, '💎');
-                }
-            });
-            
-            // Hide button if already have CyForge
-            if (elements.some(e => e.name === 'CyForge')) {
-                unlockCyForgeBtn.style.display = 'none';
-            }
-        }
-        
-        // Load CyForge cooldown from save
-        function cyForgeLoadCooldown() {
-            if (gs.cyForgeCooldownEnd && gs.cyForgeCooldownEnd > Date.now()) {
-                cyForgeCooldownEnd = gs.cyForgeCooldownEnd;
-                cyForgeStartTimer();
-                const cyForgeBtn = document.getElementById('cyForgeBtn');
-                if (cyForgeBtn) {
-                    cyForgeBtn.disabled = true;
-                    cyForgeBtn.style.opacity = '0.6';
-                }
-            }
-        }
         function updateCoinDisplay(){
             coinAmt.textContent=gs.coins.toLocaleString();
             shopCoins.textContent=gs.coins.toLocaleString();
@@ -3196,7 +3032,6 @@
         function updateCyMoneyDisplay(){
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
             updateCyMoneyPerMinDisplay();
-            updateCyForgeUnlockButton();
         }
 
 
@@ -3820,53 +3655,6 @@
                 if(upgradeBtn) upgradeBtn.style.pointerEvents = 'none';
             }
         }
-        // Show CyForge unlock button when user has 30+ CyMoney
-        function updateCyForgeUnlockButton() {
-            const buttonContainer = document.querySelector('.flex.gap-1\\.5.order-2.sm\\:order-3.items-center');
-            if (!buttonContainer) return;
-            
-            const existingBtn = document.getElementById('cyForgeUnlockBtn');
-            if ((gs.cyMoney || 0) >= 30 && !elements.some(e => e.name === 'CyForge')) {
-                if (!existingBtn) {
-                    const unlockBtn = document.createElement('button');
-                    unlockBtn.id = 'cyForgeUnlockBtn';
-                    unlockBtn.className = 'text-xs font-medium px-3 py-1.5 rounded-lg transition-all';
-                    unlockBtn.style.background = 'linear-gradient(135deg,#d4a017,#f0c040)';
-                    unlockBtn.style.color = '#1a1a2e';
-                    unlockBtn.innerHTML = '🔓 Unlock CyForge (30 💎)';
-                    unlockBtn.onclick = () => {
-                        if ((gs.cyMoney || 0) >= 30 && !elements.some(e => e.name === 'CyForge')) {
-                            gs.cyMoney -= 30;
-                            const cyForgeEl = { 
-                                name: 'CyForge', 
-                                emoji: '⚒️', 
-                                description: 'A legendary forge that blesses elements with CyMoney', 
-                                isExclusive: true, 
-                                isCyMoney: true,
-                                isCyForge: true,
-                                excludeFromRank: true,
-                                color: randColor()
-                            };
-                            elements.push(cyForgeEl);
-                            updateCyMoneyDisplay();
-                            renderEls();
-                            updateCount();
-                            save();
-                            notify('🔓 CyForge Unlocked!', 'You can now use the CyForge button to bless elements!', '⚒️');
-                            unlockBtn.remove();
-                            addCyForgeButton();
-                        }
-                    };
-                    buttonContainer.appendChild(unlockBtn);
-                }
-            } else if (existingBtn && ((gs.cyMoney || 0) < 30 || elements.some(e => e.name === 'CyForge'))) {
-                existingBtn.remove();
-            }
-        }
-            if (newEl.name === 'CyForge') {
-                const unlockBtn = document.getElementById('unlockCyForgeBtn');
-                if (unlockBtn) unlockBtn.style.display = 'none';
-            }
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
@@ -4215,7 +4003,6 @@
         window.updateCount = updateCount;
         window.save = save;
         window.notify = notify;
-        window.addCyForgeButton = addCyForgeButton;
     });
             // ========== BATTLE SYSTEM ==========
     
@@ -4993,59 +4780,176 @@
     </div>
 </script>
 <script>
-// ========== CYFORGE UNLOCK SYSTEM ==========
-(function() {
-    // Wait for the page to fully load
-    function init() {
-        // Function to update the unlock button
-        function updateUnlockButton() {
-            const buttonContainer = document.querySelector('.flex.gap-1\\.5.order-2.sm\\:order-3.items-center');
-            if (!buttonContainer) return;
-            
-            // Get current CyMoney from global gs object
-            const cyMoney = window.gs ? window.gs.cyMoney : 0;
-            const hasCyForge = window.elements ? window.elements.some(e => e.name === 'CyForge') : false;
-            
-            const existingBtn = document.getElementById('cyForgeUnlockBtn');
-            
-            if (cyMoney >= 30 && !hasCyForge) {
-                if (!existingBtn) {
-                    const unlockBtn = document.createElement('button');
-                    unlockBtn.id = 'cyForgeUnlockBtn';
-                    unlockBtn.className = 'text-xs font-medium px-3 py-1.5 rounded-lg transition-all';
-                    unlockBtn.style.background = 'linear-gradient(135deg,#d4a017,#f0c040)';
-                    unlockBtn.style.color = '#1a1a2e';
-                    unlockBtn.innerHTML = '🔓 Unlock CyForge (30 💎)';
-                    unlockBtn.onclick = function() {
-                        if (window.gs && window.gs.cyMoney >= 30 && !window.elements.some(e => e.name === 'CyForge')) {
-                            window.gs.cyMoney -= 30;
-                            const cyForgeEl = { 
-                                name: 'CyForge', 
-                                emoji: '⚒️', 
-                                description: 'A legendary forge that blesses elements with CyMoney', 
-                                isExclusive: true, 
-                                isCyMoney: true,
-                                isCyForge: true,
-                                excludeFromRank: true,
-                                color: 'bg-amber-500'
-                            };
-                            window.elements.push(cyForgeEl);
-                            if (window.updateCyMoneyDisplay) window.updateCyMoneyDisplay();
-                            if (window.renderEls) window.renderEls();
-                            if (window.updateCount) window.updateCount();
-                            if (window.save) window.save();
-                            if (window.notify) window.notify('🔓 CyForge Unlocked!', 'You can now use the CyForge button to bless elements!', '⚒️');
-                            this.remove();
-                            if (window.addCyForgeButton) window.addCyForgeButton();
-                        }
-                    };
-                    buttonContainer.appendChild(unlockBtn);
+                // ========== CYFORGE SYSTEM ==========
+        let cyForgeCooldownEnd = 0;
+        let cyForgeInterval = null;
+        const CYFORGE_COOLDOWN = 10 * 60 * 1000;
+        const CYFORGE_COST = 5;
+        
+        function cyForgeStartTimer() {
+            const cyForgeBtn = document.getElementById('cyForgeBtn');
+            if (!cyForgeBtn) return;
+            cyForgeBtn.disabled = true;
+            cyForgeBtn.style.opacity = '0.6';
+            if (cyForgeInterval) clearInterval(cyForgeInterval);
+            cyForgeInterval = setInterval(() => {
+                const rem = cyForgeCooldownEnd - Date.now();
+                const timerSpan = document.getElementById('cyForgeTimer');
+                if (rem <= 0) {
+                    clearInterval(cyForgeInterval);
+                    cyForgeInterval = null;
+                    cyForgeBtn.disabled = false;
+                    cyForgeBtn.style.opacity = '1';
+                    if (timerSpan) timerSpan.textContent = '';
+                    notify('CyForge Ready!', 'The CyForge can be used again!', '⚒️');
+                } else {
+                    const m = Math.floor(rem / 60000);
+                    const s = Math.floor((rem % 60000) / 1000);
+                    if (timerSpan) timerSpan.textContent = ` ${m}:${String(s).padStart(2, '0')}`;
                 }
-            } else if (existingBtn) {
-                existingBtn.remove();
+            }, 1000);
+            const rem = cyForgeCooldownEnd - Date.now();
+            const m = Math.floor(rem / 60000);
+            const s = Math.floor((rem % 60000) / 1000);
+            const timerSpan = document.getElementById('cyForgeTimer');
+            if (timerSpan) timerSpan.textContent = ` ${m}:${String(s).padStart(2, '0')}`;
+        }
+        
+        function activateCyForge() {
+            const hasCyForge = elements.some(e => e.name === 'CyForge');
+            if (!hasCyForge) {
+                notify('Locked', 'Unlock CyForge first (30 CyMoney)!', '🔒');
+                return;
+            }
+            if (cyForgeCooldownEnd > Date.now()) {
+                const rem = cyForgeCooldownEnd - Date.now();
+                const m = Math.floor(rem / 60000);
+                const s = Math.floor((rem % 60000) / 1000);
+                notify('Cooldown', `CyForge ready in ${m}:${String(s).padStart(2, '0')}`, '⏳');
+                return;
+            }
+            if ((gs.cyMoney || 0) < CYFORGE_COST) {
+                notify('Need CyMoney!', `CyForge requires ${CYFORGE_COST} CyMoney to use!`, '💎');
+                return;
+            }
+            const eligible = elements.filter(e => !checkIsCyMoney(e) && !e.isFinal && !e.isFatalError && !e.isError && !e.isBlank && !e.isPermafrost && !hasPenaltyMod(e));
+            if (eligible.length < 1) {
+                notify('CyForge', 'No eligible elements to bless!', '⚠️');
+                return;
+            }
+            gs.cyMoney -= CYFORGE_COST;
+            updateCyMoneyDisplay();
+            const shuffled = [...eligible].sort(() => Math.random() - 0.5);
+            const chosen = shuffled.slice(0, Math.min(3, eligible.length));
+            const results = [];
+            chosen.forEach(target => {
+                const idx = elements.findIndex(e => e.name === target.name);
+                if (idx !== -1) {
+                    elements[idx].isCyMoney = true;
+                    results.push(`${elements[idx].emoji} ${elements[idx].name} → 💎 CyMoney`);
+                }
+            });
+            cyForgeCooldownEnd = Date.now() + CYFORGE_COOLDOWN;
+            gs.cyForgeCooldownEnd = cyForgeCooldownEnd;
+            save();
+            renderEls();
+            cyForgeStartTimer();
+            if (results.length > 0) {
+                notify('⚒️ CyForge Activated!', results.join(' | '), '💎', 8000);
             }
         }
         
+        function addCyForgeButton() {
+            const buttonContainer = document.querySelector('.flex.gap-1\\.5.order-2.sm\\:order-3.items-center');
+            if (!buttonContainer || document.getElementById('cyForgeBtn')) return;
+            const hasCyForge = elements.some(e => e.name === 'CyForge');
+            if (!hasCyForge) return;
+            const cyForgeBtn = document.createElement('button');
+            cyForgeBtn.id = 'cyForgeBtn';
+            cyForgeBtn.className = 'text-xs font-medium px-3 py-1.5 rounded-lg transition-all';
+            cyForgeBtn.style.background = 'linear-gradient(135deg,#0d9488,#14b8a6)';
+            cyForgeBtn.style.color = '#fff';
+            cyForgeBtn.title = 'CyForge — Bless 3 random elements with isCyMoney (Cost: 5 CyMoney, 10 min cooldown)';
+            cyForgeBtn.innerHTML = '⚒️ CyForge<span class="sf-timer" id="cyForgeTimer"></span>';
+            cyForgeBtn.onclick = activateCyForge;
+            const starForgeBtn = document.getElementById('starForgeBtn');
+            if (starForgeBtn) {
+                starForgeBtn.insertAdjacentElement('afterend', cyForgeBtn);
+            } else {
+                buttonContainer.appendChild(cyForgeBtn);
+            }
+            if (gs.cyForgeCooldownEnd && gs.cyForgeCooldownEnd > Date.now()) {
+                cyForgeCooldownEnd = gs.cyForgeCooldownEnd;
+                cyForgeStartTimer();
+            }
+        }
+        
+        // This function handles both the unlock button and updating visibility
+        function setupUnlockCyForge() {
+            const unlockBtn = document.getElementById('unlockCyForgeBtn');
+            if (!unlockBtn) return;
+            
+            // Remove any existing listeners
+            const newBtn = unlockBtn.cloneNode(true);
+            unlockBtn.parentNode.replaceChild(newBtn, unlockBtn);
+            
+            newBtn.addEventListener('click', function() {
+                const currentCyMoney = gs.cyMoney || 0;
+                const alreadyHasCyForge = elements.some(e => e.name === 'CyForge');
+                
+                if (alreadyHasCyForge) {
+                    notify('Already Unlocked!', 'You already have CyForge!', '⚒️');
+                    newBtn.style.display = 'none';
+                    addCyForgeButton();
+                    return;
+                }
+                
+                if (currentCyMoney >= 30) {
+                    gs.cyMoney = currentCyMoney - 30;
+                    const cyForgeEl = { 
+                        name: 'CyForge', 
+                        emoji: '⚒️', 
+                        description: 'A legendary forge that blesses elements with CyMoney', 
+                        isExclusive: true, 
+                        isCyMoney: true,
+                        isCyForge: true,
+                        excludeFromRank: true,
+                        color: 'bg-amber-500'
+                    };
+                    elements.push(cyForgeEl);
+                    updateCyMoneyDisplay();
+                    renderEls();
+                    updateCount();
+                    save();
+                    notify('🔓 CyForge Unlocked!', 'You can now use the CyForge button to bless elements!', '⚒️');
+                    newBtn.style.display = 'none';
+                    addCyForgeButton();
+                } else {
+                    const needed = 30 - currentCyMoney;
+                    notify('Need More CyMoney!', `You need ${needed} more CyMoney to unlock CyForge!`, '💎');
+                }
+            });
+            
+            // Hide if already have CyForge
+            if (elements.some(e => e.name === 'CyForge')) {
+                newBtn.style.display = 'none';
+                addCyForgeButton();
+            }
+        }
+        
+        // Call this to initialize
+        setupUnlockCyForge();
+        
+        // Also call it whenever CyMoney changes (add to updateCyMoneyDisplay)
+        const originalUpdateCyMoneyDisplay = updateCyMoneyDisplay;
+        updateCyMoneyDisplay = function() {
+            originalUpdateCyMoneyDisplay();
+            // Update unlock button visibility when CyMoney changes
+            const unlockBtn = document.getElementById('unlockCyForgeBtn');
+            if (unlockBtn && !elements.some(e => e.name === 'CyForge')) {
+                unlockBtn.style.display = 'inline-block';
+            }
+        };
         // Try to update every second until we have access to gs
         const interval = setInterval(function() {
             if (window.gs && window.elements) {
