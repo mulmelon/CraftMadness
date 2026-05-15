@@ -3128,6 +3128,52 @@
                 }
             }
         }
+                // Unlock CyForge button handler
+        const unlockCyForgeBtn = document.getElementById('unlockCyForgeBtn');
+        if (unlockCyForgeBtn) {
+            unlockCyForgeBtn.addEventListener('click', function() {
+                const currentCyMoney = gs.cyMoney || 0;
+                const alreadyHasCyForge = elements.some(e => e.name === 'CyForge');
+                
+                if (alreadyHasCyForge) {
+                    notify('Already Unlocked!', 'You already have CyForge!', '⚒️');
+                    unlockCyForgeBtn.style.display = 'none';
+                    return;
+                }
+                
+                if (currentCyMoney >= 30) {
+                    gs.cyMoney = currentCyMoney - 30;
+                    
+                    const cyForgeEl = { 
+                        name: 'CyForge', 
+                        emoji: '⚒️', 
+                        description: 'A legendary forge that blesses elements with CyMoney', 
+                        isExclusive: true, 
+                        isCyMoney: true,
+                        isCyForge: true,
+                        excludeFromRank: true,
+                        color: 'bg-amber-500'
+                    };
+                    
+                    elements.push(cyForgeEl);
+                    updateCyMoneyDisplay();
+                    renderEls();
+                    updateCount();
+                    save();
+                    notify('🔓 CyForge Unlocked!', 'You can now use the CyForge button to bless elements!', '⚒️');
+                    unlockCyForgeBtn.style.display = 'none';
+                    addCyForgeButton();
+                } else {
+                    const needed = 30 - currentCyMoney;
+                    notify('Need More CyMoney!', `You need ${needed} more CyMoney to unlock CyForge!`, '💎');
+                }
+            });
+            
+            // Hide button if already have CyForge
+            if (elements.some(e => e.name === 'CyForge')) {
+                unlockCyForgeBtn.style.display = 'none';
+            }
+        }
         
         // Load CyForge cooldown from save
         function cyForgeLoadCooldown() {
