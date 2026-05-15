@@ -917,9 +917,7 @@
             <p>📊 Each frozen element has a <strong style="color:#60a5fa">melt bar</strong> — keep applying heat until it's full and thaw the element!</p>
         </div>
         <button class="font-semibold text-sm py-2.5 px-8 rounded-full" style="background:var(--gold);color:#1a1a2e" data-close="frozenTutModal">Got it!</button>
-    </div></div>
-        </div>
-    </div></div>
+    </div>
 
     <!-- isFinal Tutorial Modal -->
     <div id="finalTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:460px;border-color:var(--gold)">
@@ -3029,11 +3027,27 @@
             shopCoins.textContent=gs.coins.toLocaleString();
             updateShopButtons();
         }        
+        function cyForgeLoadCooldown() {
+            if (gs.cyForgeCooldownEnd && gs.cyForgeCooldownEnd > Date.now()) {
+                cyForgeCooldownEnd = gs.cyForgeCooldownEnd;
+                cyForgeStartTimer();
+            }
+        }
         function updateCyMoneyDisplay(){
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
             updateCyMoneyPerMinDisplay();
+            updateCyForgeUnlockButton();
         }
+        function updateCyForgeUnlockButton() {
+            const unlockBtn = documant.getElementById('unlockCyForgeBtn');
+            if (!unlockBtn) return;
 
+            const hasCyForge = elements.some(e => e.name === 'CyForge');
+            const canUnlock = (gs.cyMoney || 0) >= 30 && !hasCyForge;
+
+            unlockBtn.style.display = canUnlock ? 'inline-block' : 'none';
+            unlockBtn.disabled = !canUnlock;
+        }
 
 
         function updateShopButtons(){
@@ -3947,7 +3961,6 @@
         loadSortPref();
         renderEls();
         updateCount();
-        updateCoinDisplay();
         updateCoinDisplay();
         updateCyMoneyDisplay();
         rebuildHistory();
