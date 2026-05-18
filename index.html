@@ -3881,781 +3881,1032 @@ window.generateBattleCode = function() {
         setTimeout(()=>openModal('changelogModal'),600);
     });
     // ========== BATTLE SYSTEM ==========
+
+// Type effectiveness chart
+const typeEffectiveness = {
+    'Fire': { 'Grass': 2, 'Water': 0.5, 'Air': 2, 'Fire': 0.5, 'Ice': 2, 'Bug': 2, 'Steel': 0.5, 'Dark': 2, 'Light': 0.5, 'Rock': 0.5, 'Ground': 1, 'Dragon': 1, 'Fairy': 1 },
+    'Water': { 'Fire': 2, 'Grass': 0.5, 'Earth': 2, 'Water': 0.5, 'Rock': 2, 'Ice': 1, 'Dark': 1, 'Ground': 2, 'Steel': 1, 'Dragon': 0.5 },
+    'Grass': { 'Water': 2, 'Fire': 0.5, 'Air': 0.5, 'Earth': 2, 'Grass': 0.5, 'Ice': 0.5, 'Rock': 2, 'Ground': 2, 'Bug': 0.5 },
+    'Air': { 'Grass': 2, 'Fire': 0.5, 'Air': 0.5, 'Electric': 0.5, 'Bug': 2, 'Rock': 0.5, 'Fighting': 2, 'Ground': 0 },
+    'Electric': { 'Water': 2, 'Air': 2, 'Grass': 0.5, 'Electric': 0.5, 'Earth': 0, 'Steel': 1, 'Flying': 2 },
+    'Ice': { 'Grass': 2, 'Air': 2, 'Earth': 2, 'Fire': 0.5, 'Water': 0.5, 'Ice': 0.5, 'Dragon': 2, 'Ground': 2, 'Flying': 2 },
+    'Fighting': { 'Ice': 2, 'Rock': 2, 'Dark': 2, 'Air': 0.5, 'Bug': 0.5, 'Psychic': 0.5, 'Fairy': 0.5, 'Normal': 2, 'Steel': 2 },
+    'Bug': { 'Grass': 2, 'Dark': 2, 'Fire': 0.5, 'Fighting': 0.5, 'Air': 0.5, 'Psychic': 2, 'Fairy': 0.5, 'Poison': 0.5 },
+    'Dark': { 'Psychic': 2, 'Ghost': 2, 'Fighting': 0.5, 'Dark': 0.5, 'Fairy': 0.5, 'Light': 0 },
+    'Steel': { 'Ice': 2, 'Rock': 2, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Steel': 0.5, 'Fairy': 2, 'Poison': 2 },
+    'Psychic': { 'Fighting': 2, 'Poison': 2, 'Dark': 0.5, 'Steel': 0.5, 'Psychic': 0.5, 'Ghost': 1 },
+    'Rock': { 'Fire': 2, 'Ice': 2, 'Air': 2, 'Water': 0.5, 'Grass': 0.5, 'Fighting': 0.5, 'Steel': 0.5, 'Bug': 2 },
+    'Ghost': { 'Psychic': 2, 'Ghost': 2, 'Dark': 0.5, 'Normal': 0, 'Fighting': 0 },
+    'Poison': { 'Grass': 2, 'Fairy': 2, 'Poison': 0.5, 'Ground': 0.5, 'Rock': 0.5, 'Ghost': 0.5, 'Steel': 0, 'Bug': 1 },
+    'Ground': { 'Fire': 2, 'Electric': 2, 'Poison': 2, 'Rock': 2, 'Steel': 2, 'Water': 0.5, 'Grass': 0.5, 'Ice': 0.5, 'Air': 0 },
+    'Dragon': { 'Dragon': 2, 'Steel': 0.5, 'Fairy': 0, 'Fire': 1, 'Water': 1, 'Grass': 1, 'Electric': 1 },
+    'Fairy': { 'Fighting': 2, 'Dark': 2, 'Dragon': 2, 'Fire': 0.5, 'Poison': 0.5, 'Steel': 0.5, 'Bug': 1 },
+    'Light': { 'Dark': 2, 'Ghost': 2, 'Light': 0.5, 'Psychic': 1, 'Fairy': 1 },
+    'Normal': { 'Rock': 0.5, 'Steel': 0.5, 'Ghost': 0, 'Fighting': 1 }
+};
+
+// Move pool with OHKO moves
+const movePool = {
+    'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Fire Blast', 'Heat Wave', 'Blaze Kick', 'Inferno', 'Flare Blitz', 'Eruption', 'Fire Spin', 'Flame Wheel', 'Lava Plume', 'Searing Shot', 'V-create', 'Blast Burn', 'Magma Storm', 'Pyro Ball', '🔥 INFERNO OVERDRIVE (OHKO)'],
+    'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Hydro Pump', 'Surf', 'Scald', 'Waterfall', 'Crabhammer', 'Liquidation', 'Origin Pulse', 'Brine', 'Dive', 'Whirlpool', 'Aqua Tail', 'Hydro Cannon', 'Steam Eruption', 'Sparkling Aria', '🌊 ABYSSAL DEPTHS (OHKO)'],
+    'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Energy Ball', 'Leaf Storm', 'Solar Beam', 'Petal Dance', 'Wood Hammer', 'Grass Knot', 'Frenzy Plant', 'Bullet Seed', 'Magical Leaf', 'Giga Drain', 'Power Whip', 'Seed Flare', 'Spore', 'Sleep Powder', '🌿 FOREST JUDGMENT (OHKO)'],
+    'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Aerial Ace', 'Brave Bird', 'Drill Peck', 'Sky Attack', 'Fly', 'Air Slash', 'Tailwind', 'Defog', 'Peck', 'Pluck', 'Dual Wingbeat', 'Bounce', 'Acrobatics', '💨 SKY SHATTER (OHKO)'],
+    'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Thunder', 'Volt Tackle', 'Wild Charge', 'Discharge', 'Zap Cannon', 'Plasma Fists', 'Shock Wave', 'Charge Beam', 'Volt Switch', 'Electroweb', 'Bolt Strike', 'Fusion Bolt', 'Thunder Fang', '⚡ MEGA LIGHTNING (OHKO)'],
+    'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Ice Beam', 'Blizzard', 'Avalanche', 'Ice Fang', 'Glaciate', 'Freeze-Dry', 'Ice Shard', 'Icicle Crash', 'Icicle Spear', 'Frost Breath', 'Glacial Lance', 'Ice Hammer', 'Triple Axel', 'Sheer Cold', '❄️ ABSOLUTE ZERO (OHKO)'],
+    'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Close Combat', 'Dynamic Punch', 'Mach Punch', 'Sky Uppercut', 'Cross Chop', 'Superpower', 'Sacred Sword', 'Brick Break', 'Drain Punch', 'Reversal', 'Storm Throw', 'Aura Sphere', 'Circle Throw', 'Secret Sword', '👊 ONE-INCH PUNCH (OHKO)'],
+    'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Dark Pulse', 'Crunch', 'Foul Play', 'Throat Chop', 'Knock Off', 'Beat Up', 'Night Daze', 'Pursuit', 'Snarl', 'Darkest Lariat', 'Jaw Lock', 'Fiery Wrath', 'Obstruct', 'Wicked Blow', '🌑 MIDNIGHT REAPER (OHKO)'],
+    'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Psychic', 'Future Sight', 'Psystrike', 'Luster Purge', 'Mist Ball', 'Extrasensory', 'Psycho Cut', 'Miracle Eye', 'Psycho Boost', 'Synchronoise', 'Prismatic Laser', 'Heart Swap', 'Hyperspace Hole', 'Photon Geyser', '🔮 MIND BREAK (OHKO)'],
+    'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Pulse', 'Outrage', 'Draco Meteor', 'Dragon Rush', 'Dragon Tail', 'Spacial Rend', 'Roar of Time', 'Dragon Dance', 'Scale Shot', 'Breaking Swipe', 'Clanging Scales', 'Dynamax Cannon', 'Eternabeam', 'Core Enforcer', '🐉 DRAGON\'S WRATH (OHKO)'],
+    'Steel': ['Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam', 'Meteor Mash', 'Bullet Punch', 'Gyro Ball', 'Steel Beam', 'Doom Desire', 'Sunsteel Strike', 'Iron Tail', 'Magnet Bomb', 'Mirror Shot', 'Smart Strike', 'King\'s Shield', 'Anchor Shot', 'Double Iron Bash', '⚙️ METAL CRUSHER (OHKO)'],
+    'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Play Rough', 'Spirit Break', 'Fleur Cannon', 'Misty Explosion', 'Strange Steam', 'Draining Kiss', 'Disarming Voice', 'Sweet Kiss', 'Crafty Shield', 'Floral Healing', 'Sparkly Swirl', 'Magical Torque', 'Springtide Storm', '✨ FAIRY\'S BLESSING (OHKO)'],
+    'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Power Gem', 'Ancient Power', 'Head Smash', 'Rock Blast', 'Accelerock', 'Meteor Beam', 'Rock Tomb', 'Smack Down', 'Stealth Rock', 'Wide Guard', 'Diamond Storm', 'Continental Crush', 'Splintered Stormshards', '💎 WORLD BREAKER (OHKO)'],
+    'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Shadow Claw', 'Poltergeist', 'Phantom Force', 'Astral Barrage', 'Spectral Thief', 'Shadow Sneak', 'Hex', 'Shadow Punch', 'Grudge', 'Destiny Bond', 'Astonish', 'Soul Stealing Strike', 'Menacing Moonraze Maelstrom', '👻 SOUL REAPER (OHKO)'],
+    'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Poison Jab', 'Gunk Shot', 'Venoshock', 'Cross Poison', 'Sludge Wave', 'Belch', 'Acid', 'Acid Spray', 'Clear Smog', 'Poison Fang', 'Baneful Bunker', 'Barb Barrage', 'Malignant Chain', '☠️ FATAL VENOM (OHKO)'],
+    'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Earthquake', 'Dig', 'Bone Rush', 'Bulldoze', 'High Horsepower', 'Precipice Blades', 'Mud Bomb', 'Mud Shot', 'Drill Run', 'Sand Attack', 'Shore Up', 'Land\'s Wrath', 'Tectonic Rage', '🌍 CORE IMPLOSION (OHKO)'],
+    'Bug': ['Fury Cutter', 'X-Scissor', 'Signal Beam', 'Bug Buzz', 'Megahorn', 'Leech Life', 'First Impression', 'U-turn', 'Attack Order', 'Bug Bite', 'String Shot', 'Defend Order', 'Heal Order', 'Pollen Puff', 'Savage Spin-Out', 'Lunge', '🦗 PLAGUE SWARM (OHKO)'],
+    'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst', 'Prismatic Beam', 'Radiant Blast', 'Holy Light', 'Dazzling Flash', 'Light of Ruin', 'Sunny Day', 'Morning Sun', 'Spotlight', 'Luster Purge', 'Light That Burns The Sky', '☀️ DIVINE JUDGMENT (OHKO)'],
+    'Normal': ['Tackle', 'Pound', 'Scratch', 'Quick Attack', 'Body Slam', 'Hyper Voice', 'Tri Attack', 'Double-Edge', 'Giga Impact', 'Extreme Speed', 'Cut', 'Strength', 'Flash', 'Metronome', 'Judgment', 'Explosion', 'Self-Destruct', '💥 FATAL END (OHKO)']
+};
+
+// Cross-type move access
+const crossTypeMoves = {
+    'Fire': ['Fighting', 'Dark', 'Dragon', 'Light', 'Normal'],
+    'Water': ['Ice', 'Ground', 'Dark', 'Normal', 'Rock'],
+    'Grass': ['Poison', 'Bug', 'Water', 'Ground', 'Normal'],
+    'Air': ['Electric', 'Fire', 'Normal', 'Fighting', 'Dragon'],
+    'Electric': ['Steel', 'Air', 'Light', 'Psychic', 'Normal'],
+    'Ice': ['Water', 'Dragon', 'Fighting', 'Psychic', 'Normal'],
+    'Fighting': ['Rock', 'Dark', 'Normal', 'Steel', 'Ground'],
+    'Dark': ['Ghost', 'Psychic', 'Fighting', 'Poison', 'Normal'],
+    'Psychic': ['Fairy', 'Fighting', 'Dark', 'Electric', 'Normal'],
+    'Dragon': ['Fire', 'Electric', 'Water', 'Normal', 'Dragon'],
+    'Steel': ['Rock', 'Ground', 'Fighting', 'Electric', 'Normal'],
+    'Fairy': ['Psychic', 'Grass', 'Light', 'Dragon', 'Normal'],
+    'Rock': ['Ground', 'Steel', 'Fighting', 'Water', 'Normal'],
+    'Ghost': ['Dark', 'Psychic', 'Poison', 'Normal', 'Fairy'],
+    'Poison': ['Grass', 'Bug', 'Dark', 'Normal', 'Ground'],
+    'Ground': ['Rock', 'Fighting', 'Steel', 'Normal', 'Fire'],
+    'Bug': ['Grass', 'Poison', 'Fighting', 'Dark', 'Normal'],
+    'Light': ['Fire', 'Electric', 'Psychic', 'Fairy', 'Normal'],
+    'Normal': ['Fighting', 'Normal', 'Rock', 'Steel', 'Dark']
+};
+
+// Cross-type bonus moves
+const crossTypeBonuses = {
+    'Fire': ['Thunder Punch', 'Ice Punch', 'Drain Punch', 'Solar Beam', 'Earthquake'],
+    'Water': ['Blizzard', 'Ice Punch', 'Muddy Water', 'Dark Pulse', 'Dragon Pulse'],
+    'Grass': ['Poison Jab', 'Bug Buzz', 'Mud Shot', 'Water Pulse', 'Rock Slide'],
+    'Air': ['Heat Wave', 'Thunderbolt', 'Shadow Ball', 'Flash Cannon', 'Hurricane'],
+    'Electric': ['Magnet Bomb', 'Flash Cannon', 'Signal Beam', 'Power Gem', 'Focus Blast'],
+    'Ice': ['Water Pulse', 'Shadow Ball', 'Aura Sphere', 'Psychic', 'Flash Cannon'],
+    'Fighting': ['Rock Slide', 'Earthquake', 'Sucker Punch', 'Shadow Claw', 'Iron Head'],
+    'Dark': ['Shadow Ball', 'Sludge Bomb', 'Focus Blast', 'Iron Tail', 'Psycho Cut'],
+    'Psychic': ['Dazzling Gleam', 'Aura Sphere', 'Dark Pulse', 'Flash Cannon', 'Energy Ball'],
+    'Dragon': ['Flamethrower', 'Thunderbolt', 'Surf', 'Ice Beam', 'Shadow Ball'],
+    'Steel': ['Rock Blast', 'Earthquake', 'Thunder Punch', 'Ice Punch', 'Fire Punch'],
+    'Fairy': ['Psychic', 'Moonblast', 'Energy Ball', 'Shadow Ball', 'Thunderbolt'],
+    'Rock': ['Earthquake', 'Iron Head', 'Stone Edge', 'Body Slam', 'Superpower'],
+    'Ghost': ['Dark Pulse', 'Shadow Ball', 'Psychic', 'Focus Blast', 'Energy Ball'],
+    'Poison': ['Sludge Bomb', 'Venoshock', 'Dark Pulse', 'Shadow Ball', 'Energy Ball'],
+    'Ground': ['Earthquake', 'Rock Slide', 'Iron Head', 'Superpower', 'Stone Edge'],
+    'Bug': ['Bug Buzz', 'Signal Beam', 'Shadow Ball', 'Energy Ball', 'Sludge Bomb'],
+    'Light': ['Solar Beam', 'Flamethrower', 'Thunderbolt', 'Flash Cannon', 'Psychic'],
+    'Normal': ['Strength', 'Earthquake', 'Shadow Ball', 'Dark Pulse', 'Iron Head']
+};
+
+// Special unique moves
+const specialMoves = {
+    'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'God Speed', 'Pressure', 'Limit Break', 'Mega Punch', 'Kaioken', 'Final Flash', 'Solar Flare', 'Instant Transmission', 'Spirit Bomb', '👊 ULTRA INSTINCT (OHKO)'],
+    'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam', 'Celestial Hammer', 'Starfall', 'Cosmic Power', 'Supernova', 'Gravity Well', 'Meteor Shower', 'Constellation Strike', '⭐ STAR FORGE (OHKO)'],
+    'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Leech Life', 'X-Scissor', 'Toxic Web', 'Parasite Strike', 'Debug', 'Scan', 'Analyze', 'Vulnerability Exploit', 'System Crash', '🐛 DEBUG DELETE (OHKO)'],
+    'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Absorb Light', 'Dark Pulse', 'Void Collapse', 'Spatial Rend', 'Massive Pull', 'Time Dilation', 'Consume', 'Gravitational Wave', 'Dark Matter Burst', '🕳️ VOID ANNIHILATION (OHKO)'],
+    'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Overload', 'App Crash', 'Reboot', 'Factory Reset', 'AirDrop', 'Screenshot', 'Power Save', 'High Performance Mode', '📱 BRICK (OHKO)'],
+    'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst', 'Radiant Blast', 'Holy Light', 'Dazzling Flash', 'Light of Ruin', 'Prism Beam', 'Reflection', 'Solar Wind', 'Photon Wave', '💫 LIGHT OF CREATION (OHKO)'],
+    'Null': ['Void Touch', 'Erase', 'Oblivion', 'Nullify', 'Darkness', 'Nothingness', 'Absolute Zero', 'Paradox', 'Delete', 'Corrupt', 'Void Rift', 'Null Pointer', 'Division By Zero', '🖤 NULL EXISTENCE (OHKO)'],
+    'Permafrost': ['Frozen Shield', 'Ice Age', 'Permafrost Armor', 'Glacier', 'Absolute Zero', 'Eternal Frost', 'Cryo Prison', 'Permafrost Spear', 'Frozen Ground', 'Ice Age', 'Glacial Wall', 'Permafrost Tomb', '🧊 ETERNAL FREEZE (OHKO)']
+};
+
+function isEverythingElement(el) {
+    return el.isEverything === true;
+}
+
+function getElementType(el) {
+    const name = el.name;
     
-    // Type effectiveness chart
-    const typeEffectiveness = {
-        'Fire': { 'Grass': 2, 'Water': 0.5, 'Air': 2, 'Fire': 0.5, 'Ice': 2, 'Bug': 2, 'Steel': 0.5, 'Dark': 2, 'Light': 0.5 },
-        'Water': { 'Fire': 2, 'Grass': 0.5, 'Earth': 2, 'Water': 0.5, 'Rock': 2, 'Ice': 1, 'Dark': 1 },
-        'Grass': { 'Water': 2, 'Fire': 0.5, 'Air': 0.5, 'Earth': 2, 'Grass': 0.5, 'Ice': 0.5, 'Rock': 2 },
-        'Air': { 'Grass': 2, 'Fire': 0.5, 'Air': 0.5, 'Electric': 0.5, 'Bug': 2, 'Rock': 0.5 },
-        'Electric': { 'Water': 2, 'Air': 2, 'Grass': 0.5, 'Electric': 0.5, 'Earth': 0, 'Steel': 1 },
-        'Ice': { 'Grass': 2, 'Air': 2, 'Earth': 2, 'Fire': 0.5, 'Water': 0.5, 'Ice': 0.5, 'Dragon': 2 },
-        'Fighting': { 'Ice': 2, 'Rock': 2, 'Dark': 2, 'Air': 0.5, 'Bug': 0.5, 'Psychic': 0.5, 'Fairy': 0.5 },
-        'Bug': { 'Grass': 2, 'Dark': 2, 'Fire': 0.5, 'Fighting': 0.5, 'Air': 0.5, 'Psychic': 2, 'Fairy': 0.5 },
-        'Dark': { 'Psychic': 2, 'Ghost': 2, 'Fighting': 0.5, 'Dark': 0.5, 'Fairy': 0.5, 'Light': 0 },
-        'Steel': { 'Ice': 2, 'Rock': 2, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Steel': 0.5, 'Fairy': 2 },
-        'Psychic': { 'Fighting': 2, 'Poison': 2, 'Dark': 0.5, 'Steel': 0.5, 'Psychic': 0.5 },
-        'Rock': { 'Fire': 2, 'Ice': 2, 'Air': 2, 'Water': 0.5, 'Grass': 0.5, 'Fighting': 0.5, 'Steel': 0.5 },
-        'Ghost': { 'Psychic': 2, 'Ghost': 2, 'Dark': 0.5, 'Normal': 0 },
-        'Poison': { 'Grass': 2, 'Fairy': 2, 'Poison': 0.5, 'Ground': 0.5, 'Rock': 0.5, 'Ghost': 0.5, 'Steel': 0 },
-        'Ground': { 'Fire': 2, 'Electric': 2, 'Poison': 2, 'Rock': 2, 'Steel': 2, 'Water': 0.5, 'Grass': 0.5, 'Ice': 0.5, 'Air': 0 },
-        'Dragon': { 'Dragon': 2, 'Steel': 0.5, 'Fairy': 0 },
-        'Fairy': { 'Fighting': 2, 'Dark': 2, 'Dragon': 2, 'Fire': 0.5, 'Poison': 0.5, 'Steel': 0.5 },
-        'Light': { 'Dark': 2, 'Ghost': 2, 'Light': 0.5 }
-    };
+    if (isEverythingElement(el)) return 'Dragon';
+    if (name === 'Black Hole') return 'Dark';
+    if (name === 'Light') return 'Light';
+    if (name === 'Null') return 'Dark';
+    if (name === 'Star Forge') return 'Steel';
+    if (name === 'Bug Finder') return 'Bug';
+    if (name === 'Ultra Instinct Element') return 'Fighting';
+    if (name === 'Permafrost') return 'Ice';
+    if (name === 'iPad' || name === 'iPhone' || name === 'Computer') return 'Electric';
+    
+    if (el.isInfernal) return 'Fire';
+    if (el.isHot) return 'Fire';
+    if (el.isFrozen) return 'Ice';
+    if (el.isPermafrost) return 'Ice';
+    if (el.isVoid) return 'Dark';
+    if (el.isCursed) return 'Dark';
+    if (el.isCorrupted) return 'Dark';
+    if (el.isBlessed) return 'Fairy';
+    if (el.isHoly) return 'Fairy';
+    if (el.isDivine) return 'Fairy';
+    if (el.isCelestial) return 'Fairy';
+    if (el.isGolden) return 'Steel';
+    if (el.isCrystalline) return 'Rock';
+    if (el.isLegendary) return 'Dragon';
+    if (el.isAncient) return 'Rock';
+    if (el.isAbyssal) return 'Water';
+    if (el.isElectric) return 'Electric';
+    if (el.isMagnetic) return 'Steel';
+    if (el.isTemporal) return 'Psychic';
+    if (el.isEthereal) return 'Ghost';
+    if (el.isPhantom) return 'Ghost';
+    if (el.isRadioactive) return 'Poison';
+    if (el.isToxic) return 'Poison';
+    if (el.isViral) return 'Poison';
+    if (el.isParasitic) return 'Bug';
+    if (el.isAntimatter) return 'Dark';
+    
+    return 'Normal';
+}
 
-    // Black Hole special rule: deals x4 to Light, takes x0 from Light
-    function calculateDamageMultiplier(attacker, defender) {
-        const atkName = attacker.name;
-        const defName = defender.name;
-        
-        if (atkName === 'Black Hole' && defName === 'Light') return 4;
-        if (defName === 'Black Hole' && atkName === 'Light') return 0;
-        
-        const atkType = getElementType(attacker);
-        const defType = getElementType(defender);
-        
-        let mult = typeEffectiveness[atkType]?.[defType] || 1;
-        
-        if (defender.isPermafrost) mult *= 0.9;
-        
-        return mult;
+function getElementMoves(el) {
+    const name = el.name;
+    
+    if (isEverythingElement(el)) {
+        return ['EVERYTHING STRIKE', 'UNIVERSE BREAKER', 'OMNI SLASH', 'GODLY PRESENCE', 'INFINITY BURST', 'REALITY SHATTER', 'DIMENSION TEAR', 'COSMIC RAGE', '⭐ TOTAL OBLITERATION (OHKO)', 'Struggle'];
     }
-
-    function getElementType(el) {
-        const name = el.name;
-        
-        if (name === 'Black Hole') return 'Dark';
-        if (name === 'Light') return 'Light';
-        if (name === 'Null') return 'Dark';
-        if (name === 'Star Forge') return 'Steel';
-        if (name === 'Bug Finder') return 'Bug';
-        if (name === 'Ultra Instinct Element') return 'Fighting';
-        if (name === 'Permafrost') return 'Ice';
-        if (name === 'iPad' || name === 'iPhone' || name === 'Computer') return 'Electric';
-        
-        if (el.isInfernal) return 'Fire';
-        if (el.isHot) return 'Fire';
-        if (el.isFrozen) return 'Ice';
-        if (el.isPermafrost) return 'Ice';
-        if (el.isVoid) return 'Dark';
-        if (el.isCursed) return 'Dark';
-        if (el.isCorrupted) return 'Dark';
-        if (el.isBlessed) return 'Fairy';
-        if (el.isHoly) return 'Fairy';
-        if (el.isDivine) return 'Fairy';
-        if (el.isCelestial) return 'Fairy';
-        if (el.isGolden) return 'Steel';
-        if (el.isCrystalline) return 'Rock';
-        if (el.isLegendary) return 'Dragon';
-        if (el.isAncient) return 'Rock';
-        if (el.isAbyssal) return 'Water';
-        if (el.isElectric) return 'Electric';
-        if (el.isMagnetic) return 'Steel';
-        if (el.isTemporal) return 'Psychic';
-        if (el.isEthereal) return 'Ghost';
-        if (el.isPhantom) return 'Ghost';
-        if (el.isRadioactive) return 'Poison';
-        if (el.isToxic) return 'Poison';
-        if (el.isViral) return 'Poison';
-        if (el.isParasitic) return 'Bug';
-        if (el.isAntimatter) return 'Dark';
-        
-        if (name.includes('Fire') || name.includes('Inferno') || name.includes('Lava') || name.includes('Flame')) return 'Fire';
-        if (name.includes('Water') || name.includes('Ocean') || name.includes('Ice') || name.includes('Frozen') || name.includes('Snow')) return 'Water';
-        if (name.includes('Earth') || name.includes('Tree') || name.includes('Plant') || name.includes('Grass') || name.includes('Forest') || name.includes('Flower')) return 'Grass';
-        if (name.includes('Air') || name.includes('Wind') || name.includes('Sky') || name.includes('Cloud')) return 'Air';
-        if (name.includes('Lightning') || name.includes('Electric') || name.includes('Thunder')) return 'Electric';
-        if (name.includes('Dark') || name.includes('Shadow') || name.includes('Void')) return 'Dark';
-        if (name.includes('Light') || name.includes('Sun') || name.includes('Star')) return 'Light';
-        if (name.includes('Dragon')) return 'Dragon';
-        if (name.includes('Ghost') || name.includes('Spirit')) return 'Ghost';
-        if (name.includes('Rock') || name.includes('Stone') || name.includes('Mountain')) return 'Rock';
-        if (name.includes('Bug') || name.includes('Insect')) return 'Bug';
-        if (name.includes('Psychic') || name.includes('Magic') || name.includes('Wizard') || name.includes('Spell')) return 'Psychic';
-        
-        return 'Normal';
+    
+    if (specialMoves[name]) {
+        const extraMoves = [];
+        const mainType = getElementType(el);
+        if (crossTypeBonuses[mainType]) {
+            extraMoves.push(...crossTypeBonuses[mainType]);
+        }
+        return [...new Set([...specialMoves[name], ...extraMoves, 'Struggle'])];
     }
+    
+    const mainType = getElementType(el);
+    const availableTypes = [mainType];
+    
+    if (crossTypeMoves[mainType]) {
+        availableTypes.push(...crossTypeMoves[mainType]);
+    }
+    
+    if (el.isHot || el.isInfernal) availableTypes.push('Fire');
+    if (el.isFrozen || el.isPermafrost) availableTypes.push('Ice');
+    if (el.isElectric) availableTypes.push('Electric');
+    if (el.isLegendary) { availableTypes.push('Dragon'); availableTypes.push('Fighting'); }
+    if (el.isDivine || el.isHoly) { availableTypes.push('Fairy'); availableTypes.push('Light'); }
+    if (el.isDark || el.isVoid || el.isCursed) availableTypes.push('Dark');
+    if (el.isGhost || el.isPhantom || el.isEthereal) availableTypes.push('Ghost');
+    if (el.isPoison || el.isRadioactive || el.isToxic) availableTypes.push('Poison');
+    if (el.isBug || el.isParasitic) availableTypes.push('Bug');
+    if (el.isPsychic || el.isTemporal) availableTypes.push('Psychic');
+    if (el.isSteel || el.isGolden || el.isMagnetic) availableTypes.push('Steel');
+    if (el.isRock || el.isCrystalline || el.isAncient) availableTypes.push('Rock');
+    if (el.isGround) availableTypes.push('Ground');
+    if (el.isDragon) availableTypes.push('Dragon');
+    if (el.isFighting) availableTypes.push('Fighting');
+    if (el.isWater || el.isAbyssal) availableTypes.push('Water');
+    if (el.isGrass) availableTypes.push('Grass');
+    if (el.isAir) availableTypes.push('Air');
+    
+    const uniqueTypes = [...new Set(availableTypes)];
+    
+    let moves = [];
+    for (const type of uniqueTypes) {
+        if (movePool[type]) {
+            moves.push(...movePool[type]);
+        }
+        if (crossTypeBonuses[type]) {
+            moves.push(...crossTypeBonuses[type]);
+        }
+    }
+    
+    moves = [...new Set(moves)];
+    
+    if (moves.length < 8) {
+        moves.push(...movePool['Normal']);
+        if (crossTypeBonuses['Normal']) moves.push(...crossTypeBonuses['Normal']);
+        moves = [...new Set(moves)];
+    }
+    
+    const moveCount = Math.min(8, Math.max(6, moves.length));
+    const shuffled = [...moves].sort(() => Math.random() - 0.5);
+    const selectedMoves = shuffled.slice(0, moveCount);
+    
+    if (!selectedMoves.includes('Struggle')) {
+        selectedMoves.push('Struggle');
+    }
+    
+    return selectedMoves;
+}
 
-    // Element move sets - EVERY element has damaging moves
-    const elementMoves = {
-        // Base elements (5 damaging moves each)
-        'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Hydro Pump', 'Surf'],
-        'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Fire Blast'],
-        'Earth': ['Tackle', 'Mud Shot', 'Rock Throw', 'Earth Power', 'Earthquake'],
-        'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Aerial Ace'],
-        
-        // Special elements
-        'Lightning': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Thunder'],
-        'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam'],
-        'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Leech Life', 'X-Scissor'],
-        'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'God Speed', 'Pressure', 'Limit Break', 'Mega Punch'],
-        'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Overload'],
-        'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Absorb Light', 'Dark Pulse'],
-        'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst'],
-        'Null': ['Void Touch', 'Erase', 'Oblivion', 'Nullify', 'Darkness', 'Nothingness'],
-        'Permafrost': ['Frozen Shield', 'Ice Age', 'Permafrost Armor', 'Glacier', 'Absolute Zero']
-    };
-
-    // Ensure EVERY element has Struggle as fallback
-    function getElementMoves(el) {
-        const name = el.name;
-        if (elementMoves[name]) return [...elementMoves[name], 'Struggle'];
-        
-        // Default moves based on type (always include Struggle)
-        const type = getElementType(el);
-        const defaultMoves = {
-            'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Struggle'],
-            'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Struggle'],
-            'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Struggle'],
-            'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Struggle'],
-            'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Struggle'],
-            'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Struggle'],
-            'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Struggle'],
-            'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Struggle'],
-            'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Struggle'],
-            'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Pulse', 'Struggle'],
-            'Steel': ['Metal Claw', 'Iron Head', 'Flash Cannon', 'Struggle'],
-            'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Struggle'],
-            'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Struggle'],
-            'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Struggle'],
-            'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Struggle'],
-            'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Struggle'],
-            'Light': ['Flash', 'Beam', 'Light Burst', 'Struggle']
+function getElementStats(el) {
+    const name = el.name;
+    
+    if (isEverythingElement(el)) {
+        return {
+            hp: 110,
+            atk: 85,
+            def: 85,
+            speed: 85,
+            moves: getElementMoves(el),
+            isEverything: true
         };
-        
-        return defaultMoves[type] || ['Struggle', 'Tackle', 'Pound'];
     }
-
-    function getElementStats(el) {
-        const name = el.name;
-        
-        // Special elements with custom stats
-        const specialStats = {
-            'Star Forge': { hp: 120, atk: 95, def: 90, speed: 60 },
-            'Bug Finder': { hp: 95, atk: 80, def: 70, speed: 100 },
-            'Ultra Instinct Element': { hp: 130, atk: 100, def: 80, speed: 150, dodgeCount: 5, canOnlyUseOne: true },
-            'iPad': { hp: 60, atk: 30, def: 40, speed: 40, passive: 'screenProtector' },
-            'Black Hole': { hp: 150, atk: 50, def: 120, speed: 30, passive: 'lightAbsorber' },
-            'Light': { hp: 80, atk: 70, def: 50, speed: 140 },
-            'Null': { hp: 100, atk: 75, def: 85, speed: 65 },
-            'Permafrost': { hp: 140, atk: 45, def: 110, speed: 25, isPermafrostType: true }
-        };
-        
-        if (specialStats[name]) {
-            return { ...specialStats[name], moves: getElementMoves(el) };
-        }
-        
-        // Auto-calculate stats based on element properties
-        let hp = 100;
-        let atk = 60;
-        let def = 60;
-        let speed = 60;
-        
-        if (el.isFinal) {
-            hp += 20; atk += 20; def += 20;
-        }
-        if (el.isSecret) {
-            atk += 15; speed += 10;
-        }
-        if (el.isHot || getElementType(el) === 'Fire') {
-            atk += 15; def -= 10; speed += 10;
-        }
-        if (el.isFrozen || getElementType(el) === 'Ice') {
-            def += 20; speed -= 15;
-        }
-        if (el.isPermafrost) {
-            def += 30; hp += 20;
-        }
-        if (el.isLegendary) {
-            hp += 15; atk += 15; def += 15; speed += 10;
-        }
-        if (el.isDivine) {
-            hp += 20; atk += 10; def += 15; speed += 10;
-        }
-        
-        return { hp, atk, def, speed, moves: getElementMoves(el) };
-    }
-
-    let battleState = {
-        active: false, moveSelection: true,
-        p1Elements: [], p2Elements: [], p1Team: [], p2Team: [],
-        p1Current: null, p2Current: null,
-        p1Ready: false, p2Ready: false,
-        p1Moves: {}, p2Moves: {},
-        turn: 'p1',
-        p1AtkBoost: 1, p2AtkBoost: 1,
-        p1DefBoost: 1, p2DefBoost: 1,
-        p1FindUsed: false, p2FindUsed: false,
-        p1BugActive: false, p2BugActive: false,
-        p1CounterLocked: false, p2CounterLocked: false
+    
+    const specialStats = {
+        'Star Forge': { hp: 130, atk: 105, def: 100, speed: 70 },
+        'Bug Finder': { hp: 100, atk: 85, def: 75, speed: 120 },
+        'Ultra Instinct Element': { hp: 140, atk: 115, def: 85, speed: 160, dodgeCount: 5, canOnlyUseOne: true },
+        'iPad': { hp: 70, atk: 40, def: 50, speed: 45, passive: 'screenProtector' },
+        'Black Hole': { hp: 160, atk: 60, def: 130, speed: 35, passive: 'lightAbsorber' },
+        'Light': { hp: 85, atk: 80, def: 55, speed: 150 },
+        'Null': { hp: 110, atk: 85, def: 95, speed: 70 },
+        'Permafrost': { hp: 150, atk: 50, def: 120, speed: 30, isPermafrostType: true }
     };
-
-    function addBattleLog(msg, type) {
-        const log = document.getElementById('battleLog');
-        if (!log) return;
-        const colors = { damage: '#ef4444', skill: '#a855f7', system: '#eab308', dodge: '#14b8a6', block: '#60a5fa' };
-        const p = document.createElement('p');
-        p.style.color = colors[type] || '#888';
-        p.textContent = msg;
-        log.appendChild(p);
-        log.scrollTop = log.scrollHeight;
+    
+    if (specialStats[name]) {
+        return { ...specialStats[name], moves: getElementMoves(el) };
     }
+    
+    let hp = 90;
+    let atk = 65;
+    let def = 65;
+    let speed = 65;
+    
+    if (el.isFinal) { hp += 25; atk += 25; def += 25; }
+    if (el.isSecret) { atk += 20; speed += 15; }
+    if (el.isLegendary) { hp += 20; atk += 20; def += 20; speed += 15; }
+    if (el.isDivine) { hp += 25; atk += 15; def += 20; speed += 15; }
+    if (el.isHot) { atk += 20; def -= 5; speed += 10; }
+    if (el.isFrozen) { def += 25; speed -= 10; hp += 10; }
+    if (el.isPermafrost) { def += 35; hp += 25; speed -= 15; }
+    if (el.isElectric) { speed += 20; atk += 10; }
+    if (el.isDragon) { hp += 15; atk += 15; }
+    if (el.isDark || el.isVoid) { atk += 10; def += 10; }
+    if (el.isGhost) { speed += 15; def += 5; }
+    if (el.isPoison) { hp += 10; def += 10; }
+    if (el.isBug) { speed += 15; atk += 5; }
+    if (el.isPsychic) { atk += 15; speed += 10; }
+    if (el.isSteel) { def += 20; hp += 10; }
+    if (el.isRock) { def += 15; hp += 15; speed -= 5; }
+    if (el.isGround) { hp += 15; atk += 10; }
+    if (el.isFairy) { hp += 10; def += 10; speed += 10; }
+    if (el.isFighting) { atk += 20; hp += 10; }
+    if (el.isWater) { hp += 10; def += 10; }
+    if (el.isGrass) { hp += 10; speed += 5; }
+    if (el.isAir) { speed += 20; def -= 5; }
+    
+    return { hp, atk, def, speed, moves: getElementMoves(el) };
+}
 
-    function decodeBattleCode(code) {
-        try {
-            const decoded = decodeURIComponent(escape(atob(code)));
-            return JSON.parse(decoded);
-        } catch(e) {
-            throw new Error('Invalid battle code: ' + e.message);
-        }
+function calculateDamageMultiplier(attacker, defender) {
+    const atkName = attacker.name;
+    const defName = defender.name;
+    
+    if (atkName === 'Black Hole' && defName === 'Light') return 4;
+    if (defName === 'Black Hole' && atkName === 'Light') return 0;
+    
+    const atkType = getElementType(attacker);
+    const defType = getElementType(defender);
+    
+    let mult = typeEffectiveness[atkType]?.[defType] || 1;
+    
+    if (defender.isPermafrost) mult *= 0.9;
+    
+    return mult;
+}
+
+function addBattleLog(msg, type) {
+    const log = document.getElementById('battleLog');
+    if (!log) return;
+    const colors = { damage: '#ef4444', skill: '#a855f7', system: '#eab308', dodge: '#14b8a6', block: '#60a5fa', everything: '#00ffc8', ohko: '#ff00ff' };
+    const p = document.createElement('p');
+    p.style.color = colors[type] || '#888';
+    p.textContent = msg;
+    log.appendChild(p);
+    log.scrollTop = log.scrollHeight;
+}
+
+function showOHKOAnimation(moveName, attackerName, defenderName, success) {
+    const animations = {
+        '🔥 INFERNO OVERDRIVE (OHKO)': { emoji: '🔥💥🌋', color: '#ff6600', text: 'SUPERNOVA ERUPTION!' },
+        '🌊 ABYSSAL DEPTHS (OHKO)': { emoji: '🌊🌀🕳️', color: '#0066ff', text: 'MAELSTROM CONSUMES!' },
+        '🌿 FOREST JUDGMENT (OHKO)': { emoji: '🌿🌳💚', color: '#00cc44', text: 'NATURE\'S VENGEANCE!' },
+        '💨 SKY SHATTER (OHKO)': { emoji: '💨⚡🌪️', color: '#88ccff', text: 'HEAVENS COLLAPSE!' },
+        '⚡ MEGA LIGHTNING (OHKO)': { emoji: '⚡💥🔵', color: '#ffff00', text: 'DIVINE THUNDER!' },
+        '❄️ ABSOLUTE ZERO (OHKO)': { emoji: '❄️🧊💀', color: '#00ffff', text: 'COSMIC FREEZE!' },
+        '👊 ONE-INCH PUNCH (OHKO)': { emoji: '👊💥⚡', color: '#ff4444', text: 'DIMENSIONAL SHOCKWAVE!' },
+        '🌑 MIDNIGHT REAPER (OHKO)': { emoji: '🌑🔪💀', color: '#660066', text: 'SOUL HARVEST!' },
+        '🔮 MIND BREAK (OHKO)': { emoji: '🔮🧠💥', color: '#cc66ff', text: 'PSYCHIC SHATTER!' },
+        '🐉 DRAGON\'S WRATH (OHKO)': { emoji: '🐉🔥⭐', color: '#ff9933', text: 'ANCIENT FURY!' },
+        '⚙️ METAL CRUSHER (OHKO)': { emoji: '⚙️🔨💥', color: '#888888', text: 'ATOMIC COMPRESSION!' },
+        '✨ FAIRY\'S BLESSING (OHKO)': { emoji: '✨🌸💖', color: '#ff99ff', text: 'MYSTIC JUDGMENT!' },
+        '💎 WORLD BREAKER (OHKO)': { emoji: '💎🌍💥', color: '#44aaff', text: 'PLANET CRACKER!' },
+        '👻 SOUL REAPER (OHKO)': { emoji: '👻🔪💀', color: '#aa44ff', text: 'ETERNAL DAMNATION!' },
+        '☠️ FATAL VENOM (OHKO)': { emoji: '☠️🧪💀', color: '#88ff44', text: 'VENOMOUS DEATH!' },
+        '🌍 CORE IMPLOSION (OHKO)': { emoji: '🌍🌀💥', color: '#cc8844', text: 'MAGMA ERUPTION!' },
+        '🦗 PLAGUE SWARM (OHKO)': { emoji: '🦗🐜💀', color: '#88aa44', text: 'INSECT APOCALYPSE!' },
+        '☀️ DIVINE JUDGMENT (OHKO)': { emoji: '☀️✨🌟', color: '#ffdd88', text: 'HOLY RETRIBUTION!' },
+        '💥 FATAL END (OHKO)': { emoji: '💥☠️💀', color: '#aa0000', text: 'EXISTENCE ERASED!' },
+        '👊 ULTRA INSTINCT (OHKO)': { emoji: '👊⚡💥', color: '#ff88ff', text: 'AUTO-DODGE COUNTER!' },
+        '⭐ STAR FORGE (OHKO)': { emoji: '⭐🌟🌌', color: '#ffcc44', text: 'GALACTIC FORGE!' },
+        '🐛 DEBUG DELETE (OHKO)': { emoji: '🐛💻💥', color: '#44ff88', text: 'REALITY CORRUPTION!' },
+        '🕳️ VOID ANNIHILATION (OHKO)': { emoji: '🕳️⬛💀', color: '#4400aa', text: 'NOTHINGNESS ABSORBS!' },
+        '📱 BRICK (OHKO)': { emoji: '📱🔨💀', color: '#88aaff', text: 'CRITICAL SYSTEM FAILURE!' },
+        '💫 LIGHT OF CREATION (OHKO)': { emoji: '💫✨🌟', color: '#ffffaa', text: 'PRIMORDIAL BLAST!' },
+        '🖤 NULL EXISTENCE (OHKO)': { emoji: '🖤❌💀', color: '#333333', text: 'ERASED FROM REALITY!' },
+        '🧊 ETERNAL FREEZE (OHKO)': { emoji: '🧊❄️💀', color: '#66ddff', text: 'TIME STOPS!' },
+        '⭐ TOTAL OBLITERATION (OHKO)': { emoji: '⭐💥🌌', color: '#ffffff', text: 'UNIVERSE RESETS!' }
+    };
+    
+    const anim = animations[moveName] || { emoji: '💀⚡💥', color: '#ff00ff', text: 'OBLITERATION!' };
+    
+    addBattleLog(`✨✨✨ ${attackerName} uses ${moveName}! ✨✨✨`, 'ohko');
+    addBattleLog(`🌈 ${anim.emoji} ${anim.text} ${anim.emoji}`, 'ohko');
+    
+    if (success) {
+        addBattleLog(`💀💀💀 ${defenderName} is OBLITERATED! One-Hit KO! 💀💀💀`, 'ohko');
+        addBattleLog(`🏆 GLORIOUS VICTORY! OHKO SUCCESSFUL! 🏆`, 'ohko');
+    } else {
+        addBattleLog(`😰 OHKO missed! ${defenderName} survives by a miracle! 😰`, 'damage');
+        addBattleLog(`✨ The attack was too powerful but missed the mark! ✨`, 'system');
     }
+}
 
-    function initElementForBattle(el) {
-        const stats = getElementStats(el);
-        el.currentHp = stats.hp;
-        el.maxHp = stats.hp;
-        el.baseAtk = stats.atk;
-        el.baseDef = stats.def;
-        el.baseSpeed = stats.speed;
-        el.availableMoves = stats.moves;
-        if (stats.dodgeCount) el.dodgesLeft = stats.dodgeCount;
-        if (stats.canOnlyUseOne) el.canOnlyUseOne = stats.canOnlyUseOne;
-        if (stats.passive) el.passive = stats.passive;
-        if (el.name === 'iPad') el.screenProtector = true;
-        return el;
+function decodeBattleCode(code) {
+    try {
+        const decoded = decodeURIComponent(escape(atob(code)));
+        return JSON.parse(decoded);
+    } catch(e) {
+        throw new Error('Invalid battle code: ' + e.message);
     }
+}
 
-    function loadPlayerElements(num, code) {
-        try {
-            const data = decodeBattleCode(code);
-            const els = data.elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
-            
-            els.forEach(el => {
-                initElementForBattle(el);
-            });
-            
-            if (num === 1) {
-                battleState.p1Elements = els;
-                document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
-                battleState.p1Ready = true;
-                battleState.p1Team = [];
-                battleState.p1Moves = {};
-                updateTeamDisplay(1);
-            } else {
-                battleState.p2Elements = els;
-                document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
-                battleState.p2Ready = true;
-                battleState.p2Team = [];
-                battleState.p2Moves = {};
-                updateTeamDisplay(2);
-            }
-            document.getElementById('startBattleBtn').disabled = !(battleState.p1Ready && battleState.p2Ready);
-        } catch(e) {
-            const err = `<div class="text-red-500">✗ ${e.message}</div>`;
-            if (num === 1) {
-                document.getElementById('p1Elements').innerHTML = err;
-                battleState.p1Ready = false;
-            } else {
-                document.getElementById('p2Elements').innerHTML = err;
-                battleState.p2Ready = false;
-            }
-            document.getElementById('startBattleBtn').disabled = true;
-        }
-    }
+window.generateBattleCode = function() {
+    const battleElements = elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
+    const exportData = {
+        elements: battleElements.map(el => ({
+            name: el.name,
+            emoji: el.emoji,
+            description: el.description,
+            isEverything: el.isEverything || false,
+            isFinal: el.isFinal,
+            isSecret: el.isSecret,
+            isLegendary: el.isLegendary,
+            isDivine: el.isDivine,
+            isHot: el.isHot,
+            isFrozen: el.isFrozen,
+            isPermafrost: el.isPermafrost,
+            isElectric: el.isElectric,
+            isDragon: el.isDragon,
+            isDark: el.isDark,
+            isVoid: el.isVoid,
+            isGhost: el.isGhost,
+            isPoison: el.isPoison,
+            isBug: el.isBug,
+            isPsychic: el.isPsychic,
+            isSteel: el.isSteel,
+            isRock: el.isRock,
+            isGround: el.isGround,
+            isFairy: el.isFairy,
+            isFighting: el.isFighting,
+            isWater: el.isWater,
+            isGrass: el.isGrass,
+            isAir: el.isAir,
+            isIce: el.isIce,
+            isCursed: el.isCursed,
+            isBlessed: el.isBlessed,
+            isHoly: el.isHoly,
+            isCelestial: el.isCelestial
+        })),
+        version: '2.0'
+    };
+    const jsonStr = JSON.stringify(exportData);
+    return btoa(unescape(encodeURIComponent(jsonStr)));
+};
 
-    function updateTeamDisplay(player) {
-        const team = player === 1 ? battleState.p1Team : battleState.p2Team;
-        const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
-        const container = document.getElementById(player === 1 ? 'p1Team' : 'p2Team');
-        if (container) {
-            container.innerHTML = '';
-            els.forEach(e => {
-                const btn = document.createElement('button');
-                const isSelected = team.includes(e);
-                btn.textContent = `${e.emoji} ${e.name}${e.canOnlyUseOne ? ' (ONLY)' : ''}`;
-                btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isSelected ? 'bg-green-500 text-white' : 'bg-gray-500 text-white opacity-60'}`;
-                btn.onclick = () => selectTeam(player, e.name);
-                container.appendChild(btn);
-            });
-        }
-    }
+function initElementForBattle(el) {
+    const stats = getElementStats(el);
+    el.currentHp = stats.hp;
+    el.maxHp = stats.hp;
+    el.baseAtk = stats.atk;
+    el.baseDef = stats.def;
+    el.baseSpeed = stats.speed;
+    el.availableMoves = stats.moves;
+    el.isEverything = stats.isEverything || false;
+    if (stats.dodgeCount) el.dodgesLeft = stats.dodgeCount;
+    if (stats.canOnlyUseOne) el.canOnlyUseOne = stats.canOnlyUseOne;
+    if (stats.passive) el.passive = stats.passive;
+    if (el.name === 'iPad') el.screenProtector = true;
+    return el;
+}
 
-    function selectTeam(player, name) {
-        const team = player === 1 ? battleState.p1Team : battleState.p2Team;
-        const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
-        const el = els.find(e => e.name === name);
-        if (!el) return;
+function loadPlayerElements(num, code) {
+    try {
+        const data = decodeBattleCode(code);
+        const els = data.elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
         
-        const isSelected = team.includes(el);
+        els.forEach(el => {
+            initElementForBattle(el);
+        });
         
-        // Ultra Instinct Element can only be selected alone
-        if (el.name === 'Ultra Instinct Element' && !isSelected) {
-            team.length = 0;
-            team.push(el);
-            addBattleLog(`Player ${player} selected ${el.name}! Only one element can be used!`, 'system');
-            updateTeamDisplay(player);
-            showMoveSelection(player);
-            return;
-        }
-        
-        // If trying to add when Ultra Instinct is already in team
-        if (team.some(e => e.name === 'Ultra Instinct Element') && !isSelected) {
-            addBattleLog(`Cannot add more elements while ${team[0].name} is selected!`, 'system');
-            return;
-        }
-        
-        if (isSelected) {
-            const idx = team.indexOf(el);
-            team.splice(idx, 1);
-            delete battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name];
-            addBattleLog(`Player ${player} removed ${el.name} from team`, 'system');
-        } else if (team.length < 3) {
-            team.push(el);
-            addBattleLog(`Player ${player} added ${el.name} to team`, 'system');
+        if (num === 1) {
+            battleState.p1Elements = els;
+            document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
+            battleState.p1Ready = true;
+            battleState.p1Team = [];
+            battleState.p1Moves = {};
+            updateTeamDisplay(1);
         } else {
-            addBattleLog(`Player ${player} - can only select 3 elements!`, 'system');
-            return;
+            battleState.p2Elements = els;
+            document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
+            battleState.p2Ready = true;
+            battleState.p2Team = [];
+            battleState.p2Moves = {};
+            updateTeamDisplay(2);
         }
-        updateTeamDisplay(player);
-        showMoveSelection(player);
+        document.getElementById('startBattleBtn').disabled = !(battleState.p1Ready && battleState.p2Ready);
+    } catch(e) {
+        const err = `<div class="text-red-500">✗ ${e.message}</div>`;
+        if (num === 1) {
+            document.getElementById('p1Elements').innerHTML = err;
+            battleState.p1Ready = false;
+        } else {
+            document.getElementById('p2Elements').innerHTML = err;
+            battleState.p2Ready = false;
+        }
+        document.getElementById('startBattleBtn').disabled = true;
     }
+}
 
-    function showMoveSelection(player) {
-        const team = player === 1 ? battleState.p1Team : battleState.p2Team;
-        const movesContainer = document.getElementById(player === 1 ? 'p1MoveSelect' : 'p2MoveSelect');
-        if (!movesContainer) return;
-        
-        if (team.length === 0) {
-            movesContainer.innerHTML = '<div class="text-center text-sm italic p-3" style="color:var(--text-secondary)">Select elements first</div>';
-            return;
-        }
-        
-        movesContainer.innerHTML = '<div class="text-center text-sm font-bold mb-2">Select 4 moves for each element (click to select):</div>';
-        
-        team.forEach(el => {
-            const div = document.createElement('div');
-            div.className = 'mb-3 p-2 rounded-lg';
-            div.style.background = 'rgba(0,0,0,0.05)';
-            div.innerHTML = `<div class="font-semibold mb-1">${el.emoji} ${el.name}</div><div class="flex flex-wrap gap-1" id="moves-${player}-${el.name.replace(/[^a-z0-9]/gi, '_')}"></div>`;
-            movesContainer.appendChild(div);
-            
-            const movesDiv = div.querySelector(`[id^="moves-${player}-"]`);
-            const selectedMoves = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
-            
-            // Ensure Struggle is always available
-            const availableMoves = [...new Set([...el.availableMoves, 'Struggle'])];
-            
-            availableMoves.forEach(move => {
-                const isSelected = selectedMoves.includes(move);
-                const btn = document.createElement('button');
-                btn.textContent = move;
-                btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isSelected ? 'bg-green-500 text-white' : 'bg-purple-500 text-white opacity-60 hover:opacity-100'}`;
-                btn.onclick = () => {
-                    const currentSelected = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
-                    if (isSelected) {
-                        const idx = currentSelected.indexOf(move);
-                        currentSelected.splice(idx, 1);
-                        battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
-                        btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white opacity-60 hover:opacity-100';
-                    } else if (currentSelected.length < 4) {
-                        currentSelected.push(move);
-                        battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
-                        btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white';
-                    } else {
-                        addBattleLog(`Can only select 4 moves for ${el.name}!`, 'system');
-                    }
-                };
-                movesDiv.appendChild(btn);
-            });
+function updateTeamDisplay(player) {
+    const team = player === 1 ? battleState.p1Team : battleState.p2Team;
+    const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
+    const container = document.getElementById(player === 1 ? 'p1Team' : 'p2Team');
+    if (container) {
+        container.innerHTML = '';
+        els.forEach(e => {
+            const btn = document.createElement('button');
+            const isSelected = team.includes(e);
+            const everythingBadge = e.isEverything ? '⭐' : '';
+            btn.textContent = `${e.emoji} ${e.name} ${everythingBadge}${e.canOnlyUseOne ? ' (ONLY)' : ''}`;
+            btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isSelected ? 'bg-green-500 text-white' : 'bg-gray-500 text-white opacity-60'}`;
+            if (e.isEverything) btn.style.boxShadow = '0 0 8px #00ffc8';
+            btn.onclick = () => selectTeam(player, e.name);
+            container.appendChild(btn);
         });
     }
+}
 
-    function updateBattleUI() {
-        const p1 = battleState.p1Current;
-        const p2 = battleState.p2Current;
+function selectTeam(player, name) {
+    const team = player === 1 ? battleState.p1Team : battleState.p2Team;
+    const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
+    const el = els.find(e => e.name === name);
+    if (!el) return;
+    
+    const isSelected = team.includes(el);
+    
+    if (el.name === 'Ultra Instinct Element' && !isSelected) {
+        team.length = 0;
+        team.push(el);
+        addBattleLog(`Player ${player} selected ${el.name}! Only one element can be used!`, 'system');
+        updateTeamDisplay(player);
+        showMoveSelection(player);
+        return;
+    }
+    
+    if (team.some(e => e.name === 'Ultra Instinct Element') && !isSelected) {
+        addBattleLog(`Cannot add more elements while ${team[0].name} is selected!`, 'system');
+        return;
+    }
+    
+    if (isSelected) {
+        const idx = team.indexOf(el);
+        team.splice(idx, 1);
+        delete battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name];
+        addBattleLog(`Player ${player} removed ${el.name} from team`, 'system');
+    } else if (team.length < 3) {
+        team.push(el);
+        addBattleLog(`Player ${player} added ${el.name} to team`, 'system');
+        if (el.isEverything) addBattleLog(`⭐ ${el.name} is an EVERYTHING element! Massively boosted stats!`, 'everything');
+    } else {
+        addBattleLog(`Player ${player} - can only select 3 elements!`, 'system');
+        return;
+    }
+    updateTeamDisplay(player);
+    showMoveSelection(player);
+}
+
+function showMoveSelection(player) {
+    const team = player === 1 ? battleState.p1Team : battleState.p2Team;
+    const movesContainer = document.getElementById(player === 1 ? 'p1MoveSelect' : 'p2MoveSelect');
+    if (!movesContainer) return;
+    
+    if (team.length === 0) {
+        movesContainer.innerHTML = '<div class="text-center text-sm italic p-3" style="color:var(--text-secondary)">Select elements first</div>';
+        return;
+    }
+    
+    movesContainer.innerHTML = '<div class="text-center text-sm font-bold mb-2">Select 4 moves for each element (click to select):</div>';
+    
+    team.forEach(el => {
+        const div = document.createElement('div');
+        div.className = 'mb-3 p-2 rounded-lg';
+        div.style.background = 'rgba(0,0,0,0.05)';
+        const everythingBadge = el.isEverything ? ' ⭐ EVERYTHING ⭐' : '';
+        div.innerHTML = `<div class="font-semibold mb-1">${el.emoji} ${el.name}${everythingBadge}</div><div class="flex flex-wrap gap-1" id="moves-${player}-${el.name.replace(/[^a-z0-9]/gi, '_')}"></div>`;
+        movesContainer.appendChild(div);
         
-        if (p1) {
-            const hpPercent = Math.max(0, (p1.currentHp / p1.maxHp) * 100);
-            const hpFill = document.getElementById('p1HpFill');
-            if (hpFill) hpFill.style.width = `${hpPercent}%`;
-            const activeDiv = document.getElementById('p1Active');
-            if (activeDiv) activeDiv.innerHTML = `${p1.emoji} ${p1.name}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
-            const statsDiv = document.getElementById('p1Stats');
-            if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
-            
-            const skillsDiv = document.getElementById('p1Skills');
-            if (skillsDiv) {
-                skillsDiv.innerHTML = '';
-                const moves = battleState.p1Moves[p1.name] || p1.availableMoves.slice(0, 4);
-                moves.forEach(s => {
-                    const btn = document.createElement('button');
-                    btn.textContent = s;
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white hover:bg-purple-600';
-                    btn.onclick = () => useSkill(s, 1);
-                    skillsDiv.appendChild(btn);
-                });
-            }
+        const movesDiv = div.querySelector(`[id^="moves-${player}-"]`);
+        const selectedMoves = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
+        
+        const availableMoves = [...new Set([...el.availableMoves, 'Struggle'])];
+        
+        availableMoves.forEach(move => {
+            const isSelected = selectedMoves.includes(move);
+            const isOHKO = move.includes('(OHKO)');
+            const btn = document.createElement('button');
+            btn.textContent = move;
+            btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isSelected ? 'bg-green-500 text-white' : (isOHKO ? 'bg-pink-600 text-white opacity-80 hover:opacity-100' : 'bg-purple-500 text-white opacity-60 hover:opacity-100')}`;
+            if (isOHKO) btn.style.boxShadow = '0 0 5px #ff00ff';
+            btn.onclick = () => {
+                const currentSelected = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
+                if (isSelected) {
+                    const idx = currentSelected.indexOf(move);
+                    currentSelected.splice(idx, 1);
+                    battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
+                    btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isOHKO ? 'bg-pink-600 text-white opacity-80' : 'bg-purple-500 text-white opacity-60'}`;
+                } else if (currentSelected.length < 4) {
+                    currentSelected.push(move);
+                    battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
+                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white';
+                } else {
+                    addBattleLog(`Can only select 4 moves for ${el.name}!`, 'system');
+                }
+            };
+            movesDiv.appendChild(btn);
+        });
+    });
+}
+
+let battleState = {
+    active: false, moveSelection: true,
+    p1Elements: [], p2Elements: [], p1Team: [], p2Team: [],
+    p1Current: null, p2Current: null,
+    p1Ready: false, p2Ready: false,
+    p1Moves: {}, p2Moves: {},
+    turn: 'p1',
+    p1AtkBoost: 1, p2AtkBoost: 1,
+    p1DefBoost: 1, p2DefBoost: 1,
+    p1FindUsed: false, p2FindUsed: false,
+    p1BugActive: false, p2BugActive: false,
+    p1CounterLocked: false, p2CounterLocked: false
+};
+
+function updateBattleUI() {
+    const p1 = battleState.p1Current;
+    const p2 = battleState.p2Current;
+    
+    if (p1) {
+        const hpPercent = Math.max(0, (p1.currentHp / p1.maxHp) * 100);
+        const hpFill = document.getElementById('p1HpFill');
+        if (hpFill) hpFill.style.width = `${hpPercent}%`;
+        const activeDiv = document.getElementById('p1Active');
+        const everythingBadge = p1.isEverything ? ' ⭐ EVERYTHING ⭐' : '';
+        if (activeDiv) {
+            activeDiv.innerHTML = `${p1.emoji} ${p1.name}${everythingBadge}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
+            if (p1.isEverything) activeDiv.style.boxShadow = '0 0 15px #00ffc8';
         }
+        const statsDiv = document.getElementById('p1Stats');
+        if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
         
-        if (p2) {
-            const hpPercent = Math.max(0, (p2.currentHp / p2.maxHp) * 100);
-            const hpFill = document.getElementById('p2HpFill');
-            if (hpFill) hpFill.style.width = `${hpPercent}%`;
-            const activeDiv = document.getElementById('p2Active');
-            if (activeDiv) activeDiv.innerHTML = `${p2.emoji} ${p2.name}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
-            const statsDiv = document.getElementById('p2Stats');
-            if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
-            
-            const skillsDiv = document.getElementById('p2Skills');
-            if (skillsDiv) {
-                skillsDiv.innerHTML = '';
-                const moves = battleState.p2Moves[p2.name] || p2.availableMoves.slice(0, 4);
-                moves.forEach(s => {
-                    const btn = document.createElement('button');
-                    btn.textContent = s;
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-purple-500 text-white hover:bg-purple-600';
-                    btn.onclick = () => useSkill(s, 2);
-                    skillsDiv.appendChild(btn);
-                });
-            }
+        const skillsDiv = document.getElementById('p1Skills');
+        if (skillsDiv) {
+            skillsDiv.innerHTML = '';
+            const moves = battleState.p1Moves[p1.name] || p1.availableMoves.slice(0, 4);
+            moves.forEach(s => {
+                const isOHKO = s.includes('(OHKO)');
+                const btn = document.createElement('button');
+                btn.textContent = s;
+                btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isOHKO ? 'bg-pink-600 text-white hover:bg-pink-700 animate-pulse' : 'bg-purple-500 text-white hover:bg-purple-600'}`;
+                if (isOHKO) btn.style.boxShadow = '0 0 8px #ff00ff';
+                btn.onclick = () => useSkill(s, 1);
+                skillsDiv.appendChild(btn);
+            });
         }
     }
-
-    function useSkill(skill, player) {
-        if (!battleState.active) return;
+    
+    if (p2) {
+        const hpPercent = Math.max(0, (p2.currentHp / p2.maxHp) * 100);
+        const hpFill = document.getElementById('p2HpFill');
+        if (hpFill) hpFill.style.width = `${hpPercent}%`;
+        const activeDiv = document.getElementById('p2Active');
+        const everythingBadge = p2.isEverything ? ' ⭐ EVERYTHING ⭐' : '';
+        if (activeDiv) {
+            activeDiv.innerHTML = `${p2.emoji} ${p2.name}${everythingBadge}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
+            if (p2.isEverything) activeDiv.style.boxShadow = '0 0 15px #00ffc8';
+        }
+        const statsDiv = document.getElementById('p2Stats');
+        if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
         
-        const isP1 = player === 1;
-        const attacker = isP1 ? battleState.p1Current : battleState.p2Current;
-        const defender = isP1 ? battleState.p2Current : battleState.p1Current;
-
-        if (!attacker || !defender) {
-            addBattleLog('No active element!', 'system');
-            return;
+        const skillsDiv = document.getElementById('p2Skills');
+        if (skillsDiv) {
+            skillsDiv.innerHTML = '';
+            const moves = battleState.p2Moves[p2.name] || p2.availableMoves.slice(0, 4);
+            moves.forEach(s => {
+                const isOHKO = s.includes('(OHKO)');
+                const btn = document.createElement('button');
+                btn.textContent = s;
+                btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isOHKO ? 'bg-pink-600 text-white hover:bg-pink-700 animate-pulse' : 'bg-purple-500 text-white hover:bg-purple-600'}`;
+                if (isOHKO) btn.style.boxShadow = '0 0 8px #ff00ff';
+                btn.onclick = () => useSkill(s, 2);
+                skillsDiv.appendChild(btn);
+            });
         }
+    }
+}
 
-        // Ultra Instinct dodge
-        if (defender.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発' && skill !== 'Counter') {
-            defender.dodgesLeft--;
-            addBattleLog(`${defender.name} DODGED! ${defender.dodgesLeft} dodges left!`, 'dodge');
-            updateBattleUI();
-            endTurn();
-            return;
-        }
+function useSkill(skill, player) {
+    if (!battleState.active) return;
+    
+    const isP1 = player === 1;
+    const attacker = isP1 ? battleState.p1Current : battleState.p2Current;
+    const defender = isP1 ? battleState.p2Current : battleState.p1Current;
+
+    if (!attacker || !defender) {
+        addBattleLog('No active element!', 'system');
+        return;
+    }
+    
+    const isOHKO = skill.includes('(OHKO)');
+    if (isOHKO) {
+        const ohkoSuccess = Math.random() < 0.3;
+        showOHKOAnimation(skill, attacker.name, defender.name, ohkoSuccess);
         
-        // iPad Screen Protector
-        if (defender.name === 'iPad' && defender.screenProtector && !defender.screenUsed) {
-            defender.screenUsed = true;
-            addBattleLog(`iPad's Screen Protector shattered! 💥💔`, 'block');
+        if (ohkoSuccess) {
+            defender.currentHp = 0;
             updateBattleUI();
+            addBattleLog(`💀 ${defender.name} was instantly KO'd by ${skill}! 💀`, 'ohko');
+            endTurn();
+            return;
+        } else {
+            addBattleLog(`${attacker.name}'s ${skill} missed! (30% chance)`, 'damage');
             endTurn();
             return;
         }
+    }
+    
+    if (attacker.isEverything) {
+        addBattleLog(`⭐ ${attacker.name} (EVERYTHING) radiates cosmic energy!`, 'everything');
+    }
 
-        // Struggle always works and deals damage
-        if (skill === 'Struggle') {
-            let damage = Math.floor(attacker.baseAtk * 0.4);
-            damage = Math.max(1, damage);
-            defender.currentHp -= damage;
-            addBattleLog(`${attacker.name} used STRUGGLE! Dealt ${damage} damage!`, 'damage');
-            updateBattleUI();
-            endTurn();
+    if (defender.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発' && skill !== 'Counter') {
+        defender.dodgesLeft--;
+        addBattleLog(`${defender.name} DODGED! ${defender.dodgesLeft} dodges left!`, 'dodge');
+        updateBattleUI();
+        endTurn();
+        return;
+    }
+    
+    if (defender.name === 'iPad' && defender.screenProtector && !defender.screenUsed) {
+        defender.screenUsed = true;
+        addBattleLog(`iPad's Screen Protector shattered! 💥💔`, 'block');
+        updateBattleUI();
+        endTurn();
+        return;
+    }
+
+    if (skill === 'Struggle') {
+        let damage = Math.floor(attacker.baseAtk * 0.25);
+        damage = Math.max(1, damage);
+        defender.currentHp -= damage;
+        addBattleLog(`${attacker.name} used STRUGGLE! Dealt ${damage} damage!`, 'damage');
+        updateBattleUI();
+        endTurn();
+        return;
+    }
+
+    if (skill === 'Counter') {
+        if ((isP1 && battleState.p1CounterLocked) || (!isP1 && battleState.p2CounterLocked)) {
+            addBattleLog('Counter cannot be used twice in a row!', 'system');
             return;
         }
+        addBattleLog(`${attacker.name} used COUNTER!`, 'skill');
+        const dmg = Math.floor(attacker.baseAtk * 0.5);
+        defender.currentHp -= dmg;
+        addBattleLog(`${attacker.name} countered for ${dmg} damage!`, 'damage');
+        if (isP1) battleState.p1CounterLocked = true;
+        else battleState.p2CounterLocked = true;
+        setTimeout(() => {
+            if (isP1) battleState.p1CounterLocked = false;
+            else battleState.p2CounterLocked = false;
+        }, 2000);
+        updateBattleUI();
+        endTurn();
+        return;
+    }
 
-        // Counter skill
-        if (skill === 'Counter') {
-            if ((isP1 && battleState.p1CounterLocked) || (!isP1 && battleState.p2CounterLocked)) {
-                addBattleLog('Counter cannot be used twice in a row!', 'system');
-                return;
-            }
-            addBattleLog(`${attacker.name} used COUNTER!`, 'skill');
-            const dmg = Math.floor(attacker.baseAtk * 0.8);
-            defender.currentHp -= dmg;
-            addBattleLog(`${attacker.name} countered for ${dmg} damage!`, 'damage');
-            if (isP1) battleState.p1CounterLocked = true;
-            else battleState.p2CounterLocked = true;
-            setTimeout(() => {
-                if (isP1) battleState.p1CounterLocked = false;
-                else battleState.p2CounterLocked = false;
-            }, 2000);
-            updateBattleUI();
-            endTurn();
+    if (skill === 'Heal Punch') {
+        const dmg = Math.floor(attacker.baseAtk * 0.45);
+        const heal = Math.floor(dmg * 0.33);
+        defender.currentHp -= dmg;
+        attacker.currentHp = Math.min(attacker.maxHp, attacker.currentHp + heal);
+        addBattleLog(`${attacker.name} used HEAL PUNCH! Dealt ${dmg} damage, healed ${heal} HP!`, 'skill');
+        updateBattleUI();
+        endTurn();
+        return;
+    }
+
+    if (skill === '大爆発') {
+        addBattleLog(`${attacker.name} used 大爆発! MASSIVE EXPLOSION!`, 'skill');
+        const dmg = attacker.baseAtk * 1.8;
+        defender.currentHp -= dmg;
+        attacker.currentHp = 0;
+        addBattleLog(`${attacker.name} dealt ${Math.floor(dmg)} damage but fainted!`, 'damage');
+        if (defender.currentHp <= 0) addBattleLog(`${defender.name} fainted! DRAW!`, 'system');
+        updateBattleUI();
+        endTurn();
+        return;
+    }
+
+    if (skill === 'Forge') {
+        const dmg = Math.floor(attacker.baseAtk * 0.6);
+        defender.currentHp -= dmg;
+        if (isP1) { battleState.p1AtkBoost *= 1.3; battleState.p1DefBoost *= 1.3; }
+        else { battleState.p2AtkBoost *= 1.3; battleState.p2DefBoost *= 1.3; }
+        addBattleLog(`${attacker.name} used FORGE! Dealt ${dmg} damage, boosted stats! (1.3x)`, 'skill');
+        updateBattleUI();
+        endTurn();
+        return;
+    }
+
+    if (skill === 'Find') {
+        if ((isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed)) {
+            addBattleLog('Find can only be used once per match!', 'system');
             return;
         }
+        if (isP1) { battleState.p1FindUsed = true; battleState.p2DefBoost = 0.67; }
+        else { battleState.p2FindUsed = true; battleState.p1DefBoost = 0.67; }
+        addBattleLog(`${attacker.name} used FIND! Enemy defense lowered! (1.5x damage taken)`, 'skill');
+        endTurn();
+        return;
+    }
 
-        // Heal Punch
-        if (skill === 'Heal Punch') {
-            const dmg = Math.floor(attacker.baseAtk * 0.7);
-            const heal = Math.floor(dmg / 4);
-            defender.currentHp -= dmg;
-            attacker.currentHp = Math.min(attacker.maxHp, attacker.currentHp + heal);
-            addBattleLog(`${attacker.name} used HEAL PUNCH! Dealt ${dmg} damage, healed ${heal} HP!`, 'skill');
-            updateBattleUI();
-            endTurn();
-            return;
+    if (skill === 'Bug') {
+        addBattleLog(`${attacker.name} used BUG! 25% chance to immobilize!`, 'skill');
+        if (Math.random() < 0.25) {
+            if (isP1) battleState.p2BugActive = true;
+            else battleState.p1BugActive = true;
+            addBattleLog(`${defender.name} is BUGGED! May not be able to move!`, 'system');
         }
-
-        // 大爆発
-        if (skill === '大爆発') {
-            addBattleLog(`${attacker.name} used 大爆発! MASSIVE EXPLOSION!`, 'skill');
-            const dmg = attacker.baseAtk * 2.5;
-            defender.currentHp -= dmg;
-            attacker.currentHp = 0;
-            addBattleLog(`${attacker.name} dealt ${Math.floor(dmg)} damage but fainted!`, 'damage');
-            if (defender.currentHp <= 0) addBattleLog(`${defender.name} fainted! DRAW!`, 'system');
-            updateBattleUI();
-            endTurn();
-            return;
-        }
-
-        // Forge
-        if (skill === 'Forge') {
-            const dmg = Math.floor(attacker.baseAtk * 0.9);
-            defender.currentHp -= dmg;
-            if (isP1) { battleState.p1AtkBoost *= 1.5; battleState.p1DefBoost *= 1.5; }
-            else { battleState.p2AtkBoost *= 1.5; battleState.p2DefBoost *= 1.5; }
-            addBattleLog(`${attacker.name} used FORGE! Dealt ${dmg} damage, boosted stats! (1.5x)`, 'skill');
-            updateBattleUI();
-            endTurn();
-            return;
-        }
-
-        // Find
-        if (skill === 'Find') {
-            if ((isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed)) {
-                addBattleLog('Find can only be used once per match!', 'system');
-                return;
-            }
-            if (isP1) { battleState.p1FindUsed = true; battleState.p2DefBoost = 0.67; }
-            else { battleState.p2FindUsed = true; battleState.p1DefBoost = 0.67; }
-            addBattleLog(`${attacker.name} used FIND! Enemy defense lowered! (1.5x damage taken)`, 'skill');
-            endTurn();
-            return;
-        }
-
-        // Bug
-        if (skill === 'Bug') {
-            addBattleLog(`${attacker.name} used BUG! 25% chance to immobilize!`, 'skill');
-            if (Math.random() < 0.25) {
-                if (isP1) battleState.p2BugActive = true;
-                else battleState.p1BugActive = true;
-                addBattleLog(`${defender.name} is BUGGED! May not be able to move!`, 'system');
-            }
-            endTurn();
-            return;
-        }
-
-        // Normal damaging move
+        endTurn();
+        return;
+    }
+    
+    const everythingMoves = ['EVERYTHING STRIKE', 'UNIVERSE BREAKER', 'OMNI SLASH', 'GODLY PRESENCE', 'INFINITY BURST', 'REALITY SHATTER', 'DIMENSION TEAR', 'COSMIC RAGE'];
+    if (everythingMoves.includes(skill) && attacker.isEverything) {
+        let bonus = 1.0;
+        let effectMsg = '';
+        
+        if (skill === 'EVERYTHING STRIKE') bonus = 1.2;
+        else if (skill === 'OMNI SLASH') bonus = 1.25;
+        else if (skill === 'GODLY PRESENCE') bonus = 1.15;
+        else if (skill === 'INFINITY BURST') bonus = 1.35;
+        else if (skill === 'UNIVERSE BREAKER') { bonus = 1.4; effectMsg = ' UNIVERSE SHATTERS!'; }
+        else if (skill === 'REALITY SHATTER') { bonus = 1.38; effectMsg = ' REALITY BENDS!'; }
+        else if (skill === 'DIMENSION TEAR') { bonus = 1.3; effectMsg = ' DIMENSIONS COLLAPSE!'; }
+        else if (skill === 'COSMIC RAGE') { bonus = 1.45; effectMsg = ' COSMIC FURY UNLEASHED!'; }
+        
         let mult = calculateDamageMultiplier(attacker, defender);
-        let damage = Math.floor(attacker.baseAtk * 0.6 * mult);
+        let damage = Math.floor(attacker.baseAtk * 0.5 * mult * bonus);
         damage = Math.max(1, damage);
         
         const atkBoost = isP1 ? battleState.p1AtkBoost : battleState.p2AtkBoost;
         const defBoost = isP1 ? battleState.p2DefBoost : battleState.p1DefBoost;
         damage = Math.floor(damage * (atkBoost / defBoost));
         
-        const findActive = (isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed);
-        if (findActive) damage = Math.floor(damage * 1.5);
-        
         defender.currentHp -= damage;
-        
-        let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect! (x0)' : ''));
-        addBattleLog(`${attacker.name} used ${skill}! Dealt ${damage} damage!${eff}`, 'damage');
+        addBattleLog(`⭐ ${attacker.name} used ${skill}!${effectMsg} Dealt ${damage} damage! ⭐`, 'everything');
         updateBattleUI();
         endTurn();
+        return;
     }
 
-    function endTurn() {
-        const p1 = battleState.p1Current;
-        const p2 = battleState.p2Current;
+    let mult = calculateDamageMultiplier(attacker, defender);
+    let damage = Math.floor(attacker.baseAtk * 0.4 * mult);
+    damage = Math.max(1, damage);
+    
+    const atkBoost = isP1 ? battleState.p1AtkBoost : battleState.p2AtkBoost;
+    const defBoost = isP1 ? battleState.p2DefBoost : battleState.p1DefBoost;
+    damage = Math.floor(damage * (atkBoost / defBoost));
+    
+    const findActive = (isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed);
+    if (findActive) damage = Math.floor(damage * 1.3);
+    
+    defender.currentHp -= damage;
+    
+    let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect! (x0)' : ''));
+    addBattleLog(`${attacker.name} used ${skill}! Dealt ${damage} damage!${eff}`, 'damage');
+    updateBattleUI();
+    endTurn();
+}
 
-        if (p1 && p1.currentHp <= 0) {
-            addBattleLog(`${p1.name} fainted!`, 'system');
-            const idx = battleState.p1Team.findIndex(e => e === p1);
-            if (idx + 1 < battleState.p1Team.length) {
-                battleState.p1Current = battleState.p1Team[idx + 1];
-                addBattleLog(`Player 1 sends out ${battleState.p1Current.name}!`, 'system');
-                updateBattleUI();
-            } else {
-                addBattleLog('🎉 PLAYER 2 WINS THE BATTLE! 🎉', 'system');
-                battleState.active = false;
-                return;
-            }
-        }
+function endTurn() {
+    const p1 = battleState.p1Current;
+    const p2 = battleState.p2Current;
 
-        if (p2 && p2.currentHp <= 0) {
-            addBattleLog(`${p2.name} fainted!`, 'system');
-            const idx = battleState.p2Team.findIndex(e => e === p2);
-            if (idx + 1 < battleState.p2Team.length) {
-                battleState.p2Current = battleState.p2Team[idx + 1];
-                addBattleLog(`Player 2 sends out ${battleState.p2Current.name}!`, 'system');
-                updateBattleUI();
-            } else {
-                addBattleLog('🎉 PLAYER 1 WINS THE BATTLE! 🎉', 'system');
-                battleState.active = false;
-                return;
-            }
-        }
-
-        battleState.turn = battleState.turn === 'p1' ? 'p2' : 'p1';
-        addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'}'s turn!`, 'system');
-
-        if ((battleState.turn === 'p2' && battleState.p1BugActive) || (battleState.turn === 'p1' && battleState.p2BugActive)) {
-            if (Math.random() < 0.25) {
-                addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'} is BUGGED and cannot move!`, 'system');
-                endTurn();
-            }
-        }
-    }
-
-    function startBattle() {
-        // Check if all elements have 4 moves selected
-        for (const el of battleState.p1Team) {
-            const moves = battleState.p1Moves[el.name];
-            if (!moves || moves.length < 4) {
-                addBattleLog(`Player 1: ${el.name} needs 4 moves selected!`, 'system');
-                return;
-            }
-        }
-        for (const el of battleState.p2Team) {
-            const moves = battleState.p2Moves[el.name];
-            if (!moves || moves.length < 4) {
-                addBattleLog(`Player 2: ${el.name} needs 4 moves selected!`, 'system');
-                return;
-            }
-        }
-        
-        if (battleState.p1Team.length === 0 || battleState.p2Team.length === 0) {
-            addBattleLog('Both players must select elements!', 'system');
+    if (p1 && p1.currentHp <= 0) {
+        addBattleLog(`${p1.name} fainted!`, 'system');
+        const idx = battleState.p1Team.findIndex(e => e === p1);
+        if (idx + 1 < battleState.p1Team.length) {
+            battleState.p1Current = battleState.p1Team[idx + 1];
+            addBattleLog(`Player 1 sends out ${battleState.p1Current.name}!`, 'system');
+            updateBattleUI();
+        } else {
+            addBattleLog('🎉 PLAYER 2 WINS THE BATTLE! 🎉', 'system');
+            battleState.active = false;
             return;
         }
-
-        battleState.active = true;
-        battleState.p1Current = battleState.p1Team[0];
-        battleState.p2Current = battleState.p2Team[0];
-        battleState.turn = 'p1';
-        battleState.p1AtkBoost = battleState.p2AtkBoost = 1;
-        battleState.p1DefBoost = battleState.p2DefBoost = 1;
-        battleState.p1FindUsed = battleState.p2FindUsed = false;
-        battleState.p1BugActive = battleState.p2BugActive = false;
-        battleState.p1CounterLocked = battleState.p2CounterLocked = false;
-
-        updateBattleUI();
-        document.getElementById('battleSetup').style.display = 'none';
-        document.getElementById('battleArena').style.display = 'block';
-        addBattleLog('⚔️ BATTLE STARTED! ⚔️', 'system');
-        addBattleLog(`Player 1: ${battleState.p1Team.map(e => e.name).join(', ')}`, 'system');
-        addBattleLog(`Player 2: ${battleState.p2Team.map(e => e.name).join(', ')}`, 'system');
-        addBattleLog(`Player 1 starts with ${battleState.p1Current.name}!`, 'system');
-        addBattleLog('Click on a skill button to attack!', 'system');
     }
 
-    // Event listeners
-    document.addEventListener('DOMContentLoaded', function() {
-        const battleBtn = document.getElementById('battleBtn');
-        if (battleBtn) {
-            battleBtn.addEventListener('click', () => {
-                const modal = document.getElementById('battleModal');
-                if (modal) modal.style.display = 'block';
-            });
+    if (p2 && p2.currentHp <= 0) {
+        addBattleLog(`${p2.name} fainted!`, 'system');
+        const idx = battleState.p2Team.findIndex(e => e === p2);
+        if (idx + 1 < battleState.p2Team.length) {
+            battleState.p2Current = battleState.p2Team[idx + 1];
+            addBattleLog(`Player 2 sends out ${battleState.p2Current.name}!`, 'system');
+            updateBattleUI();
+        } else {
+            addBattleLog('🎉 PLAYER 1 WINS THE BATTLE! 🎉', 'system');
+            battleState.active = false;
+            return;
         }
+    }
 
-        const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
-        if (p1GetCodeBtn && window.generateBattleCode) {
-            p1GetCodeBtn.addEventListener('click', () => {
-                const code = window.generateBattleCode();
-                const textarea = document.getElementById('p1Code');
-                if (textarea) {
-                    textarea.value = code;
-                    textarea.style.background = '#e8f5e9';
-                    setTimeout(() => textarea.style.background = '', 1000);
-                }
-                addBattleLog('Player 1: Battle code generated!', 'system');
-            });
-        }
+    battleState.turn = battleState.turn === 'p1' ? 'p2' : 'p1';
+    addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'}'s turn!`, 'system');
 
-        const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
-        if (p2GetCodeBtn && window.generateBattleCode) {
-            p2GetCodeBtn.addEventListener('click', () => {
-                const code = window.generateBattleCode();
-                const textarea = document.getElementById('p2Code');
-                if (textarea) {
-                    textarea.value = code;
-                    textarea.style.background = '#e8f5e9';
-                    setTimeout(() => textarea.style.background = '', 1000);
-                }
-                addBattleLog('Player 2: Battle code generated!', 'system');
-            });
+    if ((battleState.turn === 'p2' && battleState.p1BugActive) || (battleState.turn === 'p1' && battleState.p2BugActive)) {
+        if (Math.random() < 0.25) {
+            addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'} is BUGGED and cannot move!`, 'system');
+            endTurn();
         }
+    }
+}
 
-        const p1LoadBtn = document.getElementById('p1LoadBtn');
-        if (p1LoadBtn) {
-            p1LoadBtn.addEventListener('click', () => {
-                const code = document.getElementById('p1Code').value;
-                if (!code) { 
-                    document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
-                    return; 
-                }
-                loadPlayerElements(1, code);
-            });
+function startBattle() {
+    for (const el of battleState.p1Team) {
+        const moves = battleState.p1Moves[el.name];
+        if (!moves || moves.length < 4) {
+            addBattleLog(`Player 1: ${el.name} needs 4 moves selected!`, 'system');
+            return;
         }
+    }
+    for (const el of battleState.p2Team) {
+        const moves = battleState.p2Moves[el.name];
+        if (!moves || moves.length < 4) {
+            addBattleLog(`Player 2: ${el.name} needs 4 moves selected!`, 'system');
+            return;
+        }
+    }
+    
+    if (battleState.p1Team.length === 0 || battleState.p2Team.length === 0) {
+        addBattleLog('Both players must select elements!', 'system');
+        return;
+    }
 
-        const p2LoadBtn = document.getElementById('p2LoadBtn');
-        if (p2LoadBtn) {
-            p2LoadBtn.addEventListener('click', () => {
-                const code = document.getElementById('p2Code').value;
-                if (!code) { 
-                    document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
-                    return; 
-                }
-                loadPlayerElements(2, code);
-            });
-        }
+    battleState.active = true;
+    battleState.p1Current = battleState.p1Team[0];
+    battleState.p2Current = battleState.p2Team[0];
+    battleState.turn = 'p1';
+    battleState.p1AtkBoost = battleState.p2AtkBoost = 1;
+    battleState.p1DefBoost = battleState.p2DefBoost = 1;
+    battleState.p1FindUsed = battleState.p2FindUsed = false;
+    battleState.p1BugActive = battleState.p2BugActive = false;
+    battleState.p1CounterLocked = battleState.p2CounterLocked = false;
 
-        const startBtn = document.getElementById('startBattleBtn');
-        if (startBtn) {
-            startBtn.addEventListener('click', startBattle);
-        }
+    updateBattleUI();
+    document.getElementById('battleSetup').style.display = 'none';
+    document.getElementById('battleArena').style.display = 'block';
+    addBattleLog('⚔️ BATTLE STARTED! ⚔️', 'system');
+    addBattleLog(`Player 1: ${battleState.p1Team.map(e => e.name + (e.isEverything ? ' ⭐' : '')).join(', ')}`, 'system');
+    addBattleLog(`Player 2: ${battleState.p2Team.map(e => e.name + (e.isEverything ? ' ⭐' : '')).join(', ')}`, 'system');
+    addBattleLog(`Player 1 starts with ${battleState.p1Current.name}!`, 'system');
+    addBattleLog('✨ OHKO MOVES: 30% chance to instantly KO! ✨', 'ohko');
+    addBattleLog('Click on a skill button to attack!', 'system');
+}
 
-        const resetBattleBtn = document.getElementById('resetBattleBtn');
-        if (resetBattleBtn) {
-            resetBattleBtn.addEventListener('click', () => {
-                battleState.active = false;
-                battleState.moveSelection = true;
-                battleState.p1Ready = battleState.p2Ready = false;
-                battleState.p1Elements = battleState.p2Elements = [];
-                battleState.p1Team = battleState.p2Team = [];
-                battleState.p1Current = battleState.p2Current = null;
-                battleState.p1Moves = {};
-                battleState.p2Moves = {};
-                const setup = document.getElementById('battleSetup');
-                const arena = document.getElementById('battleArena');
-                if (setup) setup.style.display = 'block';
-                if (arena) arena.style.display = 'none';
-                const p1El = document.getElementById('p1Elements');
-                const p2El = document.getElementById('p2Elements');
-                if (p1El) p1El.innerHTML = '';
-                if (p2El) p2El.innerHTML = '';
-                const p1TeamDiv = document.getElementById('p1Team');
-                const p2TeamDiv = document.getElementById('p2Team');
-                if (p1TeamDiv) p1TeamDiv.innerHTML = '';
-                if (p2TeamDiv) p2TeamDiv.innerHTML = '';
-                const p1MoveDiv = document.getElementById('p1MoveSelect');
-                const p2MoveDiv = document.getElementById('p2MoveSelect');
-                if (p1MoveDiv) p1MoveDiv.innerHTML = '';
-                if (p2MoveDiv) p2MoveDiv.innerHTML = '';
-                const p1Code = document.getElementById('p1Code');
-                const p2Code = document.getElementById('p2Code');
-                if (p1Code) p1Code.value = '';
-                if (p2Code) p2Code.value = '';
-                const startBtnEl = document.getElementById('startBattleBtn');
-                if (startBtnEl) startBtnEl.disabled = true;
-                const log = document.getElementById('battleLog');
-                if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
-            });
-        }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    const battleBtn = document.getElementById('battleBtn');
+    if (battleBtn) {
+        battleBtn.addEventListener('click', () => {
+            const modal = document.getElementById('battleModal');
+            if (modal) modal.style.display = 'block';
+        });
+    }
+
+    const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
+    if (p1GetCodeBtn) {
+        p1GetCodeBtn.addEventListener('click', () => {
+            const code = window.generateBattleCode();
+            const textarea = document.getElementById('p1Code');
+            if (textarea) {
+                textarea.value = code;
+                textarea.style.background = '#e8f5e9';
+                setTimeout(() => textarea.style.background = '', 1000);
+            }
+            addBattleLog('Player 1: Battle code generated!', 'system');
+        });
+    }
+
+    const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
+    if (p2GetCodeBtn) {
+        p2GetCodeBtn.addEventListener('click', () => {
+            const code = window.generateBattleCode();
+            const textarea = document.getElementById('p2Code');
+            if (textarea) {
+                textarea.value = code;
+                textarea.style.background = '#e8f5e9';
+                setTimeout(() => textarea.style.background = '', 1000);
+            }
+            addBattleLog('Player 2: Battle code generated!', 'system');
+        });
+    }
+
+    const p1LoadBtn = document.getElementById('p1LoadBtn');
+    if (p1LoadBtn) {
+        p1LoadBtn.addEventListener('click', () => {
+            const code = document.getElementById('p1Code').value;
+            if (!code) { 
+                document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
+                return; 
+            }
+            loadPlayerElements(1, code);
+        });
+    }
+
+    const p2LoadBtn = document.getElementById('p2LoadBtn');
+    if (p2LoadBtn) {
+        p2LoadBtn.addEventListener('click', () => {
+            const code = document.getElementById('p2Code').value;
+            if (!code) { 
+                document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
+                return; 
+            }
+            loadPlayerElements(2, code);
+        });
+    }
+
+    const startBtn = document.getElementById('startBattleBtn');
+    if (startBtn) {
+        startBtn.addEventListener('click', startBattle);
+    }
+
+    const resetBattleBtn = document.getElementById('resetBattleBtn');
+    if (resetBattleBtn) {
+        resetBattleBtn.addEventListener('click', () => {
+            battleState.active = false;
+            battleState.moveSelection = true;
+            battleState.p1Ready = battleState.p2Ready = false;
+            battleState.p1Elements = battleState.p2Elements = [];
+            battleState.p1Team = battleState.p2Team = [];
+            battleState.p1Current = battleState.p2Current = null;
+            battleState.p1Moves = {};
+            battleState.p2Moves = {};
+            const setup = document.getElementById('battleSetup');
+            const arena = document.getElementById('battleArena');
+            if (setup) setup.style.display = 'block';
+            if (arena) arena.style.display = 'none';
+            const p1El = document.getElementById('p1Elements');
+            const p2El = document.getElementById('p2Elements');
+            if (p1El) p1El.innerHTML = '';
+            if (p2El) p2El.innerHTML = '';
+            const p1TeamDiv = document.getElementById('p1Team');
+            const p2TeamDiv = document.getElementById('p2Team');
+            if (p1TeamDiv) p1TeamDiv.innerHTML = '';
+            if (p2TeamDiv) p2TeamDiv.innerHTML = '';
+            const p1MoveDiv = document.getElementById('p1MoveSelect');
+            const p2MoveDiv = document.getElementById('p2MoveSelect');
+            if (p1MoveDiv) p1MoveDiv.innerHTML = '';
+            if (p2MoveDiv) p2MoveDiv.innerHTML = '';
+            const p1Code = document.getElementById('p1Code');
+            const p2Code = document.getElementById('p2Code');
+            if (p1Code) p1Code.value = '';
+            if (p2Code) p2Code.value = '';
+            const startBtnEl = document.getElementById('startBattleBtn');
+            if (startBtnEl) startBtnEl.disabled = true;
+            const log = document.getElementById('battleLog');
+            if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
+        });
+    }
+});
     </script>
     <!-- Battle Modal -->
     <div id="battleModal" class="modal-overlay"><div class="modal-box" style="max-width:950px"><button class="modal-close" data-close="battleModal">&times;</button>
