@@ -967,6 +967,51 @@ input[type=checkbox] {width:auto;}
 @keyframes everythingAuroraFlow {0%,100%{background-position:0% 0%}50%{background-position:100% 100%}}
 @keyframes everythingIconFloat {0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @media(prefers-reduced-motion:reduce){.sculpted-card.everything-showpiece .everything-foil,.everything-aurora,.everything-satellites,.sculpted-card.everything-showpiece .card-stage .el-emoji{animation:none!important;}}
+</style><style>/* Modifier identity is driven by flags rather than a name hash. */
+.el-card.sculpted-card.modifier-card:not(.everything-showpiece):not(.exclusive-showpiece):not(.secret-showpiece) {background:linear-gradient(145deg,hsl(var(--card-hue) 45% 24%),hsl(var(--card-hue) 45% 8%) 75%)!important;border-color:hsl(var(--card-hue) 70% 65%)!important;}
+.modifier-pattern {position:absolute;inset:5px;border-radius:inherit;opacity:.16;pointer-events:none;z-index:0;overflow:hidden;}
+.modifier-mark {position:absolute;right:9px;top:24px;font-size:12px;color:hsl(var(--card-hue) 80% 80%);opacity:.7;pointer-events:none;}
+.modifier-accents {position:absolute;left:7px;bottom:8px;display:flex;flex-direction:column;gap:3px;pointer-events:none;}
+.modifier-accents i {font-size:7px;line-height:1;font-style:normal;opacity:.65;}
+.modifier-card .card-stage,.modifier-card .el-name,.modifier-card .card-ribbon {position:relative;z-index:1;}
+[data-motif="ice"] .modifier-pattern {background:repeating-conic-gradient(from 15deg at 20% 15%,transparent 0deg 25deg,#d9faff 26deg 28deg,transparent 29deg 60deg);}
+[data-motif="flame"] .modifier-pattern {background:repeating-linear-gradient(70deg,transparent 0 18px,#ffc989 20px,transparent 23px),radial-gradient(ellipse at bottom,#ff7944,transparent 65%);}
+[data-motif="water"] .modifier-pattern {background:repeating-radial-gradient(ellipse at 50% 130%,transparent 0 12px,#b9ffff 13px 14px,transparent 16px 24px);}
+[data-motif="circuit"] .modifier-pattern {background:linear-gradient(90deg,transparent 48%,#bbffff 49% 50%,transparent 51%),linear-gradient(0deg,transparent 48%,#bbffff 49% 50%,transparent 51%);background-size:23px 31px;}
+[data-motif="runes"] .modifier-pattern {border:3px double currentColor;background:repeating-linear-gradient(0deg,transparent 0 18px,currentColor 19px 20px,transparent 21px 36px);mask-image:linear-gradient(90deg,#000,transparent 15% 85%,#000);}
+[data-motif="halo"] .modifier-pattern {background:repeating-radial-gradient(circle at 50% 40%,transparent 0 18px,#fff4bb 19px 20px,transparent 22px 33px);}
+[data-motif="bubbles"] .modifier-pattern {background:radial-gradient(circle at 20% 75%,transparent 8px,currentColor 9px 10px,transparent 11px),radial-gradient(circle at 80% 40%,transparent 5px,currentColor 6px 7px,transparent 8px);}
+[data-motif="fracture"] .modifier-pattern {background:repeating-linear-gradient(135deg,transparent 0 22px,currentColor 23px 24px,transparent 25px 37px);clip-path:polygon(0 0,40% 0,30% 35%,60% 20%,50% 65%,100% 40%,100% 100%,0 100%);}
+[data-motif="void"] .modifier-pattern {background:radial-gradient(ellipse at 50% 40%,#000 10%,transparent 25%,#b48bea 28%,transparent 31%,#000 55%);}
+[data-motif="cosmic"] .modifier-pattern {background:radial-gradient(circle,#fff 1px,transparent 2px);background-size:21px 29px;}
+[data-motif="facets"] .modifier-pattern {background:conic-gradient(from 45deg at 50% 45%,#fff5,transparent,#fff5,transparent,#fff5,transparent,#fff5);}
+[data-motif="mist"] .modifier-pattern {background:repeating-linear-gradient(160deg,transparent,#e9e2ff 16px,transparent 35px);filter:blur(8px);}
+.el-card.sculpted-card[data-modifier="isCyMoney"]:not(.everything-showpiece) {background:linear-gradient(145deg,#124858,#07333c 55%,#07212c)!important;border:1px solid #64e8ed!important;box-shadow:inset 0 1px #caffff66,0 4px 0 #041b21,0 6px 16px #22d3ee20!important;}
+[data-modifier="isCyMoney"]:not(.everything-showpiece) .card-ribbon {color:#a7ffff!important;letter-spacing:1px;}
+[data-modifier="isCyMoney"]:not(.everything-showpiece) .card-stage::before {background:#43f3ff10!important;border:1px solid #6ffaff!important;box-shadow:0 0 12px #22d3ee22!important;}
+[data-modifier="isCyMoney"]:not(.everything-showpiece) .card-orbit {border-color:#67e8f966;}
+[data-modifier="isCyMoney"]:not(.everything-showpiece) .card-stage .el-emoji {filter:drop-shadow(0 3px 4px #0006) drop-shadow(0 0 6px #22d3ee55)!important;}
+[data-modifier="isCyMoney"]:not(.everything-showpiece) .card-footer {color:#67e8f9!important;}
+.everything-showpiece .modifier-pattern,.everything-showpiece .modifier-mark,.everything-showpiece .modifier-accents {display:none;}
+#exclusiveGrid .modifier-mark {font-size:8px;top:18px;right:5px;}
+#cyShopModal .modal-box {border-color:#3d9eac!important;}.cy-upgrade {border-color:#3d9eac88!important;}.cy-upgrade strong {color:var(--teal);}
+#starForgeEffect {position:fixed;inset:0;z-index:100;background:#080619bb;backdrop-filter:blur(10px);display:grid;place-items:center;}
+#starForgeEffect[hidden] {display:none!important;}
+.stellar-activation {position:relative;text-align:center;overflow:hidden;padding:45px 24px 25px;width:min(370px,90vw);border:1px solid #d3b1f2;border-radius:18px 36px 18px 36px;background:radial-gradient(ellipse at 50% 35%,#60396b,#18172b 70%);color:#fff0d0;box-shadow:0 0 50px #ad6deb30;}
+.stellar-star {font-size:72px;line-height:1.4;text-shadow:0 0 20px #fde68a88;animation:stellarIgnite 1.2s ease-out both;position:relative;}
+.stellar-rings {position:absolute;top:24px;left:calc(50% - 67px);width:134px;height:134px;border:1px dashed #ffeac780;border-radius:50%;animation:stellarSpin 1.2s ease-out both;}
+.stellar-rings::after {content:'';position:absolute;inset:13px;border:2px solid #dec4ff50;transform:rotate(45deg);border-radius:18px;}
+.stellar-activation h3 {letter-spacing:.2em;font-size:12px;margin:16px 0 8px;}.stellar-activation p{font-size:11px;color:#d5bddf;}
+.stellar-charge {height:2px;margin-top:24px;background:linear-gradient(90deg,#bba7ff,#fff1bd,#79faff);transform-origin:left;animation:forgeProgress 1.2s ease-out both;}
+.stellar-report {width:100%;max-width:530px;background:var(--ui-panel);border:1px solid var(--ui-edge);border-radius:14px 26px 14px 26px;padding:16px;animation:finisherArrival .4s ease-out;}
+.stellar-report-heading {display:flex;align-items:center;gap:14px;margin-bottom:15px;}.stellar-report-heading>span{font-size:34px;color:var(--gold);}.stellar-report-heading small{font-size:8px;letter-spacing:.16em;color:var(--text-secondary);}.stellar-report-heading h3{font-size:1rem;}
+.stellar-result-cards {display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:10px;padding:5px;}
+#resultArea .stellar-result-cards .sculpted-card {width:100%;min-height:130px;margin:0;}
+#resultArea .stellar-result-cards .card-stage{width:52px;height:52px;}#resultArea .stellar-result-cards .el-name{font-size:.62rem!important;}
+.stellar-changes {margin-top:14px;display:grid;gap:5px;max-height:140px;overflow:auto;}.stellar-changes p{font-size:.66rem;line-height:1.5;padding:7px 10px;background:var(--bg-card);border-left:2px solid #bd99df;border-radius:4px 9px 9px 4px;color:var(--text-secondary);}
+@keyframes stellarIgnite {0%{transform:scale(.3) rotate(-40deg);opacity:.2}65%{transform:scale(1.12) rotate(10deg);opacity:1}100%{transform:scale(1)}}
+@keyframes stellarSpin {to{transform:rotate(180deg)}}
+@media(prefers-reduced-motion:reduce){.stellar-star,.stellar-rings,.stellar-charge,.stellar-report{animation:none!important;}}
 </style></head>
 <body>
     <script>
@@ -990,8 +1035,9 @@ input[type=checkbox] {width:auto;}
                     <span class="text-[0.65rem] ml-1" style="color:var(--text-secondary)">+<span id="cpm">0</span>/min</span>
                 </div>
                 <button id="shopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
+                <button id="cyShopBtn" data-progression hidden class="text-xs px-3 py-1 rounded-lg">💎 CyMoney Workshop</button>
                 <button id="battleBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(239,68,68,0.12);color:#ef4444">⚔️ Battle</button>
-                <div id="cyMoneyDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span>
+                <div id="cyMoneyDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span><span id="cyIncomeRate" style="font-size:.6rem;opacity:.8">0/min</span>
                 </div>
             </div>
         </header>
@@ -1085,7 +1131,7 @@ input[type=checkbox] {width:auto;}
             <p id="prestigeRequirements" class="text-sm mb-3" style="line-height:1.7"></p>
             <details class="text-xs mb-3"><summary>Required collection</summary><p id="prestigeMissing" style="max-height:150px;overflow:auto;margin-top:8px"></p></details>
             <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires 250 keys, all ranked elements, and 1,000,000 coins currently held. Rank-excluded and exclusive elements are not required.</p>
-            <p class="text-sm mb-4" style="color:#eab308">Confirming spends 250 keys and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ordinary upgrades. Exclusive elements, CyMoney, prestige coins and permanent upgrades are kept. You receive exactly 1 prestige coin.</p>
+            <p class="text-sm mb-4" style="color:#eab308">Confirming spends 250 keys and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ordinary upgrades. Exclusive elements, CyMoney, CyMoney upgrades, prestige coins and permanent upgrades are kept. You receive exactly 1 prestige coin.</p>
             <button id="confirmPrestige" class="text-sm px-4 py-2 rounded-lg disabled:opacity-40" style="background:var(--gold);color:#1a1a2e" disabled>Confirm Prestige · Earn 1 coin</button>
         </div></div>
         <div id="prestigeShopModal" class="modal-overlay"><div class="modal-box" style="max-width:650px">
@@ -1095,6 +1141,15 @@ input[type=checkbox] {width:auto;}
             <p class="text-xs mb-4" style="color:var(--text-secondary)">Every level costs 1 prestige coin. All purchases survive reset and prestige. Forge upgrades apply on the next activation; stock upgrades apply on the next restock.</p>
             <div id="prestigeUpgradeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
         </div></div>
+
+        <div id="cyShopModal" class="modal-overlay"><div class="modal-box" style="max-width:650px">
+            <button class="modal-close" data-close="cyShopModal">&times;</button>
+            <h2 class="font-display text-xl mb-2">💎 CyMoney Workshop</h2>
+            <p id="cyShopBalance" class="text-sm mb-2"></p>
+            <p class="text-xs mb-4" style="color:var(--text-secondary)">Each CyMoney element produces 1 CyMoney per minute while this tab is active. Upgrade prices rise with each level. CyMoney upgrades survive Prestige; ordinary Reset clears them.</p>
+            <div id="cyUpgradeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div></div>
+        <div id="starForgeEffect" hidden role="status" aria-live="polite"><div class="stellar-activation"><div class="stellar-rings"></div><div class="stellar-star">✦</div><h3>STAR FORGE</h3><p>Constellations align. New power awakens.</p><div class="stellar-charge"></div></div></div>
 
         <!-- Loading -->
         <div id="loader" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.5);backdrop-filter:blur(3px)">
@@ -1530,6 +1585,8 @@ input[type=checkbox] {width:auto;}
             <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections, notifications and Resonance Arena, with jewel-like exclusive cards and cinematic OHKO finishers.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Strict battle turns and repeat-click guards. All 436 skill labels renamed.</li>
+                <li><span class="changelog-tag tag-ui">UI</span> Distinct modifier colors, patterns and sigils; CyMoney cards feature a cyan crystal design and CyMoney label. Star Forge has an animated activation and collectible-card results.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Each CyMoney element earns 1 CyMoney per minute in the active tab. The CyMoney Workshop offers 11 upgrade types; its upgrades survive Prestige.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Prestige: collect every ranked element, hold 250 keys and 1,000,000 coins, then reset for 1 prestige coin. Unlock 12 permanent upgrade types in the Prestige Shop, including Swift Forging.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Opening a lock now announces: “You hear a lock being broken...”</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Online Battle rooms with synchronized combat and disconnect handling, alongside Local Battle.</li>
@@ -3074,10 +3131,10 @@ input[type=checkbox] {width:auto;}
             return EVERYTHING_REQUIRED.every(k=>!!el[k]);
         }
         function checkIsCyMoney(el){
-            return el.isCyMoney === true;
+            return !!el.isCyMoney;
         }
         function stripToEverything(el){
-            ALL_MOD_FLAGS.forEach(k=>{if(k!=='isExclusive')delete el[k];});
+            ALL_MOD_FLAGS.forEach(k=>{if(k!=='isExclusive'&&k!=='isCyMoney')delete el[k];});
             el.isEverything=true;
         }
 
@@ -3289,7 +3346,7 @@ window.generateBattleCode = function() {
                 if(el.isVoid) base=Math.max(1,base-2);
                 r+=base;
             });
-            return r*(1+.25*prestigeLevel('income'));
+            return r*(1+.25*prestigeLevel('income'))*(1+.2*cyLevel('income'));
         }
 
         function tickCoins() {
@@ -3318,6 +3375,8 @@ window.generateBattleCode = function() {
         function updateCyMoneyDisplay(){
             updateProgressionUI();
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
+            $('cyIncomeRate').textContent=cyIncomeRate().toLocaleString(undefined,{maximumFractionDigits:2})+'/min';
+            if($('cyShopModal').style.display==='block')renderCyShop();
         }
 
 
@@ -3343,9 +3402,9 @@ window.generateBattleCode = function() {
             gs.shopRefresh=Date.now(); gs.shopStock={};
             Object.keys(SHOP_PACKS).forEach(id=>{
                 const p=SHOP_PACKS[id];
-                if(Math.random()<p.stockChance) gs.shopStock[id]=Math.ceil(Math.random()*p.maxStock)+prestigeLevel('stock');
+                if(Math.random()<p.stockChance) gs.shopStock[id]=Math.ceil(Math.random()*p.maxStock)+prestigeLevel('stock')+cyLevel('stock');
             });
-            if(!gs.shopStock.common) gs.shopStock.common=2+prestigeLevel('stock');
+            if(!gs.shopStock.common) gs.shopStock.common=2+prestigeLevel('stock')+cyLevel('stock');
             renderShop(); save();
         }
 
@@ -3562,6 +3621,58 @@ window.generateBattleCode = function() {
             if(!p.upgrades||typeof p.upgrades!=='object')p.upgrades={};
             return p;
         }
+        const CY_UPGRADES=[
+            {id:'forgeSeed',name:'Cyan Infusion',max:1,cost:1,desc:'Star Forge gives up to 2 eligible elements the CyMoney modifier.'},
+            {id:'yield',name:'Crystal Yield',max:8,cost:5,desc:'+25% CyMoney income per level.'},
+            {id:'reach',name:'Stellar Reach',max:5,cost:4,desc:'Star Forge blesses one more element per level.'},
+            {id:'bless',name:'Prismatic Insight',max:3,cost:8,desc:'One extra modifier per selected Forge element per level.'},
+            {id:'cooldown',name:'Cryogenic Forge',max:5,cost:5,desc:'10% shorter Forge cooldown per level, on future activations.'},
+            {id:'infusion',name:'Cyan Spread',max:4,cost:10,desc:'One additional CyMoney infusion per Forge activation per level; needs Cyan Infusion.'},
+            {id:'income',name:'Coin Refraction',max:8,cost:3,desc:'+20% ordinary coin income per level after Shop unlocks.'},
+            {id:'luck',name:'Key Resonance',max:5,cost:6,desc:'+15% random key chance per level.'},
+            {id:'discount',name:'Merchant Prism',max:5,cost:4,desc:'5% cheaper Shop packs per level, combined discounts capped at 75%.'},
+            {id:'restock',name:'Supply Conduit',max:5,cost:4,desc:'10% faster Shop restocks per level.'},
+            {id:'stock',name:'Crystal Shelves',max:5,cost:3,desc:'One extra pack per stocked category per level on restock.'}
+        ];
+        function cyLevel(id){
+            if(id==='forgeSeed')return gs.sfUpgraded?1:0;
+            const def=CY_UPGRADES.find(u=>u.id===id),n=Number(gs.cyUpgrades?.[id]);
+            return def&&Number.isFinite(n)?Math.max(0,Math.min(def.max,Math.floor(n))):0;
+        }
+        function cyIncomeRate(){return elements.filter(e=>!!e.isCyMoney).length*(1+.25*cyLevel('yield'));}
+        let cyLastTick=Date.now();
+        function tickCyIncome(){
+            const now=Date.now(),elapsed=Math.max(0,Math.min(60000,now-cyLastTick));cyLastTick=now;
+            if(document.hidden)return;
+            const savedProgress=Number(gs.cyProgress);
+            const accrued=(Number.isFinite(savedProgress)?Math.max(0,savedProgress):0)+cyIncomeRate()*elapsed/60000;
+            const whole=Math.floor(accrued+1e-9);gs.cyProgress=Math.max(0,accrued-whole);
+            if(whole){gs.cyMoney=(gs.cyMoney||0)+whole;updateCyMoneyDisplay();save();}
+            $('cyIncomeRate').textContent=cyIncomeRate().toLocaleString(undefined,{maximumFractionDigits:2})+'/min';
+        }
+        function purchaseCyUpgrade(id){
+            const u=CY_UPGRADES.find(u=>u.id===id);if(!u||!gs.cyMoneyUnlocked)return false;
+            const level=cyLevel(id),cost=u.cost*(level+1);
+            if(level>=u.max||(gs.cyMoney||0)<cost||(id==='infusion'&&!gs.sfUpgraded)||(id==='forgeSeed'&&!gs.sfUnlocked))return false;
+            tickCyIncome(); // Settle the old rate before changing production.
+            gs.cyMoney-=cost;if(id==='forgeSeed')gs.sfUpgraded=true;
+            else {if(!gs.cyUpgrades||typeof gs.cyUpgrades!=='object')gs.cyUpgrades={};gs.cyUpgrades[id]=level+1;}
+            updateCyMoneyDisplay();save();renderCyShop();renderShop();return true;
+        }
+        function renderCyShop(){
+            $('cyShopBalance').textContent=(gs.cyMoney||0)+' CyMoney · '+cyIncomeRate().toFixed(2)+'/min';
+            const grid=$('cyUpgradeGrid');grid.replaceChildren();
+            for(const u of CY_UPGRADES){
+                const level=cyLevel(u.id),cost=u.cost*(level+1),card=document.createElement('div');card.className='prestige-upgrade cy-upgrade';
+                const title=document.createElement('strong');title.textContent=u.name+' · '+level+'/'+u.max;
+                const desc=document.createElement('p');desc.textContent=u.desc;
+                const buy=document.createElement('button');buy.textContent=level>=u.max?'Max level':cost+' CyMoney';
+                buy.disabled=level>=u.max||(gs.cyMoney||0)<cost||(u.id==='infusion'&&!gs.sfUpgraded)||(u.id==='forgeSeed'&&!gs.sfUnlocked);
+                buy.onclick=()=>purchaseCyUpgrade(u.id);card.append(title,desc,buy);grid.appendChild(card);
+            }
+        }
+        $('cyShopBtn').addEventListener('click',()=>{if(!gs.cyMoneyUnlocked)return;renderCyShop();openModal('cyShopModal');});
+
         const PRESTIGE_UPGRADES=[
             {id:'fast',name:'⚡ Swift Forging',max:1,desc:'Forge 40% faster while keeping the full two-element animation. Your ingredients stay in your collection.'},
             {id:'income',name:'🪙 Coin Multiplier',max:5,desc:'+25% passive coin earnings per level, after Shop unlocks.'},
@@ -3577,8 +3688,8 @@ window.generateBattleCode = function() {
             {id:'hints',name:'📖 Recipe Library',max:1,desc:'Permanently unlock all recipe reveals without spending keys.'}
         ];
         function prestigeLevel(id){const u=PRESTIGE_UPGRADES.find(u=>u.id===id);const n=Number(prestigeData().upgrades[id]);return u&&Number.isFinite(n)?Math.max(0,Math.min(u.max,Math.floor(n))):0;}
-        function shopPrice(pack){return Math.max(1,Math.ceil(pack.price*(1-.1*prestigeLevel('discount'))));}
-        function shopRestockMs(){return 300000*(1-.15*prestigeLevel('restock'));}
+        function shopPrice(pack){return Math.max(1,Math.ceil(pack.price*Math.max(.25,1-.1*prestigeLevel('discount')-.05*cyLevel('discount'))));}
+        function shopRestockMs(){return 300000*(1-.15*prestigeLevel('restock'))*(1-.1*cyLevel('restock'));}
         function prestigeRequirements(){
             const owned=new Set(elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey).map(e=>e.name.toLowerCase()));
             const all=rankedCatalog(),missing=all.filter(n=>!owned.has(n.toLowerCase()));
@@ -3652,6 +3763,23 @@ window.generateBattleCode = function() {
             toggle.title=panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage';
         });
         // Sculpted card anatomy shared by full renders and freshly discovered cards.
+        const MODIFIER_STYLES={"isCyMoney": {"label": "CyMoney", "hue": 185, "sigil": "◇", "family": "circuit"}, "isFatalError": {"label": "FatalError", "hue": 350, "sigil": "⨯", "family": "fracture"}, "isError": {"label": "Error", "hue": 0, "sigil": "!", "family": "fracture"}, "isVoid": {"label": "Void", "hue": 265, "sigil": "◉", "family": "void"}, "isCorrupted": {"label": "Corrupted", "hue": 305, "sigil": "⌁", "family": "fracture"}, "isCursed": {"label": "Cursed", "hue": 285, "sigil": "☽", "family": "runes"}, "isToxic": {"label": "Toxic", "hue": 90, "sigil": "☣", "family": "bubbles"}, "isViral": {"label": "Viral", "hue": 135, "sigil": "✣", "family": "bubbles"}, "isParasitic": {"label": "Parasitic", "hue": 70, "sigil": "❧", "family": "bubbles"}, "isPermafrost": {"label": "Permafrost", "hue": 200, "sigil": "❆", "family": "ice"}, "isFrozen": {"label": "Frozen", "hue": 195, "sigil": "❄", "family": "ice"}, "isDivine": {"label": "Divine", "hue": 45, "sigil": "✧", "family": "halo"}, "isLegendary": {"label": "Legendary", "hue": 280, "sigil": "♔", "family": "runes"}, "isCelestial": {"label": "Celestial", "hue": 225, "sigil": "✦", "family": "cosmic"}, "isAncient": {"label": "Ancient", "hue": 35, "sigil": "⌘", "family": "runes"}, "isHoly": {"label": "Holy", "hue": 48, "sigil": "✟", "family": "halo"}, "isBlessed": {"label": "Blessed", "hue": 55, "sigil": "✥", "family": "halo"}, "isPurified": {"label": "Purified", "hue": 170, "sigil": "◈", "family": "halo"}, "isSuperHot": {"label": "SuperHot", "hue": 5, "sigil": "♨", "family": "flame"}, "isInfernal": {"label": "Infernal", "hue": 12, "sigil": "♨", "family": "flame"}, "isHot": {"label": "Hot", "hue": 25, "sigil": "♨", "family": "flame"}, "isRadioactive": {"label": "Radioactive", "hue": 80, "sigil": "☢", "family": "bubbles"}, "isElectric": {"label": "Electric", "hue": 55, "sigil": "ϟ", "family": "circuit"}, "isMagnetic": {"label": "Magnetic", "hue": 330, "sigil": "∩", "family": "circuit"}, "isAntimatter": {"label": "Antimatter", "hue": 295, "sigil": "⊖", "family": "void"}, "isTemporal": {"label": "Temporal", "hue": 250, "sigil": "◷", "family": "cosmic"}, "isAbyssal": {"label": "Abyssal", "hue": 225, "sigil": "≋", "family": "water"}, "isTsunami": {"label": "Tsunami", "hue": 190, "sigil": "≋", "family": "water"}, "isGolden": {"label": "Golden", "hue": 43, "sigil": "◆", "family": "facets"}, "isCrystalline": {"label": "Crystalline", "hue": 185, "sigil": "⬡", "family": "facets"}, "isChromatic": {"label": "Chromatic", "hue": 315, "sigil": "✺", "family": "facets"}, "isEthereal": {"label": "Ethereal", "hue": 260, "sigil": "✧", "family": "mist"}, "isPhantom": {"label": "Phantom", "hue": 255, "sigil": "◌", "family": "mist"}, "isUnstable": {"label": "Unstable", "hue": 20, "sigil": "⌁", "family": "fracture"}, "isFinal": {"label": "Final", "hue": 42, "sigil": "✶", "family": "runes"}, "isSecret": {"label": "Secret", "hue": 0, "sigil": "◆", "family": "void"}, "isExclusive": {"label": "Exclusive", "hue": 275, "sigil": "✧", "family": "facets"}, "isQuestion": {"label": "Question", "hue": 295, "sigil": "?", "family": "cosmic"}, "isBlank": {"label": "Blank", "hue": 210, "sigil": "□", "family": "mist"}, "isValidCombination": {"label": "ValidCombination", "hue": 165, "sigil": "✓", "family": "facets"}, "isBasic": {"label": "Basic", "hue": 145, "sigil": "•", "family": "facets"}, "isKey": {"label": "Key", "hue": 45, "sigil": "⚿", "family": "runes"}};
+        function decorateModifier(card,el){
+            const active=Object.keys(MODIFIER_STYLES).filter(k=>!!el[k]);
+            if(!active.length)return;
+            const key=el.isExclusive?'isExclusive':el.isSecret?'isSecret':active[0];
+            const primary=el.isCyMoney?'isCyMoney':key,theme=MODIFIER_STYLES[primary];
+            card.classList.add('modifier-card');card.dataset.modifier=primary;card.dataset.motif=theme.family;
+            card.style.setProperty('--card-hue',theme.hue);
+            card.title=(el.description||'')+' · '+active.map(k=>MODIFIER_STYLES[k].label).join(' / ');
+            if(!checkIsEverything(el))card.querySelector('.card-ribbon').textContent=theme.label+(el.isKey?' · ×'+keyAmount(el):'');
+            const mark=document.createElement('span');mark.className='modifier-mark';mark.setAttribute('aria-hidden','true');mark.textContent=theme.sigil;
+            const pattern=document.createElement('span');pattern.className='modifier-pattern';pattern.setAttribute('aria-hidden','true');
+            card.append(pattern,mark);
+            if(active.length>1){const accents=document.createElement('span');accents.className='modifier-accents';accents.setAttribute('aria-hidden','true');
+                for(const k of active.filter(k=>k!==primary).slice(0,3)){const dot=document.createElement('i');dot.style.color='hsl('+MODIFIER_STYLES[k].hue+' 80% 78%)';dot.textContent=MODIFIER_STYLES[k].sigil;accents.appendChild(dot);}card.appendChild(accents);}
+        }
+
         function sculptElementCard(card,el){
             let hash=0;for(const ch of el.name)hash=(hash*31+ch.charCodeAt(0))>>>0;
             const hue=el.isExclusive?275:el.isEverything?165:el.isFinal?43:el.isLegendary?285:el.isDivine?48:el.isFrozen?195:el.isHot?18:hash%360;
@@ -3689,6 +3817,7 @@ window.generateBattleCode = function() {
             card.prepend(ribbon,stage);
             const footer=document.createElement('div');footer.className='card-footer';footer.setAttribute('aria-hidden','true');
             footer.innerHTML='<span>✦</span><i></i><span>✧</span>';card.appendChild(footer);
+            decorateModifier(card,el);
         }
         function renderEls() {
             updateProgressionUI();
@@ -4017,6 +4146,7 @@ window.generateBattleCode = function() {
         }
 
         async function combine(){
+            if(sfAnimating)return;
             if(!sel1||!sel2||isCombining)return;
             isCombining=true;
 
@@ -4230,7 +4360,7 @@ window.generateBattleCode = function() {
             gs.cyMoneyUnlocked=!!(gs.cyMoneyUnlocked||gs.cyMoney>0||gs.sfUpgraded||elements.some(e=>e.isEverything||e.isCyMoney));
             const battleUnlocked=!!(gs.hasShownEnding||elements.some(e=>e.isEndGameTrigger));
             for(const [id,visible] of Object.entries({shopBtn:true,coinDisplay:gs.shopUnlocked,
-                starForgeBtn:gs.sfUnlocked,upgradeForgeBtn:gs.sfUnlocked,cyMoneyDisplay:gs.cyMoneyUnlocked,battleBtn:battleUnlocked})){
+                starForgeBtn:gs.sfUnlocked,upgradeForgeBtn:gs.sfUnlocked,cyMoneyDisplay:gs.cyMoneyUnlocked,cyShopBtn:gs.cyMoneyUnlocked,battleBtn:battleUnlocked})){
                 $(id).hidden=!visible;
             }
             $('shopBtn').textContent=gs.shopUnlocked?'🛒 Shop':'🔒 Shop & Coins';
@@ -4252,12 +4382,16 @@ window.generateBattleCode = function() {
         }
         function checkStarForgeUnlock(){updateProgressionUI();}
 
+        let sfAnimating=false,sfPresentationTimer=null;
         function activateStarForge(){
+            if(sfAnimating||isCombining)return;
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
             const eligible=elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
-            let count = Math.min(5+prestigeLevel('forgeReach'), eligible.length);
+            sfAnimating=true;$('starForgeEffect').hidden=false;
+            tickCyIncome();
+            let count = Math.min(5+prestigeLevel('forgeReach')+cyLevel('reach'), eligible.length);
             // Shuffle and pick
             const shuffled=[...eligible].sort(()=>Math.random()-0.5);
             const chosen=shuffled.slice(0,count);
@@ -4266,7 +4400,7 @@ window.generateBattleCode = function() {
                 const idx=elements.findIndex(e=>e.name===target.name);
                 if(idx===-1)return;
                 // Pick 1-2 random blessings for each
-                const numBlessings=1+Math.floor(Math.random()*2)+prestigeLevel('forgeBless');
+                const numBlessings=1+Math.floor(Math.random()*2)+prestigeLevel('forgeBless')+cyLevel('bless');
                 const available=SF_BLESSINGS.filter(k=>!elements[idx][k]);
                 if(available.length===0)return;
                 const picked=available.sort(()=>Math.random()-0.5).slice(0,Math.min(numBlessings,available.length));
@@ -4281,12 +4415,13 @@ window.generateBattleCode = function() {
             // UPGRADED STAR FORGE: Add 2 extra elements with isCyMoney
             if(gs.sfUpgraded){
                 const extraEligible = elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
-                if(extraEligible.length >= 2){
-                    const extraChosen = extraEligible.sort(()=>Math.random()-0.5).slice(0,2);
+                if(extraEligible.length >= 1){
+                    const extraChosen = extraEligible.sort(()=>Math.random()-0.5).slice(0,2+cyLevel('infusion'));
                     extraChosen.forEach(target=>{
                         const idx=elements.findIndex(e=>e.name===target.name);
                         if(idx!==-1){
                             elements[idx].isCyMoney = true;
+                            if(!chosen.includes(elements[idx]))chosen.push(elements[idx]);
                             results.push(target.emoji+' '+target.name+' → 💎 CyMoney');
                         }
                     });
@@ -4294,7 +4429,7 @@ window.generateBattleCode = function() {
             }
     
             // Start cooldown
-            sfCooldownEnd=Date.now()+SF_COOLDOWN*(1-.15*prestigeLevel('forgeSpeed'));
+            sfCooldownEnd=Date.now()+SF_COOLDOWN*(1-.15*prestigeLevel('forgeSpeed'))*(1-.1*cyLevel('cooldown'));
             gs.sfCooldownEnd=sfCooldownEnd;
             save();renderEls();sfStartTimer();
             // Reset button to locked mode during cooldown
@@ -4302,11 +4437,20 @@ window.generateBattleCode = function() {
             // Animate button
             starForgeBtn.classList.add('sf-activate');
             setTimeout(()=>starForgeBtn.classList.remove('sf-activate'),700);
-            // Show notification
-            if(results.length>0){
-                notify('⭐ Star Forge Activated!',results.join(' | '),'🌟',8000);
-                resultArea.innerHTML='<div class="text-center"><div class="el-card purified-el inline-flex flex-col items-center p-4 mb-2" style="background:linear-gradient(135deg,#1e1b4b,#312e81,#fbbf24)!important"><div class="el-emoji" style="font-size:2rem">🌟</div><div class="el-name" style="color:#fef3c7">Star Forge!</div></div><div class="text-xs mt-2" style="color:var(--text-secondary)">'+results.map(r=>'<div class="mb-1">'+r+'</div>').join('')+'</div></div>';
-            }
+            sfPresentationTimer=setTimeout(()=>{
+                sfAnimating=false;$('starForgeEffect').hidden=true;
+                renderForgeReport(results,chosen);
+                notify('Star Forge complete',results.length+' blessings and infusions applied.','✦');
+            },window.matchMedia('(prefers-reduced-motion: reduce)').matches?150:1200);
+        }
+        function renderForgeReport(results,chosen){
+            resultArea.replaceChildren();
+            const report=document.createElement('section');report.className='stellar-report';
+            report.innerHTML='<div class="stellar-report-heading"><span>✦</span><div><small>CONSTELLATION COMPLETE</small><h3>Star Forge awakened</h3></div></div><div class="stellar-result-cards"></div><div class="stellar-changes"></div>';
+            const cards=report.querySelector('.stellar-result-cards');
+            for(const el of chosen){const card=document.createElement('div');card.className='el-card '+getElClasses(el);card.setAttribute('data-name',el.name);const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;const name=document.createElement('div');name.className='el-name';name.textContent=el.name;card.append(emoji,name);sculptElementCard(card,el);cards.appendChild(card);}
+            for(const text of results){const row=document.createElement('p');row.textContent=text;report.querySelector('.stellar-changes').appendChild(row);}
+            resultArea.appendChild(report);
         }
 
         starForgeBtn.addEventListener('click',activateStarForge);
@@ -4454,7 +4598,8 @@ window.generateBattleCode = function() {
             // Exclusive ownership stays in the canonical collection across reset.
             const kept=elements.filter(e=>e.isExclusive);
             elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];combos=[];fractionalCoins=0;
-            gs={everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,sfUpgraded:false,sfUnlocked:false};
+            gs={everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,cyUpgrades:prestigeReset?(gs.cyUpgrades||{}):{},cyProgress:prestigeReset?(gs.cyProgress||0):0,sfUpgraded:prestigeReset?!!gs.sfUpgraded:false,sfUnlocked:false};
+            cyLastTick=Date.now();clearTimeout(sfPresentationTimer);sfAnimating=false;$('starForgeEffect').hidden=true;
             // Reset Star Forge to locked
             sfCooldownEnd=0;gs.sfCooldownEnd=0;
             if(sfInterval){clearInterval(sfInterval);sfInterval=null;}
@@ -4564,7 +4709,9 @@ window.generateBattleCode = function() {
 
         keyLockNotificationsReady=true;
         // One independent roll per active second; no offline key catch-up.
-        setInterval(()=>{if(!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
+        setInterval(()=>{if(!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))*(1+.15*cyLevel('luck'))/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
+        setInterval(tickCyIncome,1000);
+        document.addEventListener('visibilitychange',()=>{cyLastTick=Date.now();});
         setInterval(tickCoins,3000);
         setInterval(updateShopTimer,1000);
         updateShopTimer();
