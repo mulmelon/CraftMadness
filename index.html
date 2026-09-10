@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,6 +28,37 @@
         }
     </script>
     <style>
+        .prestige-upgrade {padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg-primary);font-size:.8rem;}
+        .prestige-upgrade p {color:var(--text-secondary);font-size:.75rem;margin:7px 0;}
+        .prestige-upgrade button {padding:6px 10px;border-radius:8px;background:var(--gold);color:#1a1a2e;}
+        .prestige-upgrade button:disabled {opacity:.4;cursor:not-allowed;}
+
+        #hintToggle { width:30px;height:28px;border:1px solid rgba(234,179,8,.35);border-radius:9px;background:rgba(234,179,8,.1);cursor:pointer; }
+        #hintToggle:hover,#hintToggle[aria-expanded="true"] { background:rgba(234,179,8,.22); }
+        #hintToggle:focus-visible { outline:2px solid #eab308;outline-offset:3px; }
+        #craftHints { width:min(100%,460px);box-sizing:border-box;margin:0 0 16px auto;padding:12px;border:1px solid rgba(234,179,8,.3);border-radius:14px;background:var(--bg-card);color:var(--text-primary);font-size:.75rem; }
+        #craftHints[hidden], #craftHints [hidden] { display:none!important; }
+        #craftHints article+article { margin-top:12px;padding-top:10px;border-top:1px solid var(--border); }
+        #craftHints p { margin:5px 0;color:var(--text-secondary);line-height:1.5; }
+        #craftHints summary { cursor:pointer;color:var(--gold);font-size:.7rem; }
+
+        #exclusiveToggle { width:30px;height:28px;border:1px solid rgba(167,139,250,.35);border-radius:9px;background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(45,212,191,.1));cursor:pointer;transition:background .2s,transform .2s; }
+        #exclusiveToggle:hover { transform:translateY(-1px);background:rgba(167,139,250,.25); }
+        #exclusiveToggle[aria-expanded="true"] { box-shadow:0 0 0 2px rgba(167,139,250,.2); }
+        #exclusiveToggle:focus-visible { outline:2px solid #a78bfa;outline-offset:3px; }
+        #elementStorageViews { display:flex;align-items:flex-start;gap:14px; }
+        #elGrid { flex:1;min-width:0; }
+        #exclusiveStorage { width:min(100%,460px);margin:0 0 16px auto;padding:10px;box-sizing:border-box;border:1px solid rgba(167,139,250,.4);border-radius:16px;background:linear-gradient(145deg,var(--bg-card),var(--bg-primary));box-shadow:0 6px 22px rgba(99,66,160,.1); }
+        #exclusiveStorage[hidden] { display:none!important; }
+        #exclusiveGrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:5px;max-height:180px;overflow-y:auto;padding:3px; }
+        #exclusiveGrid .el-card { min-height:48px;padding:5px 3px;border-radius:9px; }
+        #exclusiveGrid .el-emoji { font-size:1.05rem;line-height:1.2; }
+        #exclusiveGrid .el-name { font-size:.56rem;line-height:1.2;overflow-wrap:anywhere; }
+        #exclusiveGrid .badge { font-size:.43rem;padding:1px 3px;line-height:1.2; }
+        @media(max-width:640px) { #elementStorageViews { flex-wrap:wrap; } #elementStorageViews > #elGrid { flex-basis:100%; } }
+
+        /* Progression gates must also override utility display classes. */
+        [data-progression][hidden] { display:none !important; }
         * { font-family: 'Lexend', sans-serif; }
         h1, h2, h3, .font-display { font-family: 'Righteous', cursive; }
         /* Battle Modal Styles */
@@ -684,7 +716,258 @@
         .combo-entry:last-child { border-bottom:none; }
 
     </style>
-</head>
+<style>/* Craft Madness: observatory interface */
+body {background:var(--bg-primary);background-image:radial-gradient(ellipse at 15% 0%,rgba(99,102,241,.14),transparent 50%),radial-gradient(ellipse at 90% 40%,rgba(20,184,166,.09),transparent 45%);}
+header {padding:28px 18px!important;border-bottom:1px solid var(--border);margin-bottom:24px!important;}
+header h1 {letter-spacing:-1.5px;}
+button {transition:transform .16s,box-shadow .16s,background .16s;}
+button:focus-visible {outline:2px solid #818cf8;outline-offset:3px;}
+button:not(:disabled):hover {transform:translateY(-1px);}
+button:disabled {cursor:not-allowed;}
+#dz1,#dz2 {border:1px solid var(--border)!important;border-radius:24px!important;background:var(--bg-card);box-shadow:inset 0 0 35px rgba(99,102,241,.05);min-height:140px;}
+#dz1.has-element,#dz2.has-element {border-color:#818cf8!important;box-shadow:0 8px 28px rgba(99,102,241,.12);}
+#combineBtn,#combineBtnM {background:linear-gradient(120deg,#6366f1,#8b5cf6)!important;color:white!important;box-shadow:0 5px 20px rgba(99,102,241,.22);letter-spacing:.04em;}
+#searchInput {background:var(--bg-card);border:1px solid var(--border);box-shadow:0 4px 18px rgba(0,0,0,.03);}
+#elGrid {gap:10px!important;grid-template-columns:repeat(auto-fill,minmax(95px,1fr))!important;}
+.el-card {border-radius:16px!important;min-height:92px;position:relative;transition:transform .18s,box-shadow .18s;border:1px solid var(--border);}
+.el-card:hover {transform:translateY(-4px);box-shadow:0 9px 24px rgba(60,50,100,.17);z-index:1;}
+.el-name {font-size:.72rem;line-height:1.3;font-weight:600;}
+.el-emoji {font-size:1.9rem;filter:drop-shadow(0 3px 4px rgba(0,0,0,.12));}
+.modal-box {border-radius:24px!important;border:1px solid var(--border);box-shadow:0 24px 90px rgba(0,0,0,.3);}
+.modal-overlay {backdrop-filter:blur(9px);}
+.pack-card,.prestige-upgrade {border-radius:18px!important;box-shadow:0 6px 20px rgba(0,0,0,.04);}
+#exclusiveStorage {background:linear-gradient(135deg,#17142b,#251b42 55%,#102d38)!important;border:1px solid #b7a0f7!important;box-shadow:0 10px 40px rgba(139,92,246,.2);color:#eee8ff;}
+#exclusiveStorage p {color:#c5bada!important;}
+.el-card.exclusive-showpiece {background:linear-gradient(130deg,#281745,#174051,#37234e)!important;color:#fff!important;border:1px solid #c8aaff!important;box-shadow:inset 0 0 16px rgba(196,181,253,.12),0 3px 13px rgba(139,92,246,.2)!important;overflow:hidden;}
+.el-card.exclusive-showpiece::before {content:'';position:absolute;inset:-100%;background:linear-gradient(110deg,transparent 44%,rgba(255,255,255,.2) 50%,transparent 56%);transform:translateX(-40%);animation:prismSweep 7s ease-in-out infinite;pointer-events:none;}
+.el-card.exclusive-showpiece .el-emoji {filter:drop-shadow(0 0 6px #a78bfa);}
+#exclusiveGrid .el-card {min-height:58px;}
+@keyframes prismSweep {0%,65%{transform:translateX(-40%)}100%{transform:translateX(40%)}}
+#battleModal .modal-box {max-width:1050px!important;background:var(--bg-primary);}
+#battleArena {position:relative;}
+#battleTurnBanner {padding:12px 18px;border-radius:14px;margin:0 0 16px;background:linear-gradient(100deg,rgba(99,102,241,.18),rgba(20,184,166,.1));font-weight:700;text-align:center;letter-spacing:.03em;}
+#p1Active,#p2Active {min-height:110px;display:grid;place-content:center;text-align:center;font-size:1.2rem;border-radius:18px!important;background:var(--bg-card)!important;}
+#p1Skills,#p2Skills {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px;}
+#p1Skills button,#p2Skills button {margin:0!important;padding:12px 8px!important;min-height:58px;border-radius:12px;font-size:.73rem;line-height:1.3;white-space:normal;}
+.battle-skill {background:linear-gradient(125deg,#414174,#6366a4)!important;color:white!important;border:1px solid rgba(196,181,253,.3)!important;}
+.battle-skill:disabled {opacity:.32;transform:none!important;animation:none!important;box-shadow:none!important;}
+.battle-skill.ohko-skill {background:linear-gradient(120deg,#5b1744,#a42d61,#6537a1)!important;border:1px solid #f9a8d4!important;box-shadow:0 0 16px rgba(236,72,153,.25);}
+.ohko-skill::after {content:'FINISHER · 30% CHANCE';display:block;font-size:.52rem;letter-spacing:.06em;color:#fbcfe8;margin-top:5px;}
+#battleLog {height:240px!important;background:transparent!important;border:0!important;padding:4px!important;display:flex;flex-direction:column;gap:7px;}
+#battleLog p {font-family:inherit!important;background:var(--bg-card);border:1px solid var(--border);border-left:3px solid currentColor;padding:10px 14px!important;border-radius:12px;margin:0!important;font-size:.78rem;line-height:1.45;box-shadow:0 3px 10px rgba(0,0,0,.03);}
+#battleLog p[data-event="ohko"] {background:linear-gradient(90deg,rgba(236,72,153,.16),var(--bg-card));}
+#battleFinisher {padding:22px;border-radius:18px;margin-bottom:14px;text-align:center;background:radial-gradient(ellipse,#742653,#241637);color:white;border:1px solid #f9a8d4;box-shadow:0 0 30px #db277755;animation:finisherArrival .4s ease-out;}
+#battleFinisher[hidden] {display:none!important;}
+@keyframes finisherArrival {from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+@media(max-width:600px){#battleSetup>.grid,#battleArena>.grid{grid-template-columns:1fr!important;}#elGrid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))!important;}.el-card{min-height:82px;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+</style>
+<style>
+.notif {border-radius:18px!important;background:var(--bg-card)!important;border:1px solid var(--border)!important;border-top:3px solid #818cf8!important;box-shadow:0 12px 40px rgba(40,30,80,.2)!important;padding:16px!important;}
+.notif-bar {background:linear-gradient(90deg,#818cf8,#2dd4bf)!important;}
+#battleLog p::before {content:attr(data-event);display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.13em;opacity:.65;margin-bottom:4px;}
+</style><style>/* Faceted collectible cards, with an actual icon stage and foil frame. */
+#elGrid {grid-template-columns:repeat(auto-fill,minmax(112px,1fr))!important;gap:13px!important;}
+.el-card.sculpted-card {--card-hue:245;isolation:isolate;display:flex!important;flex-direction:column;align-items:center;justify-content:flex-start;min-height:158px;padding:9px 8px 12px!important;border-radius:12px 24px 12px 24px!important;border:1px solid hsl(var(--card-hue) 65% 65% / .65)!important;background:linear-gradient(155deg,hsl(var(--card-hue) 35% 24%),hsl(var(--card-hue) 30% 11%) 65%,hsl(var(--card-hue) 38% 18%))!important;color:#f8f6ff!important;box-shadow:inset 0 1px 0 #ffffff25,inset 0 -3px 0 #00000035,0 6px 0 hsl(var(--card-hue) 25% 8%),0 9px 18px #00000020!important;overflow:hidden;animation:none!important;}
+.el-card.sculpted-card::after {content:'';position:absolute;inset:4px;border:1px solid hsl(var(--card-hue) 60% 70% / .18);border-radius:8px 19px 8px 19px;pointer-events:none;z-index:-1;}
+.el-card.sculpted-card:hover {transform:translateY(-6px) rotate(-1deg)!important;box-shadow:inset 0 1px 0 #ffffff50,0 5px 0 hsl(var(--card-hue) 25% 8%),0 14px 28px hsl(var(--card-hue) 70% 45% / .28)!important;}
+.card-ribbon {align-self:stretch;text-align:left;font-size:7px;font-weight:800;letter-spacing:1.3px;color:hsl(var(--card-hue) 90% 82%);padding:1px 4px;line-height:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;}
+.card-stage {position:relative;display:grid;place-items:center;width:72px;height:72px;margin:2px 0 5px;flex-shrink:0;background:radial-gradient(circle,hsl(var(--card-hue) 80% 65% / .22),transparent 68%);pointer-events:none;}
+.card-stage::before {content:'';position:absolute;inset:12px;border:1px solid hsl(var(--card-hue) 75% 75% / .35);background:linear-gradient(135deg,#ffffff10,transparent);transform:rotate(45deg);border-radius:10px;}
+.card-orbit {position:absolute;inset:3px;border:1px dashed hsl(var(--card-hue) 80% 80% / .3);border-radius:50%;transform:rotate(-20deg);}
+.card-orbit::before,.card-orbit::after {content:'✦';position:absolute;color:hsl(var(--card-hue) 95% 85%);font-size:9px;top:2px;left:8px;}
+.card-orbit::after {top:auto;left:auto;bottom:1px;right:8px;font-size:6px;}
+.sculpted-card .card-stage .el-emoji {position:relative;z-index:1;font-size:2.2rem!important;line-height:1.2;margin:0!important;filter:drop-shadow(0 5px 1px #00000050) drop-shadow(0 0 10px hsl(var(--card-hue) 90% 75% / .3))!important;transition:transform .2s;}
+.sculpted-card:hover .el-emoji {transform:scale(1.15) rotate(6deg);}
+.sculpted-card .el-name {font-size:.76rem!important;line-height:1.3;color:#fff!important;text-shadow:0 2px 2px #0008;margin:0 0 6px;max-width:100%;overflow-wrap:anywhere;font-weight:700;}
+.sculpted-card .badge {font-size:7px!important;line-height:1.4;padding:2px 5px!important;border-radius:5px!important;margin:2px;border:1px solid #ffffff20;}
+.card-footer {display:flex;align-items:center;gap:6px;width:70%;margin-top:auto;padding-top:6px;color:hsl(var(--card-hue) 70% 75% / .6);font-size:8px;pointer-events:none;}
+.card-footer i {height:1px;flex:1;background:linear-gradient(90deg,transparent,currentColor,transparent);}
+.sculpted-card[data-tier="FINAL"],.sculpted-card[data-tier="LEGENDARY"] {border-width:2px!important;}
+.sculpted-card[data-tier="FINAL"] .card-orbit {border-style:double;border-width:3px;}
+.sculpted-card.exclusive-showpiece {background:linear-gradient(130deg,#21102f,#192f43 45%,#392044)!important;border:2px solid #e5bcff!important;box-shadow:inset 0 0 24px #b78eff20,0 5px 0 #180b25,0 8px 25px #a78bfa40!important;}
+.sculpted-card.exclusive-showpiece::before {animation:prismSweep 5s ease-in-out infinite!important;z-index:2;}
+.sculpted-card.exclusive-showpiece .card-stage::before {border:2px solid #e9c6ff;box-shadow:0 0 16px #b388ff60;}
+#exclusiveGrid {grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;padding:5px 4px 10px;}
+#exclusiveGrid .sculpted-card {min-height:112px;padding:6px 5px!important;border-radius:10px 17px 10px 17px!important;}
+#exclusiveGrid .card-stage {height:45px;width:45px;margin:1px 0 4px;}
+#exclusiveGrid .card-stage .el-emoji {font-size:1.5rem!important;}
+#exclusiveGrid .card-ribbon {font-size:5px;letter-spacing:.7px;padding:0;}
+#exclusiveGrid .sculpted-card .el-name {font-size:.57rem!important;}
+#exclusiveGrid .badge {font-size:5px!important;padding:1px 3px!important;}
+#exclusiveGrid .card-footer {padding-top:3px;}
+@media(max-width:600px){#elGrid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))!important;gap:10px!important;}.el-card.sculpted-card{min-height:145px;}.card-stage{width:60px;height:60px;}}
+@media(prefers-reduced-motion:reduce){.el-card.sculpted-card,.el-card.sculpted-card::before,.sculpted-card .el-emoji{animation:none!important;transition:none!important;transform:none!important;}}
+</style><style>.fusion-workbench {width:min(380px,90vw);padding:25px;border:1px solid #b7a7ff70;border-radius:28px;background:radial-gradient(ellipse at 50% 35%,#34264e,#141321 75%);box-shadow:0 25px 100px #0009,inset 0 1px 0 #ffffff25;text-align:center;color:#eee8ff;overflow:hidden;}
+.fusion-heading {font-size:10px;letter-spacing:.24em;color:#b7a7e0;font-weight:700;}
+.fusion-scene {height:170px;position:relative;display:grid;place-items:center;}
+.fusion-orbit {position:absolute;width:140px;height:100px;border:1px dashed #b7a7ff40;border-radius:50%;transform:rotate(-20deg);}
+.fusion-piece {position:absolute;top:47px;width:58px;height:58px;display:grid;place-items:center;border:1px solid #a5a0ed80;border-radius:16px;background:linear-gradient(135deg,#5a487b,#272d47);box-shadow:0 8px 22px #0005;font-size:32px;z-index:2;}
+.fusion-left {left:calc(50% - 108px);}
+.fusion-right {right:calc(50% - 108px);}
+.fusion-core {position:absolute;top:43px;font-size:58px;color:#fff0c3;opacity:0;text-shadow:0 0 22px #fbbf24,0 0 60px #e879f9;}
+.fusion-anvil {position:absolute;bottom:8px;font-size:38px;filter:drop-shadow(0 5px 12px #0008);}
+.fusion-sparks {position:absolute;top:27px;letter-spacing:18px;color:#ffe4a2;font-size:20px;opacity:0;}
+.fusion-names {font-size:12px;font-weight:700;overflow-wrap:anywhere;}.fusion-names>span:nth-child(2){color:#bba9ef;padding:0 6px;}
+#loaderText {font-size:11px;color:#b9adc9;margin-top:8px;}
+.fusion-track {height:3px;background:#ffffff10;border-radius:4px;margin-top:19px;overflow:hidden;}.fusion-track i{display:block;height:100%;background:linear-gradient(90deg,#a78bfa,#fcd38c);transform:scaleX(0);transform-origin:left;}
+.forging .fusion-left {animation:forgeLeft .9s ease-in-out both;}
+.forging .fusion-right {animation:forgeRight .9s ease-in-out both;}
+.forging .fusion-core {animation:forgeFlash .9s ease-out both;}
+.forging .fusion-sparks {animation:forgeSparks .9s ease-out both;}
+.forging .fusion-anvil {animation:forgeHammer .9s ease-in-out both;}
+.forging .fusion-track i {animation:forgeProgress .9s linear both;}
+@keyframes forgeLeft{0%,12%{transform:translateX(0) rotate(-12deg)}55%{transform:translateX(79px) rotate(15deg) scale(.8);opacity:1}75%,100%{transform:translateX(79px) scale(.1);opacity:0}}
+@keyframes forgeRight{0%,12%{transform:translateX(0) rotate(12deg)}55%{transform:translateX(-79px) rotate(-15deg) scale(.8);opacity:1}75%,100%{transform:translateX(-79px) scale(.1);opacity:0}}
+@keyframes forgeFlash{0%,48%{opacity:0;transform:scale(.1)}65%{opacity:1;transform:scale(1.5)}100%{opacity:1;transform:scale(.8)}}
+@keyframes forgeSparks{0%,52%{opacity:0;transform:scale(.2) translateY(30px)}70%{opacity:1}100%{opacity:0;transform:scale(1.5) translateY(-20px)}}
+@keyframes forgeHammer{0%,30%{transform:rotate(-18deg)}58%{transform:rotate(15deg) translateY(-6px)}70%,100%{transform:rotate(0)}}
+@keyframes forgeProgress{to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){#loader .fusion-piece,#loader .fusion-core,#loader .fusion-sparks,#loader .fusion-anvil,#loader .fusion-track i{animation:none!important;}.fusion-track i{transform:scaleX(1);}}
+</style><style>
+#loader.forging .fusion-left,#loader.forging .fusion-right,#loader.forging .fusion-core,#loader.forging .fusion-sparks,#loader.forging .fusion-anvil,#loader.forging .fusion-track i {animation-duration:var(--forging-duration,900ms);}
+#resultArea .sculpted-card {width:160px;min-height:185px;margin:10px auto 18px;cursor:pointer;}
+#resultArea .sculpted-card .card-stage {width:86px;height:86px;}
+#resultArea .sculpted-card .el-emoji {font-size:2.7rem!important;}
+#resultArea .sculpted-card .el-name {font-size:.9rem!important;}
+</style><style>/* Unified faceted workshop surfaces. */
+:root {--bg-primary:#efedf6;--bg-card:#faf9ff;--bg-card-hover:#e9e5f5;--border:#d3cbe6;--text-primary:#28213f;--text-secondary:#726581;--gold:#82603b;--gold-glow:#b599dd25;--teal:#317f85;--ui-panel:linear-gradient(145deg,#fcfaff,#e9e5f3);--ui-button:linear-gradient(145deg,#f9f6ff,#e3ddf1);--ui-edge:#b5a5d0;}
+.dark {--bg-primary:#100e1b;--bg-card:#201a30;--bg-card-hover:#302640;--border:#40334f;--text-primary:#f0e9fb;--text-secondary:#b3a3c6;--gold:#e5be87;--gold-glow:#d7aaff25;--teal:#83d1c5;--ui-panel:linear-gradient(145deg,#282036,#191624);--ui-button:linear-gradient(145deg,#3a2d4e,#262037);--ui-edge:#796189;}
+body {background-image:radial-gradient(ellipse at 10% 0%,#a78bfa18,transparent 50%);}
+header {border:1px solid var(--border)!important;border-radius:16px 32px 16px 32px;background:var(--ui-panel);box-shadow:inset 0 1px #ffffff20,0 6px 0 #0000000a;padding:24px 16px!important;}
+header h1 {color:var(--text-primary)!important;font-size:clamp(1.9rem,5vw,3rem)!important;letter-spacing:-.04em;}
+.workshop-label {font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;color:var(--text-secondary);margin-bottom:12px;}
+.workshop-panel,.collection-panel,.history-panel {padding:20px;border:1px solid var(--border);border-radius:14px 28px 14px 28px;background:var(--ui-panel);box-shadow:inset 0 1px #ffffff25,0 5px 0 #00000008;}
+.collection-panel {margin-top:22px!important;}.history-panel{margin-top:24px!important;}
+header button,header #elCount,header #coinDisplay,header #cyMoneyDisplay,.collection-panel button:not(.el-card),.modal-box button:not(.battle-skill):not(.modal-close):not(.pack-btn) {border:1px solid var(--ui-edge)!important;border-radius:7px 13px 7px 13px!important;background:var(--ui-button)!important;color:var(--text-primary)!important;box-shadow:inset 0 1px #ffffff18,0 3px 0 #00000015;padding:7px 10px;}
+button:disabled {opacity:.4;box-shadow:none!important;}
+button:focus-visible {outline:2px solid #b39ad9;outline-offset:3px;}
+.collection-panel .sort-active {background:linear-gradient(130deg,#72538f,#493665)!important;color:#fff!important;}
+#exclusiveToggle,#hintToggle {width:32px;height:32px;padding:0!important;}
+input,textarea {border:1px solid var(--ui-edge)!important;background:var(--bg-card)!important;color:var(--text-primary)!important;border-radius:9px 15px 9px 15px!important;accent-color:#9871b9;}
+input[type=checkbox] {width:auto;}
+.modal-box {background:var(--ui-panel)!important;border:1px solid var(--ui-edge)!important;border-radius:16px 30px 16px 30px!important;box-shadow:inset 0 1px #ffffff20,0 25px 90px #0005;}
+.modal-box h2 {padding-bottom:12px;border-bottom:1px solid var(--border);letter-spacing:-.02em;}
+.modal-close {border-radius:50%;background:var(--bg-card);color:var(--text-primary);}
+.pack-card,.prestige-upgrade,#craftHints {background:var(--ui-panel)!important;border:1px solid var(--ui-edge)!important;border-radius:10px 20px 10px 20px!important;box-shadow:inset 0 1px #ffffff20,0 4px 0 #00000012;}
+.pack-btn,#combineBtn,#combineBtnM,#startBattleBtn {border:1px solid #c5a5ed!important;background:linear-gradient(125deg,#9168b5,#574478)!important;color:#fff!important;border-radius:10px 18px 10px 18px!important;box-shadow:inset 0 1px #ffffff40,0 4px 0 #392a50!important;}
+#comboHistory {background:transparent!important;border:0!important;padding:0!important;}.combo-entry{border:1px solid var(--border);background:var(--bg-card);padding:10px 12px;border-radius:8px 14px 8px 14px;margin-bottom:6px;}
+#battleSetup>.grid>div,#battleArena>.grid>div {background:var(--ui-panel)!important;border:1px solid var(--ui-edge)!important;border-radius:12px 23px 12px 23px!important;}
+#battleTurnBanner {background:var(--ui-button)!important;border:1px solid var(--ui-edge);border-radius:8px 18px 8px 18px;}
+#battleLog p,.notif {background:var(--ui-panel)!important;border-radius:8px 18px 8px 18px!important;}
+#dz1,#dz2 {width:142px;min-height:182px;padding:10px!important;border-radius:12px 24px 12px 24px!important;background:var(--bg-card)!important;border:1px dashed var(--ui-edge)!important;box-shadow:inset 0 0 25px #9571b510!important;}
+#dz1.has-element,#dz2.has-element {background:transparent!important;border-color:transparent!important;box-shadow:none!important;padding:0!important;}
+#dz1c,#dz2c {width:100%;position:relative;}
+#dz1 .sculpted-card,#dz2 .sculpted-card {width:100%;min-height:158px;pointer-events:none;}
+#dz1c>button,#dz2c>button {z-index:4;top:-7px;right:-7px;width:24px;height:24px;background:#372b4e!important;border:1px solid #bda1dc!important;box-shadow:0 2px 5px #0004;}
+#resultArea .sculpted-card {width:112px;min-height:150px;margin:8px auto 12px;}
+#resultArea .sculpted-card .card-stage {width:64px;height:64px;}
+#resultArea .sculpted-card .el-emoji {font-size:2rem!important;}
+#resultArea .sculpted-card .el-name {font-size:.72rem!important;}
+.fusion-rejected {width:min(300px,100%);text-align:center;padding:16px;border:1px solid #b77b9670;border-radius:12px 24px 12px 24px;background:var(--ui-panel);box-shadow:inset 0 1px #ffffff20,0 4px 0 #00000010;}
+.fusion-rejected-icon {display:grid;place-items:center;width:48px;height:48px;margin:0 auto 12px;border:1px solid #c38da7;border-radius:12px;transform:rotate(45deg);background:#bf688618;}
+.fusion-rejected-icon span {transform:rotate(-45deg);font-size:24px;color:#bb6b91;}
+.fusion-rejected h3 {font-size:.9rem;color:var(--text-primary);margin:0 0 6px;}.fusion-rejected p {font-size:.7rem;color:var(--text-secondary);line-height:1.5;}.fusion-rejected small{display:block;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;margin-top:10px;color:var(--text-secondary);}
+@media(max-width:600px){.workshop-panel,.collection-panel,.history-panel{padding:12px;}#dz1,#dz2{width:112px;min-height:162px;}#dz1 .sculpted-card,#dz2 .sculpted-card{min-height:146px;}.collection-panel>.flex{row-gap:10px;}.collection-panel>.flex>div:last-child{flex-wrap:wrap;}}
+</style><style>
+/* One clean exclusive frame; multi-character emoji must not wrap over the name. */
+.el-card.sculpted-card.exclusive-showpiece {border:1px solid #d5acf1!important;border-radius:13px!important;box-shadow:inset 0 1px 0 #ffffff20,0 4px 12px #9a64c025!important;}
+.el-card.sculpted-card.exclusive-showpiece::after {display:none!important;}
+.sculpted-card.exclusive-showpiece .card-stage::before {border:0!important;box-shadow:none!important;background:radial-gradient(circle,#c28cee20,transparent 70%);transform:none;inset:0;}
+.sculpted-card.exclusive-showpiece .card-orbit {border:0;}
+.sculpted-card.exclusive-showpiece .card-orbit::before,.sculpted-card.exclusive-showpiece .card-orbit::after {display:none;}
+.sculpted-card .card-stage .el-emoji {white-space:nowrap;max-width:100%;line-height:1.1;}
+.sculpted-card.multi-icon-card .card-stage .el-emoji {font-size:1.6rem!important;}
+#exclusiveGrid .sculpted-card {border-radius:11px!important;min-width:0;}
+#exclusiveGrid .card-stage {width:100%;height:43px;margin:3px 0 7px;}
+#exclusiveGrid .multi-icon-card .card-stage .el-emoji {font-size:1.15rem!important;}
+#exclusiveGrid .sculpted-card .el-name {text-shadow:none;line-height:1.35;}
+.el-card.sculpted-card.secret-showpiece {background:linear-gradient(145deg,#171717,#030303 70%)!important;border-color:#62606c!important;color:#f5f3ff!important;box-shadow:inset 0 1px 0 #ffffff15,0 4px 0 #000,0 8px 16px #0004!important;}
+.secret-showpiece .card-ribbon,.secret-showpiece .card-footer {color:#c1bbc9;}
+.secret-showpiece .card-stage {background:radial-gradient(circle,#ffffff10,transparent 65%);}
+.secret-showpiece .card-stage::before {background:#ffffff04!important;border-color:#ffffff20!important;box-shadow:none!important;}
+.secret-showpiece .card-orbit {border-color:#ffffff20;}
+</style><style>
+/* Everything takes visual precedence, including on exclusive cards and results. */
+.el-card.sculpted-card.everything-showpiece,
+.el-card.sculpted-card.exclusive-showpiece.everything-showpiece {
+    background:linear-gradient(115deg,#802743,#88502a,#497638,#206e77,#393e91,#783b8a,#802743)!important;
+    background-size:450% 450%!important;animation:everythingSpectrum 9s ease-in-out infinite!important;
+    border:2px solid #f5e6ff!important;box-shadow:inset 0 1px 0 #fff8,0 4px 0 #252041,0 0 22px #b699ff55!important;color:#fff!important;
+}
+.everything-showpiece .card-ribbon,.everything-showpiece .card-footer {color:#fff!important;text-shadow:0 1px 4px #0009;}
+.everything-showpiece .card-stage::before {border-color:#ffffff80!important;background:#ffffff12!important;box-shadow:0 0 18px #ffffff35!important;}
+.everything-showpiece .card-stage .el-emoji {filter:drop-shadow(0 3px 4px #0006) drop-shadow(0 0 8px #fff8)!important;}
+@keyframes everythingSpectrum {0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@media(prefers-reduced-motion:reduce){.el-card.sculpted-card.everything-showpiece,.el-card.sculpted-card.exclusive-showpiece.everything-showpiece{animation:none!important;}}
+</style><style>
+#changelogModal .modal-box {display:flex;flex-direction:column;overflow:hidden!important;box-sizing:border-box;max-height:84vh;}
+#changelogModal h2 {flex:none;margin-bottom:16px;padding-right:35px;}
+#changelogModal .changelog-scroll {min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-right:12px;scrollbar-width:thin;scrollbar-color:var(--ui-edge) transparent;}
+#changelogModal .changelog-scroll::-webkit-scrollbar {width:6px;}
+#changelogModal .changelog-scroll::-webkit-scrollbar-track {background:transparent;}
+#changelogModal .changelog-scroll::-webkit-scrollbar-thumb {background:var(--ui-edge);border-radius:10px;}
+#changelogModal .changelog-scroll:focus-visible {outline:1px solid var(--ui-edge);outline-offset:-1px;}
+</style><style>
+.everything-wing {position:absolute;top:50%;width:19px;height:27px;transform:translateY(-50%) rotate(-10deg);color:#fff4d7;opacity:.75;pointer-events:none;filter:drop-shadow(0 0 3px #fff5);z-index:0;}
+.everything-wing svg {display:block;width:100%;height:100%;}
+.everything-wing.wing-left {left:-2px;}
+.everything-wing.wing-right {right:-2px;transform:translateY(-50%) scaleX(-1) rotate(-10deg);}
+#exclusiveGrid .everything-wing {width:12px;height:18px;opacity:.65;}
+#exclusiveGrid .wing-left {left:0;}#exclusiveGrid .wing-right {right:0;}
+</style><style>
+.el-card.sculpted-card.everything-showpiece {overflow:visible!important;}
+/* Disable the oversized exclusive sheen when overflow is needed for wings. */
+.el-card.sculpted-card.exclusive-showpiece.everything-showpiece::before {display:none!important;}
+.sculpted-card.everything-showpiece>.everything-wing {top:42%;width:10px;height:21px;opacity:.8;filter:none;}
+.sculpted-card.everything-showpiece>.wing-left {left:-8px;}
+.sculpted-card.everything-showpiece>.wing-right {right:-8px;}
+#exclusiveGrid .sculpted-card.everything-showpiece>.everything-wing {width:7px;height:15px;}
+#exclusiveGrid .sculpted-card.everything-showpiece>.wing-left {left:-5px;}
+#exclusiveGrid .sculpted-card.everything-showpiece>.wing-right {right:-5px;}
+</style><style>
+/* Interior foil is clipped separately so the tiny exterior wings remain visible. */
+.everything-foil {position:absolute;inset:3px;border-radius:8px 20px 8px 20px;overflow:hidden;pointer-events:none;z-index:0;border:1px solid #fff7;background:radial-gradient(ellipse at 15% 0%,#fff4,transparent 45%),radial-gradient(ellipse at 85% 100%,#a5f3fc33,transparent 45%);box-shadow:inset 0 0 14px #fff2;}
+.everything-shimmer {position:absolute;inset:-70%;background:linear-gradient(115deg,transparent 43%,#ffffff04 46%,#ffffff38 50%,#ffffff05 54%,transparent 57%);animation:everythingFoilPass 7s ease-in-out infinite;}
+.everything-seal {position:absolute;inset:-2px;color:#fff4d7;opacity:.65;filter:drop-shadow(0 0 4px #fff6);animation:everythingSealTurn 40s linear infinite;pointer-events:none;}
+.everything-seal svg {display:block;width:100%;height:100%;}
+.everything-spark {position:absolute;font-style:normal;color:#fff9e3;text-shadow:0 0 5px #fff8;animation:everythingTwinkle 4s ease-in-out infinite;}
+.spark-one {left:8%;top:32%;font-size:11px;}.spark-two {right:8%;top:63%;font-size:8px;animation-delay:1.4s;}.spark-three {right:20%;top:14%;font-size:17px;animation-delay:2.5s;}
+.sculpted-card.everything-showpiece .card-ribbon {position:relative;z-index:1;letter-spacing:1.5px;color:#fff8d6!important;text-shadow:0 1px 3px #241032;}
+.sculpted-card.everything-showpiece .el-name {position:relative;z-index:1;text-shadow:0 2px 3px #150827,0 0 9px #fff3!important;}
+.sculpted-card.everything-showpiece .card-footer {position:relative;z-index:1;color:#fff6cb!important;}
+.sculpted-card.everything-showpiece .card-stage {background:radial-gradient(circle,#ffffff30,transparent 65%);}
+.sculpted-card.everything-showpiece .card-orbit {opacity:.2;}
+#exclusiveGrid .everything-foil {border-radius:8px;}.sculpted-card.exclusive-showpiece .everything-foil {border-radius:10px;}
+#exclusiveGrid .everything-spark {font-size:7px;}
+@keyframes everythingFoilPass {0%,35%{transform:translateX(-45%)}75%,100%{transform:translateX(45%)}}
+@keyframes everythingSealTurn {to{transform:rotate(360deg)}}
+@keyframes everythingTwinkle {0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.85;transform:scale(1.15)}}
+@media(prefers-reduced-motion:reduce){.everything-shimmer,.everything-seal,.everything-spark{animation:none!important;}.everything-shimmer{opacity:.2;}}
+</style><style>
+/* Regal Everything treatment; all new effects remain inside the card footprint. */
+.sculpted-card.everything-showpiece {border-color:#fff0cb!important;}
+.sculpted-card.everything-showpiece .everything-foil {border-width:2px;border-color:#fff3b888;box-shadow:inset 0 0 0 2px #ffffff0a,inset 0 0 19px #e9d5ff35;animation:everythingPrismEdge 6s linear infinite;}
+.everything-crown {position:absolute;width:45px;height:19px;top:-7px;left:50%;transform:translateX(-50%);color:#ffe7a5;filter:drop-shadow(0 0 4px #ffdd8255);z-index:2;pointer-events:none;}
+.everything-crown svg {display:block;width:100%;height:100%;}
+.everything-aurora {position:absolute;inset:0;background:repeating-linear-gradient(125deg,transparent 0 22%,#c4b5fd10 24%,#99f6e412 26%,transparent 29% 48%);background-size:220% 220%;animation:everythingAuroraFlow 12s ease-in-out infinite;mix-blend-mode:screen;opacity:.7;}
+.everything-satellites {position:absolute;inset:1px;pointer-events:none;animation:everythingSealTurn 18s linear infinite;z-index:1;}
+.everything-satellites i {position:absolute;left:5%;top:18%;font-style:normal;font-size:9px;color:#fff3ce;text-shadow:0 0 5px #fff6;}
+.everything-satellites i:nth-child(2) {left:auto;right:1%;top:45%;color:#c7fff3;font-size:11px;}
+.everything-satellites i:nth-child(3) {left:42%;top:auto;bottom:0;color:#efd4ff;font-size:7px;}
+.everything-plinth {position:absolute;bottom:3px;left:18%;width:64%;height:9px;border:1px solid #e9d5ff80;border-radius:50%;background:radial-gradient(ellipse,#ffffff35,transparent 70%);box-shadow:0 0 8px #d8b4fe30;pointer-events:none;}
+.sculpted-card.everything-showpiece .card-stage .el-emoji {animation:everythingIconFloat 5s ease-in-out infinite;}
+.sculpted-card.everything-showpiece .card-footer i {height:2px;background:linear-gradient(90deg,transparent,#ffdd9e,#c4fff5,#d7b8ff,transparent);box-shadow:0 0 5px #e9d5ff40;}
+.sculpted-card.everything-showpiece .card-ribbon {background:linear-gradient(90deg,transparent,#fff1ca18,transparent);border-bottom:1px solid #fff1c833;text-align:center;}
+#exclusiveGrid .everything-crown {width:28px;height:12px;top:-3px;}
+#exclusiveGrid .everything-satellites i {font-size:6px;}
+#exclusiveGrid .everything-satellites i:nth-child(2) {font-size:7px;}
+#exclusiveGrid .everything-plinth {height:5px;bottom:0;}
+@keyframes everythingPrismEdge {0%,100%{border-color:#ffe9b988}33%{border-color:#b9fff088}66%{border-color:#e3c3ff88}}
+@keyframes everythingAuroraFlow {0%,100%{background-position:0% 0%}50%{background-position:100% 100%}}
+@keyframes everythingIconFloat {0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media(prefers-reduced-motion:reduce){.sculpted-card.everything-showpiece .everything-foil,.everything-aurora,.everything-satellites,.sculpted-card.everything-showpiece .card-stage .el-emoji{animation:none!important;}}
+</style></head>
 <body>
     <script>
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
@@ -694,24 +977,28 @@
     <div class="max-w-5xl mx-auto px-4 py-6">
         <!-- Header -->
         <header class="text-center mb-6">
+            <div class="workshop-label">✧ Discover · Forge · Collect ✧</div>
             <h1 class="font-display text-4xl md:text-5xl mb-1" style="color:var(--gold)">Craft Madness</h1>
             <p class="text-sm" style="color:var(--text-secondary)">Combine elements to discover new ones</p>
             <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
                 <span id="elCount" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:var(--gold-glow);color:var(--gold)">4 Discovered</span>
+                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button>
+                <button id="prestigeShopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(168,85,247,.12);color:#a78bfa">🏆 Prestige Shop</button>
                 <button id="viewRankBtn" class="hidden text-xs font-semibold px-3 py-1 rounded-full transition-colors" style="background:rgba(234,179,8,0.12);color:#eab308">View Rank</button>
-                <div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(234,179,8,0.12);color:#eab308">
+                <div id="coinDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(234,179,8,0.12);color:#eab308">
                     🪙 <span id="coinAmt">0</span>
                     <span class="text-[0.65rem] ml-1" style="color:var(--text-secondary)">+<span id="cpm">0</span>/min</span>
                 </div>
-                <button id="shopBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
-                <button id="battleBtn" class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(239,68,68,0.12);color:#ef4444">⚔️ Battle</button>
-                <div class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span>
+                <button id="shopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
+                <button id="battleBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(239,68,68,0.12);color:#ef4444">⚔️ Battle</button>
+                <div id="cyMoneyDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span>
                 </div>
             </div>
         </header>
 
         <!-- Combination Area -->
-        <section class="mb-8">
+        <section class="mb-8 workshop-panel">
+            <div class="workshop-label">✦ The crafting workbench</div>
             <h2 class="font-display text-lg text-center mb-4" style="color:var(--text-secondary)">Combine</h2>
             <div class="flex flex-col md:flex-row justify-center items-center gap-4">
                 <div id="dz1" class="drop-zone"><div id="dz1c" class="text-center text-xs" style="color:var(--text-secondary)">Drop here</div></div>
@@ -725,16 +1012,110 @@
             <div id="resultArea" class="mt-5 flex justify-center items-center min-h-[80px]"></div>
         </section>
 
+                <aside id="exclusiveStorage" hidden style="display:none!important" aria-label="Exclusive Storage">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><strong style="font-size:.8rem;color:#a78bfa">Exclusive Storage</strong><span id="exclusiveCount" style="font-size:.65rem;color:var(--text-secondary)"></span></div>
+                    <p style="font-size:.65rem;color:var(--text-secondary);margin-bottom:12px">Your treasures · Kept through reset</p>
+                    <div id="exclusiveGrid"></div>
+                </aside>
+
+        <aside id="craftHints" hidden style="display:none!important" aria-label="Crafting hints">
+            <h3 style="font-size:.8rem;color:var(--gold);margin-bottom:10px">A few clues</h3>
+            <p style="font-size:.7rem;color:var(--text-secondary)">🔑 <span id="keyBalance">0</span> keys · 1 in 500 chance each second while playing. Spend a key to reveal a recipe, or discover its element to unlock it for free.</p>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--text-secondary);margin-bottom:12px;cursor:pointer"><input type="checkbox" id="showDiscoveredHints"> Show discovered clues</label>
+            <article data-hint-element="Shop"><strong>🛒 Unlock Shop &amp; coins</strong>
+                <p>Build a home, then add a little more building material to turn it into a place of business.</p>
+                <details><summary>Another hint</summary><p>Water and Earth make Mud. Fire turns Mud into Brick. Keep combining matching building pieces until you have a House.</p></details>
+                <details><summary>Reveal the recipe</summary><p>Water + Earth → Mud<br>Mud + Fire → Brick<br>Brick + Brick → Wall<br>Wall + Wall → Room<br>Room + Room → House<br><strong>House + Brick → Shop</strong></p></details>
+            </article>
+            <article data-hint-element="The End Game"><strong>🎬 Find the ending &amp; unlock Battle</strong>
+                <p>Bring deep thought into balance. When you find The End, it still needs to meet itself.</p>
+                <details><summary>Another hint</summary><p>Fire + Paradox makes Philosophy. Two Opposites make Balance.</p></details>
+                <details><summary>Reveal the recipe</summary><p>Fire + Paradox → Philosophy<br>Opposite + Opposite → Balance<br>Philosophy + Balance → The End<br><strong>The End + The End → The End Game</strong><br>Finding the ending reveals Battle.</p></details>
+            </article>
+            <article data-hint-element="A"><strong>🔤 Discover A</strong>
+                <p>The alphabet begins when written words meet a flame.</p>
+                <details><summary>Reveal the recipe</summary><p>Stone + Ink → Writing<br><strong>Writing + Fire → A</strong></p></details>
+            </article>
+            <article data-hint-element="1"><strong>1️⃣ Discover 1</strong>
+                <p>Start counting with a single day on a calendar.</p>
+                <details><summary>Reveal the recipe</summary><p>Time + Stone → Calendar<br>Sky + Sun → Day<br><strong>Calendar + Day → 1</strong></p></details>
+            </article>
+            <article data-hint-element="Philosophy"><strong>🤔 Discover Philosophy</strong>
+                <p>Let a flame stir a question that seems to contradict itself.</p>
+                <details><summary>Reveal the recipe</summary><p>Null + Null → Paradox<br><strong>Fire + Paradox → Philosophy</strong></p></details>
+            </article>
+            <article data-hint-element="Star Forge"><strong>🌟 Discover Star Forge</strong>
+                <p>Build a place to shape metal, then give it a light from the night sky.</p>
+                <details><summary>Another hint</summary><p>A forge needs heat and metal. Look to the sky after dark for its celestial partner.</p></details>
+                <details><summary>Reveal the recipe</summary><p>Stone + Underground → Metal<br>Fire + Metal → Forge<br>Sky + Night → Star<br><strong>Star + Forge → Star Forge</strong></p></details>
+            </article>
+            <article data-hint-element="Null"><strong>⚫ Discover Null</strong>
+                <p>Peer into the deepest emptiness, then bring two of those depths together.</p>
+                <details><summary>Reveal the recipe</summary><p>Night + Ocean → Abyss<br><strong>Abyss + Abyss → Null</strong></p></details>
+            </article>
+            <section style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+                <strong>🔑 Key Services</strong>
+                <p>Each purchase asks for confirmation. Services become available as you unlock their features.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <button id="keyCoins" class="sort-btn text-xs px-2 py-1 rounded-lg">500 coins · 1 key</button>
+                    <button id="keyRestock" class="sort-btn text-xs px-2 py-1 rounded-lg">Restock Shop · 1 key</button>
+                    <button id="keyForge" class="sort-btn text-xs px-2 py-1 rounded-lg">Recharge Forge · 10 keys</button>
+                    <button id="keyCyMoney" class="sort-btn text-xs px-2 py-1 rounded-lg">1 CyMoney · 100 keys</button>
+                </div>
+                <p class="text-xs">Coins/restocks need Shop. Recharge needs a cooling-down Forge. CyMoney exchange needs CyMoney already unlocked.</p>
+            </section>
+            <p id="hintsComplete" hidden>All these discoveries are already in your collection. ✨</p>
+        </aside>
+
+        <div id="keyUnlockModal" class="modal-overlay"><div class="modal-box" style="max-width:380px">
+            <button class="modal-close" data-close="keyUnlockModal">&times;</button>
+            <h2 id="keyUnlockTitle" class="font-display text-xl mb-3">UNLOCK?</h2>
+            <p id="keyUnlockWarning" style="font-size:.8rem;color:#eab308;font-weight:700">WARNING: THIS WILL USE ONE OF YOUR KEY ELEMENTS</p>
+            <p id="keyUnlockBalance" style="font-size:.8rem;margin:12px 0;color:var(--text-secondary)"></p>
+            <div style="display:flex;gap:10px;justify-content:flex-end">
+                <button data-close="keyUnlockModal" class="text-sm px-4 py-2 rounded-lg">Cancel</button>
+                <button id="confirmKeyUnlock" class="text-sm px-4 py-2 rounded-lg" style="background:var(--gold);color:#1a1a2e">Unlock · 1 🔑</button>
+            </div>
+        </div></div>
+
+        <div id="prestigeModal" class="modal-overlay"><div class="modal-box" style="max-width:540px">
+            <button class="modal-close" data-close="prestigeModal">&times;</button>
+            <h2 class="font-display text-xl mb-3">🏆 Prestige?</h2>
+            <p id="prestigeCount" class="text-sm mb-3"></p>
+            <p id="prestigeRequirements" class="text-sm mb-3" style="line-height:1.7"></p>
+            <details class="text-xs mb-3"><summary>Required collection</summary><p id="prestigeMissing" style="max-height:150px;overflow:auto;margin-top:8px"></p></details>
+            <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires 250 keys, all ranked elements, and 1,000,000 coins currently held. Rank-excluded and exclusive elements are not required.</p>
+            <p class="text-sm mb-4" style="color:#eab308">Confirming spends 250 keys and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ordinary upgrades. Exclusive elements, CyMoney, prestige coins and permanent upgrades are kept. You receive exactly 1 prestige coin.</p>
+            <button id="confirmPrestige" class="text-sm px-4 py-2 rounded-lg disabled:opacity-40" style="background:var(--gold);color:#1a1a2e" disabled>Confirm Prestige · Earn 1 coin</button>
+        </div></div>
+        <div id="prestigeShopModal" class="modal-overlay"><div class="modal-box" style="max-width:650px">
+            <button class="modal-close" data-close="prestigeShopModal">&times;</button>
+            <h2 class="font-display text-xl mb-2">🏆 Prestige Shop</h2>
+            <p id="prestigeBalance" class="text-sm mb-2"></p>
+            <p class="text-xs mb-4" style="color:var(--text-secondary)">Every level costs 1 prestige coin. All purchases survive reset and prestige. Forge upgrades apply on the next activation; stock upgrades apply on the next restock.</p>
+            <div id="prestigeUpgradeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div></div>
+
         <!-- Loading -->
         <div id="loader" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.5);backdrop-filter:blur(3px)">
-            <div class="p-6 rounded-2xl text-center" style="background:var(--bg-card);border:1px solid var(--border)">
-                <div class="w-8 h-8 rounded-full animate-spin mx-auto mb-3" style="border:3px solid var(--gold);border-top-color:transparent"></div>
-                <p id="loaderText" class="text-sm" style="color:var(--text-secondary)">Combining...</p>
+            <div class="fusion-workbench" role="status" aria-live="polite">
+                <div class="fusion-heading">THE ELEMENT FORGE</div>
+                <div class="fusion-scene" aria-hidden="true">
+                    <div class="fusion-orbit"></div>
+                    <div class="fusion-piece fusion-left"><span id="fusionLeftEmoji"></span></div>
+                    <div class="fusion-piece fusion-right"><span id="fusionRightEmoji"></span></div>
+                    <div class="fusion-core">✦</div>
+                    <div class="fusion-sparks">✧ · ✦ · ✧</div>
+                    <div class="fusion-anvil">⚒️</div>
+                </div>
+                <div class="fusion-names"><span id="fusionLeftName"></span><span> + </span><span id="fusionRightName"></span></div>
+                <p id="loaderText">Forging a new discovery…</p>
+                <div class="fusion-track"><i></i></div>
             </div>
         </div>
 
         <!-- Elements Grid -->
-        <section class="mt-6">
+        <section class="mt-6 collection-panel">
             <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
                 <h2 class="font-display text-lg" style="color:var(--text-secondary)">Your Elements</h2>
                 <div class="relative flex-grow max-w-xs order-3 sm:order-2 w-full sm:w-auto mt-2 sm:mt-0">
@@ -742,8 +1123,8 @@
                     <svg class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text-secondary)" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
                 <div class="flex gap-1.5 order-2 sm:order-3 items-center">
-                    <button id="starForgeBtn" title="Star Forge — Bestow 5 random elements with special blessings (5 min cooldown)">🌟 Star Forge<span class="sf-timer" id="sfTimer"></span></button>
-                    <button id="upgradeForgeBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-all ml-2" style="background:rgba(20,184,166,0.12);color:#14b8a6;pointer-events:auto;opacity:1" title="Upgrade Star Forge (Cost: 1 CyMoney)">⬆️ Upgrade Forge</button>
+                    <button id="starForgeBtn" data-progression hidden title="Star Forge — Bestow 5 random elements with special blessings (5 min cooldown)">🌟 Star Forge<span class="sf-timer" id="sfTimer"></span></button>
+                    <button id="upgradeForgeBtn" data-progression hidden class="text-xs font-medium px-3 py-1.5 rounded-lg transition-all ml-2" style="background:rgba(20,184,166,0.12);color:#14b8a6;pointer-events:auto;opacity:1" title="Upgrade Star Forge (Cost: 1 CyMoney)">⬆️ Upgrade Forge</button>
                     <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
                     <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
                     <button id="resetBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(239,68,68,0.08);color:#ef4444">Reset</button>
@@ -754,13 +1135,17 @@
                 <button id="sortOriginal" class="sort-btn sort-active text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="original">Discovery ↕</button>
                 <button id="sortType" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="type">Type</button>
                 <button id="sortAlpha" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="alpha">A → Z</button>
+                <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
+                <button type="button" id="hintToggle" aria-controls="craftHints" aria-expanded="false" aria-label="Show crafting hints" title="Show crafting hints">🔑</button>
             </div>
             <div id="noResults" class="hidden text-center py-6 text-sm" style="color:var(--text-secondary)">No elements match your search</div>
-            <div id="elGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5"></div>
+            <div id="elementStorageViews"><div id="elGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5"></div>
+
+            </div>
         </section>
 
         <!-- History -->
-        <section class="mt-10 mb-8">
+        <section class="mt-10 mb-8 history-panel">
             <h2 class="font-display text-lg mb-3" style="color:var(--text-secondary)">Discovered Combinations</h2>
             <div id="comboHistory" class="rounded-xl p-4 overflow-y-auto max-h-[260px]" style="background:var(--bg-card);border:1px solid var(--border)">
                 <p class="italic text-center text-sm" style="color:var(--text-secondary)">No combinations yet</p>
@@ -781,7 +1166,7 @@
         <div id="exportStrength" class="text-xs mb-2 hidden" style="color:var(--text-secondary)"></div>
         <p id="exportErr" class="hidden text-xs text-red-500 mb-2"></p>
         <div id="exportCodeWrap" class="hidden">
-            <div class="relative"><textarea id="exportCode" class="w-full h-28 p-3 text-xs font-mono rounded-xl resize-none" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary)" readonly></textarea>
+            <div class="relative"><textarea id="exportCode" class="w-full h-28 p-3 text-xs font-mono rounded-xl resize-none" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary)" ></textarea>
             <button id="copyBtn" class="absolute right-2 top-2 text-xs font-semibold px-3 py-1 rounded-lg text-white" style="background:var(--gold);color:#1a1a2e">Copy</button></div>
         </div>
         <div id="editModeWrap" class="hidden">
@@ -819,7 +1204,7 @@
     <!-- Reset Confirm Modal -->
     <div id="resetModal" class="modal-overlay"><div class="modal-box" style="max-width:400px">
         <h2 class="font-display text-xl mb-2">Reset Game?</h2>
-        <p class="text-sm mb-5" style="color:var(--text-secondary)">All discovered elements and progress will be lost. This cannot be undone.</p>
+        <p class="text-sm mb-5" style="color:var(--text-secondary)">Non-exclusive elements and progress will be lost. Exclusive elements, prestige coins and permanent prestige upgrades will be kept. This cannot be undone.</p>
         <div class="flex justify-end gap-2">
             <button class="text-sm px-4 py-2 rounded-lg" style="background:var(--bg-primary);border:1px solid var(--border)" data-close="resetModal">Cancel</button>
             <button id="confirmReset" class="text-sm px-4 py-2 rounded-lg font-semibold bg-red-500 text-white hover:bg-red-600 transition-colors">Reset</button>
@@ -1139,6 +1524,25 @@
     <div id="changelogModal" class="modal-overlay"><div class="modal-box">
         <button class="modal-close" data-close="changelogModal">&times;</button>
         <h2 class="font-display text-xl mb-5">Changelog</h2>
+        <div class="changelog-scroll" tabindex="0" role="region" aria-label="Version history">
+        <div class="changelog-version">
+            <h3>v3.0 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
+            <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
+                <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections, notifications and Resonance Arena, with jewel-like exclusive cards and cinematic OHKO finishers.</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> Strict battle turns and repeat-click guards. All 436 skill labels renamed.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Prestige: collect every ranked element, hold 250 keys and 1,000,000 coins, then reset for 1 prestige coin. Unlock 12 permanent upgrade types in the Prestige Shop, including Swift Forging.</li>
+                <li><span class="changelog-tag tag-ui">UI</span> Opening a lock now announces: “You hear a lock being broken...”</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Online Battle rooms with synchronized combat and disconnect handling, alongside Local Battle.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Craft Shop to unlock shopping and coin earnings. Keys reveal its recipe but do not unlock Shop. Find the ending to unlock Battle.</li>
+                <li><span class="changelog-tag tag-ui">UI</span> Forge controls and CyMoney appear as you unlock them.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Compact Exclusive Storage below Combine. Toggle the whole panel with 💎 beside A → Z.</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> Exclusive elements survive reset and keep their exclusive status on import.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> 🔑 Crafting hints for Shop, the ending, A, 1, Philosophy and Null. Discovered clues hide automatically; show them again with “Show discovered clues”.</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> Upgrade Forge becomes clickable again after reset or import when eligible.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Stackable keys: a 1-in-500 chance each active second. Spend one key to reveal a recipe; Forge recharge costs 10 keys and 1 CyMoney costs 100 keys; discovering an element unlocks its recipe for free.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Automatic localStorage saves with cookie fallback. Export and import codes remain available.</li>
+            </ul>
+        </div>
         <div class="changelog-version">
             <h3>v2.1</h3>
             <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
@@ -1147,7 +1551,7 @@
             </ul>
         </div>
         <div class="changelog-version">
-            <h3>v2.0 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
+            <h3>v2.0</h3>
             <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-new">NEW</span> Coin system — earn coins passively from elements</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Element Shop with 6 pack rarities</li>
@@ -1173,6 +1577,7 @@
         </div>
         <div class="mt-4 pt-3 text-xs" style="border-top:1px solid var(--border);color:var(--text-secondary)">
             Thanks to all players who keep combining! 🧪
+        </div>
         </div>
     </div></div>
 
@@ -1233,7 +1638,6 @@
             'Tool+Wood':{name:'Craft',emoji:'⚒️',description:'Skill in making things by hand',color:'bg-orange-400'},
             'Tool+Stone':{name:'Mining',emoji:'⛏️',description:'Extraction of minerals',color:'bg-gray-600'},
             'Mining+Craft':{name:'MineCraft',emoji:'🧊',description:'A popular block-building game',color:'bg-green-700',isFinal:true},
-            'Eternity+Craft':{name:'Infinity Craft',emoji:'♾️',description:'This is a Final Item!',color:'bg-amber-500',isFinal:true},
             'Earth+Earth':{name:'Mountain',emoji:'⛰️',description:'Large landform rising above surroundings'},
             'Earth+Air':{name:'Dust',emoji:'💨',description:'Fine particles of matter'},
             'Earth+Night':{name:'Moon',emoji:'🌙',description:"Earth's natural satellite"},
@@ -1396,8 +1800,7 @@
             'Close+Media':{name:'Discord',emoji:'▶️',description:'Online chatting platform',color:'bg-amber-500',isFinal:true},
             'Human+YouTube':{name:'YouTuber',emoji:'🎥',description:'YouTube content creator',color:'bg-red-500'},
             'Media+Pirate':{name:'One Piece',emoji:'🏴‍☠️',description:'Anime about pirates',color:'bg-blue-600',isSubFinal:true},
-            'One Piece+Game':{name:'Blox Fruit',emoji:'🏝️',description:'Roblox pirate game',color:'bg-blue-600',isSubFinal:true},
-            'Blox Fruit+YouTuber':{name:'Tomokuta Plays',emoji:'📺',description:'YouTube channel for Roblox content',color:'bg-amber-500',isFinal:true,hasLink:true,link:'https://www.youtube.com/@tomokutaplays?locale=en-cn'},
+            'One Piece+Game':{name:'Blox Fruit',emoji:'🏝️',description:'A legendary pirate adventure — Final Element',color:'bg-blue-600',isFinal:true},
             'Philosophy+Balance':{name:'The End',emoji:'🌌',description:'Combine two "The End" to see your rank.',color:'bg-amber-500',isFinal:false},
             'The End+The End':{name:'The End Game',emoji:'🎬',description:'Game completed!',color:'bg-amber-500',isFinal:true,isEndGameTrigger:true},
             'Normal+Water':{name:'Pool',emoji:'🏊',description:'Artificial body of water'},
@@ -1589,6 +1992,7 @@
             // ─── CONSTRUCTION / CITY CHAIN ───
             'Wall+Wall':{name:'Room',emoji:'🚪',description:'Enclosed space'},
             'Room+Room':{name:'House',emoji:'🏠',description:'A place to live'},
+            'House+Brick':{name:'Shop',emoji:'🛒',description:'Open for business! Unlocks the Shop and coin display.'},
             'House+House':{name:'Village',emoji:'🏘️',description:'Small settlement'},
             'Village+Village':{name:'City',emoji:'🏙️',description:'Large urban area'},
             'City+City':{name:'Country',emoji:'🗺️',description:'A nation'},
@@ -2558,12 +2962,10 @@
         let sel1 = null, sel2 = null;
         let fractionalCoins = 0;
         let gs = {
-            coins:25, totalCoins:25, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false
+            prestige:{coins:0,times:0,upgrades:{}},coins:0, totalCoins:0, lastCalcTime:Date.now(), shopRefresh:Date.now(), shopStock:{}, packsBought:0, hasShownEnding:false, sfUnlocked:false, cyMoney:0, sfUpgraded:false
         };
 
-        const totalMain = Object.keys(recipes).reduce((c,k)=> {
-            const el=recipes[k]; return (!el.isExclusive && !el.excludeFromRank) ? c+1 : c;
-        }, 0);
+        const totalMain = rankedCatalog().length; // Unique ranked discoveries, shared with Prestige.
 
         // ─── DOM REFS ───
         const $ = id => document.getElementById(id);
@@ -2675,11 +3077,22 @@
             return el.isCyMoney === true;
         }
         function stripToEverything(el){
-            ALL_MOD_FLAGS.forEach(k=>{delete el[k];});
+            ALL_MOD_FLAGS.forEach(k=>{if(k!=='isExclusive')delete el[k];});
             el.isEverything=true;
         }
 
+        // One normalization/reward path covers Forge upgrades, crafting and save imports.
+        function normalizeEverything(){
+            elements.forEach(el=>{if(checkIsEverything(el))stripToEverything(el);});
+            if(elements.some(el=>el.isEverything)&&!gs.everythingAwarded){
+                gs.everythingAwarded=true;
+                gs.cyMoney=(gs.cyMoney||0)+1;
+                $('cyMoneyAmt').textContent=gs.cyMoney;
+                notify('EVERYTHING AWAKENED','Your first Everything element earned 1 CyMoney!','🌈');
+            }
+        }
         function getElClasses(el) {
+            if(el.isExclusive)return 'exclusive-el exclusive-showpiece';
             let cls=[];
             // Everything elements get unique cyber styling only
             if(checkIsEverything(el)) return 'everything-el';
@@ -2734,54 +3147,6 @@
             return cls.join(' ');
         }
 
-        function getBadges(el) {
-            let h='';
-            // Everything elements get a single supreme badge
-            if(checkIsEverything(el)) return '<span class="badge badge-everything">⚡ EVERYTHING</span>';
-            // Penalty elements only display the penalty modification badge
-            if(hasPenaltyMod(el)){
-                if(el.isToxic) h+='<span class="badge badge-toxic">⚠️ TOXIC</span>';
-                if(el.isViral) h+='<span class="badge badge-viral">⚠️ VIRAL</span>';
-                if(el.isParasitic) h+='<span class="badge badge-parasitic">⚠️ PARASITIC</span>';
-                if(el.isCorrupted) h+='<span class="badge badge-corrupted">⚠️ CORRUPT</span>';
-                return h;
-            }
-            if(el.isFinal) h+='<span class="badge badge-final">FINAL</span>';
-            else if(el.isExclusive) h+='<span class="badge badge-exclusive">EXCLUSIVE</span>';
-            if(el.isPermafrost) h+='<span class="badge badge-permafrost">PERMAFROST</span>';
-            else if(el.isFrozen) h+='<span class="badge badge-frozen">FROZEN</span>';
-            if(el.isInfernal) h+='<span class="badge badge-infernal">INFERNAL</span>';
-            else if(el.isSuperHot) h+='<span class="badge badge-hot">HOT</span>';
-            if(el.isSecret) h+='<span class="badge badge-secret">SECRET</span>';
-            if(el.isValidCombination) h+='<span class="badge badge-valid">VALID</span>';
-            if(el.isRadioactive) h+='<span class="badge badge-radioactive">☢️ RADIO</span>';
-            if(el.isCursed) h+='<span class="badge badge-cursed">CURSED</span>';
-            if(el.isBlessed) h+='<span class="badge badge-blessed">BLESSED</span>';
-            if(el.isUnstable) h+='<span class="badge badge-unstable">UNSTABLE</span>';
-            if(el.isPhantom) h+='<span class="badge badge-phantom">PHANTOM</span>';
-            if(el.isGolden) h+='<span class="badge badge-golden">GOLDEN</span>';
-            if(el.isCrystalline) h+='<span class="badge badge-crystalline">CRYSTAL</span>';
-            if(el.isCorrupted) h+='<span class="badge badge-corrupted">CORRUPT</span>';
-            if(el.isHoly) h+='<span class="badge badge-holy">HOLY</span>';
-            if(el.isVoid) h+='<span class="badge badge-void">VOID</span>';
-            if(el.isEthereal) h+='<span class="badge badge-ethereal">ETHEREAL</span>';
-            if(el.isLegendary) h+='<span class="badge badge-legendary">LEGENDARY</span>';
-            if(el.isChromatic) h+='<span class="badge badge-chromatic">CHROMATIC</span>';
-            if(el.isAncient) h+='<span class="badge badge-ancient">ANCIENT</span>';
-            if(el.isDivine) h+='<span class="badge badge-divine">DIVINE</span>';
-            if(el.isAntimatter) h+='<span class="badge badge-antimatter">ANTI-M</span>';
-            if(el.isParasitic) h+='<span class="badge badge-parasitic">PARASITIC</span>';
-            if(el.isMagnetic) h+='<span class="badge badge-magnetic">MAGNETIC</span>';
-            if(el.isTemporal) h+='<span class="badge badge-temporal">TEMPORAL</span>';
-            if(el.isAbyssal) h+='<span class="badge badge-abyssal">ABYSSAL</span>';
-            if(el.isCelestial) h+='<span class="badge badge-celestial">CELESTIAL</span>';
-            if(el.isElectric) h+='<span class="badge badge-electric">ELECTRIC</span>';
-            if(el.isPurified) h+='<span class="badge badge-purified">PURIFIED</span>';
-            if(checkIsCyMoney(el)) h+='<span class="badge badge-cymoney">💎 CYMONEY</span>';
-            return h;
-        }
-
-        // ─── ELEMENT TYPE CLASSIFICATION & SORTING ───
         const TYPE_ORDER = [
             'Everything','Basic','Final','Exclusive','Secret','Legendary','Divine','Celestial','Ancient',
             'Holy','Blessed','Purified','Golden','Crystalline','Chromatic','Ethereal','Electric','Magnetic','Temporal',
@@ -2862,15 +3227,16 @@ window.generateBattleCode = function() {
             document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('sort-active', b.dataset.sort === currentSort));
         }
 
-        // ─── SAVE/LOAD (using cookie-based storage since localStorage is unavailable in iframe) ───
+        // Export/import codes are the primary portable save; localStorage autosaves with legacy cookie fallback.
         const _store={};
-        function _setItem(k,v){_store[k]=v;try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
-        function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
-        function save(){try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
+        // Prefer durable localStorage; read legacy cookies for compatible migration.
+        function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Export your save before closing; browser storage is blocked or full.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
+        function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
+        function save(){normalizeKeyStacks();normalizeEverything();updateProgressionUI();try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
         function load(){
             try{
                 const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
-                if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
+                if(e){elements=JSON.parse(e);normalizeKeyStacks();elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
                 if(c)combos=JSON.parse(c);
                 if(s){const l=JSON.parse(s);gs={...gs,...l};}
                 // AFTER loading, update displays
@@ -2881,6 +3247,7 @@ window.generateBattleCode = function() {
 
         // ─── COIN SYSTEM (fixed fractional accumulation) ───
         function calcCoinsPerMin() {
+            if(!gs.shopUnlocked)return 0;
             let r=0;
             elements.forEach(el=>{
                 if(el.isFrozen&&!el.isPermafrost)return;
@@ -2922,10 +3289,12 @@ window.generateBattleCode = function() {
                 if(el.isVoid) base=Math.max(1,base-2);
                 r+=base;
             });
-            return r;
+            return r*(1+.25*prestigeLevel('income'));
         }
 
         function tickCoins() {
+            // No passive accrual or fractional carry-over while Shop is locked.
+            if(!gs.shopUnlocked){fractionalCoins=0;gs.lastCalcTime=Date.now();cpm.textContent=0;return;}
             const cPerMin = calcCoinsPerMin();
             const elapsed = 3/60; // 3 seconds in minutes
             const earned = cPerMin * elapsed;
@@ -2947,6 +3316,7 @@ window.generateBattleCode = function() {
             notify('💎 CyMoney Earned!', `You received ${amount} CyMoney!`, '💎');
         }
         function updateCyMoneyDisplay(){
+            updateProgressionUI();
             document.getElementById('cyMoneyAmt').textContent = gs.cyMoney || 0;
         }
 
@@ -2962,9 +3332,9 @@ window.generateBattleCode = function() {
                 const packId=Object.keys(SHOP_PACKS).find(id=>card.classList.contains('pack-'+id));
                 if(!packId)return;
                 const p=SHOP_PACKS[packId];
-                const canBuy=gs.coins>=p.price&&(gs.shopStock[packId]||0)>0;
+                const canBuy=gs.coins>=shopPrice(p)&&(gs.shopStock[packId]||0)>0;
                 btn.disabled=!canBuy;
-                btn.textContent=gs.coins<p.price?'Need '+p.price+' 🪙':'Buy for '+p.price+' 🪙';
+                btn.textContent=gs.coins<shopPrice(p)?'Need '+shopPrice(p)+' 🪙':'Buy for '+shopPrice(p)+' 🪙';
             });
         }
 
@@ -2973,9 +3343,9 @@ window.generateBattleCode = function() {
             gs.shopRefresh=Date.now(); gs.shopStock={};
             Object.keys(SHOP_PACKS).forEach(id=>{
                 const p=SHOP_PACKS[id];
-                if(Math.random()<p.stockChance) gs.shopStock[id]=Math.ceil(Math.random()*p.maxStock);
+                if(Math.random()<p.stockChance) gs.shopStock[id]=Math.ceil(Math.random()*p.maxStock)+prestigeLevel('stock');
             });
-            if(!gs.shopStock.common) gs.shopStock.common=2;
+            if(!gs.shopStock.common) gs.shopStock.common=2+prestigeLevel('stock');
             renderShop(); save();
         }
 
@@ -2990,11 +3360,11 @@ window.generateBattleCode = function() {
                 d.innerHTML=`
                     <div class="flex justify-between items-start mb-2">
                         <div class="font-semibold text-sm">${p.name}</div>
-                        <div class="flex items-center gap-1 text-sm font-bold" style="color:#eab308">${p.price} 🪙</div>
+                        <div class="flex items-center gap-1 text-sm font-bold" style="color:#eab308">${shopPrice(p)} 🪙</div>
                     </div>
                     <p class="text-xs mb-2" style="color:var(--text-secondary)">${p.description}</p>
                     <p class="text-xs mb-3" style="color:var(--text-secondary)">Stock: ${stock}</p>
-                    <button class="pack-btn" ${gs.coins<p.price?'disabled':''}>${gs.coins<p.price?'Need '+p.price+' 🪙':'Buy for '+p.price+' 🪙'}</button>`;
+                    <button class="pack-btn" ${gs.coins<shopPrice(p)?'disabled':''}>${gs.coins<shopPrice(p)?'Need '+shopPrice(p)+' 🪙':'Buy for '+shopPrice(p)+' 🪙'}</button>`;
                 d.querySelector('.pack-btn').addEventListener('click',()=>buyPack(id));
                 grid.appendChild(d);
             });
@@ -3002,17 +3372,18 @@ window.generateBattleCode = function() {
         }
 
         function updateShopTimer() {
-            const left=Math.max(0, 5*60*1000-(Date.now()-gs.shopRefresh));
+            const left=Math.max(0, shopRestockMs()-(Date.now()-gs.shopRefresh));
             if(left<=0){refreshShop();return;}
             const m=Math.floor(left/60000), s=Math.floor((left%60000)/1000);
             $('shopTimer').textContent=`${m}:${String(s).padStart(2,'0')}`;
         }
 
         function buyPack(id) {
+            if(!gs.shopUnlocked)return;
             const p=SHOP_PACKS[id];
-            if(gs.coins<p.price){notify('Not Enough','Need '+p.price+' coins','❌');return;}
+            if(gs.coins<shopPrice(p)){notify('Not Enough','Need '+shopPrice(p)+' coins','❌');return;}
             if(!gs.shopStock[id]||gs.shopStock[id]<=0){notify('Out of Stock','This pack is sold out','❌');return;}
-            gs.coins-=p.price; gs.shopStock[id]--; gs.packsBought++;
+            gs.coins-=shopPrice(p); gs.shopStock[id]--; gs.packsBought++;
             updateCoinDisplay(); save();
             const chosen=pickFromPack(p);
             openPackAnim(id,chosen);
@@ -3037,6 +3408,7 @@ window.generateBattleCode = function() {
             $('packOpenModal').style.display='block';
             // Store chosen element for the done button
             $('flipDoneBtn').onclick=function(){
+                if(!gs.shopUnlocked)return;
                 $('packOpenModal').style.display='none';
                 $('flipCard').classList.remove('flipped');
                 const newEl={name:elInfo.name,emoji:elInfo.emoji,description:elInfo.description,color:elInfo.color||randColor()};
@@ -3044,7 +3416,7 @@ window.generateBattleCode = function() {
                     elements.push(newEl); updateCount(); renderEls(); save();
                     notify('New Element!','Found '+newEl.name+' in the pack!','✨');
                 } else {
-                    gs.coins+=Math.round(SHOP_PACKS[packId].price*0.3);
+                    gs.coins+=Math.round(shopPrice(SHOP_PACKS[packId])*0.3);
                     updateCoinDisplay(); save();
                     notify('Duplicate','Already have '+newEl.name+'. Got coins back!','🔄');
                 }
@@ -3053,20 +3425,283 @@ window.generateBattleCode = function() {
 
         $('flipOpenBtn').addEventListener('click',()=>$('flipCard').classList.add('flipped'));
         $('shopBtn').addEventListener('click',()=>{
+            if(!gs.shopUnlocked){notify('Shop locked','Craft Shop to unlock shopping and coin earnings. Keys can reveal its recipe, but cannot unlock Shop.','🔒');return;}
             updateCoinDisplay();
             const mins=(Date.now()-gs.shopRefresh)/60000;
-            if(mins>=5) refreshShop();
+            if(mins>=shopRestockMs()/60000) refreshShop();
             else renderShop();
             openModal('shopModal');
         });
 
+        // Keys live in the canonical collection. Save imports are snapshots: duplicate
+        // key rows use the largest amount instead of multiplying keys on repeated imports.
+        function keyAmount(el){
+            const value=el.amountOfKey??el.amountofkey??1;
+            return Number.isFinite(Number(value))?Math.max(0,Math.min(999999,Math.floor(Number(value)))):1;
+        }
+        function normalizeKeyStacks(){
+            // Migrate retired content in both autosaves and imported collections.
+            elements=elements.filter(e=>!['infinity craft','tomokuta plays'].includes(e.name.toLowerCase()));
+            elements.forEach(e=>{if(e.name.toLowerCase()==='blox fruit'){e.isFinal=true;delete e.isSubFinal;}});
+            const seen=new Map();
+            elements=elements.filter(el=>{
+                if(!el.isKey){delete el.amountOfKey;delete el.amountofkey;return true;}
+                el.amountOfKey=keyAmount(el);delete el.amountofkey;
+                if(!el.amountOfKey)return false;
+                const name=el.name.toLowerCase(),old=seen.get(name);
+                if(old){old.amountOfKey=Math.max(old.amountOfKey,el.amountOfKey);old.isExclusive=old.isExclusive||el.isExclusive;return false;}
+                seen.set(name,el);return true;
+            });
+        }
+        function totalKeys(){return elements.reduce((n,e)=>n+(e.isKey?keyAmount(e):0),0);}
+        function recipeUnlocked(name){
+            return prestigeLevel('hints')>0||(name==='Shop'&&gs.shopUnlocked)||
+                (Array.isArray(gs.unlockedRecipes)&&gs.unlockedRecipes.includes(name))||
+                elements.some(e=>e.name.toLowerCase()===name.toLowerCase());
+        }
+        function updateKeyLocks(){
+            if(!Array.isArray(gs.unlockedRecipes))gs.unlockedRecipes=[];
+            let newLockOpened=false;
+            document.querySelectorAll('#craftHints [data-hint-element]').forEach(clue=>{
+                const name=clue.dataset.hintElement;
+                if(recipeUnlocked(name)&&!gs.unlockedRecipes.includes(name)){gs.unlockedRecipes.push(name);newLockOpened=true;}
+                const details=clue.querySelector('[data-recipe-lock]');
+                if(!details)return;
+                const unlocked=recipeUnlocked(name);
+                details.querySelector('summary').textContent=unlocked?'🔓 Reveal the recipe':'🔒 Reveal the recipe · 1 key';
+                details.querySelectorAll('p').forEach(p=>{p.hidden=!unlocked;});
+                if(!unlocked)details.open=false;
+            });
+            if(newLockOpened&&keyLockNotificationsReady)notify('System','You hear a lock being broken...','🔓');
+            $('keyBalance').textContent=totalKeys();
+            if(pendingKeyUnlock){$('confirmKeyUnlock').disabled=totalKeys()<(keyService(pendingKeyUnlock)?.cost||1)&&!recipeUnlocked(pendingKeyUnlock);$('keyUnlockBalance').textContent=totalKeys()+' key(s) available.';}
+        }
+        const KEY_SERVICES={
+            coins:{button:'keyCoins',label:'500 COINS',ready:()=>!!gs.shopUnlocked,apply:()=>{gs.coins+=500;gs.totalCoins+=500;}},
+            restock:{button:'keyRestock',label:'SHOP RESTOCK',ready:()=>!!gs.shopUnlocked,apply:()=>refreshShop()},
+            forge:{cost:10,button:'keyForge',label:'FORGE RECHARGE',ready:()=>!!gs.sfUnlocked&&sfCooldownEnd>Date.now(),apply:()=>{sfCooldownEnd=0;gs.sfCooldownEnd=0;if(sfInterval){clearInterval(sfInterval);sfInterval=null;}sfTimer.textContent='';starForgeBtn.classList.remove('sf-cooldown','sf-locked');starForgeBtn.style.pointerEvents='';}},
+            cymoney:{cost:100,button:'keyCyMoney',label:'1 CYMONEY',ready:()=>!!gs.cyMoneyUnlocked,apply:()=>{gs.cyMoney=(gs.cyMoney||0)+1;updateCyMoneyDisplay();}}
+        };
+        function keyService(name){return typeof name==='string'&&name.startsWith('service:')?KEY_SERVICES[name.slice(8)]:null;}
+        Object.entries(KEY_SERVICES).forEach(([id,service])=>{
+            $(service.button).addEventListener('click',()=>{
+                if(!service.ready()){notify('Not available','Unlock the required feature first. Forge recharge also requires an active cooldown.','🔒');return;}
+                pendingKeyUnlock='service:'+id;
+                $('keyUnlockTitle').textContent='BUY '+service.label+'?';
+                $('keyUnlockBalance').textContent=totalKeys()+' key(s) available.';
+                const cost=service.cost||1;
+                $('keyUnlockWarning').textContent='WARNING: THIS WILL USE '+cost+' OF YOUR KEY ELEMENTS';
+                $('confirmKeyUnlock').textContent='Confirm · '+cost+' 🔑';
+                $('confirmKeyUnlock').disabled=totalKeys()<cost;
+                openModal('keyUnlockModal');
+            });
+        });
+        let pendingKeyUnlock=null;
+        let keyLockNotificationsReady=false;
+        function requestKeyUnlock(name){
+            if(recipeUnlocked(name))return;
+            pendingKeyUnlock=name;
+            $('confirmKeyUnlock').textContent='Unlock · 1 🔑';
+            $('keyUnlockWarning').textContent='WARNING: THIS WILL USE ONE OF YOUR KEY ELEMENTS';
+            $('keyUnlockTitle').textContent='UNLOCK '+name.toUpperCase()+' RECIPE?';
+            $('keyUnlockBalance').textContent=totalKeys()+' key(s) available.'+(totalKeys()?'':' Keep playing for a chance to find one, or craft the element to unlock for free.');
+            $('confirmKeyUnlock').disabled=totalKeys()<1;
+            openModal('keyUnlockModal');
+        }
+        $('confirmKeyUnlock').addEventListener('click',()=>{
+            const name=pendingKeyUnlock;
+            // Recheck ownership and currency at confirmation, not only when opening.
+            if(!name)return;
+            const service=keyService(name);
+            if(service&&!service.ready()){$('keyUnlockBalance').textContent='This service is no longer available.';$('confirmKeyUnlock').disabled=true;return;}
+            if(!service&&recipeUnlocked(name)){pendingKeyUnlock=null;closeModal('keyUnlockModal');updateCraftHints();return;}
+            const cost=service?.cost||1;
+            if(totalKeys()<cost){$('keyUnlockBalance').textContent='You need '+cost+' keys.';$('confirmKeyUnlock').disabled=true;return;}
+            // Validate the full cost first, then consume units across key stacks.
+            let remaining=cost;
+            for(const key of elements){
+                if(!key.isKey||remaining===0)continue;
+                const used=Math.min(keyAmount(key),remaining);key.amountOfKey=keyAmount(key)-used;remaining-=used;
+                if(!key.amountOfKey&&(sel1===key||sel2===key))resetDZs();
+            }
+            normalizeKeyStacks();
+            // Clear the pending action before services that save or re-render.
+            pendingKeyUnlock=null;
+            if(service)service.apply();
+            else {if(!Array.isArray(gs.unlockedRecipes))gs.unlockedRecipes=[];gs.unlockedRecipes.push(name);}
+            
+            pendingKeyUnlock=null;closeModal('keyUnlockModal');
+            renderEls();updateCount();save();updateCoinDisplay();
+            const clue=Array.from(document.querySelectorAll('#craftHints [data-hint-element]')).find(c=>c.dataset.hintElement===name);
+            if(clue)clue.querySelector('[data-recipe-lock]').open=true;
+            if(service)notify('Key used',service.label+' purchased. '+cost+' key(s) consumed.','🔑');
+            else notify('System','You hear a lock being broken...','🔓');
+        });
+        document.querySelectorAll('#craftHints [data-hint-element]').forEach(clue=>{
+            const details=Array.from(clue.querySelectorAll('details')).find(d=>d.querySelector('summary').textContent==='Reveal the recipe');
+            if(!details)return;
+            details.setAttribute('data-recipe-lock','');
+            details.querySelectorAll('p').forEach(p=>{p.hidden=true;});
+            details.querySelector('summary').addEventListener('click',event=>{
+                if(!recipeUnlocked(clue.dataset.hintElement)){event.preventDefault();requestKeyUnlock(clue.dataset.hintElement);}
+            });
+        });
+
+        // Prestige counts unique discoverable names, never recipe-row totals.
+        // Ignore rank-excluded definitions and cosmetic flag combinations.
+        function rankedCatalog(){
+            const definitions=[...STARTERS,...Object.values(recipes),...Object.values(SPECIAL_ELEMENTS),...Object.values(SHOP_PACKS).flatMap(p=>p.elements)];
+            const ignored=new Set(definitions.filter(e=>e.excludeFromRank||e.isExclusive||e.isKey).map(e=>e.name.toLowerCase()));
+            return [...new Map(definitions.filter(e=>!ignored.has(e.name.toLowerCase())).map(e=>[e.name.toLowerCase(),e.name])).values()];
+        }
+        function prestigeData(){
+            if(!gs.prestige||typeof gs.prestige!=='object')gs.prestige={coins:0,times:0,upgrades:{}};
+            const p=gs.prestige;
+            p.coins=Number.isSafeInteger(p.coins)&&p.coins>=0?p.coins:0;
+            p.times=Number.isSafeInteger(p.times)&&p.times>=0?p.times:0;
+            if(!p.upgrades||typeof p.upgrades!=='object')p.upgrades={};
+            return p;
+        }
+        const PRESTIGE_UPGRADES=[
+            {id:'fast',name:'⚡ Swift Forging',max:1,desc:'Forge 40% faster while keeping the full two-element animation. Your ingredients stay in your collection.'},
+            {id:'income',name:'🪙 Coin Multiplier',max:5,desc:'+25% passive coin earnings per level, after Shop unlocks.'},
+            {id:'keyLuck',name:'🍀 Key Luck',max:5,desc:'+20% key drop chance per level.'},
+            {id:'keyBundle',name:'🔑 Key Bundles',max:3,desc:'+1 key in each successful random drop per level.'},
+            {id:'forgeSpeed',name:'⏱️ Faster Forge',max:4,desc:'15% shorter Forge cooldown per level.'},
+            {id:'forgeReach',name:'🌟 Wider Forge',max:5,desc:'Bless one additional element per level.'},
+            {id:'forgeBless',name:'✨ Extra Blessings',max:2,desc:'One extra blessing per selected element per level.'},
+            {id:'discount',name:'🏷️ Shop Discounts',max:5,desc:'10% cheaper packs per level, up to 50% off.'},
+            {id:'stock',name:'📦 Bigger Shelves',max:4,desc:'One extra pack in each stocked category per level, on restock.'},
+            {id:'restock',name:'🚚 Fast Restock',max:4,desc:'15% shorter Shop refresh time per level.'},
+            {id:'shopStart',name:'🛒 Permanent Shop',max:1,desc:'Keep Shop and coin earnings unlocked after every reset.'},
+            {id:'hints',name:'📖 Recipe Library',max:1,desc:'Permanently unlock all recipe reveals without spending keys.'}
+        ];
+        function prestigeLevel(id){const u=PRESTIGE_UPGRADES.find(u=>u.id===id);const n=Number(prestigeData().upgrades[id]);return u&&Number.isFinite(n)?Math.max(0,Math.min(u.max,Math.floor(n))):0;}
+        function shopPrice(pack){return Math.max(1,Math.ceil(pack.price*(1-.1*prestigeLevel('discount'))));}
+        function shopRestockMs(){return 300000*(1-.15*prestigeLevel('restock'));}
+        function prestigeRequirements(){
+            const owned=new Set(elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey).map(e=>e.name.toLowerCase()));
+            const all=rankedCatalog(),missing=all.filter(n=>!owned.has(n.toLowerCase()));
+            return {all,missing,keys:totalKeys(),coins:gs.coins,ready:missing.length===0&&totalKeys()>=250&&gs.coins>=1000000};
+        }
+        function updatePrestigeUI(){
+            const p=prestigeData();
+            $('prestigeShopBtn').hidden=p.times<1;
+            if($('prestigeModal').style.display==='block')renderPrestige();
+            if($('prestigeShopModal').style.display==='block')renderPrestigeShop();
+        }
+        function renderPrestige(){
+            const r=prestigeRequirements();
+            $('prestigeRequirements').textContent=`Keys: ${r.keys} / 250 · Coins: ${Math.floor(r.coins).toLocaleString()} / 1,000,000 · Ranked elements: ${r.all.length-r.missing.length} / ${r.all.length}`;
+            $('prestigeMissing').textContent=r.missing.length?'Still missing: '+r.missing.join(', '):'All ranked elements collected!';
+            $('confirmPrestige').disabled=!r.ready;
+            $('prestigeCount').textContent=prestigeData().times+' prestiges · '+prestigeData().coins+' prestige coins';
+        }
+        function renderPrestigeShop(){
+            const p=prestigeData();$('prestigeBalance').textContent=p.coins+' prestige coin(s)';
+            const grid=$('prestigeUpgradeGrid');grid.replaceChildren();
+            for(const u of PRESTIGE_UPGRADES){
+                const level=prestigeLevel(u.id),card=document.createElement('div');card.className='prestige-upgrade';
+                const name=document.createElement('strong');name.textContent=u.name+' · '+level+'/'+u.max;
+                const desc=document.createElement('p');desc.textContent=u.desc;
+                const buy=document.createElement('button');buy.textContent=level>=u.max?'Max level':'Buy level · 1 prestige coin';buy.disabled=level>=u.max||p.coins<1;
+                buy.onclick=()=>{
+                    const state=prestigeData();if(state.times<1||state.coins<1||prestigeLevel(u.id)>=u.max)return;
+                    state.coins--;state.upgrades[u.id]=prestigeLevel(u.id)+1;
+                    updateProgressionUI();save();renderPrestigeShop();renderShop();
+                };
+                card.append(name,desc,buy);grid.appendChild(card);
+            }
+        }
+        $('prestigeBtn').addEventListener('click',()=>{renderPrestige();openModal('prestigeModal');});
+        $('prestigeShopBtn').addEventListener('click',()=>{if(prestigeData().times<1)return;renderPrestigeShop();openModal('prestigeShopModal');});
+        let prestigeReset=false; // Preserve CyMoney only for a Prestige reset.
+        $('confirmPrestige').addEventListener('click',()=>{
+            if(isCombining||!prestigeRequirements().ready){renderPrestige();return;}
+            // Consume 250 units across stacks, then reuse the normal reset path.
+            let spend=250;for(const e of elements){if(e.isKey&&spend){const n=Math.min(keyAmount(e),spend);e.amountOfKey=keyAmount(e)-n;spend-=n;}}
+            normalizeKeyStacks();
+            const p=prestigeData();p.coins++;p.times++;
+            prestigeReset=true;
+            try{$('confirmReset').click();}finally{prestigeReset=false;}
+            closeModal('prestigeModal');
+            renderPrestigeShop();openModal('prestigeShopModal');
+            notify('Prestige complete!','You earned 1 prestige coin. Permanent upgrades and exclusives are kept.','🏆');
+        });
+
         // ─── RENDER ELEMENTS ───
+        // The diamond toggles the compact panel below Combine; ordinary elements stay visible.
+        // Hints toggle independently; hide the full panel just like Exclusive Storage.
+        $('showDiscoveredHints').addEventListener('change',updateCraftHints);
+        $('hintToggle').addEventListener('click',()=>{
+            const panel=$('craftHints'),toggle=$('hintToggle');
+            const show=toggle.getAttribute('aria-expanded')!=='true';
+            panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
+            toggle.setAttribute('aria-expanded',String(show));
+            toggle.setAttribute('aria-label',show?'Hide crafting hints':'Show crafting hints');
+            toggle.title=show?'Hide crafting hints':'Show crafting hints';
+        });
+        $('exclusiveToggle').addEventListener('click',()=>{
+            const panel=$('exclusiveStorage'),toggle=$('exclusiveToggle');
+            // Toggle the entire container, including its heading, padding and border.
+            const show=toggle.getAttribute('aria-expanded')!=='true';
+            panel.hidden=!show;
+            panel.style.setProperty('display',show?'block':'none','important');
+            toggle.setAttribute('aria-expanded',String(show));
+            toggle.setAttribute('aria-label',panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage');
+            toggle.title=panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage';
+        });
+        // Sculpted card anatomy shared by full renders and freshly discovered cards.
+        function sculptElementCard(card,el){
+            let hash=0;for(const ch of el.name)hash=(hash*31+ch.charCodeAt(0))>>>0;
+            const hue=el.isExclusive?275:el.isEverything?165:el.isFinal?43:el.isLegendary?285:el.isDivine?48:el.isFrozen?195:el.isHot?18:hash%360;
+            card.classList.add('sculpted-card');
+            if(el.isSecret)card.classList.add('secret-showpiece');
+            if(checkIsEverything(el))card.classList.add('everything-showpiece');
+            if(Array.from(el.emoji||'').length>3)card.classList.add('multi-icon-card');
+            card.style.setProperty('--card-hue',hue);
+            const tier=checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
+            card.dataset.tier=tier;
+            const ribbon=document.createElement('div');ribbon.className='card-ribbon';ribbon.textContent=tier+(el.isKey?' · ×'+keyAmount(el):'');
+            const stage=document.createElement('div');stage.className='card-stage';
+            const orbit=document.createElement('span');orbit.className='card-orbit';orbit.setAttribute('aria-hidden','true');stage.appendChild(orbit);
+            const emoji=card.querySelector('.el-emoji');if(emoji)stage.appendChild(emoji);
+            if(checkIsEverything(el)){
+                const foil=document.createElement('span');foil.className='everything-foil';foil.setAttribute('aria-hidden','true');
+                foil.innerHTML='<i class="everything-shimmer"></i><i class="everything-spark spark-one">✧</i><i class="everything-spark spark-two">✦</i><i class="everything-spark spark-three">·</i>';
+                const crown=document.createElement('span');crown.className='everything-crown';crown.setAttribute('aria-hidden','true');
+                crown.innerHTML='<svg viewBox="0 0 60 25" fill="none" aria-hidden="true"><path d="M8 7 19 13 30 3 41 13 52 7 47 21H13Z" fill="#ffecc4" fill-opacity=".28" stroke="#fff0c9" stroke-width="1.5"/><path d="M15 18H45" stroke="#fff7dc"/><path d="M30 9 34 13 30 17 26 13Z" fill="#c4fff5"/><circle cx="8" cy="5" r="2" fill="#fff2bf"/><circle cx="30" cy="2" r="2" fill="#fff2bf"/><circle cx="52" cy="5" r="2" fill="#fff2bf"/></svg>';
+                const aurora=document.createElement('span');aurora.className='everything-aurora';aurora.setAttribute('aria-hidden','true');
+                foil.appendChild(aurora);card.appendChild(foil);stage.appendChild(crown);
+                const stars=document.createElement('span');stars.className='everything-satellites';stars.setAttribute('aria-hidden','true');stars.innerHTML='<i>✦</i><i>✧</i><i>✦</i>';stage.appendChild(stars);
+                const plinth=document.createElement('span');plinth.className='everything-plinth';plinth.setAttribute('aria-hidden','true');stage.appendChild(plinth);
+                const seal=document.createElement('span');seal.className='everything-seal';seal.setAttribute('aria-hidden','true');
+                seal.innerHTML='<svg viewBox="0 0 80 80" fill="none" aria-hidden="true"><path d="M40 5 65 15 75 40 65 65 40 75 15 65 5 40 15 15Z" stroke="currentColor"/><path d="M40 13 67 40 40 67 13 40Z" stroke="currentColor" stroke-opacity=".5"/><circle cx="40" cy="40" r="24" stroke="currentColor" stroke-dasharray="2 5"/><path d="M40 2v8M78 40h-8M40 78v-8M2 40h8" stroke="currentColor" stroke-width="2"/></svg>';
+                stage.prepend(seal);
+                // Small wings sit just outside the frame; they never intercept card clicks.
+                for(const side of ['left','right']){
+                    const wing=document.createElement('span');wing.className='everything-wing wing-'+side;
+                    wing.setAttribute('aria-hidden','true');
+                    wing.innerHTML='<svg viewBox="0 0 28 36" fill="none" focusable="false" aria-hidden="true"><path d="M25 30C18 31 5 21 2 3C10 12 16 9 22 19L25 30Z" fill="currentColor" fill-opacity=".3"/><path d="M25 30C17 29 6 17 2 3M25 30C16 26 10 20 8 13M25 30C18 28 14 25 13 21" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+                    card.appendChild(wing);
+                }
+            }
+            card.prepend(ribbon,stage);
+            const footer=document.createElement('div');footer.className='card-footer';footer.setAttribute('aria-hidden','true');
+            footer.innerHTML='<span>✦</span><i></i><span>✧</span>';card.appendChild(footer);
+        }
         function renderEls() {
+            updateProgressionUI();
             elGrid.innerHTML='';
+            // Both views reference the canonical elements array and original selection indices.
+            const exclusiveGrid=$('exclusiveGrid');exclusiveGrid.innerHTML='';
+            const count=elements.filter(e=>e.isExclusive).length;
+            $('exclusiveCount').textContent=count;
+            if(!count){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='A little space for rare discoveries.';exclusiveGrid.appendChild(empty);}
             const sorted = getSortedElements();
             let lastType = null;
             sorted.forEach(({el,origIdx})=>{
-                if(currentSort === 'type') {
+                if(currentSort === 'type' && !el.isExclusive) {
                     const t = getElType(el);
                     if(t !== lastType) {
                         lastType = t;
@@ -3090,11 +3725,12 @@ window.generateBattleCode = function() {
                 d.setAttribute('data-desc',el.description||'');
                 d.setAttribute('draggable','true');
                 d.title=el.description||'';
-                d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>${getBadges(el)}`;
+                d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
+                sculptElementCard(d,el);
                 if(el.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width=`${((el.meltProgress||0)/(el.meltGoal||10))*100}%`;d.appendChild(mb);}
                 if(el.hasLink) d.addEventListener('click',e=>{if(!e.defaultPrevented)window.open(el.link,'_blank');});
                 w.appendChild(d);
-                elGrid.appendChild(w);
+                (el.isExclusive?exclusiveGrid:elGrid).appendChild(w);
             });
         }
 
@@ -3118,7 +3754,7 @@ window.generateBattleCode = function() {
         searchInput.addEventListener('input',e=>{
             const t=e.target.value.trim().toLowerCase();
             let vis=0;
-            elGrid.querySelectorAll('.el-card').forEach(c=>{
+            document.querySelectorAll('#elGrid .el-card, #exclusiveGrid .el-card').forEach(c=>{
                 const nm=c.getAttribute('data-name').toLowerCase(), ds=c.getAttribute('data-desc').toLowerCase();
                 const show=!t||nm.includes(t)||ds.includes(t);
                 c.closest('.el-wrapper').style.display=show?'':'none';
@@ -3139,8 +3775,8 @@ window.generateBattleCode = function() {
         });
 
         // ─── ELEMENT SELECTION & DROP ZONES ───
-        elGrid.addEventListener('click',e=>{
-            const card=e.target.closest('.el-card');
+        document.addEventListener('click',e=>{
+            const card=e.target.closest('#elGrid .el-card, #exclusiveGrid .el-card');
             if(!card||card.classList.contains('youtuber-el'))return;
             const el=elements[card.getAttribute('data-idx')];
             if(!sel1){sel1=el;fillDZ(dz1,dz1c,el);}
@@ -3151,7 +3787,11 @@ window.generateBattleCode = function() {
 
         function fillDZ(dz,cnt,el){
             dz.className=`drop-zone has-element`;
-            cnt.innerHTML=`<div class="text-2xl mb-1">${el.emoji}</div><div class="text-xs font-medium text-center">${el.name}</div>`;
+            cnt.replaceChildren();
+            const card=document.createElement('div');card.className='el-card '+getElClasses(el);
+            const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;
+            const name=document.createElement('div');name.className='el-name';name.textContent=el.name;
+            card.append(emoji,name);sculptElementCard(card,el);cnt.appendChild(card);
             const closeBtn=document.createElement('button');
             closeBtn.className='absolute top-1 right-1 text-xs rounded-full w-5 h-5 flex items-center justify-center';
             closeBtn.style.cssText='background:rgba(0,0,0,0.3);color:#fff;border:none;cursor:pointer';
@@ -3219,7 +3859,7 @@ window.generateBattleCode = function() {
             if(p1.isFrozen&&!p1.isPermafrost&&!(p2.isHot||p2.isSuperHot||n2==='Fire'||n2==='Inferno'))return{frozen:true};
             if(p2.isFrozen&&!p2.isPermafrost&&!(p1.isHot||p1.isSuperHot||n1==='Fire'||n1==='Inferno'))return{frozen:true};
             // Final blocks
-            if(n1==='Infinity Craft'||n2==='Infinity Craft'||n1==='Tomokuta Plays'||n2==='Tomokuta Plays')return{finalBlock:true};
+            if(n1==='Blox Fruit'||n2==='Blox Fruit')return{finalBlock:true};
             // Fatal error blocks (allow Fatal Error + Philosophy recipe)
             if((n1==='Fatal Error'&&n2!=='Philosophy')||(n2==='Fatal Error'&&n1!=='Philosophy'))return{fatalBlock:true};
             // Error propagation (skip if a recipe exists for this combo)
@@ -3394,14 +4034,21 @@ window.generateBattleCode = function() {
             if(sel2.isFrozen&&!sel2.isPermafrost&&isHeat1){const r=processMelt(sel2,sel1);if(r){showMeltResult(r);return;}}
 
             // ─── Normal combine path (with discovery delay) ───
-            loader.classList.remove('hidden');
-            loaderText.textContent='Combining elements...';
-            resultArea.innerHTML='<div class="text-sm" style="color:var(--text-secondary)"><span class="inline-block w-4 h-4 border-2 rounded-full animate-spin mr-2" style="border-color:var(--gold);border-top-color:transparent"></span>Discovering...</div>';
+            const forgingMs=prestigeLevel('fast')?540:900;
+            loader.style.setProperty('--forging-duration',forgingMs+'ms');
+            $('fusionLeftEmoji').textContent=sel1.emoji;
+            $('fusionRightEmoji').textContent=sel2.emoji;
+            $('fusionLeftName').textContent=sel1.name;
+            $('fusionRightName').textContent=sel2.name;
+            loaderText.textContent='Forging a new discovery…';
+            resultArea.innerHTML='';
+            loader.classList.remove('hidden','forging');
+            void loader.offsetWidth; // Restart the convergence for this exact ingredient pair.
+            loader.classList.add('forging');
+            await new Promise(r=>setTimeout(r,window.matchMedia('(prefers-reduced-motion: reduce)').matches?150:forgingMs));
 
-            await new Promise(r=>setTimeout(r,100+Math.random()*300));
-
-            const result=generateElement(sel1,sel2);
-            loader.classList.add('hidden');
+            let result;
+            try{result=generateElement(sel1,sel2);}finally{loader.classList.add('hidden');loader.classList.remove('forging');}
 
             // ─── PURIFICATION: blessed/holy/celestial/divine purify ONLY cursed/penalty elements ───
             const purifiers=['isHoly','isBlessed','isCelestial','isDivine'];
@@ -3449,7 +4096,11 @@ window.generateBattleCode = function() {
             if(result.shortCircuit){resultArea.innerHTML='<div class="text-center"><div class="el-card electric-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">⚡</div><div class="el-name">Short Circuit!</div></div><div class="text-xs" style="color:var(--text-secondary)">The electric charge fried the combination!</div></div>';setTimeout(resetDZs,0);return;}
             if(result.finalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card final-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">⭐</div><div class="el-name">Final Item</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot be combined further</div></div>';setTimeout(resetDZs,0);return;}
             if(result.fatalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card fatal-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💀</div><div class="el-name">Fatal Error</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot process combination</div></div>';setTimeout(resetDZs,0);return;}
-            if(result.invalid){resultArea.innerHTML=`<div class="text-center"><div class="el-card invalid-shake inline-flex flex-col items-center p-4 mb-2" style="background:var(--bg-card);border:1px solid var(--border)" data-name="Invalid Combination"><div class="el-emoji">❌</div><div class="el-name">Invalid Combination</div></div><div class="text-xs" style="color:var(--text-secondary)">${result.description}</div></div>`;resetDZs();return;}
+            if(result.invalid){
+                resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>◇</span></div><h3>No fusion found</h3><p></p><small>Try a different pairing</small></div>';
+                resultArea.querySelector('p').textContent=result.description||'These elements do not resonate together yet.';
+                resetDZs();return;
+            }
 
             const newEl={...result,color:result.color||randColor()};
             if(newEl.isFrozen&&!newEl.meltProgress){newEl.meltProgress=0;newEl.meltGoal=10;}
@@ -3465,24 +4116,24 @@ window.generateBattleCode = function() {
         }
 
         function addElement(newEl){
+            // Only key elements accumulate amounts; all other discoveries remain unique.
+            if(newEl.isKey){
+                const found=elements.find(e=>e.name.toLowerCase()===newEl.name.toLowerCase());
+                if(found){found.isKey=true;found.amountOfKey=Math.min(999999,keyAmount(found)+keyAmount(newEl));}
+                else elements.push({...newEl,amountOfKey:keyAmount(newEl)});
+                normalizeKeyStacks();renderEls();updateCount();save();
+                notify('Key found!','You gained a key. Use it for recipe clues or Key Services.','🔑');return;
+            }
             // If element qualifies as Everything, strip all mods and set isEverything only
             if(checkIsEverything(newEl)){stripToEverything(newEl);}
             const exists=elements.findIndex(e=>e.name.toLowerCase()===newEl.name.toLowerCase());
             if(exists!==-1){
+                if(newEl.isEverything){stripToEverything(elements[exists]);save();renderEls();}
                 // Re-check existing element in case it now qualifies after Star Forge etc.
                 if(checkIsEverything(elements[exists])){stripToEverything(elements[exists]);}
                 showResult(elements[exists],false);
             } else {
                 elements.push(newEl);
-                // Check if this is the first Everything element
-                // Check if this is the first Everything element
-                const hasEverythingAlready = elements.some(e => checkIsEverything(e));
-                const isFirstEverything = checkIsEverything(newEl) && !hasEverythingAlready;
-                if(isFirstEverything){
-                    awardCyMoney(1);
-                    notify('🌟 EVERYTHING UNLOCKED!', 'You got your first EVERYTHING element! You earned 1 CyMoney! Use it to upgrade the Star Forge!', '🌟');
-                    setTimeout(() => openModal('everythingTutModal'), 500);
-                }
                 showResult(newEl,true);
                 combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name});
                 addComboEntry(sel1,sel2,newEl);
@@ -3490,10 +4141,12 @@ window.generateBattleCode = function() {
                 const card=document.createElement('div');
                 card.className=`el-card new-el ${getElClasses(newEl)}`;
                 card.setAttribute('data-idx',elements.length-1);card.setAttribute('data-name',newEl.name);card.setAttribute('data-desc',newEl.description||'');card.setAttribute('draggable','true');card.title=newEl.description||'';
-                card.innerHTML=`<div class="el-emoji">${newEl.emoji}</div><div class="el-name">${newEl.name}</div>${getBadges(newEl)}${checkIsCyMoney(newEl) ? '<span class="badge badge-cymoney">💎 CYMONEY</span>' : ''}`;
+                card.innerHTML=`<div class="el-emoji">${newEl.emoji}</div><div class="el-name">${newEl.name}</div>`;
+                sculptElementCard(card,newEl);
                 if(newEl.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width='0%';card.appendChild(mb);}
                 if(newEl.hasLink)card.addEventListener('click',()=>window.open(newEl.link,'_blank'));
                 d.appendChild(card);elGrid.appendChild(d);
+                if(newEl.isExclusive)renderEls();
                 updateCount();save();checkStarForgeUnlock();
                 // Notifications for special types
                 if(newEl.isFatalError){notify('FATAL ERROR!',newEl.name+' — critically glitched!','💀');if(!fatalErrorTutShown){fatalErrorTutShown=true;openModal('fatalErrorTutModal');}}
@@ -3515,7 +4168,8 @@ window.generateBattleCode = function() {
             const cls=getElClasses(el);
             const status=isNew?'New element discovered!':'Already discovered';
             const sColor=isNew?'color:var(--gold)':'color:var(--text-secondary)';
-            resultArea.innerHTML=`<div class="text-center"><div class="el-card ${cls} inline-flex flex-col items-center p-4 mb-2 relative" data-name="${el.name}"><div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>${getBadges(el)}</div><div class="text-xs font-semibold" style="${sColor}">${status}</div><div class="text-xs mt-1" style="color:var(--text-secondary)">${el.description||''}</div><div class="text-xs mt-2 italic" style="color:var(--text-secondary)">Click element to reuse</div></div>`;
+            resultArea.innerHTML=`<div class="text-center"><div class="el-card ${cls} inline-flex flex-col items-center p-4 mb-2 relative" data-name="${el.name}"><div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div></div><div class="text-xs font-semibold" style="${sColor}">${status}</div><div class="text-xs mt-1" style="color:var(--text-secondary)">${el.description||''}</div><div class="text-xs mt-2 italic" style="color:var(--text-secondary)">Click element to reuse</div></div>`;
+            sculptElementCard(resultArea.querySelector('.el-card'),el);
         }
 
         combineBtn.addEventListener('click',combine);
@@ -3526,7 +4180,7 @@ window.generateBattleCode = function() {
         let sfCooldownEnd=0;
         let sfInterval=null;
         const SF_COOLDOWN=5*60*1000; // 5 minutes
-        const SF_BLESSINGS=['isPurified','isBlessed','isGolden','isCrystalline','isEthereal','isChromatic','isLegendary','isDivine','isCelestial','isAncient','isHoly'];
+        const SF_BLESSINGS=[...new Set([...EVERYTHING_REQUIRED,'isHot'])]; // Every required trait is now attainable through the Forge.
 
         // Load cooldown from game state
         function sfLoadCooldown(){
@@ -3555,29 +4209,55 @@ window.generateBattleCode = function() {
             sfTimer.textContent=' '+m+':'+String(s).padStart(2,'0');
         }
 
-        function checkStarForgeUnlock(){
-            const unlocked=gs.sfUnlocked||elements.some(e=>e.name==='Star Forge');
-            if(unlocked&&!gs.sfUnlocked){gs.sfUnlocked=true;save();}
-            if(unlocked){
-                starForgeBtn.classList.remove('sf-locked');
-                starForgeBtn.style.pointerEvents='';
-                // Also enable upgrade button if unlocked
-                const upgradeBtn = document.getElementById('upgradeForgeBtn');
-                if(upgradeBtn) upgradeBtn.style.pointerEvents = '';
-            } else {
-                starForgeBtn.classList.add('sf-locked');
-                starForgeBtn.style.pointerEvents='none';
-                const upgradeBtn = document.getElementById('upgradeForgeBtn');
-                if(upgradeBtn) upgradeBtn.style.pointerEvents = 'none';
+        // One view of saved progression, refreshed after discovery, load, import and reset.
+        // Flags remember discoveries even if an element is later consumed.
+        // Derive clue visibility from ownership, so discovery/import/reset stay consistent.
+        function updateCraftHints(){
+            updateKeyLocks();
+            const owned=new Set(elements.map(e=>e.name.toLowerCase()));
+            let remaining=0;
+            $('craftHints').querySelectorAll('[data-hint-element]').forEach(clue=>{
+                clue.hidden=!$('showDiscoveredHints').checked&&owned.has(clue.dataset.hintElement.toLowerCase());
+                if(!clue.hidden)remaining++;
+            });
+            $('hintsComplete').hidden=remaining!==0;
+        }
+        function updateProgressionUI(){
+            updatePrestigeUI();
+            updateCraftHints();
+            gs.shopUnlocked=!!(prestigeLevel('shopStart')||gs.shopUnlocked||elements.some(e=>e.name==='Shop'));
+            gs.sfUnlocked=!!(gs.sfUnlocked||gs.sfUpgraded||elements.some(e=>e.name==='Star Forge'));
+            gs.cyMoneyUnlocked=!!(gs.cyMoneyUnlocked||gs.cyMoney>0||gs.sfUpgraded||elements.some(e=>e.isEverything||e.isCyMoney));
+            const battleUnlocked=!!(gs.hasShownEnding||elements.some(e=>e.isEndGameTrigger));
+            for(const [id,visible] of Object.entries({shopBtn:true,coinDisplay:gs.shopUnlocked,
+                starForgeBtn:gs.sfUnlocked,upgradeForgeBtn:gs.sfUnlocked,cyMoneyDisplay:gs.cyMoneyUnlocked,battleBtn:battleUnlocked})){
+                $(id).hidden=!visible;
+            }
+            $('shopBtn').textContent=gs.shopUnlocked?'🛒 Shop':'🔒 Shop & Coins';
+            const forge=$('starForgeBtn'),upgrade=$('upgradeForgeBtn');
+            forge.classList.toggle('sf-locked',!gs.sfUnlocked);
+            forge.style.pointerEvents=gs.sfUnlocked?'':'none';
+            // Explicitly restore these after reset/import; the old handler left the button disabled.
+            upgrade.disabled=!!gs.sfUpgraded||!gs.sfUnlocked;
+            upgrade.style.pointerEvents='';upgrade.style.opacity=upgrade.disabled?'0.5':'1';
+            upgrade.textContent=gs.sfUpgraded?'✓ Forge Upgraded':'⬆️ Upgrade Forge';
+            upgrade.title=gs.sfUpgraded?'Star Forge is upgraded':'Upgrade Star Forge (Cost: 1 CyMoney)';
+            window.craftBattleUnlocked=()=>!!(gs.hasShownEnding||elements.some(e=>e.isEndGameTrigger));
+            if(!gs.shopUnlocked){closeModal('shopModal');$('packOpenModal').style.display='none';}
+            if(!battleUnlocked){
+                closeModal('battleModal');
+                if(online.mode&&online.peer)leaveOnline('Progress reset. Find the ending to unlock Battle again.');
+                battleState.active=false;
             }
         }
+        function checkStarForgeUnlock(){updateProgressionUI();}
 
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
             const eligible=elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
-            let count = Math.min(5, eligible.length);
+            let count = Math.min(5+prestigeLevel('forgeReach'), eligible.length);
             // Shuffle and pick
             const shuffled=[...eligible].sort(()=>Math.random()-0.5);
             const chosen=shuffled.slice(0,count);
@@ -3586,7 +4266,7 @@ window.generateBattleCode = function() {
                 const idx=elements.findIndex(e=>e.name===target.name);
                 if(idx===-1)return;
                 // Pick 1-2 random blessings for each
-                const numBlessings=1+Math.floor(Math.random()*2);
+                const numBlessings=1+Math.floor(Math.random()*2)+prestigeLevel('forgeBless');
                 const available=SF_BLESSINGS.filter(k=>!elements[idx][k]);
                 if(available.length===0)return;
                 const picked=available.sort(()=>Math.random()-0.5).slice(0,Math.min(numBlessings,available.length));
@@ -3614,7 +4294,7 @@ window.generateBattleCode = function() {
             }
     
             // Start cooldown
-            sfCooldownEnd=Date.now()+SF_COOLDOWN;
+            sfCooldownEnd=Date.now()+SF_COOLDOWN*(1-.15*prestigeLevel('forgeSpeed'));
             gs.sfCooldownEnd=sfCooldownEnd;
             save();renderEls();sfStartTimer();
             // Reset button to locked mode during cooldown
@@ -3633,6 +4313,7 @@ window.generateBattleCode = function() {
             const upgradeBtn = document.getElementById('upgradeForgeBtn');
             if(upgradeBtn){
                 upgradeBtn.addEventListener('click', function(){
+                    if(!gs.sfUnlocked)return;
                     if(gs.sfUpgraded){
                         notify('Already Upgraded!', 'Star Forge is already upgraded!', '💎');
                         return;
@@ -3737,9 +4418,12 @@ window.generateBattleCode = function() {
                 const d=JSON.parse(raw);
                 if(!d.elements||!Array.isArray(d.elements))throw new Error('Invalid save format');
                 // MERGE: import elements first, then append user's unique elements after
+                const ownedExclusive=elements.filter(e=>e.isExclusive);
+                d.elements=d.elements.map(e=>ownedExclusive.find(x=>x.name===e.name)||e);
                 const importedNames=new Set(d.elements.map(e=>e.name));
                 const userOnly=elements.filter(e=>!importedNames.has(e.name));
                 elements=[...d.elements,...userOnly];
+                normalizeKeyStacks();
                 // Strip elements that qualify as Everything
                 elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});
                 // MERGE combos: import combos first, then append user's unique combos
@@ -3747,7 +4431,10 @@ window.generateBattleCode = function() {
                 const importComboKeys=new Set(importCombos.map(c=>c.e1+'|'+c.e2+'|'+c.r));
                 const userOnlyCombos=combos.filter(c=>!importComboKeys.has(c.e1+'|'+c.e2+'|'+c.r));
                 combos=[...importCombos,...userOnlyCombos];
-                if(d.gs)gs={...gs,...d.gs};
+                if(d.gs){
+                    const unlockedRecipes=[...new Set([...(Array.isArray(gs.unlockedRecipes)?gs.unlockedRecipes:[]),...(Array.isArray(d.gs.unlockedRecipes)?d.gs.unlockedRecipes:[])])];
+                    gs={...gs,...d.gs,unlockedRecipes};
+                }
                 if(d.sortMode&&['original','type','alpha'].includes(d.sortMode)){currentSort=d.sortMode;applySortBtnUI();}
                 const added=userOnly.length;
                 renderEls();rebuildHistory();updateCount();updateCoinDisplay();save();checkStarForgeUnlock();
@@ -3764,8 +4451,10 @@ window.generateBattleCode = function() {
         // ─── RESET ───
         $('resetBtn').addEventListener('click',()=>openModal('resetModal'));
         $('confirmReset').addEventListener('click',()=>{
-            elements=[...STARTERS];combos=[];
-            gs={coins:25,totalCoins:25,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:0,sfUpgraded:false,sfUnlocked:false};
+            // Exclusive ownership stays in the canonical collection across reset.
+            const kept=elements.filter(e=>e.isExclusive);
+            elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];combos=[];fractionalCoins=0;
+            gs={everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,sfUpgraded:false,sfUnlocked:false};
             // Reset Star Forge to locked
             sfCooldownEnd=0;gs.sfCooldownEnd=0;
             if(sfInterval){clearInterval(sfInterval);sfInterval=null;}
@@ -3782,7 +4471,7 @@ window.generateBattleCode = function() {
 
         // ─── ENDING / RANK ───
         function showEnding(){
-            const counted=elements.filter(e=>!e.isExclusive&&!e.excludeFromRank).length;
+            const counted=rankedCatalog().filter(name=>elements.some(e=>e.name.toLowerCase()===name.toLowerCase()&&!e.isExclusive&&!e.excludeFromRank&&!e.isKey)).length;
             const pct=Math.round((counted/totalMain)*100);
             let rank,msg;            
             if(pct<=5){rank='U';msg='Just scratched the surface.';}
@@ -3873,13 +4562,459 @@ window.generateBattleCode = function() {
         if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();
         else renderShop();
 
+        keyLockNotificationsReady=true;
+        // One independent roll per active second; no offline key catch-up.
+        setInterval(()=>{if(!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
         setInterval(tickCoins,3000);
         setInterval(updateShopTimer,1000);
         updateShopTimer();
 
+        window.craftBattleCollection=()=>JSON.parse(JSON.stringify(elements.filter(e=>!e.isFrozen&&!e.isPermafrost&&!e.isError)));
         // Show changelog on first visit
         setTimeout(()=>openModal('changelogModal'),600);
     });
+    // Move IDs are retained internally for saved team/effect compatibility; all UI uses new names.
+const BATTLE_MOVE_NAMES={
+  "Ember": "Cinder Covenant",
+  "Fire Punch": "Cinder Refrain",
+  "Flame Burst": "Cinder Spindle",
+  "Flamethrower": "Cinder Lattice",
+  "Fire Blast": "Cinder Canticle",
+  "Heat Wave": "Cinder Spiral",
+  "Blaze Kick": "Cinder Rupture",
+  "Inferno": "Cinder Filament",
+  "Flare Blitz": "Cinder Cadence",
+  "Eruption": "Cinder Vow",
+  "Fire Spin": "Cinder Crucible",
+  "Flame Wheel": "Cinder Wake",
+  "Lava Plume": "Cinder Imprint",
+  "Searing Shot": "Cinder Tether",
+  "V-create": "Cinder Pulsework",
+  "Blast Burn": "Cinder Orbit",
+  "Magma Storm": "Cinder Crownfall",
+  "Pyro Ball": "Cinder Fracture",
+  "🔥 INFERNO OVERDRIVE (OHKO)": "Cinder Resonance (OHKO)",
+  "Water Gun": "Tideglass Covenant",
+  "Aqua Jet": "Tideglass Refrain",
+  "Bubble Beam": "Tideglass Spindle",
+  "Hydro Pump": "Tideglass Lattice",
+  "Surf": "Tideglass Canticle",
+  "Scald": "Tideglass Spiral",
+  "Waterfall": "Tideglass Rupture",
+  "Crabhammer": "Tideglass Filament",
+  "Liquidation": "Tideglass Cadence",
+  "Origin Pulse": "Tideglass Vow",
+  "Brine": "Tideglass Crucible",
+  "Dive": "Tideglass Wake",
+  "Whirlpool": "Tideglass Imprint",
+  "Aqua Tail": "Tideglass Tether",
+  "Hydro Cannon": "Tideglass Pulsework",
+  "Steam Eruption": "Tideglass Orbit",
+  "Sparkling Aria": "Tideglass Crownfall",
+  "🌊 ABYSSAL DEPTHS (OHKO)": "Tideglass Fracture (OHKO)",
+  "Razor Leaf": "Briar Covenant",
+  "Seed Bomb": "Briar Refrain",
+  "Vine Whip": "Briar Spindle",
+  "Energy Ball": "Briar Lattice",
+  "Leaf Storm": "Briar Canticle",
+  "Solar Beam": "Briar Spiral",
+  "Petal Dance": "Briar Rupture",
+  "Wood Hammer": "Briar Filament",
+  "Grass Knot": "Briar Cadence",
+  "Frenzy Plant": "Briar Vow",
+  "Bullet Seed": "Briar Crucible",
+  "Magical Leaf": "Briar Wake",
+  "Giga Drain": "Briar Imprint",
+  "Power Whip": "Briar Tether",
+  "Seed Flare": "Briar Pulsework",
+  "Spore": "Briar Orbit",
+  "Sleep Powder": "Briar Crownfall",
+  "🌿 FOREST JUDGMENT (OHKO)": "Briar Fracture (OHKO)",
+  "Gust": "Zephyr Covenant",
+  "Air Cutter": "Zephyr Refrain",
+  "Wing Attack": "Zephyr Spindle",
+  "Hurricane": "Zephyr Lattice",
+  "Aerial Ace": "Zephyr Canticle",
+  "Brave Bird": "Zephyr Spiral",
+  "Drill Peck": "Zephyr Rupture",
+  "Sky Attack": "Zephyr Filament",
+  "Fly": "Zephyr Cadence",
+  "Air Slash": "Zephyr Vow",
+  "Tailwind": "Zephyr Crucible",
+  "Defog": "Zephyr Wake",
+  "Peck": "Zephyr Imprint",
+  "Pluck": "Zephyr Tether",
+  "Dual Wingbeat": "Zephyr Pulsework",
+  "Bounce": "Zephyr Orbit",
+  "Acrobatics": "Zephyr Crownfall",
+  "💨 SKY SHATTER (OHKO)": "Zephyr Fracture (OHKO)",
+  "Thunder Shock": "Arc Covenant",
+  "Spark": "Arc Refrain",
+  "Electro Ball": "Arc Spindle",
+  "Thunderbolt": "Arc Lattice",
+  "Thunder": "Arc Canticle",
+  "Volt Tackle": "Arc Spiral",
+  "Wild Charge": "Arc Rupture",
+  "Discharge": "Arc Filament",
+  "Zap Cannon": "Arc Cadence",
+  "Plasma Fists": "Arc Vow",
+  "Shock Wave": "Arc Crucible",
+  "Charge Beam": "Arc Wake",
+  "Volt Switch": "Arc Imprint",
+  "Electroweb": "Arc Tether",
+  "Bolt Strike": "Arc Pulsework",
+  "Fusion Bolt": "Arc Orbit",
+  "Thunder Fang": "Arc Crownfall",
+  "⚡ MEGA LIGHTNING (OHKO)": "Arc Fracture (OHKO)",
+  "Powder Snow": "Rime Covenant",
+  "Ice Punch": "Rime Refrain",
+  "Icy Wind": "Rime Spindle",
+  "Ice Beam": "Rime Lattice",
+  "Blizzard": "Rime Canticle",
+  "Avalanche": "Rime Spiral",
+  "Ice Fang": "Rime Rupture",
+  "Glaciate": "Rime Filament",
+  "Freeze-Dry": "Rime Cadence",
+  "Ice Shard": "Rime Vow",
+  "Icicle Crash": "Rime Crucible",
+  "Icicle Spear": "Rime Wake",
+  "Frost Breath": "Rime Imprint",
+  "Glacial Lance": "Rime Tether",
+  "Ice Hammer": "Rime Pulsework",
+  "Triple Axel": "Rime Orbit",
+  "Sheer Cold": "Rime Crownfall",
+  "❄️ ABSOLUTE ZERO (OHKO)": "Rime Fracture (OHKO)",
+  "Low Kick": "Ironwill Covenant",
+  "Karate Chop": "Ironwill Refrain",
+  "Focus Punch": "Ironwill Spindle",
+  "Close Combat": "Ironwill Lattice",
+  "Dynamic Punch": "Ironwill Canticle",
+  "Mach Punch": "Ironwill Spiral",
+  "Sky Uppercut": "Ironwill Rupture",
+  "Cross Chop": "Ironwill Filament",
+  "Superpower": "Ironwill Cadence",
+  "Sacred Sword": "Ironwill Vow",
+  "Brick Break": "Ironwill Crucible",
+  "Drain Punch": "Ironwill Wake",
+  "Reversal": "Ironwill Imprint",
+  "Storm Throw": "Ironwill Tether",
+  "Aura Sphere": "Ironwill Pulsework",
+  "Circle Throw": "Ironwill Orbit",
+  "Secret Sword": "Ironwill Crownfall",
+  "👊 ONE-INCH PUNCH (OHKO)": "Ironwill Fracture (OHKO)",
+  "Bite": "Nightveil Covenant",
+  "Sucker Punch": "Nightveil Refrain",
+  "Night Slash": "Nightveil Spindle",
+  "Dark Pulse": "Nightveil Lattice",
+  "Crunch": "Nightveil Canticle",
+  "Foul Play": "Nightveil Spiral",
+  "Throat Chop": "Nightveil Rupture",
+  "Knock Off": "Nightveil Filament",
+  "Beat Up": "Nightveil Cadence",
+  "Night Daze": "Nightveil Vow",
+  "Pursuit": "Nightveil Crucible",
+  "Snarl": "Nightveil Wake",
+  "Darkest Lariat": "Nightveil Imprint",
+  "Jaw Lock": "Nightveil Tether",
+  "Fiery Wrath": "Nightveil Pulsework",
+  "Obstruct": "Nightveil Orbit",
+  "Wicked Blow": "Nightveil Crownfall",
+  "🌑 MIDNIGHT REAPER (OHKO)": "Nightveil Fracture (OHKO)",
+  "Confusion": "Mindglass Covenant",
+  "Psybeam": "Mindglass Refrain",
+  "Zen Headbutt": "Mindglass Spindle",
+  "Psychic": "Mindglass Lattice",
+  "Future Sight": "Mindglass Canticle",
+  "Psystrike": "Mindglass Spiral",
+  "Luster Purge": "Mindglass Rupture",
+  "Mist Ball": "Mindglass Filament",
+  "Extrasensory": "Mindglass Cadence",
+  "Psycho Cut": "Mindglass Vow",
+  "Miracle Eye": "Mindglass Crucible",
+  "Psycho Boost": "Mindglass Wake",
+  "Synchronoise": "Mindglass Imprint",
+  "Prismatic Laser": "Mindglass Tether",
+  "Heart Swap": "Mindglass Pulsework",
+  "Hyperspace Hole": "Mindglass Orbit",
+  "Photon Geyser": "Mindglass Crownfall",
+  "🔮 MIND BREAK (OHKO)": "Mindglass Fracture (OHKO)",
+  "Dragon Breath": "Wyrmstone Covenant",
+  "Dragon Claw": "Wyrmstone Refrain",
+  "Dragon Pulse": "Wyrmstone Spindle",
+  "Outrage": "Wyrmstone Lattice",
+  "Draco Meteor": "Wyrmstone Canticle",
+  "Dragon Rush": "Wyrmstone Spiral",
+  "Dragon Tail": "Wyrmstone Rupture",
+  "Spacial Rend": "Wyrmstone Filament",
+  "Roar of Time": "Wyrmstone Cadence",
+  "Dragon Dance": "Wyrmstone Vow",
+  "Scale Shot": "Wyrmstone Crucible",
+  "Breaking Swipe": "Wyrmstone Wake",
+  "Clanging Scales": "Wyrmstone Imprint",
+  "Dynamax Cannon": "Wyrmstone Tether",
+  "Eternabeam": "Wyrmstone Pulsework",
+  "Core Enforcer": "Wyrmstone Orbit",
+  "🐉 DRAGON'S WRATH (OHKO)": "Wyrmstone Crownfall (OHKO)",
+  "Metal Claw": "Alloy Covenant",
+  "Iron Head": "Alloy Refrain",
+  "Flash Cannon": "Alloy Spindle",
+  "Heavy Slam": "Alloy Lattice",
+  "Meteor Mash": "Alloy Canticle",
+  "Bullet Punch": "Alloy Spiral",
+  "Gyro Ball": "Alloy Rupture",
+  "Steel Beam": "Alloy Filament",
+  "Doom Desire": "Alloy Cadence",
+  "Sunsteel Strike": "Alloy Vow",
+  "Iron Tail": "Alloy Crucible",
+  "Magnet Bomb": "Alloy Wake",
+  "Mirror Shot": "Alloy Imprint",
+  "Smart Strike": "Alloy Tether",
+  "King's Shield": "Alloy Pulsework",
+  "Anchor Shot": "Alloy Orbit",
+  "Double Iron Bash": "Alloy Crownfall",
+  "⚙️ METAL CRUSHER (OHKO)": "Alloy Fracture (OHKO)",
+  "Fairy Wind": "Glimmer Covenant",
+  "Dazzling Gleam": "Glimmer Refrain",
+  "Moonblast": "Glimmer Spindle",
+  "Play Rough": "Glimmer Lattice",
+  "Spirit Break": "Glimmer Canticle",
+  "Fleur Cannon": "Glimmer Spiral",
+  "Misty Explosion": "Glimmer Rupture",
+  "Strange Steam": "Glimmer Filament",
+  "Draining Kiss": "Glimmer Cadence",
+  "Disarming Voice": "Glimmer Vow",
+  "Sweet Kiss": "Glimmer Crucible",
+  "Crafty Shield": "Glimmer Wake",
+  "Floral Healing": "Glimmer Imprint",
+  "Sparkly Swirl": "Glimmer Tether",
+  "Magical Torque": "Glimmer Pulsework",
+  "Springtide Storm": "Glimmer Orbit",
+  "✨ FAIRY'S BLESSING (OHKO)": "Glimmer Crownfall (OHKO)",
+  "Rock Throw": "Strata Covenant",
+  "Rock Slide": "Strata Refrain",
+  "Stone Edge": "Strata Spindle",
+  "Power Gem": "Strata Lattice",
+  "Ancient Power": "Strata Canticle",
+  "Head Smash": "Strata Spiral",
+  "Rock Blast": "Strata Rupture",
+  "Accelerock": "Strata Filament",
+  "Meteor Beam": "Strata Cadence",
+  "Rock Tomb": "Strata Vow",
+  "Smack Down": "Strata Crucible",
+  "Stealth Rock": "Strata Wake",
+  "Wide Guard": "Strata Imprint",
+  "Diamond Storm": "Strata Tether",
+  "Continental Crush": "Strata Pulsework",
+  "Splintered Stormshards": "Strata Orbit",
+  "💎 WORLD BREAKER (OHKO)": "Strata Crownfall (OHKO)",
+  "Lick": "Wraith Covenant",
+  "Shadow Ball": "Wraith Refrain",
+  "Night Shade": "Wraith Spindle",
+  "Shadow Claw": "Wraith Lattice",
+  "Poltergeist": "Wraith Canticle",
+  "Phantom Force": "Wraith Spiral",
+  "Astral Barrage": "Wraith Rupture",
+  "Spectral Thief": "Wraith Filament",
+  "Shadow Sneak": "Wraith Cadence",
+  "Hex": "Wraith Vow",
+  "Shadow Punch": "Wraith Crucible",
+  "Grudge": "Wraith Wake",
+  "Destiny Bond": "Wraith Imprint",
+  "Astonish": "Wraith Tether",
+  "Soul Stealing Strike": "Wraith Pulsework",
+  "Menacing Moonraze Maelstrom": "Wraith Orbit",
+  "👻 SOUL REAPER (OHKO)": "Wraith Crownfall (OHKO)",
+  "Poison Sting": "Venomglass Covenant",
+  "Sludge Bomb": "Venomglass Refrain",
+  "Toxic": "Venomglass Spindle",
+  "Poison Jab": "Venomglass Lattice",
+  "Gunk Shot": "Venomglass Canticle",
+  "Venoshock": "Venomglass Spiral",
+  "Cross Poison": "Venomglass Rupture",
+  "Sludge Wave": "Venomglass Filament",
+  "Belch": "Venomglass Cadence",
+  "Acid": "Venomglass Vow",
+  "Acid Spray": "Venomglass Crucible",
+  "Clear Smog": "Venomglass Wake",
+  "Poison Fang": "Venomglass Imprint",
+  "Baneful Bunker": "Venomglass Tether",
+  "Barb Barrage": "Venomglass Pulsework",
+  "Malignant Chain": "Venomglass Orbit",
+  "☠️ FATAL VENOM (OHKO)": "Venomglass Crownfall (OHKO)",
+  "Mud Slap": "Faultline Covenant",
+  "Earth Power": "Faultline Refrain",
+  "Sand Tomb": "Faultline Spindle",
+  "Earthquake": "Faultline Lattice",
+  "Dig": "Faultline Canticle",
+  "Bone Rush": "Faultline Spiral",
+  "Bulldoze": "Faultline Rupture",
+  "High Horsepower": "Faultline Filament",
+  "Precipice Blades": "Faultline Cadence",
+  "Mud Bomb": "Faultline Vow",
+  "Mud Shot": "Faultline Crucible",
+  "Drill Run": "Faultline Wake",
+  "Sand Attack": "Faultline Imprint",
+  "Shore Up": "Faultline Tether",
+  "Land's Wrath": "Faultline Pulsework",
+  "Tectonic Rage": "Faultline Orbit",
+  "🌍 CORE IMPLOSION (OHKO)": "Faultline Crownfall (OHKO)",
+  "Fury Cutter": "Dawn Covenant",
+  "X-Scissor": "Dawn Refrain",
+  "Signal Beam": "Dawn Spindle",
+  "Bug Buzz": "Dawn Lattice",
+  "Megahorn": "Dawn Canticle",
+  "Leech Life": "Dawn Spiral",
+  "First Impression": "Dawn Rupture",
+  "U-turn": "Dawn Filament",
+  "Attack Order": "Dawn Cadence",
+  "Bug Bite": "Dawn Vow",
+  "String Shot": "Dawn Crucible",
+  "Defend Order": "Dawn Wake",
+  "Heal Order": "Dawn Imprint",
+  "Pollen Puff": "Dawn Tether",
+  "Savage Spin-Out": "Dawn Pulsework",
+  "Lunge": "Dawn Orbit",
+  "🦗 PLAGUE SWARM (OHKO)": "Dawn Crownfall (OHKO)",
+  "Flash": "Thread Covenant",
+  "Beam": "Thread Refrain",
+  "Photon Blast": "Thread Spindle",
+  "Solar Flare": "Thread Lattice",
+  "Light Burst": "Thread Canticle",
+  "Prismatic Beam": "Thread Spiral",
+  "Radiant Blast": "Thread Rupture",
+  "Holy Light": "Thread Filament",
+  "Dazzling Flash": "Thread Cadence",
+  "Light of Ruin": "Thread Vow",
+  "Sunny Day": "Thread Crucible",
+  "Morning Sun": "Thread Wake",
+  "Spotlight": "Thread Imprint",
+  "Light That Burns The Sky": "Thread Tether",
+  "☀️ DIVINE JUDGMENT (OHKO)": "Thread Pulsework (OHKO)",
+  "Tackle": "Swarm Covenant",
+  "Pound": "Swarm Refrain",
+  "Scratch": "Swarm Spindle",
+  "Quick Attack": "Swarm Lattice",
+  "Body Slam": "Swarm Canticle",
+  "Hyper Voice": "Swarm Spiral",
+  "Tri Attack": "Swarm Rupture",
+  "Double-Edge": "Swarm Filament",
+  "Giga Impact": "Swarm Cadence",
+  "Extreme Speed": "Swarm Vow",
+  "Cut": "Swarm Crucible",
+  "Strength": "Swarm Wake",
+  "Metronome": "Swarm Imprint",
+  "Judgment": "Swarm Tether",
+  "Explosion": "Swarm Pulsework",
+  "Self-Destruct": "Swarm Orbit",
+  "💥 FATAL END (OHKO)": "Swarm Crownfall (OHKO)",
+  "Counter": "Recoil Verdict",
+  "Heal Punch": "Vital Exchange",
+  "大爆発": "Core Sacrifice",
+  "Ultra Punch": "Cinder Astral Lattice",
+  "Instant Strike": "Cinder Astral Canticle",
+  "Divine Wrath": "Cinder Astral Spiral",
+  "God Speed": "Cinder Astral Rupture",
+  "Pressure": "Cinder Astral Filament",
+  "Limit Break": "Cinder Astral Cadence",
+  "Mega Punch": "Cinder Astral Vow",
+  "Kaioken": "Cinder Astral Crucible",
+  "Final Flash": "Cinder Astral Wake",
+  "Instant Transmission": "Cinder Astral Imprint",
+  "Spirit Bomb": "Cinder Astral Tether",
+  "👊 ULTRA INSTINCT (OHKO)": "Cinder Astral Pulsework (OHKO)",
+  "Forge": "Anvil Covenant",
+  "Celestial Hammer": "Tideglass Astral Refrain",
+  "Starfall": "Tideglass Astral Spindle",
+  "Cosmic Power": "Tideglass Astral Lattice",
+  "Supernova": "Tideglass Astral Canticle",
+  "Gravity Well": "Tideglass Astral Spiral",
+  "Meteor Shower": "Tideglass Astral Rupture",
+  "Constellation Strike": "Tideglass Astral Filament",
+  "⭐ STAR FORGE (OHKO)": "Tideglass Astral Cadence (OHKO)",
+  "Find": "Fault Revelation",
+  "Bug": "Static Hex",
+  "Infestation": "Briar Astral Spindle",
+  "Toxic Web": "Briar Astral Lattice",
+  "Parasite Strike": "Briar Astral Canticle",
+  "Debug": "Briar Astral Spiral",
+  "Scan": "Briar Astral Rupture",
+  "Analyze": "Briar Astral Filament",
+  "Vulnerability Exploit": "Briar Astral Cadence",
+  "System Crash": "Briar Astral Vow",
+  "🐛 DEBUG DELETE (OHKO)": "Briar Astral Crucible (OHKO)",
+  "Singularity": "Zephyr Astral Covenant",
+  "Gravity Pull": "Zephyr Astral Refrain",
+  "Event Horizon": "Zephyr Astral Spindle",
+  "Absorb Light": "Zephyr Astral Lattice",
+  "Void Collapse": "Zephyr Astral Canticle",
+  "Spatial Rend": "Zephyr Astral Spiral",
+  "Massive Pull": "Zephyr Astral Rupture",
+  "Time Dilation": "Zephyr Astral Filament",
+  "Consume": "Zephyr Astral Cadence",
+  "Gravitational Wave": "Zephyr Astral Vow",
+  "Dark Matter Burst": "Zephyr Astral Crucible",
+  "🕳️ VOID ANNIHILATION (OHKO)": "Zephyr Astral Wake (OHKO)",
+  "Screen Protector": "Arc Astral Covenant",
+  "Charge": "Arc Astral Refrain",
+  "Reset": "Arc Astral Spindle",
+  "Shock": "Arc Astral Lattice",
+  "Overload": "Arc Astral Canticle",
+  "App Crash": "Arc Astral Spiral",
+  "Reboot": "Arc Astral Rupture",
+  "Factory Reset": "Arc Astral Filament",
+  "AirDrop": "Arc Astral Cadence",
+  "Screenshot": "Arc Astral Vow",
+  "Power Save": "Arc Astral Crucible",
+  "High Performance Mode": "Arc Astral Wake",
+  "📱 BRICK (OHKO)": "Arc Astral Imprint (OHKO)",
+  "Prism Beam": "Rime Astral Covenant",
+  "Reflection": "Rime Astral Refrain",
+  "Solar Wind": "Rime Astral Spindle",
+  "Photon Wave": "Rime Astral Lattice",
+  "💫 LIGHT OF CREATION (OHKO)": "Rime Astral Canticle (OHKO)",
+  "Void Touch": "Ironwill Astral Covenant",
+  "Erase": "Ironwill Astral Refrain",
+  "Oblivion": "Ironwill Astral Spindle",
+  "Nullify": "Ironwill Astral Lattice",
+  "Darkness": "Ironwill Astral Canticle",
+  "Nothingness": "Ironwill Astral Spiral",
+  "Absolute Zero": "Ironwill Astral Rupture",
+  "Paradox": "Ironwill Astral Filament",
+  "Delete": "Ironwill Astral Cadence",
+  "Corrupt": "Ironwill Astral Vow",
+  "Void Rift": "Ironwill Astral Crucible",
+  "Null Pointer": "Ironwill Astral Wake",
+  "Division By Zero": "Ironwill Astral Imprint",
+  "🖤 NULL EXISTENCE (OHKO)": "Ironwill Astral Tether (OHKO)",
+  "Frozen Shield": "Nightveil Astral Covenant",
+  "Ice Age": "Nightveil Astral Refrain",
+  "Permafrost Armor": "Nightveil Astral Spindle",
+  "Glacier": "Nightveil Astral Lattice",
+  "Eternal Frost": "Nightveil Astral Canticle",
+  "Cryo Prison": "Nightveil Astral Spiral",
+  "Permafrost Spear": "Nightveil Astral Rupture",
+  "Frozen Ground": "Nightveil Astral Filament",
+  "Glacial Wall": "Nightveil Astral Cadence",
+  "Permafrost Tomb": "Nightveil Astral Vow",
+  "🧊 ETERNAL FREEZE (OHKO)": "Nightveil Astral Crucible (OHKO)",
+  "Thunder Punch": "Mindglass Astral Covenant",
+  "Muddy Water": "Mindglass Astral Refrain",
+  "Water Pulse": "Mindglass Astral Spindle",
+  "Focus Blast": "Mindglass Astral Lattice",
+  "EVERYTHING STRIKE": "Wyrmstone Astral Covenant",
+  "UNIVERSE BREAKER": "Wyrmstone Astral Refrain",
+  "OMNI SLASH": "Wyrmstone Astral Spindle",
+  "GODLY PRESENCE": "Wyrmstone Astral Lattice",
+  "INFINITY BURST": "Wyrmstone Astral Canticle",
+  "REALITY SHATTER": "Wyrmstone Astral Spiral",
+  "DIMENSION TEAR": "Wyrmstone Astral Rupture",
+  "COSMIC RAGE": "Wyrmstone Astral Filament",
+  "⭐ TOTAL OBLITERATION (OHKO)": "Wyrmstone Astral Cadence (OHKO)",
+  "Struggle": "Last Ember"
+};
+function battleMoveName(id){return BATTLE_MOVE_NAMES[id]||'Uncharted Resonance';}
+let battleInputUntil=0;
+function battleCanAct(player){return battleState.active&&battleState.turn==='p'+player&&Date.now()>=battleInputUntil&&(!online.mode||(online.side===player&&!online.pending));}
     // ========== BATTLE SYSTEM ==========
 
 // Type effectiveness chart
@@ -4096,7 +5231,9 @@ function getElementMoves(el) {
     }
     
     const moveCount = Math.min(8, Math.max(6, moves.length));
-    const shuffled = [...moves].sort(() => Math.random() - 0.5);
+    // Online move pools must be identical when each peer recomputes a team.
+    const moveKey=m=>{let h=2166136261;for(const c of name+'|'+m)h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0;};
+    const shuffled = online.mode ? [...moves].sort((a,b)=>moveKey(a)-moveKey(b)) : [...moves].sort(() => Math.random() - 0.5);
     const selectedMoves = shuffled.slice(0, moveCount);
     
     if (!selectedMoves.includes('Struggle')) {
@@ -4189,55 +5326,18 @@ function addBattleLog(msg, type) {
     const colors = { damage: '#ef4444', skill: '#a855f7', system: '#eab308', dodge: '#14b8a6', block: '#60a5fa', everything: '#00ffc8', ohko: '#ff00ff' };
     const p = document.createElement('p');
     p.style.color = colors[type] || '#888';
+    p.dataset.event=type;
     p.textContent = msg;
     log.appendChild(p);
+    while(log.children.length>150)log.firstElementChild.remove();
     log.scrollTop = log.scrollHeight;
 }
 
 function showOHKOAnimation(moveName, attackerName, defenderName, success) {
-    const animations = {
-        '🔥 INFERNO OVERDRIVE (OHKO)': { emoji: '🔥💥🌋', color: '#ff6600', text: 'SUPERNOVA ERUPTION!' },
-        '🌊 ABYSSAL DEPTHS (OHKO)': { emoji: '🌊🌀🕳️', color: '#0066ff', text: 'MAELSTROM CONSUMES!' },
-        '🌿 FOREST JUDGMENT (OHKO)': { emoji: '🌿🌳💚', color: '#00cc44', text: 'NATURE\'S VENGEANCE!' },
-        '💨 SKY SHATTER (OHKO)': { emoji: '💨⚡🌪️', color: '#88ccff', text: 'HEAVENS COLLAPSE!' },
-        '⚡ MEGA LIGHTNING (OHKO)': { emoji: '⚡💥🔵', color: '#ffff00', text: 'DIVINE THUNDER!' },
-        '❄️ ABSOLUTE ZERO (OHKO)': { emoji: '❄️🧊💀', color: '#00ffff', text: 'COSMIC FREEZE!' },
-        '👊 ONE-INCH PUNCH (OHKO)': { emoji: '👊💥⚡', color: '#ff4444', text: 'DIMENSIONAL SHOCKWAVE!' },
-        '🌑 MIDNIGHT REAPER (OHKO)': { emoji: '🌑🔪💀', color: '#660066', text: 'SOUL HARVEST!' },
-        '🔮 MIND BREAK (OHKO)': { emoji: '🔮🧠💥', color: '#cc66ff', text: 'PSYCHIC SHATTER!' },
-        '🐉 DRAGON\'S WRATH (OHKO)': { emoji: '🐉🔥⭐', color: '#ff9933', text: 'ANCIENT FURY!' },
-        '⚙️ METAL CRUSHER (OHKO)': { emoji: '⚙️🔨💥', color: '#888888', text: 'ATOMIC COMPRESSION!' },
-        '✨ FAIRY\'S BLESSING (OHKO)': { emoji: '✨🌸💖', color: '#ff99ff', text: 'MYSTIC JUDGMENT!' },
-        '💎 WORLD BREAKER (OHKO)': { emoji: '💎🌍💥', color: '#44aaff', text: 'PLANET CRACKER!' },
-        '👻 SOUL REAPER (OHKO)': { emoji: '👻🔪💀', color: '#aa44ff', text: 'ETERNAL DAMNATION!' },
-        '☠️ FATAL VENOM (OHKO)': { emoji: '☠️🧪💀', color: '#88ff44', text: 'VENOMOUS DEATH!' },
-        '🌍 CORE IMPLOSION (OHKO)': { emoji: '🌍🌀💥', color: '#cc8844', text: 'MAGMA ERUPTION!' },
-        '🦗 PLAGUE SWARM (OHKO)': { emoji: '🦗🐜💀', color: '#88aa44', text: 'INSECT APOCALYPSE!' },
-        '☀️ DIVINE JUDGMENT (OHKO)': { emoji: '☀️✨🌟', color: '#ffdd88', text: 'HOLY RETRIBUTION!' },
-        '💥 FATAL END (OHKO)': { emoji: '💥☠️💀', color: '#aa0000', text: 'EXISTENCE ERASED!' },
-        '👊 ULTRA INSTINCT (OHKO)': { emoji: '👊⚡💥', color: '#ff88ff', text: 'AUTO-DODGE COUNTER!' },
-        '⭐ STAR FORGE (OHKO)': { emoji: '⭐🌟🌌', color: '#ffcc44', text: 'GALACTIC FORGE!' },
-        '🐛 DEBUG DELETE (OHKO)': { emoji: '🐛💻💥', color: '#44ff88', text: 'REALITY CORRUPTION!' },
-        '🕳️ VOID ANNIHILATION (OHKO)': { emoji: '🕳️⬛💀', color: '#4400aa', text: 'NOTHINGNESS ABSORBS!' },
-        '📱 BRICK (OHKO)': { emoji: '📱🔨💀', color: '#88aaff', text: 'CRITICAL SYSTEM FAILURE!' },
-        '💫 LIGHT OF CREATION (OHKO)': { emoji: '💫✨🌟', color: '#ffffaa', text: 'PRIMORDIAL BLAST!' },
-        '🖤 NULL EXISTENCE (OHKO)': { emoji: '🖤❌💀', color: '#333333', text: 'ERASED FROM REALITY!' },
-        '🧊 ETERNAL FREEZE (OHKO)': { emoji: '🧊❄️💀', color: '#66ddff', text: 'TIME STOPS!' },
-        '⭐ TOTAL OBLITERATION (OHKO)': { emoji: '⭐💥🌌', color: '#ffffff', text: 'UNIVERSE RESETS!' }
-    };
-    
-    const anim = animations[moveName] || { emoji: '💀⚡💥', color: '#ff00ff', text: 'OBLITERATION!' };
-    
-    addBattleLog(`✨✨✨ ${attackerName} uses ${moveName}! ✨✨✨`, 'ohko');
-    addBattleLog(`🌈 ${anim.emoji} ${anim.text} ${anim.emoji}`, 'ohko');
-    
-    if (success) {
-        addBattleLog(`💀💀💀 ${defenderName} is OBLITERATED! One-Hit KO! 💀💀💀`, 'ohko');
-        addBattleLog(`🏆 GLORIOUS VICTORY! OHKO SUCCESSFUL! 🏆`, 'ohko');
-    } else {
-        addBattleLog(`😰 OHKO missed! ${defenderName} survives by a miracle! 😰`, 'damage');
-        addBattleLog(`✨ The attack was too powerful but missed the mark! ✨`, 'system');
-    }
+    const panel=document.getElementById('battleFinisher');
+    const message=battleMoveName(moveName)+' · '+(success?'FINISHER CONNECTED':'FINISHER EVADED');
+    if(panel){panel.hidden=false;panel.textContent=message;clearTimeout(panel.hideTimer);panel.hideTimer=setTimeout(()=>{panel.hidden=true;},2200);}
+    addBattleLog(message+' — '+attackerName+' challenged '+defenderName+'.','ohko');
 }
 
 function decodeBattleCode(code) {
@@ -4366,6 +5466,7 @@ function updateTeamDisplay(player) {
 }
 
 function selectTeam(player, name) {
+    if(online.mode && (player!==online.side || online.ready))return;
     const team = player === 1 ? battleState.p1Team : battleState.p2Team;
     const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
     const el = els.find(e => e.name === name);
@@ -4433,12 +5534,13 @@ function showMoveSelection(player) {
             const isSelected = selectedMoves.includes(move);
             const isOHKO = move.includes('(OHKO)');
             const btn = document.createElement('button');
-            btn.textContent = move;
+            btn.textContent = battleMoveName(move);
             btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isSelected ? 'bg-green-500 text-white' : (isOHKO ? 'bg-pink-600 text-white opacity-80 hover:opacity-100' : 'bg-purple-500 text-white opacity-60 hover:opacity-100')}`;
             if (isOHKO) btn.style.boxShadow = '0 0 5px #ff00ff';
             btn.onclick = () => {
                 const currentSelected = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
-                if (isSelected) {
+                if(online.mode&&(online.ready||player!==online.side))return;
+                if (currentSelected.includes(move)) {
                     const idx = currentSelected.indexOf(move);
                     currentSelected.splice(idx, 1);
                     battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
@@ -4471,6 +5573,8 @@ let battleState = {
 };
 
 function updateBattleUI() {
+    const banner=document.getElementById('battleTurnBanner');
+    if(banner)banner.textContent=battleState.active?(battleState.turn==='p1'?'Player 1':'Player 2')+' · Choose your next move':'Match complete';
     const p1 = battleState.p1Current;
     const p2 = battleState.p2Current;
     
@@ -4494,9 +5598,11 @@ function updateBattleUI() {
             moves.forEach(s => {
                 const isOHKO = s.includes('(OHKO)');
                 const btn = document.createElement('button');
-                btn.textContent = s;
+                btn.textContent = battleMoveName(s);
                 btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isOHKO ? 'bg-pink-600 text-white hover:bg-pink-700 animate-pulse' : 'bg-purple-500 text-white hover:bg-purple-600'}`;
                 if (isOHKO) btn.style.boxShadow = '0 0 8px #ff00ff';
+                btn.classList.add('battle-skill');if(isOHKO)btn.classList.add('ohko-skill');
+                btn.disabled=!battleCanAct(1);
                 btn.onclick = () => useSkill(s, 1);
                 skillsDiv.appendChild(btn);
             });
@@ -4523,9 +5629,11 @@ function updateBattleUI() {
             moves.forEach(s => {
                 const isOHKO = s.includes('(OHKO)');
                 const btn = document.createElement('button');
-                btn.textContent = s;
+                btn.textContent = battleMoveName(s);
                 btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isOHKO ? 'bg-pink-600 text-white hover:bg-pink-700 animate-pulse' : 'bg-purple-500 text-white hover:bg-purple-600'}`;
                 if (isOHKO) btn.style.boxShadow = '0 0 8px #ff00ff';
+                btn.classList.add('battle-skill');if(isOHKO)btn.classList.add('ohko-skill');
+                btn.disabled=!battleCanAct(2);
                 btn.onclick = () => useSkill(s, 2);
                 skillsDiv.appendChild(btn);
             });
@@ -4534,8 +5642,13 @@ function updateBattleUI() {
 }
 
 function useSkill(skill, player) {
-    if (!battleState.active) return;
-    
+    if(online.mode && !online.resolving){onlineMove(skill,player);return;}
+    if (!battleState.active||battleState.turn!=='p'+player||Date.now()<battleInputUntil) return;
+    const current=battleState['p'+player+'Current'];
+    if(!current||!battleState['p'+player+'Moves'][current.name]?.includes(skill))return;
+    battleInputUntil=Date.now()+450;
+    setTimeout(updateBattleUI,460);
+    if(skill!=='Counter')battleState['p'+player+'CounterLocked']=false;
     const isP1 = player === 1;
     const attacker = isP1 ? battleState.p1Current : battleState.p2Current;
     const defender = isP1 ? battleState.p2Current : battleState.p1Current;
@@ -4553,11 +5666,11 @@ function useSkill(skill, player) {
         if (ohkoSuccess) {
             defender.currentHp = 0;
             updateBattleUI();
-            addBattleLog(`💀 ${defender.name} was instantly KO'd by ${skill}! 💀`, 'ohko');
+            addBattleLog(`💀 ${defender.name} was instantly KO'd by ${battleMoveName(skill)}! 💀`, 'ohko');
             endTurn();
             return;
         } else {
-            addBattleLog(`${attacker.name}'s ${skill} missed! (30% chance)`, 'damage');
+            addBattleLog(`${attacker.name}'s ${battleMoveName(skill)} missed! (30% chance)`, 'damage');
             endTurn();
             return;
         }
@@ -4587,7 +5700,7 @@ function useSkill(skill, player) {
         let damage = Math.floor(attacker.baseAtk * 0.25);
         damage = Math.max(1, damage);
         defender.currentHp -= damage;
-        addBattleLog(`${attacker.name} used STRUGGLE! Dealt ${damage} damage!`, 'damage');
+        addBattleLog(`${attacker.name} used Last Ember! Dealt ${damage} damage!`, 'damage');
         updateBattleUI();
         endTurn();
         return;
@@ -4595,19 +5708,16 @@ function useSkill(skill, player) {
 
     if (skill === 'Counter') {
         if ((isP1 && battleState.p1CounterLocked) || (!isP1 && battleState.p2CounterLocked)) {
-            addBattleLog('Counter cannot be used twice in a row!', 'system');
+            addBattleLog('Recoil Verdict cannot be used twice in a row!', 'system');
             return;
         }
-        addBattleLog(`${attacker.name} used COUNTER!`, 'skill');
+        addBattleLog(`${attacker.name} used Recoil Verdict!`, 'skill');
         const dmg = Math.floor(attacker.baseAtk * 0.5);
         defender.currentHp -= dmg;
         addBattleLog(`${attacker.name} countered for ${dmg} damage!`, 'damage');
         if (isP1) battleState.p1CounterLocked = true;
         else battleState.p2CounterLocked = true;
-        setTimeout(() => {
-            if (isP1) battleState.p1CounterLocked = false;
-            else battleState.p2CounterLocked = false;
-        }, 2000);
+
         updateBattleUI();
         endTurn();
         return;
@@ -4618,14 +5728,14 @@ function useSkill(skill, player) {
         const heal = Math.floor(dmg * 0.33);
         defender.currentHp -= dmg;
         attacker.currentHp = Math.min(attacker.maxHp, attacker.currentHp + heal);
-        addBattleLog(`${attacker.name} used HEAL PUNCH! Dealt ${dmg} damage, healed ${heal} HP!`, 'skill');
+        addBattleLog(`${attacker.name} used Vital Exchange! Dealt ${dmg} damage, healed ${heal} HP!`, 'skill');
         updateBattleUI();
         endTurn();
         return;
     }
 
     if (skill === '大爆発') {
-        addBattleLog(`${attacker.name} used 大爆発! MASSIVE EXPLOSION!`, 'skill');
+        addBattleLog(`${attacker.name} used Core Sacrifice! MASSIVE EXPLOSION!`, 'skill');
         const dmg = attacker.baseAtk * 1.8;
         defender.currentHp -= dmg;
         attacker.currentHp = 0;
@@ -4641,7 +5751,7 @@ function useSkill(skill, player) {
         defender.currentHp -= dmg;
         if (isP1) { battleState.p1AtkBoost *= 1.3; battleState.p1DefBoost *= 1.3; }
         else { battleState.p2AtkBoost *= 1.3; battleState.p2DefBoost *= 1.3; }
-        addBattleLog(`${attacker.name} used FORGE! Dealt ${dmg} damage, boosted stats! (1.3x)`, 'skill');
+        addBattleLog(`${attacker.name} used Anvil Covenant! Dealt ${dmg} damage, boosted stats! (1.3x)`, 'skill');
         updateBattleUI();
         endTurn();
         return;
@@ -4649,18 +5759,18 @@ function useSkill(skill, player) {
 
     if (skill === 'Find') {
         if ((isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed)) {
-            addBattleLog('Find can only be used once per match!', 'system');
+            addBattleLog('Fault Revelation can only be used once per match!', 'system');
             return;
         }
         if (isP1) { battleState.p1FindUsed = true; battleState.p2DefBoost = 0.67; }
         else { battleState.p2FindUsed = true; battleState.p1DefBoost = 0.67; }
-        addBattleLog(`${attacker.name} used FIND! Enemy defense lowered! (1.5x damage taken)`, 'skill');
+        addBattleLog(`${attacker.name} used Fault Revelation! Enemy defense lowered! (1.5x damage taken)`, 'skill');
         endTurn();
         return;
     }
 
     if (skill === 'Bug') {
-        addBattleLog(`${attacker.name} used BUG! 25% chance to immobilize!`, 'skill');
+        addBattleLog(`${attacker.name} used Static Hex! 25% chance to immobilize!`, 'skill');
         if (Math.random() < 0.25) {
             if (isP1) battleState.p2BugActive = true;
             else battleState.p1BugActive = true;
@@ -4693,7 +5803,7 @@ function useSkill(skill, player) {
         damage = Math.floor(damage * (atkBoost / defBoost));
         
         defender.currentHp -= damage;
-        addBattleLog(`⭐ ${attacker.name} used ${skill}!${effectMsg} Dealt ${damage} damage! ⭐`, 'everything');
+        addBattleLog(`⭐ ${attacker.name} used ${battleMoveName(skill)}!${effectMsg} Dealt ${damage} damage! ⭐`, 'everything');
         updateBattleUI();
         endTurn();
         return;
@@ -4713,12 +5823,16 @@ function useSkill(skill, player) {
     defender.currentHp -= damage;
     
     let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect! (x0)' : ''));
-    addBattleLog(`${attacker.name} used ${skill}! Dealt ${damage} damage!${eff}`, 'damage');
+    addBattleLog(`${attacker.name} used ${battleMoveName(skill)}! Dealt ${damage} damage!${eff}`, 'damage');
     updateBattleUI();
     endTurn();
 }
 
-function endTurn() {
+function endTurn(){try{advanceBattleTurn();}finally{updateBattleUI();}}
+function advanceBattleTurn() {
+    if(battleState.p1Team.every(e=>e.currentHp<=0) && battleState.p2Team.every(e=>e.currentHp<=0)){
+        battleState.active=false;addBattleLog('Both teams fainted — DRAW!', 'system');return;
+    }
     const p1 = battleState.p1Current;
     const p2 = battleState.p2Current;
 
@@ -4753,15 +5867,17 @@ function endTurn() {
     battleState.turn = battleState.turn === 'p1' ? 'p2' : 'p1';
     addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'}'s turn!`, 'system');
 
-    if ((battleState.turn === 'p2' && battleState.p1BugActive) || (battleState.turn === 'p1' && battleState.p2BugActive)) {
+    if ((battleState.turn === 'p2' && battleState.p2BugActive) || (battleState.turn === 'p1' && battleState.p1BugActive)) {
         if (Math.random() < 0.25) {
             addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'} is BUGGED and cannot move!`, 'system');
-            endTurn();
+            battleState.turn=battleState.turn==='p1'?'p2':'p1';
+            addBattleLog('Initiative returns to '+(battleState.turn==='p1'?'Player 1':'Player 2'),'system');
         }
     }
 }
 
 function startBattle() {
+    if(online.mode && !online.resolving){readyOnline();return;}
     for (const el of battleState.p1Team) {
         const moves = battleState.p1Moves[el.name];
         if (!moves || moves.length < 4) {
@@ -4782,6 +5898,8 @@ function startBattle() {
         return;
     }
 
+    battleInputUntil=0;
+    [...battleState.p1Team,...battleState.p2Team].forEach(initElementForBattle);
     battleState.active = true;
     battleState.p1Current = battleState.p1Team[0];
     battleState.p2Current = battleState.p2Team[0];
@@ -4807,6 +5925,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const battleBtn = document.getElementById('battleBtn');
     if (battleBtn) {
         battleBtn.addEventListener('click', () => {
+            if(!window.craftBattleUnlocked?.())return;
             const modal = document.getElementById('battleModal');
             if (modal) modal.style.display = 'block';
         });
@@ -4872,6 +5991,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetBattleBtn = document.getElementById('resetBattleBtn');
     if (resetBattleBtn) {
         resetBattleBtn.addEventListener('click', () => {
+            if(online.mode)leaveOnline('Left room. Create or join a new room.');
             battleState.active = false;
             battleState.moveSelection = true;
             battleState.p1Ready = battleState.p2Ready = false;
@@ -4903,15 +6023,183 @@ document.addEventListener('DOMContentLoaded', function() {
             const startBtnEl = document.getElementById('startBattleBtn');
             if (startBtnEl) startBtnEl.disabled = true;
             const log = document.getElementById('battleLog');
-            if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>';
+            if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Your battle story begins here…</p>';
         });
     }
 });
+// Real WebRTC transport. Public signaling works on static HTTPS hosting.
+// For restrictive NAT/firewalls supply your deployment's short-lived TURN credentials.
+const ONLINE_CONFIG={
+    peerOptions:{config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}
+        // ,{urls:'turn:YOUR_TURN_HOST:3478',username:'SHORT_LIVED_USER',credential:'SHORT_LIVED_PASSWORD'}
+    ]}}
+    // To self-host signaling add host, port, path and secure to peerOptions.
+};
+const online={mode:false,side:0,peer:null,conn:null,ready:false,resolving:false,pending:false,seq:0,timer:null,lastSeen:0};
+const netEl=id=>document.getElementById(id);
+function netStatus(s){netEl('onlineStatus').textContent=s;}
+function netSend(data){if(online.conn?.open)online.conn.send(data);}
+function leaveOnline(message){
+    const c=online.conn,p=online.peer;online.conn=null;online.peer=null;
+    clearInterval(online.timer);clearTimeout(online.timeout);online.side=0;online.ready=false;online.pending=false;
+    battleState.active=false;c?.close();p?.destroy();
+    if(online.mode){netStatus(message);netEl('startBattleBtn').disabled=true;updateBattleUI();}
+}
+function netSetupUI(){
+    for(let n=1;n<=2;n++){
+        const panel=netEl('p'+n+'Code').parentElement;
+        panel.hidden=online.mode && online.side!==n;
+        for(const id of ['Code','GetCodeBtn','LoadBtn'])netEl('p'+n+id).hidden=online.mode;
+    }
+    netEl('startBattleBtn').textContent=online.mode?'Ready — lock team & moves':'⚔️ START BATTLE ⚔️';
+}
+function netSnapshot(){
+    online.seq++;
+    netSend({type:'state',seq:online.seq,state:battleState,
+        indices:[battleState.p1Team.indexOf(battleState.p1Current),battleState.p2Team.indexOf(battleState.p2Current)],
+        log:Array.from(netEl('battleLog').children).slice(-150).map(p=>({text:p.textContent,color:p.style.color,event:p.dataset.event}))});
+    netStatus(battleState.active?`You are Player 1 · ${battleState.turn==='p1'?'Your':'Opponent’s'} turn`:'Match finished. See battle log.');
+    updateBattleUI();
+}
+function netTeam(packet){
+    if(!packet||!Array.isArray(packet.team)||packet.team.length<1||packet.team.length>3)throw Error('Invalid team');
+    const moves=Object.create(null),names=new Set();
+    const team=packet.team.map(raw=>{
+        if(!raw||typeof raw.name!=='string'||raw.name.length>150||/[<>]/.test(raw.name)||['__proto__','constructor','prototype'].includes(raw.name)||names.has(raw.name))throw Error('Invalid element');
+        names.add(raw.name);
+        // Recompute combat stats; do not accept opponent-supplied HP, damage or abilities.
+        const el={name:raw.name,emoji:typeof raw.emoji==='string'?raw.emoji.slice(0,32).replace(/[<>]/g,''): '⚪'};
+        for(const k of Object.keys(raw))if(/^is[A-Z][A-Za-z]+$/.test(k)&&raw[k])el[k]=true;
+        initElementForBattle(el);
+        const chosen=packet.moves?.[el.name];
+        if(!Array.isArray(chosen)||chosen.length!==4||new Set(chosen).size!==4||chosen.some(m=>m!=='Struggle'&&!el.availableMoves.includes(m)))throw Error('Select four valid moves per element');
+        moves[el.name]=chosen.slice();return el;
+    });
+    if(team.length>1&&team.some(e=>e.canOnlyUseOne))throw Error('This element must battle alone');
+    return {team,moves};
+}
+function readyOnline(){
+    if(!online.conn?.open||online.ready||battleState.active)return;
+    try{
+        const n=online.side,packet=netTeam({team:battleState['p'+n+'Team'],moves:battleState['p'+n+'Moves']});
+        online.ready=true;netEl('startBattleBtn').disabled=true;netEl('p'+n+'MoveSelect').style.pointerEvents='none';
+        if(n===1){battleState.p1Team=packet.team;battleState.p1Moves=packet.moves;maybeStartOnline();}
+        else netSend({type:'ready',...packet});
+        if(!battleState.active)netStatus('Team locked. Waiting for opponent to be ready.');
+    }catch(e){netStatus(e.message);}
+}
+function maybeStartOnline(){
+    if(!online.ready||!battleState.p2Ready||battleState.active)return;
+    online.resolving=true;try{startBattle();}finally{online.resolving=false;}netSnapshot();
+}
+function resolveOnlineMove(skill,player,seq){
+    if(online.side!==1||!online.conn?.open||!battleState.active||seq!==online.seq||battleState.turn!=='p'+player)return;
+    const el=battleState['p'+player+'Current'];
+    if(!el||!battleState['p'+player+'Moves'][el.name]?.includes(skill))return;
+    if(skill!=='Counter')battleState['p'+player+'CounterLocked']=false;
+    online.resolving=true;
+    try{useSkill(skill,player);}finally{online.resolving=false;}
+    // End-turn replacements and random effects resolve once on the host, then synchronize.
+    netSnapshot();
+}
+function onlineMove(skill,player){
+    if(player!==online.side||online.pending||!online.conn?.open||battleState.turn!=='p'+player||!battleState.active)return;
+    if(player===1)resolveOnlineMove(skill,1,online.seq);
+    else {online.pending=true;netSend({type:'move',skill,seq:online.seq});updateBattleUI();}
+}
+function bindOnlineConnection(c){
+    online.conn=c;
+    clearTimeout(online.timeout);
+    online.timeout=setTimeout(()=>{if(online.conn===c&&!c.open)leaveOnline('Peer connection timed out. Try again; TURN may be required.');},30000);
+    c.on('open',()=>{
+        if(online.conn!==c)return;
+        clearTimeout(online.timeout);online.lastSeen=Date.now();
+        netStatus(`Connected · You are Player ${online.side}. Choose your team and moves.`);
+        const n=online.side;
+        loadPlayerElements(n,btoa(unescape(encodeURIComponent(JSON.stringify({elements:window.craftBattleCollection()})))));
+        netEl('startBattleBtn').disabled=false;netSetupUI();
+        online.timer=setInterval(()=>{if(Date.now()-online.lastSeen>45000){leaveOnline('Connection lost or opponent tab suspended. Match ended.');return;}netSend({type:'ping'});},5000);
+    });
+    c.on('data',data=>{
+        if(online.conn!==c)return;
+        try{
+            if(!data||typeof data!=='object'||JSON.stringify(data).length>250000)throw Error('Invalid network message');
+            online.lastSeen=Date.now();
+            if(data.type==='ping'){netSend({type:'pong'});return;}
+            if(online.side===1){
+                if(data.type==='ready'&&!battleState.p2Ready&&!battleState.active){const p=netTeam(data);battleState.p2Team=p.team;battleState.p2Moves=p.moves;battleState.p2Ready=true;maybeStartOnline();}
+                if(data.type==='move')resolveOnlineMove(data.skill,2,data.seq);
+            }else if(data.type==='state'&&Number.isInteger(data.seq)&&data.seq>online.seq){
+                const s=data.state;
+                if(!s||!Array.isArray(s.p1Team)||!Array.isArray(s.p2Team)||!['p1','p2'].includes(s.turn))throw Error('Invalid state');
+                // Validate display strings before the existing renderer consumes peer data.
+                for(const e of [...s.p1Team,...s.p2Team])if(typeof e.name!=='string'||/[<>]/.test(e.name+e.emoji))throw Error('Invalid state element');
+                battleState=s;online.seq=data.seq;online.pending=false;
+                battleState.p1Current=s.p1Team[data.indices[0]];battleState.p2Current=s.p2Team[data.indices[1]];
+                netEl('battleSetup').style.display='none';netEl('battleArena').style.display='block';
+                netEl('battleLog').replaceChildren();
+                for(const line of data.log){const p=document.createElement('p');p.textContent=line.text;p.style.color=line.color;p.dataset.event=line.event||'system';netEl('battleLog').appendChild(p);}
+                const finisher=data.log.filter(line=>line.event==='ohko').at(-1);
+                if(finisher&&online.lastFinisher!==finisher.text){online.lastFinisher=finisher.text;const f=netEl('battleFinisher');f.textContent=finisher.text;f.hidden=false;clearTimeout(f.hideTimer);f.hideTimer=setTimeout(()=>{f.hidden=true;},2200);}
+                updateBattleUI();netStatus(s.active?`You are Player 2 · ${s.turn==='p2'?'Your':'Opponent’s'} turn`:'Match finished. See battle log.');
+            }
+        }catch(e){leaveOnline('Match ended: '+e.message);}
+    });
+    c.on('close',()=>{if(online.conn===c)leaveOnline('Opponent disconnected. Match ended.');});
+    c.on('error',()=>{if(online.conn===c)leaveOnline('Connection failed. Try again; this network may require TURN.');});
+}
+async function connectOnline(host){
+    if(online.peer||online.connecting)return;
+    const code=netEl('roomCode').value.trim();
+    if(!host&&!/^[a-zA-Z0-9_-]{6,100}$/.test(code)){netStatus('Enter the full room code from the host.');return;}
+    online.connecting=true;netStatus('Connecting to signaling service…');
+    try{
+        if(!window.Peer)await new Promise((resolve,reject)=>{
+            const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js';
+            const timeout=setTimeout(()=>reject(Error('PeerJS download timed out')),15000);
+            s.onload=()=>{clearTimeout(timeout);resolve();};s.onerror=()=>{clearTimeout(timeout);reject(Error('Could not load PeerJS'));};document.head.appendChild(s);
+        });
+        if(!online.mode)return;
+        online.lastFinisher=null;online.side=host?1:2;online.ready=false;online.seq=0;online.pending=false;
+        battleState.active=false;battleState.p1Ready=false;battleState.p2Ready=false;
+        battleState.p1Team=[];battleState.p2Team=[];battleState.p1Moves={};battleState.p2Moves={};
+        for(let n=1;n<=2;n++)netEl('p'+n+'MoveSelect').style.pointerEvents='';
+        netEl('battleLog').replaceChildren();netEl('battleSetup').style.display='block';netEl('battleArena').style.display='none';netSetupUI();
+        const peer=new Peer(undefined,ONLINE_CONFIG.peerOptions);online.peer=peer;
+        online.timeout=setTimeout(()=>{if(!online.conn?.open)leaveOnline('Connection timed out. Check the room code and network; TURN may be required.');},30000);
+        peer.on('open',id=>{
+            if(online.peer!==peer)return;
+            if(host){clearTimeout(online.timeout);netEl('roomCode').value=id;netStatus('Room created. Share this code. Waiting for Player 2…');}
+            else if(code===id)leaveOnline('Cannot join your own peer.');
+            else bindOnlineConnection(peer.connect(code,{reliable:true,serialization:'json'}));
+        });
+        peer.on('connection',c=>{if(!host||online.conn){c.on('open',()=>c.close());return;}bindOnlineConnection(c);});
+        peer.on('error',e=>{if(online.peer===peer)leaveOnline('Online unavailable: '+e.type+'. Check the code or try another network.');});
+        peer.on('disconnected',()=>{if(online.peer===peer&&!online.conn?.open)leaveOnline('Signaling disconnected. Create or join again.');});
+    }catch(e){leaveOnline(e.message+'. Local mode remains available.');}finally{online.connecting=false;}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+    netEl('onlineMode').onclick=()=>{if(online.mode)return;netEl('resetBattleBtn').click();online.mode=true;netEl('onlinePanel').hidden=false;netEl('startBattleBtn').disabled=true;netSetupUI();};
+    netEl('localMode').onclick=()=>{leaveOnline('Left room.');online.mode=false;netEl('onlinePanel').hidden=true;netEl('resetBattleBtn').click();netSetupUI();for(let n=1;n<=2;n++)netEl('p'+n+'MoveSelect').style.pointerEvents='';};
+    netEl('createRoom').onclick=()=>connectOnline(true);netEl('joinRoom').onclick=()=>connectOnline(false);
+    netEl('leaveRoom').onclick=()=>{leaveOnline('Left room.');netSetupUI();};
+    window.addEventListener('beforeunload',()=>online.peer?.destroy());
+});
+
     </script>
     <!-- Battle Modal -->
     <div id="battleModal" class="modal-overlay"><div class="modal-box" style="max-width:950px"><button class="modal-close" data-close="battleModal">&times;</button>
-        <h2 class="font-display text-xl mb-4 text-center">⚔️ Element Battle</h2>
+        <h2 class="font-display text-xl mb-4 text-center">⚔️ Resonance Arena</h2>
         
+        <div class="mb-4" style="padding:12px;border:1px solid var(--border);border-radius:12px">
+            <button id="localMode">🏠 LOCAL</button> · <button id="onlineMode">🌐 ONLINE</button>
+            <div id="onlinePanel" hidden>
+                <p class="text-xs my-2">Two players on separate devices: create a room, share its code, then each select a team and four moves and press Ready. Keep this tab open.</p>
+                <button id="createRoom">Create room</button> · <input id="roomCode" aria-label="Room code" placeholder="Room code" style="color:#111;width:220px"> <button id="joinRoom">Join room</button> · <button id="leaveRoom">Leave</button>
+                <p id="onlineStatus" role="status" style="margin-top:8px">Ready to connect.</p>
+                <details class="text-xs"><summary>Connection help</summary>Uses PeerJS public signaling and real WebRTC data channels. Host resolves combat. Restricted networks may require TURN in ONLINE_CONFIG inside this HTML. No account or competitive anti-cheat is provided. A disconnect ends the match; create a new room to play again.</details>
+            </div>
+        </div>
         <!-- Setup Phase -->
         <div id="battleSetup" class="mb-4">
             <div class="grid grid-cols-2 gap-4 mb-4">
@@ -4921,7 +6209,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="flex gap-2 mb-2">
                         <button id="p1GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#3b82f6;color:#fff">📋 Get Battle Code</button>
                     </div>
-                    <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                    <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." ></textarea>
                     <button id="p1LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
                     <div id="p1Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
                     
@@ -4944,7 +6232,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="flex gap-2 mb-2">
                         <button id="p2GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#ef4444;color:#fff">📋 Get Battle Code</button>
                     </div>
-                    <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." readonly></textarea>
+                    <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." ></textarea>
                     <button id="p2LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
                     <div id="p2Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
                     
@@ -4966,7 +6254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         
         <!-- Battle Arena -->
-        <div id="battleArena" style="display:none">
+        <div id="battleArena" style="display:none"><div id="battleTurnBanner" role="status"></div><div id="battleFinisher" hidden role="status"></div>
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <!-- Player 1 Arena -->
                 <div class="rounded-xl p-3 text-center" style="background:rgba(59,130,246,0.1);border:1px solid #3b82f6">
@@ -4995,12 +6283,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <!-- Battle Log -->
             <div id="battleLog" class="rounded-xl p-3 h-40 overflow-y-auto text-sm" style="background:var(--bg-primary);border:1px solid var(--border)">
-                <p class="text-center italic" style="color:var(--text-secondary)">Battle log will appear here...</p>
+                <p class="text-center italic" style="color:var(--text-secondary)">Your battle story begins here…</p>
             </div>
             
             <!-- Reset Button -->
             <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
         </div>
-    </div>
+    </div></div>
 </body>
 </html>
