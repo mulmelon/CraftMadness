@@ -61,169 +61,6 @@
         [data-progression][hidden] { display:none !important; }
         * { font-family: 'Lexend', sans-serif; }
         h1, h2, h3, .font-display { font-family: 'Righteous', cursive; }
-        /* Battle Modal Styles */
-        #p1Team, #p2Team {
-            transition: all 0.2s ease;
-        }
-        
-        #p1Team button, #p2Team button {
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        #p1Team button:hover, #p2Team button:hover {
-            transform: scale(1.05);
-            opacity: 1 !important;
-        }
-        
-        #p1MoveSelect, #p2MoveSelect {
-            scrollbar-width: thin;
-        }
-        
-        #p1MoveSelect button, #p2MoveSelect button {
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        #p1MoveSelect button:hover, #p2MoveSelect button:hover {
-            transform: scale(1.02);
-        }
-        
-        /* HP Bar animation */
-        #p1HpFill, #p2HpFill {
-            transition: width 0.3s ease-out;
-        }
-        
-        /* Battle log scrolling */
-        #battleLog {
-            scroll-behavior: smooth;
-        }
-        
-        #battleLog p {
-            margin: 4px 0;
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-        
-        #battleLog p:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        
-        /* Skill buttons */
-        #p1Skills button, #p2Skills button {
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        #p1Skills button:hover, #p2Skills button:hover {
-            transform: scale(1.05);
-            filter: brightness(1.1);
-        }
-        
-        #p1Skills button:active, #p2Skills button:active {
-            transform: scale(0.95);
-        }
-        
-        /* Get Code buttons */
-        #p1GetCodeBtn, #p2GetCodeBtn {
-            transition: all 0.2s ease;
-        }
-        
-        #p1GetCodeBtn:hover, #p2GetCodeBtn:hover {
-            filter: brightness(1.1);
-            transform: scale(1.02);
-        }
-        
-        /* Load buttons */
-        #p1LoadBtn, #p2LoadBtn {
-            transition: all 0.2s ease;
-        }
-        
-        #p1LoadBtn:hover, #p2LoadBtn:hover {
-            filter: brightness(1.1);
-            transform: scale(1.02);
-        }
-        
-        /* Start Battle button */
-        #startBattleBtn {
-            transition: all 0.2s ease;
-        }
-        
-        #startBattleBtn:hover:not(:disabled) {
-            transform: scale(1.02);
-            filter: brightness(1.1);
-        }
-        
-        #startBattleBtn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        /* Reset button */
-        #resetBattleBtn {
-            transition: all 0.2s ease;
-        }
-        
-        #resetBattleBtn:hover {
-            transform: scale(1.02);
-            background: var(--bg-card-hover);
-        }
-        
-        /* Textareas */
-        textarea {
-            resize: vertical;
-            font-family: monospace;
-        }
-        
-        /* Modal box for battle */
-        #battleModal .modal-box {
-            max-width: 950px;
-            width: 95%;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            #battleModal .modal-box {
-                max-width: 98%;
-                padding: 16px;
-            }
-            
-            .grid-cols-2 {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-        }
-        
-        /* Move selection container scrollbar */
-        #p1MoveSelect::-webkit-scrollbar,
-        #p2MoveSelect::-webkit-scrollbar,
-        #battleLog::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        #p1MoveSelect::-webkit-scrollbar-track,
-        #p2MoveSelect::-webkit-scrollbar-track,
-        #battleLog::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
-            border-radius: 4px;
-        }
-        
-        #p1MoveSelect::-webkit-scrollbar-thumb,
-        #p2MoveSelect::-webkit-scrollbar-thumb,
-        #battleLog::-webkit-scrollbar-thumb {
-            background: var(--gold);
-            border-radius: 4px;
-        }
-        
-        /* Glow effects */
-        @keyframes battlePulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-        
-        #startBattleBtn:not(:disabled) {
-            animation: battlePulse 2s infinite;
-        }
         :root {
             --bg-primary: #f7f5f0; --bg-card: #ffffff; --bg-card-hover: #faf8f3;
             --border: #e0dcd2; --text-primary: #1a1a2e; --text-secondary: #6b6b80;
@@ -745,29 +582,12 @@ button:disabled {cursor:not-allowed;}
 .el-card.exclusive-showpiece .el-emoji {filter:drop-shadow(0 0 6px #a78bfa);}
 #exclusiveGrid .el-card {min-height:58px;}
 @keyframes prismSweep {0%,65%{transform:translateX(-40%)}100%{transform:translateX(40%)}}
-#battleModal .modal-box {max-width:1050px!important;background:var(--bg-primary);}
-#battleArena {position:relative;}
-#battleTurnBanner {padding:12px 18px;border-radius:14px;margin:0 0 16px;background:linear-gradient(100deg,rgba(99,102,241,.18),rgba(20,184,166,.1));font-weight:700;text-align:center;letter-spacing:.03em;}
-#p1Active,#p2Active {min-height:110px;display:grid;place-content:center;text-align:center;font-size:1.2rem;border-radius:18px!important;background:var(--bg-card)!important;}
-#p1Skills,#p2Skills {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px;}
-#p1Skills button,#p2Skills button {margin:0!important;padding:12px 8px!important;min-height:58px;border-radius:12px;font-size:.73rem;line-height:1.3;white-space:normal;}
-.battle-skill {background:linear-gradient(125deg,#414174,#6366a4)!important;color:white!important;border:1px solid rgba(196,181,253,.3)!important;}
-.battle-skill:disabled {opacity:.32;transform:none!important;animation:none!important;box-shadow:none!important;}
-.battle-skill.ohko-skill {background:linear-gradient(120deg,#5b1744,#a42d61,#6537a1)!important;border:1px solid #f9a8d4!important;box-shadow:0 0 16px rgba(236,72,153,.25);}
-.ohko-skill::after {content:'FINISHER · 30% CHANCE';display:block;font-size:.52rem;letter-spacing:.06em;color:#fbcfe8;margin-top:5px;}
-#battleLog {height:240px!important;background:transparent!important;border:0!important;padding:4px!important;display:flex;flex-direction:column;gap:7px;}
-#battleLog p {font-family:inherit!important;background:var(--bg-card);border:1px solid var(--border);border-left:3px solid currentColor;padding:10px 14px!important;border-radius:12px;margin:0!important;font-size:.78rem;line-height:1.45;box-shadow:0 3px 10px rgba(0,0,0,.03);}
-#battleLog p[data-event="ohko"] {background:linear-gradient(90deg,rgba(236,72,153,.16),var(--bg-card));}
-#battleFinisher {padding:22px;border-radius:18px;margin-bottom:14px;text-align:center;background:radial-gradient(ellipse,#742653,#241637);color:white;border:1px solid #f9a8d4;box-shadow:0 0 30px #db277755;animation:finisherArrival .4s ease-out;}
-#battleFinisher[hidden] {display:none!important;}
-@keyframes finisherArrival {from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-@media(max-width:600px){#battleSetup>.grid,#battleArena>.grid{grid-template-columns:1fr!important;}#elGrid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))!important;}.el-card{min-height:82px;}}
+@media(max-width:600px){#elGrid{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))!important;}.el-card{min-height:82px;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
 </style>
 <style>
 .notif {border-radius:18px!important;background:var(--bg-card)!important;border:1px solid var(--border)!important;border-top:3px solid #818cf8!important;box-shadow:0 12px 40px rgba(40,30,80,.2)!important;padding:16px!important;}
 .notif-bar {background:linear-gradient(90deg,#818cf8,#2dd4bf)!important;}
-#battleLog p::before {content:attr(data-event);display:block;font-size:.52rem;text-transform:uppercase;letter-spacing:.13em;opacity:.65;margin-bottom:4px;}
 </style><style>/* Faceted collectible cards, with an actual icon stage and foil frame. */
 #elGrid {grid-template-columns:repeat(auto-fill,minmax(112px,1fr))!important;gap:13px!important;}
 .el-card.sculpted-card {--card-hue:245;isolation:isolate;display:flex!important;flex-direction:column;align-items:center;justify-content:flex-start;min-height:158px;padding:9px 8px 12px!important;border-radius:12px 24px 12px 24px!important;border:1px solid hsl(var(--card-hue) 65% 65% / .65)!important;background:linear-gradient(155deg,hsl(var(--card-hue) 35% 24%),hsl(var(--card-hue) 30% 11%) 65%,hsl(var(--card-hue) 38% 18%))!important;color:#f8f6ff!important;box-shadow:inset 0 1px 0 #ffffff25,inset 0 -3px 0 #00000035,0 6px 0 hsl(var(--card-hue) 25% 8%),0 9px 18px #00000020!important;overflow:hidden;animation:none!important;}
@@ -841,7 +661,7 @@ header h1 {color:var(--text-primary)!important;font-size:clamp(1.9rem,5vw,3rem)!
 .workshop-label {font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;color:var(--text-secondary);margin-bottom:12px;}
 .workshop-panel,.collection-panel,.history-panel {padding:20px;border:1px solid var(--border);border-radius:14px 28px 14px 28px;background:var(--ui-panel);box-shadow:inset 0 1px #ffffff25,0 5px 0 #00000008;}
 .collection-panel {margin-top:22px!important;}.history-panel{margin-top:24px!important;}
-header button,header #elCount,header #coinDisplay,header #cyMoneyDisplay,.collection-panel button:not(.el-card),.modal-box button:not(.battle-skill):not(.modal-close):not(.pack-btn) {border:1px solid var(--ui-edge)!important;border-radius:7px 13px 7px 13px!important;background:var(--ui-button)!important;color:var(--text-primary)!important;box-shadow:inset 0 1px #ffffff18,0 3px 0 #00000015;padding:7px 10px;}
+header button,header #elCount,header #coinDisplay,header #cyMoneyDisplay,.collection-panel button:not(.el-card),.modal-box button:not(.modal-close):not(.pack-btn) {border:1px solid var(--ui-edge)!important;border-radius:7px 13px 7px 13px!important;background:var(--ui-button)!important;color:var(--text-primary)!important;box-shadow:inset 0 1px #ffffff18,0 3px 0 #00000015;padding:7px 10px;}
 button:disabled {opacity:.4;box-shadow:none!important;}
 button:focus-visible {outline:2px solid #b39ad9;outline-offset:3px;}
 .collection-panel .sort-active {background:linear-gradient(130deg,#72538f,#493665)!important;color:#fff!important;}
@@ -852,9 +672,8 @@ input[type=checkbox] {width:auto;}
 .modal-box h2 {padding-bottom:12px;border-bottom:1px solid var(--border);letter-spacing:-.02em;}
 .modal-close {border-radius:50%;background:var(--bg-card);color:var(--text-primary);}
 .pack-card,.prestige-upgrade,#craftHints {background:var(--ui-panel)!important;border:1px solid var(--ui-edge)!important;border-radius:10px 20px 10px 20px!important;box-shadow:inset 0 1px #ffffff20,0 4px 0 #00000012;}
-.pack-btn,#combineBtn,#combineBtnM,#startBattleBtn {border:1px solid #c5a5ed!important;background:linear-gradient(125deg,#9168b5,#574478)!important;color:#fff!important;border-radius:10px 18px 10px 18px!important;box-shadow:inset 0 1px #ffffff40,0 4px 0 #392a50!important;}
+.pack-btn,#combineBtn,#combineBtnM {border:1px solid #c5a5ed!important;background:linear-gradient(125deg,#9168b5,#574478)!important;color:#fff!important;border-radius:10px 18px 10px 18px!important;box-shadow:inset 0 1px #ffffff40,0 4px 0 #392a50!important;}
 #comboHistory {background:transparent!important;border:0!important;padding:0!important;}.combo-entry{border:1px solid var(--border);background:var(--bg-card);padding:10px 12px;border-radius:8px 14px 8px 14px;margin-bottom:6px;}
-#battleSetup>.grid>div,#battleArena>.grid>div {background:var(--ui-panel)!important;border:1px solid var(--ui-edge)!important;border-radius:12px 23px 12px 23px!important;}
 #battleTurnBanner {background:var(--ui-button)!important;border:1px solid var(--ui-edge);border-radius:8px 18px 8px 18px;}
 #battleLog p,.notif {background:var(--ui-panel)!important;border-radius:8px 18px 8px 18px!important;}
 #dz1,#dz2 {width:142px;min-height:182px;padding:10px!important;border-radius:12px 24px 12px 24px!important;background:var(--bg-card)!important;border:1px dashed var(--ui-edge)!important;box-shadow:inset 0 0 25px #9571b510!important;}
@@ -1049,10 +868,159 @@ input[type=checkbox] {width:auto;}
 *::-webkit-scrollbar-button {display:none;width:0;height:0;}
 .modal-box::-webkit-scrollbar-track {margin-block:30px!important;}
 .modal-box {scroll-padding-block:24px;overscroll-behavior:contain;}
-#exclusiveGrid,#craftGuideList,.changelog-scroll,#battleLog,#p1MoveSelect,#p2MoveSelect,.stellar-changes {scroll-padding-block:12px;overscroll-behavior:contain;}
+#exclusiveGrid,#craftGuideList,.changelog-scroll,.stellar-changes {scroll-padding-block:12px;overscroll-behavior:contain;}
 /* Chromium uses the inset custom rail; Firefox retains its native thin rail. */
 @supports selector(::-webkit-scrollbar) {* {scrollbar-width:auto!important;scrollbar-color:auto!important;}}
 .account-toolbar,.account-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:14px 0}.account-toolbar{font-size:12px}#accountModal button{margin:6px 4px}#nicknameInput,#boardMetric{background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--border);padding:10px;border-radius:10px;max-width:100%}.account-note,#accountStatus{font-size:12px;line-height:1.6;margin:14px 0;color:var(--text-secondary)}#leaderboardList p{padding:12px;border-bottom:1px solid var(--border)}#leaderboardList{max-height:50vh;overflow:auto}
+
+/* Scroll inside the frame, so the rail cannot overlap rounded outer corners. */
+.modal-box.inset-scroll-frame{overflow:hidden!important;box-sizing:border-box;}
+.modal-scroll-body{max-height:calc(84vh - 50px);min-height:0;overflow-y:auto;overflow-x:hidden;padding:2px 10px 2px 2px;overscroll-behavior:contain;scrollbar-gutter:stable;}
+.modal-scroll-body::-webkit-scrollbar-track{margin-block:8px!important;}
+textarea{box-sizing:border-box;border-radius:12px;}
+textarea::-webkit-scrollbar-track{margin-block:14px!important;}
+/* Collector finishes: shared construction, distinct materials for the highest tiers. */
+.el-card.sculpted-card{border-radius:14px 22px 14px 22px!important;background:radial-gradient(ellipse at 50% 15%,hsl(var(--card-hue) 65% 40% / .35),transparent 65%),linear-gradient(155deg,#232432,#10121d)!important;box-shadow:inset 0 1px #ffffff50,inset 0 -2px #0008,0 4px 0 #0a0b13,0 9px 18px #0003!important;}
+.el-card.sculpted-card::after{inset:5px;border-radius:9px 16px 9px 16px;border-color:hsl(var(--card-hue) 65% 75% / .28);}
+.sculpted-card .card-ribbon{font-size:8px;letter-spacing:.12em;text-shadow:0 1px 3px #000;max-width:100%;}
+.sculpted-card .card-stage{background:radial-gradient(circle,#ffffff0d,transparent 68%);}
+.sculpted-card .el-name{letter-spacing:.015em;text-wrap:balance;}
+.sculpted-card .card-footer i{background:linear-gradient(90deg,transparent,hsl(var(--card-hue) 70% 75%),transparent)!important;}
+.el-card.sculpted-card:hover{transform:translateY(-3px)!important;}
+/* Exclusive outranks CyMoney: amethyst glass with diamond-cut borders. */
+.el-card.sculpted-card.exclusive-showpiece{background:radial-gradient(ellipse at top,#9849b449,transparent 65%),linear-gradient(135deg,#27123e,#17162e 50%,#3f234b)!important;border:2px solid #e7b9ff!important;box-shadow:inset 0 0 0 3px #241531,inset 0 0 25px #c67dff25,0 4px 0 #1a0925,0 8px 20px #914bcb40!important;}
+.exclusive-showpiece .card-ribbon{color:#f1cfff!important;}
+.exclusive-showpiece .card-orbit{border-style:double!important;border-color:#d8a6f6!important;}
+/* EVERYTHING: a dark prismatic observatory, animated aurora, orbital geometry. */
+.el-card.sculpted-card.everything-showpiece:not(.prestige-showpiece){background:radial-gradient(ellipse at 20% 10%,#00e5ff40,transparent 55%),radial-gradient(ellipse at 90% 75%,#fa40da45,transparent 60%),linear-gradient(130deg,#070c25,#291341,#062337,#070c25)!important;background-size:220% 220%!important;animation:everythingSpectrum 9s ease-in-out infinite!important;border:2px solid #a9f4ff!important;box-shadow:inset 0 0 0 3px #090e29,inset 0 0 25px #9c68ff40,0 4px 0 #101034,0 0 18px #73deff40!important;}
+.everything-showpiece:not(.prestige-showpiece) .card-ribbon{background:linear-gradient(90deg,#8dffff,#fff4b5,#ffa8e6,#99dbff);background-clip:text;-webkit-background-clip:text;color:transparent!important;text-shadow:none;font-weight:900;}
+.everything-showpiece .everything-seal{color:#b8f8ff;opacity:.6;}
+.everything-showpiece .card-orbit{border-color:#d1a5ff!important;box-shadow:0 0 14px #a855f755;}
+/* PRESTIGE: a royal obsidian medal, gold rays and engraved laurels. */
+.el-card.sculpted-card.prestige-showpiece{background:repeating-conic-gradient(from 0deg at 50% 42%,#efc66a09 0deg 7deg,transparent 7deg 18deg),radial-gradient(ellipse at 50% 35%,#8b641c66,transparent 65%),linear-gradient(150deg,#21190c,#0b0c12 65%,#30200f)!important;border:2px solid #f2d17b!important;animation:none!important;box-shadow:inset 0 0 0 3px #18110c,inset 0 0 0 4px #b78b4540,0 5px 0 #3d2c14,0 8px 22px #c8972930!important;}
+.prestige-showpiece .card-ribbon{color:#ffe6a3!important;letter-spacing:.06em!important;}
+.prestige-showpiece .everything-foil,.prestige-showpiece .everything-aurora,.prestige-showpiece .everything-satellites,.prestige-showpiece .everything-seal{display:none!important;}
+.prestige-showpiece .card-stage::before{border:3px double #eaca80!important;background:radial-gradient(circle,#80601d44,#100e09)!important;}
+.prestige-showpiece .card-orbit{border:1px solid #b38c41!important;animation:none!important;}
+.prestige-showpiece .card-stage::after{content:'❧';position:absolute;inset:0;display:grid;align-items:end;justify-items:center;color:#dcb964;font-size:27px;pointer-events:none;}
+.prestige-showpiece .el-name{color:#fff0c4!important;}
+.prestige-showpiece>.everything-wing{color:#e6c375!important;filter:drop-shadow(0 1px 2px #000);}
+.prestige-showpiece .modifier-pattern,.prestige-showpiece .modifier-mark,.prestige-showpiece .modifier-accents{display:none!important;}
+@media(prefers-reduced-motion:reduce){.el-card.sculpted-card.everything-showpiece{animation:none!important;}}
+
+/* Move the light across a card-sized layer; never rotate the layer beyond its frame. */
+.final-el::before,.final-tut-card::before,.legendary-el::before,.divine-el::before,.el-card.exclusive-showpiece::before,.sculpted-card.exclusive-showpiece::before{
+    inset:0!important;border-radius:inherit!important;transform:none!important;
+    background:linear-gradient(110deg,transparent 42%,#ffffff25 50%,transparent 58%)!important;
+    background-size:300% 100%!important;background-repeat:no-repeat!important;
+    animation:alignedCardShine 5s ease-in-out infinite!important;pointer-events:none;
+}
+@keyframes alignedCardShine{0%,25%{background-position:150% 0}75%,100%{background-position:-50% 0}}
+@media(prefers-reduced-motion:reduce){.final-el::before,.final-tut-card::before,.legendary-el::before,.divine-el::before,.el-card.exclusive-showpiece::before{animation:none!important;opacity:.15;}}
+/* Everything's own iridescent frame and astrolabe; decorations stay behind the name. */
+.el-card.sculpted-card.everything-showpiece:not(.prestige-showpiece){border:2px solid transparent!important;background:radial-gradient(ellipse at 50% 30%,#4e2377 0%,#11172f 48%,#080c1b 85%) padding-box,conic-gradient(from 25deg,#b9ffff,#7aafff,#eca4ff,#ffe5ac,#9cffe3,#b9ffff) border-box!important;box-shadow:inset 0 0 0 2px #060b20,inset 0 0 26px #7655bc55,0 4px 0 #172340,0 0 12px #8bebff55,0 8px 25px #9464dc40!important;}
+.everything-showpiece:not(.prestige-showpiece) .everything-foil{inset:5px;border-radius:9px 16px 9px 16px;background:radial-gradient(circle at 15% 20%,#8bffff44,transparent 35%),radial-gradient(circle at 85% 60%,#ff98df33,transparent 40%),repeating-conic-gradient(from 0deg at 50% 38%,#dcd5ff09 0deg 4deg,transparent 4deg 18deg)!important;box-shadow:inset 0 0 0 1px #ffffff20,inset 0 0 22px #b0beff20!important;}
+.everything-showpiece:not(.prestige-showpiece) .card-stage{background:radial-gradient(circle,#fff0c955,#ad8bff30 34%,transparent 65%)!important;}
+.everything-showpiece:not(.prestige-showpiece) .card-stage::before{transform:none!important;border-radius:50%!important;inset:7px!important;border:3px double #dfd5ffbb!important;background:radial-gradient(circle,#030d27,#3e265066)!important;box-shadow:0 0 0 4px #a5fff110,0 0 17px #b9b1ff66,inset 0 0 13px #a2b5ff55!important;}
+.everything-showpiece:not(.prestige-showpiece) .everything-seal{inset:-4px;opacity:.8;color:#d2faff;filter:drop-shadow(0 0 3px #94e4ff88);}
+.everything-showpiece:not(.prestige-showpiece) .card-orbit{opacity:.8;border-style:dotted!important;border-color:#ffd8a7!important;}
+.everything-showpiece:not(.prestige-showpiece) .card-ribbon{background:linear-gradient(100deg,#acffff,#ffeab2,#efb1ff,#acffff)!important;background-size:250% 100%!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important;text-shadow:none!important;font-weight:900;border-bottom:1px solid #adc8ff55;animation:rainbowInscription 6s linear infinite;}
+.everything-showpiece:not(.prestige-showpiece) .el-name{color:#fff8e9!important;text-shadow:0 2px 2px #020516,0 0 8px #ddd4ff70!important;}
+.everything-showpiece:not(.prestige-showpiece) .everything-crown{filter:drop-shadow(0 0 4px #fbe2a999);}
+.everything-showpiece:not(.prestige-showpiece) .everything-spark{color:#f5eaff;text-shadow:0 0 7px #d6aaff;}
+.everything-showpiece:not(.prestige-showpiece)>.everything-wing{color:#c7eaff;filter:drop-shadow(0 0 3px #b59cff88);}
+.everything-showpiece:not(.prestige-showpiece) .modifier-pattern,.everything-showpiece:not(.prestige-showpiece) .modifier-mark,.everything-showpiece:not(.prestige-showpiece) .modifier-accents{display:none!important;}
+@keyframes rainbowInscription{to{background-position:250% 0}}
+@media(prefers-reduced-motion:reduce){.everything-showpiece:not(.prestige-showpiece) .card-ribbon{animation:none!important;}}
+
+.everything-emoji-emitter{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:3;}
+.everything-emoji-particle{position:absolute;bottom:5px;left:12%;font-size:11px;line-height:1.2;opacity:0;filter:drop-shadow(0 0 3px #d5b7ff80);animation:everythingEmojiRise 2.8s ease-out infinite;will-change:transform,opacity;}
+@keyframes everythingEmojiRise{0%{opacity:0;transform:translate(0,5px) scale(.4)}12%{opacity:.8;transform:translate(2px,0) scale(.8)}65%{opacity:.5;transform:translate(-3px,-28px) scale(.65)}85%,100%{opacity:0;transform:translate(4px,-44px) scale(.35)}}
+#exclusiveGrid .everything-emoji-particle{font-size:8px;}
+@media(prefers-reduced-motion:reduce){.everything-emoji-emitter{display:none;}.everything-emoji-particle{animation:none!important;}}
+
+/* Dense, staggered symbol fountains; the center remains legible. */
+.everything-emoji-particle{left:var(--launch);bottom:2px;font-size:10px;animation:everythingSymbolFountain 2.76s linear infinite!important;animation-delay:var(--delay)!important;will-change:auto;}
+@keyframes everythingSymbolFountain{0%{opacity:0;transform:translate(0,7px) scale(.5)}12%{opacity:.7;transform:translate(0,-1px) scale(.85)}55%{opacity:.5}100%{opacity:0;transform:translate(var(--drift),-70px) scale(.35)}}
+.el-card.sculpted-card.everything-showpiece:not(.prestige-showpiece){background:radial-gradient(ellipse at 50% 25%,#6941a4 0%,#142345 42%,#090d20 80%) padding-box,conic-gradient(from 25deg,#b9ffff,#7aafff,#eca4ff,#ffe5ac,#9cffe3,#b9ffff) border-box!important;box-shadow:inset 0 0 0 2px #080c24,inset 0 0 35px #9666df55,0 4px 0 #15233f,0 0 0 1px #d6c9ff55,0 0 15px #72e8ff55,0 8px 25px #ad61e440!important;}
+.everything-showpiece:not(.prestige-showpiece) .everything-foil::after{content:'';position:absolute;inset:0;border-radius:inherit;background:conic-gradient(from 45deg at 0 0,#d8ffff77,transparent 25%),conic-gradient(from 225deg at 100% 100%,#f4c3ff66,transparent 25%);opacity:.4;pointer-events:none;}
+.everything-showpiece:not(.prestige-showpiece) .everything-aurora{background:repeating-linear-gradient(115deg,transparent 0 15%,#9affec22 19%,#d1acff33 23%,#ffb4e518 28%,transparent 34% 50%)!important;background-size:260% 200%!important;opacity:.9;}
+.everything-showpiece:not(.prestige-showpiece) .card-stage{box-shadow:0 0 25px #baa5ff33;border-radius:50%;}
+.everything-showpiece:not(.prestige-showpiece) .card-stage::before{box-shadow:0 0 0 3px #98efff20,0 0 0 6px #cab1ff15,0 0 20px #b8c4ff88,inset 0 0 16px #adc9ff88!important;}
+.everything-showpiece:not(.prestige-showpiece) .everything-seal{opacity:.95;filter:drop-shadow(0 0 4px #b1edff);}
+.everything-showpiece:not(.prestige-showpiece) .everything-plinth{box-shadow:0 0 6px #f7ddff,0 0 15px #9a8bff80;background:radial-gradient(ellipse,#f1e8ff99,transparent 70%);}
+.everything-showpiece:not(.prestige-showpiece) .card-footer{color:#d0ffff!important;text-shadow:0 0 6px #97eaff;}
+.everything-showpiece:not(.prestige-showpiece) .el-name{position:relative;z-index:4;background:radial-gradient(ellipse,#11152bcc,transparent 75%);}
+@media(prefers-reduced-motion:reduce){.everything-emoji-particle{animation:none!important;}.everything-emoji-emitter{display:none;}}
+
+/* Prestige: engraved solar gold, distinct from Everything's rainbow finish. */
+.el-card.sculpted-card.prestige-showpiece{border:2px solid transparent!important;background:repeating-conic-gradient(from 0deg at 50% 38%,#ffdf8a0e 0deg 3deg,transparent 3deg 15deg),radial-gradient(ellipse at 50% 30%,#84602180,transparent 60%),linear-gradient(155deg,#2b2011,#090b13 65%,#39260f) padding-box!important;background-clip:padding-box!important;border-color:#f5d58c!important;box-shadow:inset 0 0 0 2px #211506,inset 0 0 0 3px #d8af5f88,inset 0 0 25px #f1c86a25,0 5px 0 #463015,0 0 0 1px #8a6637,0 0 18px #f3cf6745!important;}
+.el-card.sculpted-card.prestige-showpiece::after{inset:7px;border:1px solid #f6d18766;border-radius:7px 14px 7px 14px;box-shadow:inset 0 0 10px #f2cb6318;}
+.prestige-showpiece .card-ribbon{background:linear-gradient(95deg,#be8d36,#fff4bd,#e4b65f,#fff4bd,#be8d36)!important;background-size:220% 100%!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important;text-shadow:none!important;font-weight:900;border-bottom:1px solid #d8b96866;animation:prestigeGoldScript 7s ease-in-out infinite;}
+.prestige-showpiece .card-stage{border-radius:50%;background:radial-gradient(circle,#fff1ba40,#b67a1515 60%,transparent 72%)!important;}
+.prestige-showpiece .card-stage::before{transform:none!important;inset:8px!important;border-radius:50%!important;border:4px double #ffe7a2!important;background:radial-gradient(circle,#b98b3833,#171108 75%)!important;box-shadow:0 0 0 3px #ae864344,0 0 0 5px #fbe3a315,0 0 18px #e7bc5d55,inset 0 0 12px #ffe3a644!important;}
+.prestige-showpiece .card-stage::after{content:'❧  ❧';font-size:24px;letter-spacing:3px;color:#f0cd81;text-shadow:0 1px 2px #000,0 0 5px #f3c16c77;transform:translateY(4px);}
+.prestige-showpiece .everything-crown{width:46px;height:21px;top:-6px;filter:drop-shadow(0 0 5px #ffe1a277);}
+.prestige-showpiece .everything-satellites{display:block!important;animation:none!important;}
+.prestige-showpiece .everything-satellites i{color:#ffedb2!important;animation:prestigeEmbers 3.6s ease-in-out infinite;}
+.prestige-showpiece .everything-satellites i:nth-child(2){animation-delay:1.2s;}.prestige-showpiece .everything-satellites i:nth-child(3){animation-delay:2.4s;}
+.prestige-showpiece .el-name{background:linear-gradient(180deg,#fff5cf,#e8c078);background-clip:text;-webkit-background-clip:text;color:transparent!important;text-shadow:none!important;font-weight:900;}
+.prestige-showpiece .card-footer{color:#ffdfa0!important;text-shadow:0 0 6px #ffc96566;}
+.prestige-showpiece .card-footer i{background:linear-gradient(90deg,transparent,#b78134,#fff0b2,#b78134,transparent)!important;box-shadow:0 0 5px #ffd67b55;}
+.prestige-showpiece>.everything-wing{color:#f2d289!important;filter:drop-shadow(0 1px 1px #080705) drop-shadow(0 0 3px #efbb4e66);}
+#exclusiveGrid .prestige-showpiece .everything-crown{width:28px;height:12px;top:-3px;}
+@keyframes prestigeGoldScript{0%,100%{background-position:0 0}50%{background-position:100% 0}}
+@keyframes prestigeEmbers{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.15)}}
+@media(prefers-reduced-motion:reduce){.prestige-showpiece .card-ribbon,.prestige-showpiece .everything-satellites i{animation:none!important;}}
+/* Highest-tier frames: full-card ornament, isolated from ordinary modifier artwork. */
+.mythic-tracery{position:absolute;inset:2px;width:calc(100% - 4px);height:calc(100% - 4px);pointer-events:none;z-index:2;overflow:visible;}
+.mythic-tracery .filigree{fill:none;stroke:currentColor;stroke-width:.65;opacity:.8;}
+.mythic-tracery .gem{fill:currentColor;stroke:#fff9;stroke-width:.4;}
+.mythic-tracery .rays{fill:none;stroke:currentColor;stroke-width:.4;opacity:.35;}
+.prestige-showpiece .mythic-tracery{color:#ffdc88;filter:drop-shadow(0 0 2px #d69b3c66);}
+.everything-showpiece:not(.prestige-showpiece) .mythic-tracery{color:#b9f9ff;filter:drop-shadow(0 0 3px #b797ff99);animation:mythicColors 12s linear infinite;}
+.el-card.sculpted-card.prestige-showpiece{border-width:3px!important;border-color:#e4b759!important;background:radial-gradient(ellipse at 50% 32%,#99742c77,transparent 58%),repeating-conic-gradient(from 0deg at 50% 38%,#f5d27b12 0deg 2deg,transparent 2deg 12deg),linear-gradient(130deg,#3c250e,#080d17 60%,#392613)!important;box-shadow:inset 0 0 0 2px #070b15,inset 0 0 0 3px #e3b866aa,inset 0 0 0 6px #17110a,inset 0 0 28px #f4d17f55,0 5px 0 #4b3014,0 0 0 1px #ffedb199,0 0 22px #e2ad3c55!important;}
+.el-card.sculpted-card.everything-showpiece:not(.prestige-showpiece){border-width:3px!important;background:radial-gradient(ellipse at 50% 32%,#9b67e780,transparent 48%),radial-gradient(ellipse at 5% 90%,#12c4c955,transparent 55%),linear-gradient(145deg,#0a153b,#311349 50%,#081926) padding-box,conic-gradient(from 45deg,#fff2b8,#79ffff,#b799ff,#ff9eda,#fff2b8) border-box!important;box-shadow:inset 0 0 0 2px #050b20,inset 0 0 0 3px #d4ceff88,inset 0 0 30px #b69aff55,0 5px 0 #252052,0 0 0 1px #b4f9ff99,0 0 22px #a777ff66!important;}
+.prestige-showpiece .card-stage,.everything-showpiece .card-stage{isolation:isolate;}
+.prestige-showpiece .card-stage .el-emoji{filter:drop-shadow(0 3px 2px #000) drop-shadow(0 0 8px #ffe3a6aa)!important;}
+.everything-showpiece:not(.prestige-showpiece) .card-stage .el-emoji{filter:drop-shadow(0 3px 2px #09041e) drop-shadow(0 0 9px #d7c0ffcc)!important;}
+.prestige-showpiece .everything-crown,.everything-showpiece .everything-crown{filter:drop-shadow(0 0 4px #fff0abbb);}
+.prestige-showpiece .card-ribbon,.everything-showpiece .card-ribbon{z-index:4!important;font-weight:900;}
+.prestige-showpiece .el-name,.everything-showpiece .el-name{z-index:4!important;position:relative;}
+.prestige-showpiece .card-footer,.everything-showpiece .card-footer{z-index:4!important;}
+.everything-showpiece:not(.prestige-showpiece) .everything-foil{background:radial-gradient(circle at 12% 18%,#ffffff 0 0.6px,transparent 1.2px),radial-gradient(circle at 88% 36%,#d9fdff 0 0.8px,transparent 1.5px),radial-gradient(circle at 22% 67%,#fbe6ff 0 0.5px,transparent 1px),radial-gradient(circle at 78% 80%,#fff 0 0.6px,transparent 1.3px),conic-gradient(from 45deg at 50% 40%,#5ee7ff15,#c090ff25,#ffb5db15,#77ffea20,#5ee7ff15)!important;}
+@keyframes mythicColors{0%,100%{color:#b9f9ff}33%{color:#f1baff}66%{color:#ffe6b0}}
+@media(prefers-reduced-motion:reduce){.everything-showpiece .mythic-tracery{animation:none!important;}}
+/* Prestige: deliberate medal proportions rather than overlapping decoration. */
+.el-card.sculpted-card.prestige-showpiece{border:2px solid #dcb86b!important;background:radial-gradient(ellipse at 50% 28%,#67502b66,transparent 62%),linear-gradient(155deg,#24202b,#100f1b 65%,#29202a)!important;box-shadow:inset 0 0 0 3px #15121c,inset 0 0 0 4px #c69e4c55,0 4px 0 #302319,0 8px 22px #0004,0 0 14px #e4b95b25!important;}
+.prestige-showpiece .mythic-tracery,.prestige-showpiece>.everything-wing,.prestige-showpiece .everything-plinth,.prestige-showpiece .everything-satellites{display:none!important;}
+.prestige-showpiece .card-stage::after{content:none!important;}
+.prestige-showpiece .card-stage{background:radial-gradient(circle,#f2d99918,transparent 70%)!important;border-radius:50%;box-shadow:none;}
+.prestige-showpiece .card-stage::before{inset:5px!important;border:3px double #e7c780!important;border-radius:50%!important;transform:none!important;background:radial-gradient(circle at 35% 25%,#715a30,#251e18 70%)!important;box-shadow:0 0 0 3px #141019,0 0 0 4px #c39b4b66,inset 0 1px 4px #fff0b855,0 3px 7px #0008!important;}
+.prestige-showpiece .card-orbit{inset:0!important;border:1px dotted #e3bc6799!important;opacity:.65;box-shadow:none!important;}
+.prestige-showpiece .everything-crown{width:30px;height:14px;top:-7px;filter:drop-shadow(0 1px 2px #0008)!important;}
+.prestige-showpiece .el-name{background:none!important;color:#fff0ca!important;text-shadow:0 2px 2px #0006!important;letter-spacing:.025em;}
+.prestige-showpiece .card-ribbon{letter-spacing:.045em!important;border-bottom:1px solid #d5ad5555;padding-bottom:3px;}
+.prestige-showpiece .card-footer{color:#d8b56d!important;text-shadow:none!important;}
+/* Everything's final polish: a contained holographic pass and luminous corner gems. */
+.everything-showpiece:not(.prestige-showpiece) .everything-foil::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,transparent 38%,#82ffff15 44%,#fff8 49%,#e4a1ff22 54%,transparent 61%);background-size:350% 100%;opacity:.4;animation:celestialFoilGlide 9s ease-in-out infinite;pointer-events:none;}
+.everything-showpiece:not(.prestige-showpiece) .mythic-tracery .gem{stroke:#fff;stroke-width:.6;filter:drop-shadow(0 0 1px #fff9);}
+.everything-showpiece:not(.prestige-showpiece) .everything-crown{filter:drop-shadow(0 0 3px #ffeec5bb)!important;}
+.everything-showpiece:not(.prestige-showpiece) .card-footer i{background:linear-gradient(90deg,transparent,#8ef5ff,#f8ccff,#fff0b2,#8ef5ff,transparent)!important;box-shadow:0 0 6px #c9a7ff77;}
+@keyframes celestialFoilGlide{0%,35%{background-position:150% 0}85%,100%{background-position:-50% 0}}
+@media(prefers-reduced-motion:reduce){.everything-showpiece .everything-foil::before{animation:none!important;opacity:.1;}}
+
+/* The shimmer stays within Prestige's rounded face. */
+.el-card.sculpted-card.prestige-showpiece::before{content:'';position:absolute;inset:0!important;border-radius:inherit;transform:none!important;background:linear-gradient(115deg,transparent 39%,#ffe6aa12 45%,#fff5ce55 50%,#e8bf6818 55%,transparent 61%)!important;background-size:320% 100%!important;animation:prestigeFaceShimmer 6s ease-in-out infinite!important;pointer-events:none;z-index:2;}
+@keyframes prestigeFaceShimmer{0%,30%{background-position:150% 0}85%,100%{background-position:-50% 0}}
+.everything-showpiece:not(.prestige-showpiece)>.everything-wing{display:none!important;}
+.holo-gothic-wings{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:0;}
+.holo-gothic-wings svg{position:absolute;width:96%;height:76%;left:2%;top:6%;color:#bdcfff;filter:drop-shadow(0 0 3px #c795ff77);animation:holoWingTint 8s ease-in-out infinite;}
+.holo-gothic-wings path:first-child{fill:currentColor;fill-opacity:.16;stroke:currentColor;stroke-width:1.2;}
+.holo-gothic-wings path+path{stroke:currentColor;stroke-width:.8;opacity:.6;}
+.everything-showpiece .card-stage{position:relative;z-index:1;}
+@keyframes holoWingTint{0%,100%{color:#8defff;filter:drop-shadow(0 0 3px #80efff66)}40%{color:#e3a5ff;filter:drop-shadow(0 0 4px #c98fff77)}70%{color:#ffe8b7;filter:drop-shadow(0 0 3px #efd19955)}}
+@media(prefers-reduced-motion:reduce){.el-card.sculpted-card.prestige-showpiece::before,.holo-gothic-wings svg{animation:none!important;}}
 </style></head>
 <body>
     <script>
@@ -1077,11 +1045,9 @@ input[type=checkbox] {width:auto;}
                 </div>
                 <button id="shopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
                 <button id="cyShopBtn" data-progression hidden class="text-xs px-3 py-1 rounded-lg">💎 CyMoney Workshop</button>
-                <button id="battleBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(239,68,68,0.12);color:#ef4444">⚔️ Battle</button>
                 <div id="cyMoneyDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span><span id="cyIncomeRate" style="font-size:.6rem;opacity:.8">0/min</span>
                 </div>
             </div>
-            <div class="account-toolbar"><span id="playerName">New crafter</span><button id="accountBtn">⚙️ Settings & Account</button><button id="leaderboardBtn">🏅 Leaderboards</button></div>
         </header>
 
         <!-- Combination Area -->
@@ -1116,10 +1082,10 @@ input[type=checkbox] {width:auto;}
                 <details><summary>Another hint</summary><p>Water and Earth make Mud. Fire turns Mud into Brick. Keep combining matching building pieces until you have a House.</p></details>
                 <details><summary>Reveal the recipe</summary><p>Water + Earth → Mud<br>Mud + Fire → Brick<br>Brick + Brick → Wall<br>Wall + Wall → Room<br>Room + Room → House<br><strong>House + Brick → Shop</strong></p></details>
             </article>
-            <article data-hint-element="The End Game"><strong>🎬 Find the ending &amp; unlock Battle</strong>
+            <article data-hint-element="The End Game"><strong>🎬 Find the ending</strong>
                 <p>Bring deep thought into balance. When you find The End, it still needs to meet itself.</p>
                 <details><summary>Another hint</summary><p>Fire + Paradox makes Philosophy. Two Opposites make Balance.</p></details>
-                <details><summary>Reveal the recipe</summary><p>Fire + Paradox → Philosophy<br>Opposite + Opposite → Balance<br>Philosophy + Balance → The End<br><strong>The End + The End → The End Game</strong><br>Finding the ending reveals Battle.</p></details>
+                <details><summary>Reveal the recipe</summary><p>Fire + Paradox → Philosophy<br>Opposite + Opposite → Balance<br>Philosophy + Balance → The End<br><strong>The End + The End → The End Game</strong><br>Finding the ending reveals your rank.</p></details>
             </article>
             <article data-hint-element="A"><strong>🔤 Discover A</strong>
                 <p>The alphabet begins when written words meet a flame.</p>
@@ -1173,7 +1139,7 @@ input[type=checkbox] {width:auto;}
             <p id="prestigeCount" class="text-sm mb-3"></p>
             <p id="prestigeRequirements" class="text-sm mb-3" style="line-height:1.7"></p>
             <p class="text-xs mb-3">Open the 📖 guide beside hints to see your missing elements and their recipe steps.</p>
-            <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires Shop and Star Forge unlocked. Collect 100 ranked elements for your first Prestige, then 25 more per completed Prestige (100, 125, 150…). These are fixed counts, independent of the total number of elements. Keys start at 25 and coins at 100,000; each Prestige adds 6.25 keys (rounded up) and 25,000 coins, capped at 250 keys and 1,000,000 coins. Any ranked elements count. Rank-excluded and exclusive elements are not required.</p>
+            <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires Shop and Star Forge unlocked. Collect 100 ranked elements for your first Prestige, then 25 more per completed Prestige (100, 125, 150…). These are fixed counts, independent of the total number of elements. Keys start at 25 and coins at 100,000; each Prestige adds 6.25 keys (rounded up) and 25,000 coins, capped at 250 keys and 1,000,000 coins. CyMoney starts at 50 and increases by 50 per Prestige; it is required but not spent. Any ranked elements count. Rank-excluded and exclusive elements are not required.</p>
             <p class="text-sm mb-4" style="color:#eab308">Confirming spends the displayed key requirement and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ALL upgrade levels. Exclusive elements, CyMoney and prestige totals are kept. ALL upgrade levels reset, including Prestige Shop purchases. You receive 1 prestige coin, Shop, an unupgraded Star Forge, a Prestige counter element and one additional starting basic element.</p>
             <button id="confirmPrestige" class="text-sm px-4 py-2 rounded-lg disabled:opacity-40" style="background:var(--gold);color:#1a1a2e" disabled>Confirm Prestige · Earn 1 coin</button>
         </div></div>
@@ -1234,6 +1200,8 @@ input[type=checkbox] {width:auto;}
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
                 <button type="button" id="hintToggle" aria-controls="craftHints" aria-expanded="false" aria-label="Show crafting hints" title="Show crafting hints">🔑</button>
                 <button type="button" id="guideToggle" aria-controls="craftGuide" aria-expanded="false" aria-label="Show crafting guide" title="Crafting guide">📖</button>
+                <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
+                <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
             </div>
             <div id="noResults" class="hidden text-center py-6 text-sm" style="color:var(--text-secondary)">No elements match your search</div>
             <div id="elementStorageViews"><div id="elGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5"></div>
@@ -1250,6 +1218,53 @@ input[type=checkbox] {width:auto;}
         </section>
     </div>
 
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal-overlay"><div class="modal-box">
+        <button class="modal-close" data-close="exportModal">&times;</button>
+        <h2 class="font-display text-xl mb-3">🔒 Secure Export</h2>
+        <p class="text-sm mb-2" style="color:var(--text-secondary)">Set a password to encrypt your save:</p>
+        <div class="flex gap-2 mb-3">
+            <input type="password" id="exportPass" placeholder="Password (min 4 chars)" class="flex-1 px-3 py-2 text-sm rounded-xl" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:16px">
+            <button id="doExportBtn" class="text-sm px-4 py-2 rounded-xl font-semibold transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e">Encrypt</button>
+        </div>
+        <div id="exportStrength" class="text-xs mb-2 hidden" style="color:var(--text-secondary)"></div>
+        <p id="exportErr" class="hidden text-xs text-red-500 mb-2"></p>
+        <div id="exportCodeWrap" class="hidden">
+            <div class="relative"><textarea id="exportCode" class="w-full h-28 p-3 text-xs font-mono rounded-xl resize-none" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary)" ></textarea>
+            <button id="copyBtn" class="absolute right-2 top-2 text-xs font-semibold px-3 py-1 rounded-lg text-white" style="background:var(--gold);color:#1a1a2e">Copy</button></div>
+        </div>
+        <div id="editModeWrap" class="hidden">
+            <p class="text-xs mb-2 font-semibold" style="color:#a855f6">🔓 Dev Edit Mode — Modify raw save data:</p>
+            <textarea id="editCodeArea" class="w-full h-44 p-3 text-xs font-mono rounded-xl resize-none mb-2" style="background:var(--bg-primary);border:2px solid #a855f6;color:var(--text-primary);font-size:16px" spellcheck="false"></textarea>
+            <p id="editErr" class="hidden text-xs text-red-500 mb-2"></p>
+            <div class="flex gap-2 mb-2">
+                <input type="password" id="reEncryptPass" placeholder="New password to re-encrypt" class="flex-1 px-3 py-2 text-sm rounded-xl" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:16px">
+                <button id="reEncryptBtn" class="text-sm px-4 py-2 rounded-xl font-semibold transition-all hover:scale-105" style="background:#a855f6;color:#fff">Re-encrypt</button>
+            </div>
+            <p class="text-xs" style="color:var(--text-secondary)">⚠️ Be careful — invalid JSON will corrupt your save.</p>
+        </div>
+    </div></div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal-overlay"><div class="modal-box">
+        <button class="modal-close" data-close="importModal">&times;</button>
+        <h2 class="font-display text-xl mb-3">🔒 Secure Import</h2>
+        <p class="text-sm mb-3" style="color:var(--text-secondary)">Paste your encrypted save code:</p>
+        <textarea id="importCode" class="w-full h-28 p-3 text-xs font-mono rounded-xl resize-none mb-2" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste encrypted code here..."></textarea>
+        <input type="password" id="importPass" placeholder="Enter decryption password" class="w-full px-3 py-2 text-sm rounded-xl mb-3" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:16px">
+        <p id="importErr" class="hidden text-xs text-red-500 mb-2"></p>
+        <div id="importProgress" class="hidden mb-2">
+            <div class="w-full h-1.5 rounded-full overflow-hidden" style="background:var(--border)">
+                <div id="importProgressBar" class="h-full rounded-full transition-all" style="background:var(--gold);width:0%"></div>
+            </div>
+            <p class="text-xs mt-1" style="color:var(--text-secondary)">Decrypting...</p>
+        </div>
+        <div class="flex justify-end gap-2">
+            <button id="cancelImport" class="text-sm px-4 py-2 rounded-lg" style="background:var(--bg-primary);border:1px solid var(--border)">Cancel</button>
+            <button id="confirmImport" class="text-sm px-4 py-2 rounded-lg font-semibold" style="background:var(--gold);color:#1a1a2e">Decrypt & Import</button>
+        </div>
+    </div></div>
 
     <!-- Ending Modal -->
     <div id="endingModal" class="modal-overlay"><div class="modal-box text-center" style="border-color:var(--gold)">
@@ -1560,7 +1575,7 @@ input[type=checkbox] {width:auto;}
     </div></div>
 
     <!-- Changelog Button & Modal -->
-    <button id="changelogBtn" class="fixed bottom-5 right-5 w-11 h-11 rounded-full flex items-center justify-center text-lg shadow-lg z-50 transition-transform hover:scale-110" style="background:var(--gold);color:#1a1a2e">📋</button>
+<button id="changelogBtn" class="fixed bottom-5 right-5 w-11 h-11 rounded-full flex items-center justify-center text-lg shadow-lg z-50 transition-transform hover:scale-110" style="background:var(--gold);color:#1a1a2e">📋</button>
     <div id="changelogModal" class="modal-overlay"><div class="modal-box">
         <button class="modal-close" data-close="changelogModal">&times;</button>
         <h2 class="font-display text-xl mb-5">Changelog</h2>
@@ -1568,14 +1583,12 @@ input[type=checkbox] {width:auto;}
         <div class="changelog-version">
             <h3>v3.0 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
             <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections, notifications and Resonance Arena, with jewel-like exclusive cards and cinematic OHKO finishers.</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Strict battle turns and repeat-click guards. All 436 skill labels renamed.</li>
+                <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections and notifications, with jewel-like exclusive cards.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Distinct modifier colors, patterns and sigils; CyMoney cards feature a cyan crystal design and CyMoney label. Star Forge has an animated activation and collectible-card results.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Each CyMoney element earns 1 CyMoney per minute in the active tab. The CyMoney Workshop offers 11 upgrade types; CyMoney is kept on Prestige, while upgrade levels reset.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys and 100,000 coins, with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. All upgrade levels reset.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys, 100,000 coins and 50 CyMoney (50 more each Prestige, kept after Prestige), with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. All upgrade levels reset.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Opening a lock now announces: “You hear a lock being broken...”</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Online Battle rooms with synchronized combat and disconnect handling, alongside Local Battle.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Craft Shop to unlock shopping and coin earnings. Keys reveal its recipe but do not unlock Shop. Find the ending to unlock Battle.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Craft Shop to unlock shopping and coin earnings. Keys reveal its recipe but do not unlock Shop. Find the ending to see your rank.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Forge controls and CyMoney appear as you unlock them.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Compact Exclusive Storage below Combine. Toggle the whole panel with 💎 beside A → Z.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Exclusive elements survive reset and keep their exclusive status on import.</li>
@@ -1623,11 +1636,23 @@ input[type=checkbox] {width:auto;}
         </div>
     </div></div>
 
+<div id="developerModal" class="modal-overlay"><section class="modal-box"><button class="modal-close" data-close="developerModal">×</button><h2>🛠 Developer panel</h2><p class="text-xs my-3">Edit your save JSON. Apply merges it using the same validation as Import. Export a backup first.</p><textarea id="developerJson" spellcheck="false" style="width:100%;height:320px;font:12px monospace;background:var(--bg-primary);color:var(--text-primary);padding:12px"></textarea><p id="developerError" role="status"></p><button id="applyDeveloper">Apply JSON</button><button id="refreshDeveloper">Reload current save</button></section></div>
     <!-- Notifications -->
     <div id="notifContainer"></div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Keep close controls on the frame; only the inset content area scrolls.
+        document.querySelectorAll('.modal-box').forEach(box=>{
+            if(box.closest('#changelogModal'))return; // Already has an inset scrolling body.
+            const body=document.createElement('div');body.className='modal-scroll-body';
+            for(const child of [...box.childNodes]){
+                if(child.nodeType===1&&child.classList.contains('modal-close'))continue;
+                body.appendChild(child);
+            }
+            box.classList.add('inset-scroll-frame');box.appendChild(body);
+        });
+
         // ─── ELEMENT DEFINITIONS ───
         const STARTERS = [
             { name:'Water', emoji:'💧', color:'bg-blue-500', description:'A clear, essential liquid' },
@@ -3017,6 +3042,76 @@ input[type=checkbox] {width:auto;}
         document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
         document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.style.display='none'; }));
 
+        function safeB64Enc(s){return btoa(unescape(encodeURIComponent(s)));}
+        function safeB64Dec(s){return decodeURIComponent(escape(atob(s)));}
+
+
+        const CRYPTO_VERSION = 'CM3';
+        const PBKDF2_ITERATIONS = 600000;
+        const SALT_LEN = 32;
+        const IV_LEN = 12;
+
+        function getRandomBytes(n) { const b = new Uint8Array(n); crypto.getRandomValues(b); return b; }
+        function toHex(buf) { return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join(''); }
+        function fromHex(h) { const b = new Uint8Array(h.length/2); for(let i=0;i<h.length;i+=2) b[i/2]=parseInt(h.substr(i,2),16); return b; }
+        function concatBuf(...bufs) { const t = bufs.reduce((a,b)=>a+b.byteLength,0); const r = new Uint8Array(t); let o=0; bufs.forEach(b=>{r.set(new Uint8Array(b),o);o+=b.byteLength;}); return r.buffer; }
+
+        async function deriveKeys(password, salt) {
+            const enc = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey','deriveBits']);
+            const aesKey1 = await crypto.subtle.deriveKey(
+                { name:'PBKDF2', salt:salt, iterations:PBKDF2_ITERATIONS, hash:'SHA-512' },
+                keyMaterial, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
+            );
+            const salt2 = new Uint8Array(salt.byteLength || salt.length);
+            salt2.set(new Uint8Array(salt instanceof ArrayBuffer ? salt : salt.buffer));
+            salt2.reverse();
+            const aesKey2 = await crypto.subtle.deriveKey(
+                { name:'PBKDF2', salt:salt2, iterations:PBKDF2_ITERATIONS, hash:'SHA-256' },
+                keyMaterial, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
+            );
+            const hmacBits = await crypto.subtle.deriveBits(
+                { name:'PBKDF2', salt:concatBuf(salt, enc.encode('hmac-auth')), iterations:PBKDF2_ITERATIONS, hash:'SHA-512' },
+                keyMaterial, 256
+            );
+            const hmacKey = await crypto.subtle.importKey('raw', hmacBits, { name:'HMAC', hash:'SHA-256' }, false, ['sign','verify']);
+            return { aesKey1, aesKey2, hmacKey };
+        }
+
+        async function secureEncrypt(plaintext, password) {
+            const salt = getRandomBytes(SALT_LEN);
+            const { aesKey1, aesKey2, hmacKey } = await deriveKeys(password, salt);
+            const enc = new TextEncoder();
+            const data = enc.encode(plaintext);
+            const iv1 = getRandomBytes(IV_LEN);
+            const cipher1 = await crypto.subtle.encrypt({ name:'AES-GCM', iv:iv1, tagLength:128 }, aesKey1, data);
+            const iv2 = getRandomBytes(IV_LEN);
+            const cipher2 = await crypto.subtle.encrypt({ name:'AES-GCM', iv:iv2, tagLength:128 }, aesKey2, cipher1);
+            const payload = concatBuf(salt, iv1, iv2, cipher2);
+            const sig = await crypto.subtle.sign('HMAC', hmacKey, payload);
+            const final = concatBuf(new Uint8Array([3]), payload, sig);
+            return CRYPTO_VERSION + '.' + toHex(final);
+        }
+
+        async function secureDecrypt(cipherHex, password) {
+            if (!cipherHex.startsWith(CRYPTO_VERSION + '.')) throw new Error('Invalid or legacy code format');
+            const raw = fromHex(cipherHex.slice(CRYPTO_VERSION.length + 1));
+            if (raw[0] !== 3) throw new Error('Unsupported encryption version');
+            const body = raw.slice(1);
+            const sigLen = 32;
+            const payload = body.slice(0, body.length - sigLen);
+            const sig = body.slice(body.length - sigLen);
+            const salt = payload.slice(0, SALT_LEN);
+            const iv1 = payload.slice(SALT_LEN, SALT_LEN + IV_LEN);
+            const iv2 = payload.slice(SALT_LEN + IV_LEN, SALT_LEN + IV_LEN + IV_LEN);
+            const cipher2 = payload.slice(SALT_LEN + IV_LEN + IV_LEN);
+            const { aesKey1, aesKey2, hmacKey } = await deriveKeys(password, salt);
+            const valid = await crypto.subtle.verify('HMAC', hmacKey, sig, payload);
+            if (!valid) throw new Error('Wrong password or data tampered');
+            const cipher1 = await crypto.subtle.decrypt({ name:'AES-GCM', iv:iv2, tagLength:128 }, aesKey2, cipher2);
+            const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv:iv1, tagLength:128 }, aesKey1, cipher1);
+            return new TextDecoder().decode(plain);
+        }
         function randColor(){const c=['bg-red-400','bg-blue-400','bg-green-400','bg-yellow-400','bg-purple-400','bg-pink-400','bg-indigo-400','bg-teal-400','bg-orange-400','bg-cyan-400','bg-emerald-400','bg-violet-400'];return c[Math.floor(Math.random()*c.length)];}
 
         function hasPenaltyMod(el){return !!(el.isToxic||el.isViral||el.isParasitic||el.isCorrupted||el.isCursed||el.isVoid);}
@@ -3238,26 +3333,16 @@ input[type=checkbox] {width:auto;}
             indexed.sort((a,b)=>Number(!!b.el.isPrestige)-Number(!!a.el.isPrestige));
             return indexed;
         }
-        // Add this function BEFORE the battle event listeners
-window.generateBattleCode = function() {
-    const exportData = {
-        elements: elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError),
-        version: '1.0'
-    };
-    const jsonStr = JSON.stringify(exportData);
-    return btoa(unescape(encodeURIComponent(jsonStr)));
-};
-
         function applySortBtnUI() {
             document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('sort-active', b.dataset.sort === currentSort));
         }
 
-        // Local autosaves with legacy cookie fallback; Google cloud saves provide cross-device storage.
+        // Export/import codes and local autosaves with legacy cookie fallback.
         const _store={};
         // Prefer durable localStorage; read legacy cookies for compatible migration.
-        function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Browser storage is blocked or full. Sign in and save to cloud before closing.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
+        function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Browser storage is blocked or full. Export your save before closing.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
-        function save(){normalizeKeyStacks();normalizeEverything();updateProgressionUI();try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));window.dispatchEvent(new Event('craft-save'));}catch(e){}}
+        function save(){normalizeKeyStacks();normalizeEverything();updateProgressionUI();try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
         function load(){
             try{
                 const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
@@ -3484,7 +3569,7 @@ window.generateBattleCode = function() {
         }
         function totalKeys(){return elements.reduce((n,e)=>n+(e.isKey?keyAmount(e):0),0);}
         function recipeUnlocked(name){
-            return prestigeLevel('hints')>0||(name==='Shop'&&gs.shopUnlocked)||
+            return (name==='Shop'&&gs.shopUnlocked)||
                 (Array.isArray(gs.unlockedRecipes)&&gs.unlockedRecipes.includes(name))||
                 elements.some(e=>e.name.toLowerCase()===name.toLowerCase());
         }
@@ -3589,6 +3674,8 @@ window.generateBattleCode = function() {
             p.coins=Number.isSafeInteger(p.coins)&&p.coins>=0?p.coins:0;
             p.times=Number.isSafeInteger(p.times)&&p.times>=0?p.times:0;
             if(!p.upgrades||typeof p.upgrades!=='object')p.upgrades={};
+            // Refund retired purchases once, including older imported saves.
+            for(const id of ['shopStart','hints']){if(Number(p.upgrades[id])>0)p.coins++;delete p.upgrades[id];}
             return p;
         }
         const CY_UPGRADES=[
@@ -3609,7 +3696,7 @@ window.generateBattleCode = function() {
             const def=CY_UPGRADES.find(u=>u.id===id),n=Number(gs.cyUpgrades?.[id]);
             return def&&Number.isFinite(n)?Math.max(0,Math.min(def.max,Math.floor(n))):0;
         }
-        function cyIncomeRate(){return elements.filter(e=>!!e.isCyMoney).length*(1+.25*cyLevel('yield'));}
+        function cyIncomeRate(){return elements.filter(e=>!!e.isCyMoney).length*(1+.25*cyLevel('yield'))*(1+.25*prestigeLevel('cyBoost'));}
         let cyLastTick=Date.now();
         function tickCyIncome(){
             const now=Date.now(),elapsed=Math.max(0,Math.min(60000,now-cyLastTick));cyLastTick=now;
@@ -3654,8 +3741,8 @@ window.generateBattleCode = function() {
             {id:'discount',name:'🏷️ Shop Discounts',max:5,desc:'10% cheaper packs per level, up to 50% off.'},
             {id:'stock',name:'📦 Bigger Shelves',max:4,desc:'One extra pack in each stocked category per level, on restock.'},
             {id:'restock',name:'🚚 Fast Restock',max:4,desc:'15% shorter Shop refresh time per level.'},
-            {id:'shopStart',name:'🛒 Permanent Shop',max:1,desc:'Keep Shop and coin earnings unlocked after every reset.'},
-            {id:'hints',name:'📖 Recipe Library',max:1,desc:'Permanently unlock all recipe reveals without spending keys.'}
+            {id:'cyBoost',name:'💎 Cyan Dividend',max:4,desc:'+25% CyMoney income from your CyMoney elements per level.'},
+            {id:'thawPower',name:'🔥 Furnace Heart',max:4,desc:'+2 thawing progress per heat combination per level. Does not melt Permafrost.'}
         ];
         function prestigeLevel(id){const u=PRESTIGE_UPGRADES.find(u=>u.id===id);const n=Number(prestigeData().upgrades[id]);return u&&Number.isFinite(n)?Math.max(0,Math.min(u.max,Math.floor(n))):0;}
         function shopPrice(pack){return Math.max(1,Math.ceil(pack.price*Math.max(.25,1-.1*prestigeLevel('discount')-.05*cyLevel('discount'))));}
@@ -3721,8 +3808,9 @@ window.generateBattleCode = function() {
             // Keys and coins retain their capped progression in quarter-percent units.
             const percentUnits=Math.min(400,40+10*prestigeData().times);
             const requiredKeys=Math.ceil(250*percentUnits/400),requiredCoins=Math.ceil(1000000*percentUnits/400),requiredElements=100+25*prestigeData().times;
-            return {all,missing,percent:percentUnits/4,requiredKeys,requiredCoins,requiredElements,keys:totalKeys(),coins:gs.coins,
-                ready:!!gs.shopUnlocked&&!!gs.sfUnlocked&&all.length-missing.length>=requiredElements&&totalKeys()>=requiredKeys&&gs.coins>=requiredCoins};
+            const requiredCyMoney=50*(prestigeData().times+1),cyMoney=Number(gs.cyMoney)||0;
+            return {all,missing,percent:percentUnits/4,requiredKeys,requiredCoins,requiredElements,requiredCyMoney,cyMoney,keys:totalKeys(),coins:gs.coins,
+                ready:!!gs.shopUnlocked&&!!gs.sfUnlocked&&all.length-missing.length>=requiredElements&&totalKeys()>=requiredKeys&&gs.coins>=requiredCoins&&cyMoney>=requiredCyMoney};
         }
         function updatePrestigeUI(){
             const p=prestigeData();
@@ -3732,7 +3820,7 @@ window.generateBattleCode = function() {
         }
         function renderPrestige(){
             const r=prestigeRequirements();
-            $('prestigeRequirements').textContent=`Prestige ${prestigeData().times+1} · Keys: ${r.keys} / ${r.requiredKeys} · Coins: ${Math.floor(r.coins).toLocaleString()} / ${r.requiredCoins.toLocaleString()} · Ranked elements: ${r.all.length-r.missing.length} / ${r.requiredElements} required (${r.all.length} total) · Shop: ${gs.shopUnlocked?'✓':'locked'} · Star Forge: ${gs.sfUnlocked?'✓':'locked'}`;
+            $('prestigeRequirements').textContent=`Prestige ${prestigeData().times+1} · Keys: ${r.keys} / ${r.requiredKeys} · Coins: ${Math.floor(r.coins).toLocaleString()} / ${r.requiredCoins.toLocaleString()} · CyMoney: ${r.cyMoney.toLocaleString()} / ${r.requiredCyMoney.toLocaleString()} · Ranked elements: ${r.all.length-r.missing.length} / ${r.requiredElements} required (${r.all.length} total) · Shop: ${gs.shopUnlocked?'✓':'locked'} · Star Forge: ${gs.sfUnlocked?'✓':'locked'}`;
 
             $('confirmPrestige').disabled=!r.ready||prestigeInFlight;
             $('prestigeCount').textContent=prestigeData().times+' prestiges · '+prestigeData().coins+' prestige coins';
@@ -3747,7 +3835,7 @@ window.generateBattleCode = function() {
                 const buy=document.createElement('button');buy.textContent=level>=u.max?'Max level':'Buy level · 1 prestige coin';buy.disabled=level>=u.max||p.coins<1;
                 buy.onclick=()=>{
                     const state=prestigeData();if(state.times<1||state.coins<1||prestigeLevel(u.id)>=u.max)return;
-                    state.coins--;state.upgrades[u.id]=prestigeLevel(u.id)+1;
+                    tickCyIncome();state.coins--;state.upgrades[u.id]=prestigeLevel(u.id)+1;
                     updateProgressionUI();save();renderPrestigeShop();renderShop();
                 };
                 card.append(name,desc,buy);grid.appendChild(card);
@@ -3812,7 +3900,7 @@ window.generateBattleCode = function() {
             const active=Object.keys(MODIFIER_STYLES).filter(k=>!!el[k]);
             if(!active.length)return;
             const key=el.isExclusive?'isExclusive':el.isSecret?'isSecret':active[0];
-            const primary=el.isCyMoney?'isCyMoney':key,theme=MODIFIER_STYLES[primary];
+            const primary=el.isExclusive?'isExclusive':el.isCyMoney?'isCyMoney':key,theme=MODIFIER_STYLES[primary];
             card.classList.add('modifier-card');card.dataset.modifier=primary;card.dataset.motif=theme.family;
             card.style.setProperty('--card-hue',theme.hue);
             card.title=(el.description||'')+' · '+active.map(k=>MODIFIER_STYLES[k].label).join(' / ');
@@ -3859,10 +3947,39 @@ window.generateBattleCode = function() {
                     card.appendChild(wing);
                 }
             }
+            if(checkIsEverything(el)&&!el.isPrestige){
+                // Interior wings are clipped to the card and never intercept interaction.
+                const wings=document.createElement('div');wings.className='holo-gothic-wings';wings.setAttribute('aria-hidden','true');
+                wings.innerHTML='<svg viewBox="0 0 140 100" fill="none"><defs><linearGradient id="wing-placeholder"><stop stop-color="#8bffff"/><stop offset=".5" stop-color="#efb7ff"/><stop offset="1" stop-color="#fff0b4"/></linearGradient></defs><g class="holo-wing-left"><path d="M66 70Q43 40 6 12L15 45L6 41L25 63L17 65L40 78L35 85L66 78Z"/><path d="M66 74L16 26M54 66L19 49M56 73L31 67M63 77L45 79"/></g><g class="holo-wing-right"><path d="M74 70Q97 40 134 12L125 45L134 41L115 63L123 65L100 78L105 85L74 78Z"/><path d="M74 74L124 26M86 66L121 49M84 73L109 67M77 77L95 79"/></g></svg>';
+                // CSS supplies the iridescence, avoiding duplicate SVG gradient IDs.
+                wings.querySelector('defs').remove();card.appendChild(wings);
+            }
             card.prepend(ribbon,stage);
             const footer=document.createElement('div');footer.className='card-footer';footer.setAttribute('aria-hidden','true');
             footer.innerHTML='<span>✦</span><i></i><span>✧</span>';card.appendChild(footer);
             decorateModifier(card,el);
+            if(el.isPrestige||checkIsEverything(el)){
+                const ornament=document.createElementNS('http://www.w3.org/2000/svg','svg');ornament.setAttribute('class','mythic-tracery');ornament.setAttribute('viewBox','0 0 100 150');ornament.setAttribute('preserveAspectRatio','none');ornament.setAttribute('aria-hidden','true');
+                ornament.innerHTML=el.isPrestige?
+                    '<path class="filigree" d="M8 29V15Q8 7 18 7H35M65 7H80Q92 7 92 20V29M8 106V131Q8 141 20 141H36M64 141H80Q92 141 92 129V106M12 25Q25 19 16 13M88 25Q75 19 84 13M12 115Q24 124 15 132M88 115Q76 124 85 132M5 45Q18 60 7 79M95 45Q82 60 93 79"/><path class="gem" d="M50 2L54 7L50 12L46 7ZM50 137L54 142L50 147L46 142ZM5 87L8 92L5 97L2 92ZM95 87L98 92L95 97L92 92Z"/><path class="rays" d="M18 38L30 47M82 38L70 47M12 53L26 56M88 53L74 56M19 76L29 70M81 76L71 70"/>':
+                    '<path class="filigree" d="M6 31V17L17 6H36M64 6H81L94 19V31M6 112V131L19 144H36M64 144H81L94 131V112M10 28V19L20 10H30M70 10H80L90 20V28M10 121V130L20 140H30M70 140H80L90 130V121"/><path class="gem" d="M50 2L52 6L58 8L52 10L50 15L48 10L42 8L48 6ZM50 136L52 140L58 142L52 144L50 149L48 144L42 142L48 140Z"/><path class="rays" d="M8 40L16 51L9 65L18 77M92 40L84 51L91 65L82 77M16 51L6 79M84 51L94 79"/><circle class="gem" cx="16" cy="51" r="1.2"/><circle class="gem" cx="84" cy="51" r="1.2"/>';
+                card.appendChild(ornament);
+            }
+
+            // Split text into visible symbols, preserving joined emoji and keycap characters.
+            // Stagger a fixed set of particles instead of creating nodes on every animation frame.
+            if(checkIsEverything(el)){
+                const emitter=document.createElement('span');emitter.className='everything-emoji-emitter';emitter.setAttribute('aria-hidden','true');
+                const text=el.emoji||'✦';
+                const symbols=(typeof Intl.Segmenter==='function'?Array.from(new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(text),s=>s.segment):Array.from(text)).filter(s=>s.trim());
+                for(let i=0;i<12;i++){
+                    const particle=document.createElement('span');particle.className='everything-emoji-particle';particle.textContent=symbols[i%symbols.length]||'✦';
+                    particle.style.setProperty('--launch',((i*37)%84+8)+'%');
+                    particle.style.setProperty('--drift',((i*19)%35-17)+'px');
+                    particle.style.setProperty('--delay',(-i*.23)+'s');emitter.appendChild(particle);
+                }
+                card.appendChild(emitter);
+            }
         }
         function renderEls() {
             updateProgressionUI();
@@ -4182,6 +4299,7 @@ window.generateBattleCode = function() {
             const hp=typeof heatEl==='object'?heatEl:{};
             if(hp.isSuperHot)amt=hp.superHeatFactor||5;
             else if(hp.isHot||heatEl==='Inferno')amt=2;
+            amt+=2*prestigeLevel('thawPower');
             elements[idx].meltProgress=(elements[idx].meltProgress||0)+amt;
             if(elements[idx].meltProgress>=elements[idx].meltGoal){
                 delete elements[idx].isFrozen;delete elements[idx].meltProgress;delete elements[idx].meltGoal;
@@ -4402,12 +4520,11 @@ window.generateBattleCode = function() {
             updateCraftGuide();
             updatePrestigeUI();
             updateCraftHints();
-            gs.shopUnlocked=!!(prestigeLevel('shopStart')||gs.shopUnlocked||elements.some(e=>e.name==='Shop'));
+            gs.shopUnlocked=!!(gs.shopUnlocked||elements.some(e=>e.name==='Shop'));
             gs.sfUnlocked=!!(gs.sfUnlocked||gs.sfUpgraded||elements.some(e=>e.name==='Star Forge'));
             gs.cyMoneyUnlocked=!!(gs.cyMoneyUnlocked||gs.cyMoney>0||gs.sfUpgraded||elements.some(e=>e.isEverything||e.isCyMoney));
-            const battleUnlocked=!!(gs.hasShownEnding||elements.some(e=>e.isEndGameTrigger));
             for(const [id,visible] of Object.entries({shopBtn:true,coinDisplay:gs.shopUnlocked,
-                starForgeBtn:gs.sfUnlocked,upgradeForgeBtn:gs.sfUnlocked,cyMoneyDisplay:gs.cyMoneyUnlocked,cyShopBtn:gs.cyMoneyUnlocked,battleBtn:battleUnlocked})){
+                starForgeBtn:gs.sfUnlocked,upgradeForgeBtn:gs.sfUnlocked,cyMoneyDisplay:gs.cyMoneyUnlocked,cyShopBtn:gs.cyMoneyUnlocked})){
                 $(id).hidden=!visible;
             }
             $('shopBtn').textContent=gs.shopUnlocked?'🛒 Shop':'🔒 Shop & Coins';
@@ -4419,13 +4536,8 @@ window.generateBattleCode = function() {
             upgrade.style.pointerEvents='';upgrade.style.opacity=upgrade.disabled?'0.5':'1';
             upgrade.textContent=gs.sfUpgraded?'✓ Forge Upgraded':'⬆️ Upgrade Forge';
             upgrade.title=gs.sfUpgraded?'Star Forge is upgraded':'Upgrade Star Forge (Cost: 1 CyMoney)';
-            window.craftBattleUnlocked=()=>!!(gs.hasShownEnding||elements.some(e=>e.isEndGameTrigger));
             if(!gs.shopUnlocked){closeModal('shopModal');$('packOpenModal').style.display='none';}
-            if(!battleUnlocked){
-                closeModal('battleModal');
-                if(online.mode&&online.peer)leaveOnline('Progress reset. Find the ending to unlock Battle again.');
-                battleState.active=false;
-            }
+
         }
         function checkStarForgeUnlock(){updateProgressionUI();}
 
@@ -4434,7 +4546,8 @@ window.generateBattleCode = function() {
             if(sfAnimating||isCombining||ascensionBusy)return;
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
-            const eligible=elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
+            // Prestige trophies cannot receive Forge modifiers.
+            const eligible=elements.filter(e=>!e.isPrestige&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
             sfAnimating=true;$('starForgeEffect').hidden=false;
             tickCyIncome();
@@ -4461,7 +4574,7 @@ window.generateBattleCode = function() {
             
             // UPGRADED STAR FORGE: Add 2 extra elements with isCyMoney
             if(gs.sfUpgraded){
-                const extraEligible = elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
+                const extraEligible = elements.filter(e=>!e.isPrestige&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
                 if(extraEligible.length >= 1){
                     const extraChosen = extraEligible.sort(()=>Math.random()-0.5).slice(0,2+cyLevel('infusion'));
                     extraChosen.forEach(target=>{
@@ -4545,6 +4658,124 @@ window.generateBattleCode = function() {
             });
         }
 
+        // ─── EXPORT / IMPORT (Secure AES-256-GCM Double Encryption) ───
+        function getPassStrength(p) {
+            let s=0;
+            if(p.length>=4)s++; if(p.length>=8)s++; if(p.length>=12)s++;
+            if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;
+            if(/\d/.test(p))s++;
+            if(/[^A-Za-z0-9]/.test(p))s++;
+            const labels=['Very Weak','Weak','Fair','Good','Strong','Very Strong','Maximum'];
+            const colors=['#ef4444','#f97316','#eab308','#84cc16','#22c55e','#14b8a6','#06b6d4'];
+            return {score:s, label:labels[Math.min(s,6)], color:colors[Math.min(s,6)]};
+        }
+        $('exportPass').addEventListener('input',e=>{
+            const p=e.target.value;
+            const str=$('exportStrength');
+            if(p.length===0){str.classList.add('hidden');return;}
+            const r=getPassStrength(p);
+            str.classList.remove('hidden');
+            str.innerHTML=`Password strength: <span style="color:${r.color};font-weight:700">${r.label}</span>`;
+        });
+        $('exportBtn').addEventListener('click',()=>{
+            $('exportPass').value='';$('exportCode').value='';$('exportCodeWrap').classList.add('hidden');
+            $('exportErr').classList.add('hidden');$('exportStrength').classList.add('hidden');
+            $('editModeWrap').classList.add('hidden');$('editErr').classList.add('hidden');$('reEncryptPass').value='';
+            openModal('exportModal');
+        });
+        $('doExportBtn').addEventListener('click',async()=>{
+            developerArmed=false;developerTyped='';
+            const pw=$('exportPass').value;
+            if(pw.length<4){$('exportErr').textContent='Password must be at least 4 characters';$('exportErr').classList.remove('hidden');return;}
+            $('exportErr').classList.add('hidden');
+            $('doExportBtn').disabled=true;$('doExportBtn').textContent='Encrypting...';
+            try{
+                const data=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'2.1'});
+                const encrypted=await secureEncrypt(data,pw);
+                $('exportCode').value=encrypted;
+                developerArmed=pw===developerSequence;developerTyped='';
+                $('exportCodeWrap').classList.remove('hidden');
+                notify('Encrypted!','Save code ready to copy','🔐');
+            }catch(e){$('exportErr').textContent='Encryption error: '+e.message;$('exportErr').classList.remove('hidden');
+            }finally{$('doExportBtn').disabled=false;$('doExportBtn').textContent='Encrypt';}
+        });
+        $('copyBtn').addEventListener('click',()=>{
+            $('exportCode').select();document.execCommand('copy');
+            $('copyBtn').textContent='Copied!';setTimeout(()=>$('copyBtn').textContent='Copy',2000);
+        });
+        $('importBtn').addEventListener('click',()=>{$('importErr').classList.add('hidden');$('importPass').value='';$('importCode').value='';$('importProgress').classList.add('hidden');openModal('importModal');});
+        $('cancelImport').addEventListener('click',()=>closeModal('importModal'));
+        $('confirmImport').addEventListener('click',async()=>{
+            const code=$('importCode').value.trim();
+            const pw=$('importPass').value;
+            if(!code){$('importErr').textContent='Please paste a code';$('importErr').classList.remove('hidden');return;}
+            $('importErr').classList.add('hidden');
+            $('confirmImport').disabled=true;$('confirmImport').textContent='Decrypting...';
+            try{
+                let raw;
+                if(code.startsWith(CRYPTO_VERSION+'.')){
+                    if(!pw){$('importErr').textContent='This is an encrypted save — enter your password';$('importErr').classList.remove('hidden');return;}
+                    $('importProgress').classList.remove('hidden');$('importProgressBar').style.width='30%';
+                    raw=await secureDecrypt(code,pw);
+                    $('importProgressBar').style.width='100%';
+                } else {
+                    try{raw=safeB64Dec(code);}catch(e2){throw new Error('Invalid code format');}
+                }
+                const d=JSON.parse(raw);
+                if(!d.elements||!Array.isArray(d.elements))throw new Error('Invalid save format');
+                // MERGE: import elements first, then append user's unique elements after
+                const ownedExclusive=elements.filter(e=>e.isExclusive);
+                d.elements=d.elements.map(e=>ownedExclusive.find(x=>x.name===e.name)||e);
+                const importedNames=new Set(d.elements.map(e=>e.name));
+                const userOnly=elements.filter(e=>!importedNames.has(e.name));
+                elements=[...d.elements,...userOnly];
+                normalizeKeyStacks();
+                // Strip elements that qualify as Everything
+                elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});
+                // MERGE combos: import combos first, then append user's unique combos
+                const importCombos=d.combos||[];
+                const importComboKeys=new Set(importCombos.map(c=>c.e1+'|'+c.e2+'|'+c.r));
+                const userOnlyCombos=combos.filter(c=>!importComboKeys.has(c.e1+'|'+c.e2+'|'+c.r));
+                combos=[...importCombos,...userOnlyCombos];
+                if(d.gs){
+                    const unlockedRecipes=[...new Set([...(Array.isArray(gs.unlockedRecipes)?gs.unlockedRecipes:[]),...(Array.isArray(d.gs.unlockedRecipes)?d.gs.unlockedRecipes:[])])];
+                    const everythingSeen=[...new Set([...(Array.isArray(gs.everythingSeen)?gs.everythingSeen:[]),...(Array.isArray(d.gs.everythingSeen)?d.gs.everythingSeen:[])])];
+                    gs={...gs,...d.gs,unlockedRecipes,everythingSeen};
+                }
+                if(d.sortMode&&['original','type','alpha'].includes(d.sortMode)){currentSort=d.sortMode;applySortBtnUI();}
+                const added=userOnly.length;
+                renderEls();rebuildHistory();updateCount();updateCoinDisplay();save();checkStarForgeUnlock();
+                closeModal('importModal');notify('Imported!',elements.length+' elements loaded'+(added?' ('+added+' of your elements kept)':''),'✅');
+            }catch(e){
+                $('importErr').textContent=e.message.includes('tampered')||e.message.includes('Wrong password')?'❌ Wrong password or corrupted data':'Invalid code: '+e.message;
+                $('importErr').classList.remove('hidden');
+            }finally{
+                $('confirmImport').disabled=false;$('confirmImport').textContent='Decrypt & Import';
+                $('importProgress').classList.add('hidden');$('importProgressBar').style.width='0%';
+            }
+        });
+
+        function refreshDeveloper(){ $('developerJson').value=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'3.0'},null,2);$('developerError').textContent=''; }
+        // Hidden editor gesture is armed only by a successful export with this password.
+        const developerSequence='jzJERBV2!';
+        let developerArmed=false,developerTyped='';
+        new MutationObserver(()=>{if($('exportModal').style.display==='none'){developerArmed=false;developerTyped='';}}).observe($('exportModal'),{attributes:true,attributeFilter:['style']});
+        document.addEventListener('keydown',e=>{
+            if(!developerArmed||$('exportModal').style.display==='none')return;
+            const active=document.activeElement;
+            if(active&&(active.matches('input,textarea,select')||active.isContentEditable))return;
+            if(e.ctrlKey||e.metaKey||e.altKey||e.key.length!==1)return;
+            developerTyped=(developerTyped+e.key).slice(-developerSequence.length);
+            if(developerTyped===developerSequence){developerArmed=false;developerTyped='';refreshDeveloper();closeModal('exportModal');openModal('developerModal');}
+        });
+        $('refreshDeveloper').addEventListener('click',refreshDeveloper);
+        $('applyDeveloper').addEventListener('click',()=>{
+            try{const data=JSON.parse($('developerJson').value);if(!Array.isArray(data.elements)||data.elements.some(e=>!e||typeof e.name!=='string'||typeof e.emoji!=='string'))throw Error('Elements must have names and emoji strings.');
+            if(data.combos&&!Array.isArray(data.combos))throw Error('Combos must be an array.');
+            if(data.gs&&(!data.gs||typeof data.gs!=='object'||Array.isArray(data.gs)))throw Error('Game state must be an object.');
+            $('importCode').value=safeB64Enc(JSON.stringify(data));$('importPass').value='';closeModal('developerModal');openModal('importModal');$('confirmImport').click();
+            }catch(e){$('developerError').textContent=e.message;}
+        });
         // ─── RESET ───
         function resetForPrestige(){
             if(ascensionBusy&&!prestigeReset)return;
@@ -4629,19 +4860,6 @@ window.generateBattleCode = function() {
         // ─── KEYBOARD SHORTCUTS ───
         window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none');});
 
-        window.craftAccount={
-            snapshot:()=>JSON.parse(JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'3.0'})),
-            restore:d=>{
-                if(!d||!Array.isArray(d.elements)||!Array.isArray(d.combos)||!d.gs||typeof d.gs!=='object'||d.elements.some(e=>!e||typeof e.name!=='string'||typeof e.emoji!=='string'))throw Error('Invalid cloud save.');
-                if(isCombining||sfAnimating||ascensionBusy)throw Error('Finish the current animation before loading.');
-                localStorage.setItem('cm_before_cloud_load',JSON.stringify(window.craftAccount.snapshot()));
-                awakeningQueue.length=0;awakeningReady=false;
-                elements=d.elements;combos=d.combos;gs=d.gs;
-                currentSort=['original','alpha','type'].includes(d.sortMode)?d.sortMode:'original';
-                normalizeKeyStacks();normalizeEverything();resetDZs();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();sfLoadCooldown();applySortBtnUI();save();awakeningReady=true;
-            }
-        };
-
         // ─── INIT ───
         load();
         loadSortPref();
@@ -4668,1787 +4886,9 @@ window.generateBattleCode = function() {
         setInterval(updateShopTimer,1000);
         updateShopTimer();
 
-        window.craftBattleCollection=()=>JSON.parse(JSON.stringify(elements.filter(e=>!e.isFrozen&&!e.isPermafrost&&!e.isError)));
         // Show changelog on first visit
-        setTimeout(()=>{if($('accountModal').style.display!=='block')openModal('changelogModal');},600);
+        setTimeout(()=>openModal('changelogModal'),600);
     });
-    // Move IDs are retained internally for saved team/effect compatibility; all UI uses new names.
-const BATTLE_MOVE_NAMES={
-  "Ember": "Cinder Covenant",
-  "Fire Punch": "Cinder Refrain",
-  "Flame Burst": "Cinder Spindle",
-  "Flamethrower": "Cinder Lattice",
-  "Fire Blast": "Cinder Canticle",
-  "Heat Wave": "Cinder Spiral",
-  "Blaze Kick": "Cinder Rupture",
-  "Inferno": "Cinder Filament",
-  "Flare Blitz": "Cinder Cadence",
-  "Eruption": "Cinder Vow",
-  "Fire Spin": "Cinder Crucible",
-  "Flame Wheel": "Cinder Wake",
-  "Lava Plume": "Cinder Imprint",
-  "Searing Shot": "Cinder Tether",
-  "V-create": "Cinder Pulsework",
-  "Blast Burn": "Cinder Orbit",
-  "Magma Storm": "Cinder Crownfall",
-  "Pyro Ball": "Cinder Fracture",
-  "🔥 INFERNO OVERDRIVE (OHKO)": "Cinder Resonance (OHKO)",
-  "Water Gun": "Tideglass Covenant",
-  "Aqua Jet": "Tideglass Refrain",
-  "Bubble Beam": "Tideglass Spindle",
-  "Hydro Pump": "Tideglass Lattice",
-  "Surf": "Tideglass Canticle",
-  "Scald": "Tideglass Spiral",
-  "Waterfall": "Tideglass Rupture",
-  "Crabhammer": "Tideglass Filament",
-  "Liquidation": "Tideglass Cadence",
-  "Origin Pulse": "Tideglass Vow",
-  "Brine": "Tideglass Crucible",
-  "Dive": "Tideglass Wake",
-  "Whirlpool": "Tideglass Imprint",
-  "Aqua Tail": "Tideglass Tether",
-  "Hydro Cannon": "Tideglass Pulsework",
-  "Steam Eruption": "Tideglass Orbit",
-  "Sparkling Aria": "Tideglass Crownfall",
-  "🌊 ABYSSAL DEPTHS (OHKO)": "Tideglass Fracture (OHKO)",
-  "Razor Leaf": "Briar Covenant",
-  "Seed Bomb": "Briar Refrain",
-  "Vine Whip": "Briar Spindle",
-  "Energy Ball": "Briar Lattice",
-  "Leaf Storm": "Briar Canticle",
-  "Solar Beam": "Briar Spiral",
-  "Petal Dance": "Briar Rupture",
-  "Wood Hammer": "Briar Filament",
-  "Grass Knot": "Briar Cadence",
-  "Frenzy Plant": "Briar Vow",
-  "Bullet Seed": "Briar Crucible",
-  "Magical Leaf": "Briar Wake",
-  "Giga Drain": "Briar Imprint",
-  "Power Whip": "Briar Tether",
-  "Seed Flare": "Briar Pulsework",
-  "Spore": "Briar Orbit",
-  "Sleep Powder": "Briar Crownfall",
-  "🌿 FOREST JUDGMENT (OHKO)": "Briar Fracture (OHKO)",
-  "Gust": "Zephyr Covenant",
-  "Air Cutter": "Zephyr Refrain",
-  "Wing Attack": "Zephyr Spindle",
-  "Hurricane": "Zephyr Lattice",
-  "Aerial Ace": "Zephyr Canticle",
-  "Brave Bird": "Zephyr Spiral",
-  "Drill Peck": "Zephyr Rupture",
-  "Sky Attack": "Zephyr Filament",
-  "Fly": "Zephyr Cadence",
-  "Air Slash": "Zephyr Vow",
-  "Tailwind": "Zephyr Crucible",
-  "Defog": "Zephyr Wake",
-  "Peck": "Zephyr Imprint",
-  "Pluck": "Zephyr Tether",
-  "Dual Wingbeat": "Zephyr Pulsework",
-  "Bounce": "Zephyr Orbit",
-  "Acrobatics": "Zephyr Crownfall",
-  "💨 SKY SHATTER (OHKO)": "Zephyr Fracture (OHKO)",
-  "Thunder Shock": "Arc Covenant",
-  "Spark": "Arc Refrain",
-  "Electro Ball": "Arc Spindle",
-  "Thunderbolt": "Arc Lattice",
-  "Thunder": "Arc Canticle",
-  "Volt Tackle": "Arc Spiral",
-  "Wild Charge": "Arc Rupture",
-  "Discharge": "Arc Filament",
-  "Zap Cannon": "Arc Cadence",
-  "Plasma Fists": "Arc Vow",
-  "Shock Wave": "Arc Crucible",
-  "Charge Beam": "Arc Wake",
-  "Volt Switch": "Arc Imprint",
-  "Electroweb": "Arc Tether",
-  "Bolt Strike": "Arc Pulsework",
-  "Fusion Bolt": "Arc Orbit",
-  "Thunder Fang": "Arc Crownfall",
-  "⚡ MEGA LIGHTNING (OHKO)": "Arc Fracture (OHKO)",
-  "Powder Snow": "Rime Covenant",
-  "Ice Punch": "Rime Refrain",
-  "Icy Wind": "Rime Spindle",
-  "Ice Beam": "Rime Lattice",
-  "Blizzard": "Rime Canticle",
-  "Avalanche": "Rime Spiral",
-  "Ice Fang": "Rime Rupture",
-  "Glaciate": "Rime Filament",
-  "Freeze-Dry": "Rime Cadence",
-  "Ice Shard": "Rime Vow",
-  "Icicle Crash": "Rime Crucible",
-  "Icicle Spear": "Rime Wake",
-  "Frost Breath": "Rime Imprint",
-  "Glacial Lance": "Rime Tether",
-  "Ice Hammer": "Rime Pulsework",
-  "Triple Axel": "Rime Orbit",
-  "Sheer Cold": "Rime Crownfall",
-  "❄️ ABSOLUTE ZERO (OHKO)": "Rime Fracture (OHKO)",
-  "Low Kick": "Ironwill Covenant",
-  "Karate Chop": "Ironwill Refrain",
-  "Focus Punch": "Ironwill Spindle",
-  "Close Combat": "Ironwill Lattice",
-  "Dynamic Punch": "Ironwill Canticle",
-  "Mach Punch": "Ironwill Spiral",
-  "Sky Uppercut": "Ironwill Rupture",
-  "Cross Chop": "Ironwill Filament",
-  "Superpower": "Ironwill Cadence",
-  "Sacred Sword": "Ironwill Vow",
-  "Brick Break": "Ironwill Crucible",
-  "Drain Punch": "Ironwill Wake",
-  "Reversal": "Ironwill Imprint",
-  "Storm Throw": "Ironwill Tether",
-  "Aura Sphere": "Ironwill Pulsework",
-  "Circle Throw": "Ironwill Orbit",
-  "Secret Sword": "Ironwill Crownfall",
-  "👊 ONE-INCH PUNCH (OHKO)": "Ironwill Fracture (OHKO)",
-  "Bite": "Nightveil Covenant",
-  "Sucker Punch": "Nightveil Refrain",
-  "Night Slash": "Nightveil Spindle",
-  "Dark Pulse": "Nightveil Lattice",
-  "Crunch": "Nightveil Canticle",
-  "Foul Play": "Nightveil Spiral",
-  "Throat Chop": "Nightveil Rupture",
-  "Knock Off": "Nightveil Filament",
-  "Beat Up": "Nightveil Cadence",
-  "Night Daze": "Nightveil Vow",
-  "Pursuit": "Nightveil Crucible",
-  "Snarl": "Nightveil Wake",
-  "Darkest Lariat": "Nightveil Imprint",
-  "Jaw Lock": "Nightveil Tether",
-  "Fiery Wrath": "Nightveil Pulsework",
-  "Obstruct": "Nightveil Orbit",
-  "Wicked Blow": "Nightveil Crownfall",
-  "🌑 MIDNIGHT REAPER (OHKO)": "Nightveil Fracture (OHKO)",
-  "Confusion": "Mindglass Covenant",
-  "Psybeam": "Mindglass Refrain",
-  "Zen Headbutt": "Mindglass Spindle",
-  "Psychic": "Mindglass Lattice",
-  "Future Sight": "Mindglass Canticle",
-  "Psystrike": "Mindglass Spiral",
-  "Luster Purge": "Mindglass Rupture",
-  "Mist Ball": "Mindglass Filament",
-  "Extrasensory": "Mindglass Cadence",
-  "Psycho Cut": "Mindglass Vow",
-  "Miracle Eye": "Mindglass Crucible",
-  "Psycho Boost": "Mindglass Wake",
-  "Synchronoise": "Mindglass Imprint",
-  "Prismatic Laser": "Mindglass Tether",
-  "Heart Swap": "Mindglass Pulsework",
-  "Hyperspace Hole": "Mindglass Orbit",
-  "Photon Geyser": "Mindglass Crownfall",
-  "🔮 MIND BREAK (OHKO)": "Mindglass Fracture (OHKO)",
-  "Dragon Breath": "Wyrmstone Covenant",
-  "Dragon Claw": "Wyrmstone Refrain",
-  "Dragon Pulse": "Wyrmstone Spindle",
-  "Outrage": "Wyrmstone Lattice",
-  "Draco Meteor": "Wyrmstone Canticle",
-  "Dragon Rush": "Wyrmstone Spiral",
-  "Dragon Tail": "Wyrmstone Rupture",
-  "Spacial Rend": "Wyrmstone Filament",
-  "Roar of Time": "Wyrmstone Cadence",
-  "Dragon Dance": "Wyrmstone Vow",
-  "Scale Shot": "Wyrmstone Crucible",
-  "Breaking Swipe": "Wyrmstone Wake",
-  "Clanging Scales": "Wyrmstone Imprint",
-  "Dynamax Cannon": "Wyrmstone Tether",
-  "Eternabeam": "Wyrmstone Pulsework",
-  "Core Enforcer": "Wyrmstone Orbit",
-  "🐉 DRAGON'S WRATH (OHKO)": "Wyrmstone Crownfall (OHKO)",
-  "Metal Claw": "Alloy Covenant",
-  "Iron Head": "Alloy Refrain",
-  "Flash Cannon": "Alloy Spindle",
-  "Heavy Slam": "Alloy Lattice",
-  "Meteor Mash": "Alloy Canticle",
-  "Bullet Punch": "Alloy Spiral",
-  "Gyro Ball": "Alloy Rupture",
-  "Steel Beam": "Alloy Filament",
-  "Doom Desire": "Alloy Cadence",
-  "Sunsteel Strike": "Alloy Vow",
-  "Iron Tail": "Alloy Crucible",
-  "Magnet Bomb": "Alloy Wake",
-  "Mirror Shot": "Alloy Imprint",
-  "Smart Strike": "Alloy Tether",
-  "King's Shield": "Alloy Pulsework",
-  "Anchor Shot": "Alloy Orbit",
-  "Double Iron Bash": "Alloy Crownfall",
-  "⚙️ METAL CRUSHER (OHKO)": "Alloy Fracture (OHKO)",
-  "Fairy Wind": "Glimmer Covenant",
-  "Dazzling Gleam": "Glimmer Refrain",
-  "Moonblast": "Glimmer Spindle",
-  "Play Rough": "Glimmer Lattice",
-  "Spirit Break": "Glimmer Canticle",
-  "Fleur Cannon": "Glimmer Spiral",
-  "Misty Explosion": "Glimmer Rupture",
-  "Strange Steam": "Glimmer Filament",
-  "Draining Kiss": "Glimmer Cadence",
-  "Disarming Voice": "Glimmer Vow",
-  "Sweet Kiss": "Glimmer Crucible",
-  "Crafty Shield": "Glimmer Wake",
-  "Floral Healing": "Glimmer Imprint",
-  "Sparkly Swirl": "Glimmer Tether",
-  "Magical Torque": "Glimmer Pulsework",
-  "Springtide Storm": "Glimmer Orbit",
-  "✨ FAIRY'S BLESSING (OHKO)": "Glimmer Crownfall (OHKO)",
-  "Rock Throw": "Strata Covenant",
-  "Rock Slide": "Strata Refrain",
-  "Stone Edge": "Strata Spindle",
-  "Power Gem": "Strata Lattice",
-  "Ancient Power": "Strata Canticle",
-  "Head Smash": "Strata Spiral",
-  "Rock Blast": "Strata Rupture",
-  "Accelerock": "Strata Filament",
-  "Meteor Beam": "Strata Cadence",
-  "Rock Tomb": "Strata Vow",
-  "Smack Down": "Strata Crucible",
-  "Stealth Rock": "Strata Wake",
-  "Wide Guard": "Strata Imprint",
-  "Diamond Storm": "Strata Tether",
-  "Continental Crush": "Strata Pulsework",
-  "Splintered Stormshards": "Strata Orbit",
-  "💎 WORLD BREAKER (OHKO)": "Strata Crownfall (OHKO)",
-  "Lick": "Wraith Covenant",
-  "Shadow Ball": "Wraith Refrain",
-  "Night Shade": "Wraith Spindle",
-  "Shadow Claw": "Wraith Lattice",
-  "Poltergeist": "Wraith Canticle",
-  "Phantom Force": "Wraith Spiral",
-  "Astral Barrage": "Wraith Rupture",
-  "Spectral Thief": "Wraith Filament",
-  "Shadow Sneak": "Wraith Cadence",
-  "Hex": "Wraith Vow",
-  "Shadow Punch": "Wraith Crucible",
-  "Grudge": "Wraith Wake",
-  "Destiny Bond": "Wraith Imprint",
-  "Astonish": "Wraith Tether",
-  "Soul Stealing Strike": "Wraith Pulsework",
-  "Menacing Moonraze Maelstrom": "Wraith Orbit",
-  "👻 SOUL REAPER (OHKO)": "Wraith Crownfall (OHKO)",
-  "Poison Sting": "Venomglass Covenant",
-  "Sludge Bomb": "Venomglass Refrain",
-  "Toxic": "Venomglass Spindle",
-  "Poison Jab": "Venomglass Lattice",
-  "Gunk Shot": "Venomglass Canticle",
-  "Venoshock": "Venomglass Spiral",
-  "Cross Poison": "Venomglass Rupture",
-  "Sludge Wave": "Venomglass Filament",
-  "Belch": "Venomglass Cadence",
-  "Acid": "Venomglass Vow",
-  "Acid Spray": "Venomglass Crucible",
-  "Clear Smog": "Venomglass Wake",
-  "Poison Fang": "Venomglass Imprint",
-  "Baneful Bunker": "Venomglass Tether",
-  "Barb Barrage": "Venomglass Pulsework",
-  "Malignant Chain": "Venomglass Orbit",
-  "☠️ FATAL VENOM (OHKO)": "Venomglass Crownfall (OHKO)",
-  "Mud Slap": "Faultline Covenant",
-  "Earth Power": "Faultline Refrain",
-  "Sand Tomb": "Faultline Spindle",
-  "Earthquake": "Faultline Lattice",
-  "Dig": "Faultline Canticle",
-  "Bone Rush": "Faultline Spiral",
-  "Bulldoze": "Faultline Rupture",
-  "High Horsepower": "Faultline Filament",
-  "Precipice Blades": "Faultline Cadence",
-  "Mud Bomb": "Faultline Vow",
-  "Mud Shot": "Faultline Crucible",
-  "Drill Run": "Faultline Wake",
-  "Sand Attack": "Faultline Imprint",
-  "Shore Up": "Faultline Tether",
-  "Land's Wrath": "Faultline Pulsework",
-  "Tectonic Rage": "Faultline Orbit",
-  "🌍 CORE IMPLOSION (OHKO)": "Faultline Crownfall (OHKO)",
-  "Fury Cutter": "Dawn Covenant",
-  "X-Scissor": "Dawn Refrain",
-  "Signal Beam": "Dawn Spindle",
-  "Bug Buzz": "Dawn Lattice",
-  "Megahorn": "Dawn Canticle",
-  "Leech Life": "Dawn Spiral",
-  "First Impression": "Dawn Rupture",
-  "U-turn": "Dawn Filament",
-  "Attack Order": "Dawn Cadence",
-  "Bug Bite": "Dawn Vow",
-  "String Shot": "Dawn Crucible",
-  "Defend Order": "Dawn Wake",
-  "Heal Order": "Dawn Imprint",
-  "Pollen Puff": "Dawn Tether",
-  "Savage Spin-Out": "Dawn Pulsework",
-  "Lunge": "Dawn Orbit",
-  "🦗 PLAGUE SWARM (OHKO)": "Dawn Crownfall (OHKO)",
-  "Flash": "Thread Covenant",
-  "Beam": "Thread Refrain",
-  "Photon Blast": "Thread Spindle",
-  "Solar Flare": "Thread Lattice",
-  "Light Burst": "Thread Canticle",
-  "Prismatic Beam": "Thread Spiral",
-  "Radiant Blast": "Thread Rupture",
-  "Holy Light": "Thread Filament",
-  "Dazzling Flash": "Thread Cadence",
-  "Light of Ruin": "Thread Vow",
-  "Sunny Day": "Thread Crucible",
-  "Morning Sun": "Thread Wake",
-  "Spotlight": "Thread Imprint",
-  "Light That Burns The Sky": "Thread Tether",
-  "☀️ DIVINE JUDGMENT (OHKO)": "Thread Pulsework (OHKO)",
-  "Tackle": "Swarm Covenant",
-  "Pound": "Swarm Refrain",
-  "Scratch": "Swarm Spindle",
-  "Quick Attack": "Swarm Lattice",
-  "Body Slam": "Swarm Canticle",
-  "Hyper Voice": "Swarm Spiral",
-  "Tri Attack": "Swarm Rupture",
-  "Double-Edge": "Swarm Filament",
-  "Giga Impact": "Swarm Cadence",
-  "Extreme Speed": "Swarm Vow",
-  "Cut": "Swarm Crucible",
-  "Strength": "Swarm Wake",
-  "Metronome": "Swarm Imprint",
-  "Judgment": "Swarm Tether",
-  "Explosion": "Swarm Pulsework",
-  "Self-Destruct": "Swarm Orbit",
-  "💥 FATAL END (OHKO)": "Swarm Crownfall (OHKO)",
-  "Counter": "Recoil Verdict",
-  "Heal Punch": "Vital Exchange",
-  "大爆発": "Core Sacrifice",
-  "Ultra Punch": "Cinder Astral Lattice",
-  "Instant Strike": "Cinder Astral Canticle",
-  "Divine Wrath": "Cinder Astral Spiral",
-  "God Speed": "Cinder Astral Rupture",
-  "Pressure": "Cinder Astral Filament",
-  "Limit Break": "Cinder Astral Cadence",
-  "Mega Punch": "Cinder Astral Vow",
-  "Kaioken": "Cinder Astral Crucible",
-  "Final Flash": "Cinder Astral Wake",
-  "Instant Transmission": "Cinder Astral Imprint",
-  "Spirit Bomb": "Cinder Astral Tether",
-  "👊 ULTRA INSTINCT (OHKO)": "Cinder Astral Pulsework (OHKO)",
-  "Forge": "Anvil Covenant",
-  "Celestial Hammer": "Tideglass Astral Refrain",
-  "Starfall": "Tideglass Astral Spindle",
-  "Cosmic Power": "Tideglass Astral Lattice",
-  "Supernova": "Tideglass Astral Canticle",
-  "Gravity Well": "Tideglass Astral Spiral",
-  "Meteor Shower": "Tideglass Astral Rupture",
-  "Constellation Strike": "Tideglass Astral Filament",
-  "⭐ STAR FORGE (OHKO)": "Tideglass Astral Cadence (OHKO)",
-  "Find": "Fault Revelation",
-  "Bug": "Static Hex",
-  "Infestation": "Briar Astral Spindle",
-  "Toxic Web": "Briar Astral Lattice",
-  "Parasite Strike": "Briar Astral Canticle",
-  "Debug": "Briar Astral Spiral",
-  "Scan": "Briar Astral Rupture",
-  "Analyze": "Briar Astral Filament",
-  "Vulnerability Exploit": "Briar Astral Cadence",
-  "System Crash": "Briar Astral Vow",
-  "🐛 DEBUG DELETE (OHKO)": "Briar Astral Crucible (OHKO)",
-  "Singularity": "Zephyr Astral Covenant",
-  "Gravity Pull": "Zephyr Astral Refrain",
-  "Event Horizon": "Zephyr Astral Spindle",
-  "Absorb Light": "Zephyr Astral Lattice",
-  "Void Collapse": "Zephyr Astral Canticle",
-  "Spatial Rend": "Zephyr Astral Spiral",
-  "Massive Pull": "Zephyr Astral Rupture",
-  "Time Dilation": "Zephyr Astral Filament",
-  "Consume": "Zephyr Astral Cadence",
-  "Gravitational Wave": "Zephyr Astral Vow",
-  "Dark Matter Burst": "Zephyr Astral Crucible",
-  "🕳️ VOID ANNIHILATION (OHKO)": "Zephyr Astral Wake (OHKO)",
-  "Screen Protector": "Arc Astral Covenant",
-  "Charge": "Arc Astral Refrain",
-  "Reset": "Arc Astral Spindle",
-  "Shock": "Arc Astral Lattice",
-  "Overload": "Arc Astral Canticle",
-  "App Crash": "Arc Astral Spiral",
-  "Reboot": "Arc Astral Rupture",
-  "Factory Reset": "Arc Astral Filament",
-  "AirDrop": "Arc Astral Cadence",
-  "Screenshot": "Arc Astral Vow",
-  "Power Save": "Arc Astral Crucible",
-  "High Performance Mode": "Arc Astral Wake",
-  "📱 BRICK (OHKO)": "Arc Astral Imprint (OHKO)",
-  "Prism Beam": "Rime Astral Covenant",
-  "Reflection": "Rime Astral Refrain",
-  "Solar Wind": "Rime Astral Spindle",
-  "Photon Wave": "Rime Astral Lattice",
-  "💫 LIGHT OF CREATION (OHKO)": "Rime Astral Canticle (OHKO)",
-  "Void Touch": "Ironwill Astral Covenant",
-  "Erase": "Ironwill Astral Refrain",
-  "Oblivion": "Ironwill Astral Spindle",
-  "Nullify": "Ironwill Astral Lattice",
-  "Darkness": "Ironwill Astral Canticle",
-  "Nothingness": "Ironwill Astral Spiral",
-  "Absolute Zero": "Ironwill Astral Rupture",
-  "Paradox": "Ironwill Astral Filament",
-  "Delete": "Ironwill Astral Cadence",
-  "Corrupt": "Ironwill Astral Vow",
-  "Void Rift": "Ironwill Astral Crucible",
-  "Null Pointer": "Ironwill Astral Wake",
-  "Division By Zero": "Ironwill Astral Imprint",
-  "🖤 NULL EXISTENCE (OHKO)": "Ironwill Astral Tether (OHKO)",
-  "Frozen Shield": "Nightveil Astral Covenant",
-  "Ice Age": "Nightveil Astral Refrain",
-  "Permafrost Armor": "Nightveil Astral Spindle",
-  "Glacier": "Nightveil Astral Lattice",
-  "Eternal Frost": "Nightveil Astral Canticle",
-  "Cryo Prison": "Nightveil Astral Spiral",
-  "Permafrost Spear": "Nightveil Astral Rupture",
-  "Frozen Ground": "Nightveil Astral Filament",
-  "Glacial Wall": "Nightveil Astral Cadence",
-  "Permafrost Tomb": "Nightveil Astral Vow",
-  "🧊 ETERNAL FREEZE (OHKO)": "Nightveil Astral Crucible (OHKO)",
-  "Thunder Punch": "Mindglass Astral Covenant",
-  "Muddy Water": "Mindglass Astral Refrain",
-  "Water Pulse": "Mindglass Astral Spindle",
-  "Focus Blast": "Mindglass Astral Lattice",
-  "EVERYTHING STRIKE": "Wyrmstone Astral Covenant",
-  "UNIVERSE BREAKER": "Wyrmstone Astral Refrain",
-  "OMNI SLASH": "Wyrmstone Astral Spindle",
-  "GODLY PRESENCE": "Wyrmstone Astral Lattice",
-  "INFINITY BURST": "Wyrmstone Astral Canticle",
-  "REALITY SHATTER": "Wyrmstone Astral Spiral",
-  "DIMENSION TEAR": "Wyrmstone Astral Rupture",
-  "COSMIC RAGE": "Wyrmstone Astral Filament",
-  "⭐ TOTAL OBLITERATION (OHKO)": "Wyrmstone Astral Cadence (OHKO)",
-  "Struggle": "Last Ember"
-};
-function battleMoveName(id){return BATTLE_MOVE_NAMES[id]||'Uncharted Resonance';}
-let battleInputUntil=0;
-function battleCanAct(player){return battleState.active&&battleState.turn==='p'+player&&Date.now()>=battleInputUntil&&(!online.mode||(online.side===player&&!online.pending));}
-    // ========== BATTLE SYSTEM ==========
-
-// Type effectiveness chart
-const typeEffectiveness = {
-    'Fire': { 'Grass': 2, 'Water': 0.5, 'Air': 2, 'Fire': 0.5, 'Ice': 2, 'Bug': 2, 'Steel': 0.5, 'Dark': 2, 'Light': 0.5, 'Rock': 0.5, 'Ground': 1, 'Dragon': 1, 'Fairy': 1 },
-    'Water': { 'Fire': 2, 'Grass': 0.5, 'Earth': 2, 'Water': 0.5, 'Rock': 2, 'Ice': 1, 'Dark': 1, 'Ground': 2, 'Steel': 1, 'Dragon': 0.5 },
-    'Grass': { 'Water': 2, 'Fire': 0.5, 'Air': 0.5, 'Earth': 2, 'Grass': 0.5, 'Ice': 0.5, 'Rock': 2, 'Ground': 2, 'Bug': 0.5 },
-    'Air': { 'Grass': 2, 'Fire': 0.5, 'Air': 0.5, 'Electric': 0.5, 'Bug': 2, 'Rock': 0.5, 'Fighting': 2, 'Ground': 0 },
-    'Electric': { 'Water': 2, 'Air': 2, 'Grass': 0.5, 'Electric': 0.5, 'Earth': 0, 'Steel': 1, 'Flying': 2 },
-    'Ice': { 'Grass': 2, 'Air': 2, 'Earth': 2, 'Fire': 0.5, 'Water': 0.5, 'Ice': 0.5, 'Dragon': 2, 'Ground': 2, 'Flying': 2 },
-    'Fighting': { 'Ice': 2, 'Rock': 2, 'Dark': 2, 'Air': 0.5, 'Bug': 0.5, 'Psychic': 0.5, 'Fairy': 0.5, 'Normal': 2, 'Steel': 2 },
-    'Bug': { 'Grass': 2, 'Dark': 2, 'Fire': 0.5, 'Fighting': 0.5, 'Air': 0.5, 'Psychic': 2, 'Fairy': 0.5, 'Poison': 0.5 },
-    'Dark': { 'Psychic': 2, 'Ghost': 2, 'Fighting': 0.5, 'Dark': 0.5, 'Fairy': 0.5, 'Light': 0 },
-    'Steel': { 'Ice': 2, 'Rock': 2, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Steel': 0.5, 'Fairy': 2, 'Poison': 2 },
-    'Psychic': { 'Fighting': 2, 'Poison': 2, 'Dark': 0.5, 'Steel': 0.5, 'Psychic': 0.5, 'Ghost': 1 },
-    'Rock': { 'Fire': 2, 'Ice': 2, 'Air': 2, 'Water': 0.5, 'Grass': 0.5, 'Fighting': 0.5, 'Steel': 0.5, 'Bug': 2 },
-    'Ghost': { 'Psychic': 2, 'Ghost': 2, 'Dark': 0.5, 'Normal': 0, 'Fighting': 0 },
-    'Poison': { 'Grass': 2, 'Fairy': 2, 'Poison': 0.5, 'Ground': 0.5, 'Rock': 0.5, 'Ghost': 0.5, 'Steel': 0, 'Bug': 1 },
-    'Ground': { 'Fire': 2, 'Electric': 2, 'Poison': 2, 'Rock': 2, 'Steel': 2, 'Water': 0.5, 'Grass': 0.5, 'Ice': 0.5, 'Air': 0 },
-    'Dragon': { 'Dragon': 2, 'Steel': 0.5, 'Fairy': 0, 'Fire': 1, 'Water': 1, 'Grass': 1, 'Electric': 1 },
-    'Fairy': { 'Fighting': 2, 'Dark': 2, 'Dragon': 2, 'Fire': 0.5, 'Poison': 0.5, 'Steel': 0.5, 'Bug': 1 },
-    'Light': { 'Dark': 2, 'Ghost': 2, 'Light': 0.5, 'Psychic': 1, 'Fairy': 1 },
-    'Normal': { 'Rock': 0.5, 'Steel': 0.5, 'Ghost': 0, 'Fighting': 1 }
-};
-
-// Move pool with OHKO moves
-const movePool = {
-    'Fire': ['Ember', 'Fire Punch', 'Flame Burst', 'Flamethrower', 'Fire Blast', 'Heat Wave', 'Blaze Kick', 'Inferno', 'Flare Blitz', 'Eruption', 'Fire Spin', 'Flame Wheel', 'Lava Plume', 'Searing Shot', 'V-create', 'Blast Burn', 'Magma Storm', 'Pyro Ball', '🔥 INFERNO OVERDRIVE (OHKO)'],
-    'Water': ['Water Gun', 'Aqua Jet', 'Bubble Beam', 'Hydro Pump', 'Surf', 'Scald', 'Waterfall', 'Crabhammer', 'Liquidation', 'Origin Pulse', 'Brine', 'Dive', 'Whirlpool', 'Aqua Tail', 'Hydro Cannon', 'Steam Eruption', 'Sparkling Aria', '🌊 ABYSSAL DEPTHS (OHKO)'],
-    'Grass': ['Razor Leaf', 'Seed Bomb', 'Vine Whip', 'Energy Ball', 'Leaf Storm', 'Solar Beam', 'Petal Dance', 'Wood Hammer', 'Grass Knot', 'Frenzy Plant', 'Bullet Seed', 'Magical Leaf', 'Giga Drain', 'Power Whip', 'Seed Flare', 'Spore', 'Sleep Powder', '🌿 FOREST JUDGMENT (OHKO)'],
-    'Air': ['Gust', 'Air Cutter', 'Wing Attack', 'Hurricane', 'Aerial Ace', 'Brave Bird', 'Drill Peck', 'Sky Attack', 'Fly', 'Air Slash', 'Tailwind', 'Defog', 'Peck', 'Pluck', 'Dual Wingbeat', 'Bounce', 'Acrobatics', '💨 SKY SHATTER (OHKO)'],
-    'Electric': ['Thunder Shock', 'Spark', 'Electro Ball', 'Thunderbolt', 'Thunder', 'Volt Tackle', 'Wild Charge', 'Discharge', 'Zap Cannon', 'Plasma Fists', 'Shock Wave', 'Charge Beam', 'Volt Switch', 'Electroweb', 'Bolt Strike', 'Fusion Bolt', 'Thunder Fang', '⚡ MEGA LIGHTNING (OHKO)'],
-    'Ice': ['Powder Snow', 'Ice Punch', 'Icy Wind', 'Ice Beam', 'Blizzard', 'Avalanche', 'Ice Fang', 'Glaciate', 'Freeze-Dry', 'Ice Shard', 'Icicle Crash', 'Icicle Spear', 'Frost Breath', 'Glacial Lance', 'Ice Hammer', 'Triple Axel', 'Sheer Cold', '❄️ ABSOLUTE ZERO (OHKO)'],
-    'Fighting': ['Low Kick', 'Karate Chop', 'Focus Punch', 'Close Combat', 'Dynamic Punch', 'Mach Punch', 'Sky Uppercut', 'Cross Chop', 'Superpower', 'Sacred Sword', 'Brick Break', 'Drain Punch', 'Reversal', 'Storm Throw', 'Aura Sphere', 'Circle Throw', 'Secret Sword', '👊 ONE-INCH PUNCH (OHKO)'],
-    'Dark': ['Bite', 'Sucker Punch', 'Night Slash', 'Dark Pulse', 'Crunch', 'Foul Play', 'Throat Chop', 'Knock Off', 'Beat Up', 'Night Daze', 'Pursuit', 'Snarl', 'Darkest Lariat', 'Jaw Lock', 'Fiery Wrath', 'Obstruct', 'Wicked Blow', '🌑 MIDNIGHT REAPER (OHKO)'],
-    'Psychic': ['Confusion', 'Psybeam', 'Zen Headbutt', 'Psychic', 'Future Sight', 'Psystrike', 'Luster Purge', 'Mist Ball', 'Extrasensory', 'Psycho Cut', 'Miracle Eye', 'Psycho Boost', 'Synchronoise', 'Prismatic Laser', 'Heart Swap', 'Hyperspace Hole', 'Photon Geyser', '🔮 MIND BREAK (OHKO)'],
-    'Dragon': ['Dragon Breath', 'Dragon Claw', 'Dragon Pulse', 'Outrage', 'Draco Meteor', 'Dragon Rush', 'Dragon Tail', 'Spacial Rend', 'Roar of Time', 'Dragon Dance', 'Scale Shot', 'Breaking Swipe', 'Clanging Scales', 'Dynamax Cannon', 'Eternabeam', 'Core Enforcer', '🐉 DRAGON\'S WRATH (OHKO)'],
-    'Steel': ['Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam', 'Meteor Mash', 'Bullet Punch', 'Gyro Ball', 'Steel Beam', 'Doom Desire', 'Sunsteel Strike', 'Iron Tail', 'Magnet Bomb', 'Mirror Shot', 'Smart Strike', 'King\'s Shield', 'Anchor Shot', 'Double Iron Bash', '⚙️ METAL CRUSHER (OHKO)'],
-    'Fairy': ['Fairy Wind', 'Dazzling Gleam', 'Moonblast', 'Play Rough', 'Spirit Break', 'Fleur Cannon', 'Misty Explosion', 'Strange Steam', 'Draining Kiss', 'Disarming Voice', 'Sweet Kiss', 'Crafty Shield', 'Floral Healing', 'Sparkly Swirl', 'Magical Torque', 'Springtide Storm', '✨ FAIRY\'S BLESSING (OHKO)'],
-    'Rock': ['Rock Throw', 'Rock Slide', 'Stone Edge', 'Power Gem', 'Ancient Power', 'Head Smash', 'Rock Blast', 'Accelerock', 'Meteor Beam', 'Rock Tomb', 'Smack Down', 'Stealth Rock', 'Wide Guard', 'Diamond Storm', 'Continental Crush', 'Splintered Stormshards', '💎 WORLD BREAKER (OHKO)'],
-    'Ghost': ['Lick', 'Shadow Ball', 'Night Shade', 'Shadow Claw', 'Poltergeist', 'Phantom Force', 'Astral Barrage', 'Spectral Thief', 'Shadow Sneak', 'Hex', 'Shadow Punch', 'Grudge', 'Destiny Bond', 'Astonish', 'Soul Stealing Strike', 'Menacing Moonraze Maelstrom', '👻 SOUL REAPER (OHKO)'],
-    'Poison': ['Poison Sting', 'Sludge Bomb', 'Toxic', 'Poison Jab', 'Gunk Shot', 'Venoshock', 'Cross Poison', 'Sludge Wave', 'Belch', 'Acid', 'Acid Spray', 'Clear Smog', 'Poison Fang', 'Baneful Bunker', 'Barb Barrage', 'Malignant Chain', '☠️ FATAL VENOM (OHKO)'],
-    'Ground': ['Mud Slap', 'Earth Power', 'Sand Tomb', 'Earthquake', 'Dig', 'Bone Rush', 'Bulldoze', 'High Horsepower', 'Precipice Blades', 'Mud Bomb', 'Mud Shot', 'Drill Run', 'Sand Attack', 'Shore Up', 'Land\'s Wrath', 'Tectonic Rage', '🌍 CORE IMPLOSION (OHKO)'],
-    'Bug': ['Fury Cutter', 'X-Scissor', 'Signal Beam', 'Bug Buzz', 'Megahorn', 'Leech Life', 'First Impression', 'U-turn', 'Attack Order', 'Bug Bite', 'String Shot', 'Defend Order', 'Heal Order', 'Pollen Puff', 'Savage Spin-Out', 'Lunge', '🦗 PLAGUE SWARM (OHKO)'],
-    'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst', 'Prismatic Beam', 'Radiant Blast', 'Holy Light', 'Dazzling Flash', 'Light of Ruin', 'Sunny Day', 'Morning Sun', 'Spotlight', 'Luster Purge', 'Light That Burns The Sky', '☀️ DIVINE JUDGMENT (OHKO)'],
-    'Normal': ['Tackle', 'Pound', 'Scratch', 'Quick Attack', 'Body Slam', 'Hyper Voice', 'Tri Attack', 'Double-Edge', 'Giga Impact', 'Extreme Speed', 'Cut', 'Strength', 'Flash', 'Metronome', 'Judgment', 'Explosion', 'Self-Destruct', '💥 FATAL END (OHKO)']
-};
-
-// Cross-type move access
-const crossTypeMoves = {
-    'Fire': ['Fighting', 'Dark', 'Dragon', 'Light', 'Normal'],
-    'Water': ['Ice', 'Ground', 'Dark', 'Normal', 'Rock'],
-    'Grass': ['Poison', 'Bug', 'Water', 'Ground', 'Normal'],
-    'Air': ['Electric', 'Fire', 'Normal', 'Fighting', 'Dragon'],
-    'Electric': ['Steel', 'Air', 'Light', 'Psychic', 'Normal'],
-    'Ice': ['Water', 'Dragon', 'Fighting', 'Psychic', 'Normal'],
-    'Fighting': ['Rock', 'Dark', 'Normal', 'Steel', 'Ground'],
-    'Dark': ['Ghost', 'Psychic', 'Fighting', 'Poison', 'Normal'],
-    'Psychic': ['Fairy', 'Fighting', 'Dark', 'Electric', 'Normal'],
-    'Dragon': ['Fire', 'Electric', 'Water', 'Normal', 'Dragon'],
-    'Steel': ['Rock', 'Ground', 'Fighting', 'Electric', 'Normal'],
-    'Fairy': ['Psychic', 'Grass', 'Light', 'Dragon', 'Normal'],
-    'Rock': ['Ground', 'Steel', 'Fighting', 'Water', 'Normal'],
-    'Ghost': ['Dark', 'Psychic', 'Poison', 'Normal', 'Fairy'],
-    'Poison': ['Grass', 'Bug', 'Dark', 'Normal', 'Ground'],
-    'Ground': ['Rock', 'Fighting', 'Steel', 'Normal', 'Fire'],
-    'Bug': ['Grass', 'Poison', 'Fighting', 'Dark', 'Normal'],
-    'Light': ['Fire', 'Electric', 'Psychic', 'Fairy', 'Normal'],
-    'Normal': ['Fighting', 'Normal', 'Rock', 'Steel', 'Dark']
-};
-
-// Cross-type bonus moves
-const crossTypeBonuses = {
-    'Fire': ['Thunder Punch', 'Ice Punch', 'Drain Punch', 'Solar Beam', 'Earthquake'],
-    'Water': ['Blizzard', 'Ice Punch', 'Muddy Water', 'Dark Pulse', 'Dragon Pulse'],
-    'Grass': ['Poison Jab', 'Bug Buzz', 'Mud Shot', 'Water Pulse', 'Rock Slide'],
-    'Air': ['Heat Wave', 'Thunderbolt', 'Shadow Ball', 'Flash Cannon', 'Hurricane'],
-    'Electric': ['Magnet Bomb', 'Flash Cannon', 'Signal Beam', 'Power Gem', 'Focus Blast'],
-    'Ice': ['Water Pulse', 'Shadow Ball', 'Aura Sphere', 'Psychic', 'Flash Cannon'],
-    'Fighting': ['Rock Slide', 'Earthquake', 'Sucker Punch', 'Shadow Claw', 'Iron Head'],
-    'Dark': ['Shadow Ball', 'Sludge Bomb', 'Focus Blast', 'Iron Tail', 'Psycho Cut'],
-    'Psychic': ['Dazzling Gleam', 'Aura Sphere', 'Dark Pulse', 'Flash Cannon', 'Energy Ball'],
-    'Dragon': ['Flamethrower', 'Thunderbolt', 'Surf', 'Ice Beam', 'Shadow Ball'],
-    'Steel': ['Rock Blast', 'Earthquake', 'Thunder Punch', 'Ice Punch', 'Fire Punch'],
-    'Fairy': ['Psychic', 'Moonblast', 'Energy Ball', 'Shadow Ball', 'Thunderbolt'],
-    'Rock': ['Earthquake', 'Iron Head', 'Stone Edge', 'Body Slam', 'Superpower'],
-    'Ghost': ['Dark Pulse', 'Shadow Ball', 'Psychic', 'Focus Blast', 'Energy Ball'],
-    'Poison': ['Sludge Bomb', 'Venoshock', 'Dark Pulse', 'Shadow Ball', 'Energy Ball'],
-    'Ground': ['Earthquake', 'Rock Slide', 'Iron Head', 'Superpower', 'Stone Edge'],
-    'Bug': ['Bug Buzz', 'Signal Beam', 'Shadow Ball', 'Energy Ball', 'Sludge Bomb'],
-    'Light': ['Solar Beam', 'Flamethrower', 'Thunderbolt', 'Flash Cannon', 'Psychic'],
-    'Normal': ['Strength', 'Earthquake', 'Shadow Ball', 'Dark Pulse', 'Iron Head']
-};
-
-// Special unique moves
-const specialMoves = {
-    'Ultra Instinct Element': ['Counter', 'Heal Punch', '大爆発', 'Ultra Punch', 'Instant Strike', 'Divine Wrath', 'God Speed', 'Pressure', 'Limit Break', 'Mega Punch', 'Kaioken', 'Final Flash', 'Solar Flare', 'Instant Transmission', 'Spirit Bomb', '👊 ULTRA INSTINCT (OHKO)'],
-    'Star Forge': ['Forge', 'Metal Claw', 'Iron Head', 'Flash Cannon', 'Heavy Slam', 'Celestial Hammer', 'Starfall', 'Cosmic Power', 'Supernova', 'Gravity Well', 'Meteor Shower', 'Constellation Strike', '⭐ STAR FORGE (OHKO)'],
-    'Bug Finder': ['Find', 'Bug', 'Infestation', 'Signal Beam', 'Leech Life', 'X-Scissor', 'Toxic Web', 'Parasite Strike', 'Debug', 'Scan', 'Analyze', 'Vulnerability Exploit', 'System Crash', '🐛 DEBUG DELETE (OHKO)'],
-    'Black Hole': ['Singularity', 'Gravity Pull', 'Event Horizon', 'Absorb Light', 'Dark Pulse', 'Void Collapse', 'Spatial Rend', 'Massive Pull', 'Time Dilation', 'Consume', 'Gravitational Wave', 'Dark Matter Burst', '🕳️ VOID ANNIHILATION (OHKO)'],
-    'iPad': ['Screen Protector', 'Charge', 'Reset', 'Shock', 'Overload', 'App Crash', 'Reboot', 'Factory Reset', 'AirDrop', 'Screenshot', 'Power Save', 'High Performance Mode', '📱 BRICK (OHKO)'],
-    'Light': ['Flash', 'Beam', 'Photon Blast', 'Solar Flare', 'Light Burst', 'Radiant Blast', 'Holy Light', 'Dazzling Flash', 'Light of Ruin', 'Prism Beam', 'Reflection', 'Solar Wind', 'Photon Wave', '💫 LIGHT OF CREATION (OHKO)'],
-    'Null': ['Void Touch', 'Erase', 'Oblivion', 'Nullify', 'Darkness', 'Nothingness', 'Absolute Zero', 'Paradox', 'Delete', 'Corrupt', 'Void Rift', 'Null Pointer', 'Division By Zero', '🖤 NULL EXISTENCE (OHKO)'],
-    'Permafrost': ['Frozen Shield', 'Ice Age', 'Permafrost Armor', 'Glacier', 'Absolute Zero', 'Eternal Frost', 'Cryo Prison', 'Permafrost Spear', 'Frozen Ground', 'Ice Age', 'Glacial Wall', 'Permafrost Tomb', '🧊 ETERNAL FREEZE (OHKO)']
-};
-
-function isEverythingElement(el) {
-    return el.isEverything === true;
-}
-
-function getElementType(el) {
-    const name = el.name;
-    
-    if (isEverythingElement(el)) return 'Dragon';
-    if (name === 'Black Hole') return 'Dark';
-    if (name === 'Light') return 'Light';
-    if (name === 'Null') return 'Dark';
-    if (name === 'Star Forge') return 'Steel';
-    if (name === 'Bug Finder') return 'Bug';
-    if (name === 'Ultra Instinct Element') return 'Fighting';
-    if (name === 'Permafrost') return 'Ice';
-    if (name === 'iPad' || name === 'iPhone' || name === 'Computer') return 'Electric';
-    
-    if (el.isInfernal) return 'Fire';
-    if (el.isHot) return 'Fire';
-    if (el.isFrozen) return 'Ice';
-    if (el.isPermafrost) return 'Ice';
-    if (el.isVoid) return 'Dark';
-    if (el.isCursed) return 'Dark';
-    if (el.isCorrupted) return 'Dark';
-    if (el.isBlessed) return 'Fairy';
-    if (el.isHoly) return 'Fairy';
-    if (el.isDivine) return 'Fairy';
-    if (el.isCelestial) return 'Fairy';
-    if (el.isGolden) return 'Steel';
-    if (el.isCrystalline) return 'Rock';
-    if (el.isLegendary) return 'Dragon';
-    if (el.isAncient) return 'Rock';
-    if (el.isAbyssal) return 'Water';
-    if (el.isElectric) return 'Electric';
-    if (el.isMagnetic) return 'Steel';
-    if (el.isTemporal) return 'Psychic';
-    if (el.isEthereal) return 'Ghost';
-    if (el.isPhantom) return 'Ghost';
-    if (el.isRadioactive) return 'Poison';
-    if (el.isToxic) return 'Poison';
-    if (el.isViral) return 'Poison';
-    if (el.isParasitic) return 'Bug';
-    if (el.isAntimatter) return 'Dark';
-    
-    return 'Normal';
-}
-
-function getElementMoves(el) {
-    const name = el.name;
-    
-    if (isEverythingElement(el)) {
-        return ['EVERYTHING STRIKE', 'UNIVERSE BREAKER', 'OMNI SLASH', 'GODLY PRESENCE', 'INFINITY BURST', 'REALITY SHATTER', 'DIMENSION TEAR', 'COSMIC RAGE', '⭐ TOTAL OBLITERATION (OHKO)', 'Struggle'];
-    }
-    
-    if (specialMoves[name]) {
-        const extraMoves = [];
-        const mainType = getElementType(el);
-        if (crossTypeBonuses[mainType]) {
-            extraMoves.push(...crossTypeBonuses[mainType]);
-        }
-        return [...new Set([...specialMoves[name], ...extraMoves, 'Struggle'])];
-    }
-    
-    const mainType = getElementType(el);
-    const availableTypes = [mainType];
-    
-    if (crossTypeMoves[mainType]) {
-        availableTypes.push(...crossTypeMoves[mainType]);
-    }
-    
-    if (el.isHot || el.isInfernal) availableTypes.push('Fire');
-    if (el.isFrozen || el.isPermafrost) availableTypes.push('Ice');
-    if (el.isElectric) availableTypes.push('Electric');
-    if (el.isLegendary) { availableTypes.push('Dragon'); availableTypes.push('Fighting'); }
-    if (el.isDivine || el.isHoly) { availableTypes.push('Fairy'); availableTypes.push('Light'); }
-    if (el.isDark || el.isVoid || el.isCursed) availableTypes.push('Dark');
-    if (el.isGhost || el.isPhantom || el.isEthereal) availableTypes.push('Ghost');
-    if (el.isPoison || el.isRadioactive || el.isToxic) availableTypes.push('Poison');
-    if (el.isBug || el.isParasitic) availableTypes.push('Bug');
-    if (el.isPsychic || el.isTemporal) availableTypes.push('Psychic');
-    if (el.isSteel || el.isGolden || el.isMagnetic) availableTypes.push('Steel');
-    if (el.isRock || el.isCrystalline || el.isAncient) availableTypes.push('Rock');
-    if (el.isGround) availableTypes.push('Ground');
-    if (el.isDragon) availableTypes.push('Dragon');
-    if (el.isFighting) availableTypes.push('Fighting');
-    if (el.isWater || el.isAbyssal) availableTypes.push('Water');
-    if (el.isGrass) availableTypes.push('Grass');
-    if (el.isAir) availableTypes.push('Air');
-    
-    const uniqueTypes = [...new Set(availableTypes)];
-    
-    let moves = [];
-    for (const type of uniqueTypes) {
-        if (movePool[type]) {
-            moves.push(...movePool[type]);
-        }
-        if (crossTypeBonuses[type]) {
-            moves.push(...crossTypeBonuses[type]);
-        }
-    }
-    
-    moves = [...new Set(moves)];
-    
-    if (moves.length < 8) {
-        moves.push(...movePool['Normal']);
-        if (crossTypeBonuses['Normal']) moves.push(...crossTypeBonuses['Normal']);
-        moves = [...new Set(moves)];
-    }
-    
-    const moveCount = Math.min(8, Math.max(6, moves.length));
-    // Online move pools must be identical when each peer recomputes a team.
-    const moveKey=m=>{let h=2166136261;for(const c of name+'|'+m)h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0;};
-    const shuffled = online.mode ? [...moves].sort((a,b)=>moveKey(a)-moveKey(b)) : [...moves].sort(() => Math.random() - 0.5);
-    const selectedMoves = shuffled.slice(0, moveCount);
-    
-    if (!selectedMoves.includes('Struggle')) {
-        selectedMoves.push('Struggle');
-    }
-    
-    return selectedMoves;
-}
-
-function getElementStats(el) {
-    const name = el.name;
-    
-    if (isEverythingElement(el)) {
-        return {
-            hp: 110,
-            atk: 85,
-            def: 85,
-            speed: 85,
-            moves: getElementMoves(el),
-            isEverything: true
-        };
-    }
-    
-    const specialStats = {
-        'Star Forge': { hp: 130, atk: 105, def: 100, speed: 70 },
-        'Bug Finder': { hp: 100, atk: 85, def: 75, speed: 120 },
-        'Ultra Instinct Element': { hp: 140, atk: 115, def: 85, speed: 160, dodgeCount: 5, canOnlyUseOne: true },
-        'iPad': { hp: 70, atk: 40, def: 50, speed: 45, passive: 'screenProtector' },
-        'Black Hole': { hp: 160, atk: 60, def: 130, speed: 35, passive: 'lightAbsorber' },
-        'Light': { hp: 85, atk: 80, def: 55, speed: 150 },
-        'Null': { hp: 110, atk: 85, def: 95, speed: 70 },
-        'Permafrost': { hp: 150, atk: 50, def: 120, speed: 30, isPermafrostType: true }
-    };
-    
-    if (specialStats[name]) {
-        return { ...specialStats[name], moves: getElementMoves(el) };
-    }
-    
-    let hp = 90;
-    let atk = 65;
-    let def = 65;
-    let speed = 65;
-    
-    if (el.isFinal) { hp += 25; atk += 25; def += 25; }
-    if (el.isSecret) { atk += 20; speed += 15; }
-    if (el.isLegendary) { hp += 20; atk += 20; def += 20; speed += 15; }
-    if (el.isDivine) { hp += 25; atk += 15; def += 20; speed += 15; }
-    if (el.isHot) { atk += 20; def -= 5; speed += 10; }
-    if (el.isFrozen) { def += 25; speed -= 10; hp += 10; }
-    if (el.isPermafrost) { def += 35; hp += 25; speed -= 15; }
-    if (el.isElectric) { speed += 20; atk += 10; }
-    if (el.isDragon) { hp += 15; atk += 15; }
-    if (el.isDark || el.isVoid) { atk += 10; def += 10; }
-    if (el.isGhost) { speed += 15; def += 5; }
-    if (el.isPoison) { hp += 10; def += 10; }
-    if (el.isBug) { speed += 15; atk += 5; }
-    if (el.isPsychic) { atk += 15; speed += 10; }
-    if (el.isSteel) { def += 20; hp += 10; }
-    if (el.isRock) { def += 15; hp += 15; speed -= 5; }
-    if (el.isGround) { hp += 15; atk += 10; }
-    if (el.isFairy) { hp += 10; def += 10; speed += 10; }
-    if (el.isFighting) { atk += 20; hp += 10; }
-    if (el.isWater) { hp += 10; def += 10; }
-    if (el.isGrass) { hp += 10; speed += 5; }
-    if (el.isAir) { speed += 20; def -= 5; }
-    
-    return { hp, atk, def, speed, moves: getElementMoves(el) };
-}
-
-function calculateDamageMultiplier(attacker, defender) {
-    const atkName = attacker.name;
-    const defName = defender.name;
-    
-    if (atkName === 'Black Hole' && defName === 'Light') return 4;
-    if (defName === 'Black Hole' && atkName === 'Light') return 0;
-    
-    const atkType = getElementType(attacker);
-    const defType = getElementType(defender);
-    
-    let mult = typeEffectiveness[atkType]?.[defType] || 1;
-    
-    if (defender.isPermafrost) mult *= 0.9;
-    
-    return mult;
-}
-
-function addBattleLog(msg, type) {
-    const log = document.getElementById('battleLog');
-    if (!log) return;
-    const colors = { damage: '#ef4444', skill: '#a855f7', system: '#eab308', dodge: '#14b8a6', block: '#60a5fa', everything: '#00ffc8', ohko: '#ff00ff' };
-    const p = document.createElement('p');
-    p.style.color = colors[type] || '#888';
-    p.dataset.event=type;
-    p.textContent = msg;
-    log.appendChild(p);
-    while(log.children.length>150)log.firstElementChild.remove();
-    log.scrollTop = log.scrollHeight;
-}
-
-function showOHKOAnimation(moveName, attackerName, defenderName, success) {
-    const panel=document.getElementById('battleFinisher');
-    const message=battleMoveName(moveName)+' · '+(success?'FINISHER CONNECTED':'FINISHER EVADED');
-    if(panel){panel.hidden=false;panel.textContent=message;clearTimeout(panel.hideTimer);panel.hideTimer=setTimeout(()=>{panel.hidden=true;},2200);}
-    addBattleLog(message+' — '+attackerName+' challenged '+defenderName+'.','ohko');
-}
-
-function decodeBattleCode(code) {
-    try {
-        const decoded = decodeURIComponent(escape(atob(code)));
-        return JSON.parse(decoded);
-    } catch(e) {
-        throw new Error('Invalid battle code: ' + e.message);
-    }
-}
-
-window.generateBattleCode = function() {
-    const battleElements = elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
-    const exportData = {
-        elements: battleElements.map(el => ({
-            name: el.name,
-            emoji: el.emoji,
-            description: el.description,
-            isEverything: el.isEverything || false,
-            isFinal: el.isFinal,
-            isSecret: el.isSecret,
-            isLegendary: el.isLegendary,
-            isDivine: el.isDivine,
-            isHot: el.isHot,
-            isFrozen: el.isFrozen,
-            isPermafrost: el.isPermafrost,
-            isElectric: el.isElectric,
-            isDragon: el.isDragon,
-            isDark: el.isDark,
-            isVoid: el.isVoid,
-            isGhost: el.isGhost,
-            isPoison: el.isPoison,
-            isBug: el.isBug,
-            isPsychic: el.isPsychic,
-            isSteel: el.isSteel,
-            isRock: el.isRock,
-            isGround: el.isGround,
-            isFairy: el.isFairy,
-            isFighting: el.isFighting,
-            isWater: el.isWater,
-            isGrass: el.isGrass,
-            isAir: el.isAir,
-            isIce: el.isIce,
-            isCursed: el.isCursed,
-            isBlessed: el.isBlessed,
-            isHoly: el.isHoly,
-            isCelestial: el.isCelestial
-        })),
-        version: '2.0'
-    };
-    const jsonStr = JSON.stringify(exportData);
-    return btoa(unescape(encodeURIComponent(jsonStr)));
-};
-
-function initElementForBattle(el) {
-    const stats = getElementStats(el);
-    el.currentHp = stats.hp;
-    el.maxHp = stats.hp;
-    el.baseAtk = stats.atk;
-    el.baseDef = stats.def;
-    el.baseSpeed = stats.speed;
-    el.availableMoves = stats.moves;
-    el.isEverything = stats.isEverything || false;
-    if (stats.dodgeCount) el.dodgesLeft = stats.dodgeCount;
-    if (stats.canOnlyUseOne) el.canOnlyUseOne = stats.canOnlyUseOne;
-    if (stats.passive) el.passive = stats.passive;
-    if (el.name === 'iPad') el.screenProtector = true;
-    return el;
-}
-
-function loadPlayerElements(num, code) {
-    try {
-        const data = decodeBattleCode(code);
-        const els = data.elements.filter(e => !e.isFrozen && !e.isPermafrost && !e.isError);
-        
-        els.forEach(el => {
-            initElementForBattle(el);
-        });
-        
-        if (num === 1) {
-            battleState.p1Elements = els;
-            document.getElementById('p1Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
-            battleState.p1Ready = true;
-            battleState.p1Team = [];
-            battleState.p1Moves = {};
-            updateTeamDisplay(1);
-        } else {
-            battleState.p2Elements = els;
-            document.getElementById('p2Elements').innerHTML = `<div class="text-green-500">✓ Loaded ${els.length} elements. Click on elements to select for battle!</div>`;
-            battleState.p2Ready = true;
-            battleState.p2Team = [];
-            battleState.p2Moves = {};
-            updateTeamDisplay(2);
-        }
-        document.getElementById('startBattleBtn').disabled = !(battleState.p1Ready && battleState.p2Ready);
-    } catch(e) {
-        const err = `<div class="text-red-500">✗ ${e.message}</div>`;
-        if (num === 1) {
-            document.getElementById('p1Elements').innerHTML = err;
-            battleState.p1Ready = false;
-        } else {
-            document.getElementById('p2Elements').innerHTML = err;
-            battleState.p2Ready = false;
-        }
-        document.getElementById('startBattleBtn').disabled = true;
-    }
-}
-
-function updateTeamDisplay(player) {
-    const team = player === 1 ? battleState.p1Team : battleState.p2Team;
-    const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
-    const container = document.getElementById(player === 1 ? 'p1Team' : 'p2Team');
-    if (container) {
-        container.innerHTML = '';
-        els.forEach(e => {
-            const btn = document.createElement('button');
-            const isSelected = team.includes(e);
-            const everythingBadge = e.isEverything ? '⭐' : '';
-            btn.textContent = `${e.emoji} ${e.name} ${everythingBadge}${e.canOnlyUseOne ? ' (ONLY)' : ''}`;
-            btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isSelected ? 'bg-green-500 text-white' : 'bg-gray-500 text-white opacity-60'}`;
-            if (e.isEverything) btn.style.boxShadow = '0 0 8px #00ffc8';
-            btn.onclick = () => selectTeam(player, e.name);
-            container.appendChild(btn);
-        });
-    }
-}
-
-function selectTeam(player, name) {
-    if(online.mode && (player!==online.side || online.ready))return;
-    const team = player === 1 ? battleState.p1Team : battleState.p2Team;
-    const els = player === 1 ? battleState.p1Elements : battleState.p2Elements;
-    const el = els.find(e => e.name === name);
-    if (!el) return;
-    
-    const isSelected = team.includes(el);
-    
-    if (el.name === 'Ultra Instinct Element' && !isSelected) {
-        team.length = 0;
-        team.push(el);
-        addBattleLog(`Player ${player} selected ${el.name}! Only one element can be used!`, 'system');
-        updateTeamDisplay(player);
-        showMoveSelection(player);
-        return;
-    }
-    
-    if (team.some(e => e.name === 'Ultra Instinct Element') && !isSelected) {
-        addBattleLog(`Cannot add more elements while ${team[0].name} is selected!`, 'system');
-        return;
-    }
-    
-    if (isSelected) {
-        const idx = team.indexOf(el);
-        team.splice(idx, 1);
-        delete battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name];
-        addBattleLog(`Player ${player} removed ${el.name} from team`, 'system');
-    } else if (team.length < 3) {
-        team.push(el);
-        addBattleLog(`Player ${player} added ${el.name} to team`, 'system');
-        if (el.isEverything) addBattleLog(`⭐ ${el.name} is an EVERYTHING element! Massively boosted stats!`, 'everything');
-    } else {
-        addBattleLog(`Player ${player} - can only select 3 elements!`, 'system');
-        return;
-    }
-    updateTeamDisplay(player);
-    showMoveSelection(player);
-}
-
-function showMoveSelection(player) {
-    const team = player === 1 ? battleState.p1Team : battleState.p2Team;
-    const movesContainer = document.getElementById(player === 1 ? 'p1MoveSelect' : 'p2MoveSelect');
-    if (!movesContainer) return;
-    
-    if (team.length === 0) {
-        movesContainer.innerHTML = '<div class="text-center text-sm italic p-3" style="color:var(--text-secondary)">Select elements first</div>';
-        return;
-    }
-    
-    movesContainer.innerHTML = '<div class="text-center text-sm font-bold mb-2">Select 4 moves for each element (click to select):</div>';
-    
-    team.forEach(el => {
-        const div = document.createElement('div');
-        div.className = 'mb-3 p-2 rounded-lg';
-        div.style.background = 'rgba(0,0,0,0.05)';
-        const everythingBadge = el.isEverything ? ' ⭐ EVERYTHING ⭐' : '';
-        div.innerHTML = `<div class="font-semibold mb-1">${el.emoji} ${el.name}${everythingBadge}</div><div class="flex flex-wrap gap-1" id="moves-${player}-${el.name.replace(/[^a-z0-9]/gi, '_')}"></div>`;
-        movesContainer.appendChild(div);
-        
-        const movesDiv = div.querySelector(`[id^="moves-${player}-"]`);
-        const selectedMoves = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
-        
-        const availableMoves = [...new Set([...el.availableMoves, 'Struggle'])];
-        
-        availableMoves.forEach(move => {
-            const isSelected = selectedMoves.includes(move);
-            const isOHKO = move.includes('(OHKO)');
-            const btn = document.createElement('button');
-            btn.textContent = battleMoveName(move);
-            btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isSelected ? 'bg-green-500 text-white' : (isOHKO ? 'bg-pink-600 text-white opacity-80 hover:opacity-100' : 'bg-purple-500 text-white opacity-60 hover:opacity-100')}`;
-            if (isOHKO) btn.style.boxShadow = '0 0 5px #ff00ff';
-            btn.onclick = () => {
-                const currentSelected = battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] || [];
-                if(online.mode&&(online.ready||player!==online.side))return;
-                if (currentSelected.includes(move)) {
-                    const idx = currentSelected.indexOf(move);
-                    currentSelected.splice(idx, 1);
-                    battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
-                    btn.className = `text-xs px-2 py-1 rounded-lg m-1 ${isOHKO ? 'bg-pink-600 text-white opacity-80' : 'bg-purple-500 text-white opacity-60'}`;
-                } else if (currentSelected.length < 4) {
-                    currentSelected.push(move);
-                    battleState[player === 1 ? 'p1Moves' : 'p2Moves'][el.name] = currentSelected;
-                    btn.className = 'text-xs px-2 py-1 rounded-lg m-1 bg-green-500 text-white';
-                } else {
-                    addBattleLog(`Can only select 4 moves for ${el.name}!`, 'system');
-                }
-            };
-            movesDiv.appendChild(btn);
-        });
-    });
-}
-
-let battleState = {
-    active: false, moveSelection: true,
-    p1Elements: [], p2Elements: [], p1Team: [], p2Team: [],
-    p1Current: null, p2Current: null,
-    p1Ready: false, p2Ready: false,
-    p1Moves: {}, p2Moves: {},
-    turn: 'p1',
-    p1AtkBoost: 1, p2AtkBoost: 1,
-    p1DefBoost: 1, p2DefBoost: 1,
-    p1FindUsed: false, p2FindUsed: false,
-    p1BugActive: false, p2BugActive: false,
-    p1CounterLocked: false, p2CounterLocked: false
-};
-
-function updateBattleUI() {
-    const banner=document.getElementById('battleTurnBanner');
-    if(banner)banner.textContent=battleState.active?(battleState.turn==='p1'?'Player 1':'Player 2')+' · Choose your next move':'Match complete';
-    const p1 = battleState.p1Current;
-    const p2 = battleState.p2Current;
-    
-    if (p1) {
-        const hpPercent = Math.max(0, (p1.currentHp / p1.maxHp) * 100);
-        const hpFill = document.getElementById('p1HpFill');
-        if (hpFill) hpFill.style.width = `${hpPercent}%`;
-        const activeDiv = document.getElementById('p1Active');
-        const everythingBadge = p1.isEverything ? ' ⭐ EVERYTHING ⭐' : '';
-        if (activeDiv) {
-            activeDiv.innerHTML = `${p1.emoji} ${p1.name}${everythingBadge}<br><span class="text-xs">HP: ${Math.max(0, p1.currentHp)}/${p1.maxHp}</span>`;
-            if (p1.isEverything) activeDiv.style.boxShadow = '0 0 15px #00ffc8';
-        }
-        const statsDiv = document.getElementById('p1Stats');
-        if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p1AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p1DefBoost * 100)}%`;
-        
-        const skillsDiv = document.getElementById('p1Skills');
-        if (skillsDiv) {
-            skillsDiv.innerHTML = '';
-            const moves = battleState.p1Moves[p1.name] || p1.availableMoves.slice(0, 4);
-            moves.forEach(s => {
-                const isOHKO = s.includes('(OHKO)');
-                const btn = document.createElement('button');
-                btn.textContent = battleMoveName(s);
-                btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isOHKO ? 'bg-pink-600 text-white hover:bg-pink-700 animate-pulse' : 'bg-purple-500 text-white hover:bg-purple-600'}`;
-                if (isOHKO) btn.style.boxShadow = '0 0 8px #ff00ff';
-                btn.classList.add('battle-skill');if(isOHKO)btn.classList.add('ohko-skill');
-                btn.disabled=!battleCanAct(1);
-                btn.onclick = () => useSkill(s, 1);
-                skillsDiv.appendChild(btn);
-            });
-        }
-    }
-    
-    if (p2) {
-        const hpPercent = Math.max(0, (p2.currentHp / p2.maxHp) * 100);
-        const hpFill = document.getElementById('p2HpFill');
-        if (hpFill) hpFill.style.width = `${hpPercent}%`;
-        const activeDiv = document.getElementById('p2Active');
-        const everythingBadge = p2.isEverything ? ' ⭐ EVERYTHING ⭐' : '';
-        if (activeDiv) {
-            activeDiv.innerHTML = `${p2.emoji} ${p2.name}${everythingBadge}<br><span class="text-xs">HP: ${Math.max(0, p2.currentHp)}/${p2.maxHp}</span>`;
-            if (p2.isEverything) activeDiv.style.boxShadow = '0 0 15px #00ffc8';
-        }
-        const statsDiv = document.getElementById('p2Stats');
-        if (statsDiv) statsDiv.innerHTML = `⚔️ ${Math.floor(battleState.p2AtkBoost * 100)}% | 🛡️ ${Math.floor(battleState.p2DefBoost * 100)}%`;
-        
-        const skillsDiv = document.getElementById('p2Skills');
-        if (skillsDiv) {
-            skillsDiv.innerHTML = '';
-            const moves = battleState.p2Moves[p2.name] || p2.availableMoves.slice(0, 4);
-            moves.forEach(s => {
-                const isOHKO = s.includes('(OHKO)');
-                const btn = document.createElement('button');
-                btn.textContent = battleMoveName(s);
-                btn.className = `text-xs px-2 py-1 rounded-lg m-1 transition-all ${isOHKO ? 'bg-pink-600 text-white hover:bg-pink-700 animate-pulse' : 'bg-purple-500 text-white hover:bg-purple-600'}`;
-                if (isOHKO) btn.style.boxShadow = '0 0 8px #ff00ff';
-                btn.classList.add('battle-skill');if(isOHKO)btn.classList.add('ohko-skill');
-                btn.disabled=!battleCanAct(2);
-                btn.onclick = () => useSkill(s, 2);
-                skillsDiv.appendChild(btn);
-            });
-        }
-    }
-}
-
-function useSkill(skill, player) {
-    if(online.mode && !online.resolving){onlineMove(skill,player);return;}
-    if (!battleState.active||battleState.turn!=='p'+player||Date.now()<battleInputUntil) return;
-    const current=battleState['p'+player+'Current'];
-    if(!current||!battleState['p'+player+'Moves'][current.name]?.includes(skill))return;
-    battleInputUntil=Date.now()+450;
-    setTimeout(updateBattleUI,460);
-    if(skill!=='Counter')battleState['p'+player+'CounterLocked']=false;
-    const isP1 = player === 1;
-    const attacker = isP1 ? battleState.p1Current : battleState.p2Current;
-    const defender = isP1 ? battleState.p2Current : battleState.p1Current;
-
-    if (!attacker || !defender) {
-        addBattleLog('No active element!', 'system');
-        return;
-    }
-    
-    const isOHKO = skill.includes('(OHKO)');
-    if (isOHKO) {
-        const ohkoSuccess = Math.random() < 0.3;
-        showOHKOAnimation(skill, attacker.name, defender.name, ohkoSuccess);
-        
-        if (ohkoSuccess) {
-            defender.currentHp = 0;
-            updateBattleUI();
-            addBattleLog(`💀 ${defender.name} was instantly KO'd by ${battleMoveName(skill)}! 💀`, 'ohko');
-            endTurn();
-            return;
-        } else {
-            addBattleLog(`${attacker.name}'s ${battleMoveName(skill)} missed! (30% chance)`, 'damage');
-            endTurn();
-            return;
-        }
-    }
-    
-    if (attacker.isEverything) {
-        addBattleLog(`⭐ ${attacker.name} (EVERYTHING) radiates cosmic energy!`, 'everything');
-    }
-
-    if (defender.name === 'Ultra Instinct Element' && defender.dodgesLeft > 0 && skill !== '大爆発' && skill !== 'Counter') {
-        defender.dodgesLeft--;
-        addBattleLog(`${defender.name} DODGED! ${defender.dodgesLeft} dodges left!`, 'dodge');
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-    
-    if (defender.name === 'iPad' && defender.screenProtector && !defender.screenUsed) {
-        defender.screenUsed = true;
-        addBattleLog(`iPad's Screen Protector shattered! 💥💔`, 'block');
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-
-    if (skill === 'Struggle') {
-        let damage = Math.floor(attacker.baseAtk * 0.25);
-        damage = Math.max(1, damage);
-        defender.currentHp -= damage;
-        addBattleLog(`${attacker.name} used Last Ember! Dealt ${damage} damage!`, 'damage');
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-
-    if (skill === 'Counter') {
-        if ((isP1 && battleState.p1CounterLocked) || (!isP1 && battleState.p2CounterLocked)) {
-            addBattleLog('Recoil Verdict cannot be used twice in a row!', 'system');
-            return;
-        }
-        addBattleLog(`${attacker.name} used Recoil Verdict!`, 'skill');
-        const dmg = Math.floor(attacker.baseAtk * 0.5);
-        defender.currentHp -= dmg;
-        addBattleLog(`${attacker.name} countered for ${dmg} damage!`, 'damage');
-        if (isP1) battleState.p1CounterLocked = true;
-        else battleState.p2CounterLocked = true;
-
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-
-    if (skill === 'Heal Punch') {
-        const dmg = Math.floor(attacker.baseAtk * 0.45);
-        const heal = Math.floor(dmg * 0.33);
-        defender.currentHp -= dmg;
-        attacker.currentHp = Math.min(attacker.maxHp, attacker.currentHp + heal);
-        addBattleLog(`${attacker.name} used Vital Exchange! Dealt ${dmg} damage, healed ${heal} HP!`, 'skill');
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-
-    if (skill === '大爆発') {
-        addBattleLog(`${attacker.name} used Core Sacrifice! MASSIVE EXPLOSION!`, 'skill');
-        const dmg = attacker.baseAtk * 1.8;
-        defender.currentHp -= dmg;
-        attacker.currentHp = 0;
-        addBattleLog(`${attacker.name} dealt ${Math.floor(dmg)} damage but fainted!`, 'damage');
-        if (defender.currentHp <= 0) addBattleLog(`${defender.name} fainted! DRAW!`, 'system');
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-
-    if (skill === 'Forge') {
-        const dmg = Math.floor(attacker.baseAtk * 0.6);
-        defender.currentHp -= dmg;
-        if (isP1) { battleState.p1AtkBoost *= 1.3; battleState.p1DefBoost *= 1.3; }
-        else { battleState.p2AtkBoost *= 1.3; battleState.p2DefBoost *= 1.3; }
-        addBattleLog(`${attacker.name} used Anvil Covenant! Dealt ${dmg} damage, boosted stats! (1.3x)`, 'skill');
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-
-    if (skill === 'Find') {
-        if ((isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed)) {
-            addBattleLog('Fault Revelation can only be used once per match!', 'system');
-            return;
-        }
-        if (isP1) { battleState.p1FindUsed = true; battleState.p2DefBoost = 0.67; }
-        else { battleState.p2FindUsed = true; battleState.p1DefBoost = 0.67; }
-        addBattleLog(`${attacker.name} used Fault Revelation! Enemy defense lowered! (1.5x damage taken)`, 'skill');
-        endTurn();
-        return;
-    }
-
-    if (skill === 'Bug') {
-        addBattleLog(`${attacker.name} used Static Hex! 25% chance to immobilize!`, 'skill');
-        if (Math.random() < 0.25) {
-            if (isP1) battleState.p2BugActive = true;
-            else battleState.p1BugActive = true;
-            addBattleLog(`${defender.name} is BUGGED! May not be able to move!`, 'system');
-        }
-        endTurn();
-        return;
-    }
-    
-    const everythingMoves = ['EVERYTHING STRIKE', 'UNIVERSE BREAKER', 'OMNI SLASH', 'GODLY PRESENCE', 'INFINITY BURST', 'REALITY SHATTER', 'DIMENSION TEAR', 'COSMIC RAGE'];
-    if (everythingMoves.includes(skill) && attacker.isEverything) {
-        let bonus = 1.0;
-        let effectMsg = '';
-        
-        if (skill === 'EVERYTHING STRIKE') bonus = 1.2;
-        else if (skill === 'OMNI SLASH') bonus = 1.25;
-        else if (skill === 'GODLY PRESENCE') bonus = 1.15;
-        else if (skill === 'INFINITY BURST') bonus = 1.35;
-        else if (skill === 'UNIVERSE BREAKER') { bonus = 1.4; effectMsg = ' UNIVERSE SHATTERS!'; }
-        else if (skill === 'REALITY SHATTER') { bonus = 1.38; effectMsg = ' REALITY BENDS!'; }
-        else if (skill === 'DIMENSION TEAR') { bonus = 1.3; effectMsg = ' DIMENSIONS COLLAPSE!'; }
-        else if (skill === 'COSMIC RAGE') { bonus = 1.45; effectMsg = ' COSMIC FURY UNLEASHED!'; }
-        
-        let mult = calculateDamageMultiplier(attacker, defender);
-        let damage = Math.floor(attacker.baseAtk * 0.5 * mult * bonus);
-        damage = Math.max(1, damage);
-        
-        const atkBoost = isP1 ? battleState.p1AtkBoost : battleState.p2AtkBoost;
-        const defBoost = isP1 ? battleState.p2DefBoost : battleState.p1DefBoost;
-        damage = Math.floor(damage * (atkBoost / defBoost));
-        
-        defender.currentHp -= damage;
-        addBattleLog(`⭐ ${attacker.name} used ${battleMoveName(skill)}!${effectMsg} Dealt ${damage} damage! ⭐`, 'everything');
-        updateBattleUI();
-        endTurn();
-        return;
-    }
-
-    let mult = calculateDamageMultiplier(attacker, defender);
-    let damage = Math.floor(attacker.baseAtk * 0.4 * mult);
-    damage = Math.max(1, damage);
-    
-    const atkBoost = isP1 ? battleState.p1AtkBoost : battleState.p2AtkBoost;
-    const defBoost = isP1 ? battleState.p2DefBoost : battleState.p1DefBoost;
-    damage = Math.floor(damage * (atkBoost / defBoost));
-    
-    const findActive = (isP1 && battleState.p1FindUsed) || (!isP1 && battleState.p2FindUsed);
-    if (findActive) damage = Math.floor(damage * 1.3);
-    
-    defender.currentHp -= damage;
-    
-    let eff = mult > 1 ? ` It's super effective! (x${mult})` : (mult < 1 && mult > 0 ? ` It's not very effective... (x${mult})` : (mult === 0 ? ' It has no effect! (x0)' : ''));
-    addBattleLog(`${attacker.name} used ${battleMoveName(skill)}! Dealt ${damage} damage!${eff}`, 'damage');
-    updateBattleUI();
-    endTurn();
-}
-
-function endTurn(){try{advanceBattleTurn();}finally{updateBattleUI();}}
-function advanceBattleTurn() {
-    if(battleState.p1Team.every(e=>e.currentHp<=0) && battleState.p2Team.every(e=>e.currentHp<=0)){
-        battleState.active=false;addBattleLog('Both teams fainted — DRAW!', 'system');return;
-    }
-    const p1 = battleState.p1Current;
-    const p2 = battleState.p2Current;
-
-    if (p1 && p1.currentHp <= 0) {
-        addBattleLog(`${p1.name} fainted!`, 'system');
-        const idx = battleState.p1Team.findIndex(e => e === p1);
-        if (idx + 1 < battleState.p1Team.length) {
-            battleState.p1Current = battleState.p1Team[idx + 1];
-            addBattleLog(`Player 1 sends out ${battleState.p1Current.name}!`, 'system');
-            updateBattleUI();
-        } else {
-            addBattleLog('🎉 PLAYER 2 WINS THE BATTLE! 🎉', 'system');
-            battleState.active = false;
-            return;
-        }
-    }
-
-    if (p2 && p2.currentHp <= 0) {
-        addBattleLog(`${p2.name} fainted!`, 'system');
-        const idx = battleState.p2Team.findIndex(e => e === p2);
-        if (idx + 1 < battleState.p2Team.length) {
-            battleState.p2Current = battleState.p2Team[idx + 1];
-            addBattleLog(`Player 2 sends out ${battleState.p2Current.name}!`, 'system');
-            updateBattleUI();
-        } else {
-            addBattleLog('🎉 PLAYER 1 WINS THE BATTLE! 🎉', 'system');
-            battleState.active = false;
-            return;
-        }
-    }
-
-    battleState.turn = battleState.turn === 'p1' ? 'p2' : 'p1';
-    addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'}'s turn!`, 'system');
-
-    if ((battleState.turn === 'p2' && battleState.p2BugActive) || (battleState.turn === 'p1' && battleState.p1BugActive)) {
-        if (Math.random() < 0.25) {
-            addBattleLog(`${battleState.turn === 'p1' ? 'Player 1' : 'Player 2'} is BUGGED and cannot move!`, 'system');
-            battleState.turn=battleState.turn==='p1'?'p2':'p1';
-            addBattleLog('Initiative returns to '+(battleState.turn==='p1'?'Player 1':'Player 2'),'system');
-        }
-    }
-}
-
-function startBattle() {
-    if(online.mode && !online.resolving){readyOnline();return;}
-    for (const el of battleState.p1Team) {
-        const moves = battleState.p1Moves[el.name];
-        if (!moves || moves.length < 4) {
-            addBattleLog(`Player 1: ${el.name} needs 4 moves selected!`, 'system');
-            return;
-        }
-    }
-    for (const el of battleState.p2Team) {
-        const moves = battleState.p2Moves[el.name];
-        if (!moves || moves.length < 4) {
-            addBattleLog(`Player 2: ${el.name} needs 4 moves selected!`, 'system');
-            return;
-        }
-    }
-    
-    if (battleState.p1Team.length === 0 || battleState.p2Team.length === 0) {
-        addBattleLog('Both players must select elements!', 'system');
-        return;
-    }
-
-    battleInputUntil=0;
-    [...battleState.p1Team,...battleState.p2Team].forEach(initElementForBattle);
-    battleState.active = true;
-    battleState.p1Current = battleState.p1Team[0];
-    battleState.p2Current = battleState.p2Team[0];
-    battleState.turn = 'p1';
-    battleState.p1AtkBoost = battleState.p2AtkBoost = 1;
-    battleState.p1DefBoost = battleState.p2DefBoost = 1;
-    battleState.p1FindUsed = battleState.p2FindUsed = false;
-    battleState.p1BugActive = battleState.p2BugActive = false;
-    battleState.p1CounterLocked = battleState.p2CounterLocked = false;
-
-    updateBattleUI();
-    document.getElementById('battleSetup').style.display = 'none';
-    document.getElementById('battleArena').style.display = 'block';
-    addBattleLog('⚔️ BATTLE STARTED! ⚔️', 'system');
-    addBattleLog(`Player 1: ${battleState.p1Team.map(e => e.name + (e.isEverything ? ' ⭐' : '')).join(', ')}`, 'system');
-    addBattleLog(`Player 2: ${battleState.p2Team.map(e => e.name + (e.isEverything ? ' ⭐' : '')).join(', ')}`, 'system');
-    addBattleLog(`Player 1 starts with ${battleState.p1Current.name}!`, 'system');
-    addBattleLog('✨ OHKO MOVES: 30% chance to instantly KO! ✨', 'ohko');
-    addBattleLog('Click on a skill button to attack!', 'system');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const battleBtn = document.getElementById('battleBtn');
-    if (battleBtn) {
-        battleBtn.addEventListener('click', () => {
-            if(!window.craftBattleUnlocked?.())return;
-            const modal = document.getElementById('battleModal');
-            if (modal) modal.style.display = 'block';
-        });
-    }
-
-    const p1GetCodeBtn = document.getElementById('p1GetCodeBtn');
-    if (p1GetCodeBtn) {
-        p1GetCodeBtn.addEventListener('click', () => {
-            const code = window.generateBattleCode();
-            const textarea = document.getElementById('p1Code');
-            if (textarea) {
-                textarea.value = code;
-                textarea.style.background = '#e8f5e9';
-                setTimeout(() => textarea.style.background = '', 1000);
-            }
-            addBattleLog('Player 1: Battle code generated!', 'system');
-        });
-    }
-
-    const p2GetCodeBtn = document.getElementById('p2GetCodeBtn');
-    if (p2GetCodeBtn) {
-        p2GetCodeBtn.addEventListener('click', () => {
-            const code = window.generateBattleCode();
-            const textarea = document.getElementById('p2Code');
-            if (textarea) {
-                textarea.value = code;
-                textarea.style.background = '#e8f5e9';
-                setTimeout(() => textarea.style.background = '', 1000);
-            }
-            addBattleLog('Player 2: Battle code generated!', 'system');
-        });
-    }
-
-    const p1LoadBtn = document.getElementById('p1LoadBtn');
-    if (p1LoadBtn) {
-        p1LoadBtn.addEventListener('click', () => {
-            const code = document.getElementById('p1Code').value;
-            if (!code) { 
-                document.getElementById('p1Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
-                return; 
-            }
-            loadPlayerElements(1, code);
-        });
-    }
-
-    const p2LoadBtn = document.getElementById('p2LoadBtn');
-    if (p2LoadBtn) {
-        p2LoadBtn.addEventListener('click', () => {
-            const code = document.getElementById('p2Code').value;
-            if (!code) { 
-                document.getElementById('p2Elements').innerHTML = '<div class="text-red-500">✗ Generate or paste a battle code first</div>'; 
-                return; 
-            }
-            loadPlayerElements(2, code);
-        });
-    }
-
-    const startBtn = document.getElementById('startBattleBtn');
-    if (startBtn) {
-        startBtn.addEventListener('click', startBattle);
-    }
-
-    const resetBattleBtn = document.getElementById('resetBattleBtn');
-    if (resetBattleBtn) {
-        resetBattleBtn.addEventListener('click', () => {
-            if(online.mode)leaveOnline('Left room. Create or join a new room.');
-            battleState.active = false;
-            battleState.moveSelection = true;
-            battleState.p1Ready = battleState.p2Ready = false;
-            battleState.p1Elements = battleState.p2Elements = [];
-            battleState.p1Team = battleState.p2Team = [];
-            battleState.p1Current = battleState.p2Current = null;
-            battleState.p1Moves = {};
-            battleState.p2Moves = {};
-            const setup = document.getElementById('battleSetup');
-            const arena = document.getElementById('battleArena');
-            if (setup) setup.style.display = 'block';
-            if (arena) arena.style.display = 'none';
-            const p1El = document.getElementById('p1Elements');
-            const p2El = document.getElementById('p2Elements');
-            if (p1El) p1El.innerHTML = '';
-            if (p2El) p2El.innerHTML = '';
-            const p1TeamDiv = document.getElementById('p1Team');
-            const p2TeamDiv = document.getElementById('p2Team');
-            if (p1TeamDiv) p1TeamDiv.innerHTML = '';
-            if (p2TeamDiv) p2TeamDiv.innerHTML = '';
-            const p1MoveDiv = document.getElementById('p1MoveSelect');
-            const p2MoveDiv = document.getElementById('p2MoveSelect');
-            if (p1MoveDiv) p1MoveDiv.innerHTML = '';
-            if (p2MoveDiv) p2MoveDiv.innerHTML = '';
-            const p1Code = document.getElementById('p1Code');
-            const p2Code = document.getElementById('p2Code');
-            if (p1Code) p1Code.value = '';
-            if (p2Code) p2Code.value = '';
-            const startBtnEl = document.getElementById('startBattleBtn');
-            if (startBtnEl) startBtnEl.disabled = true;
-            const log = document.getElementById('battleLog');
-            if (log) log.innerHTML = '<p class="text-center italic" style="color:var(--text-secondary)">Your battle story begins here…</p>';
-        });
-    }
-});
-// Real WebRTC transport. Public signaling works on static HTTPS hosting.
-// For restrictive NAT/firewalls supply your deployment's short-lived TURN credentials.
-const ONLINE_CONFIG={
-    peerOptions:{config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}
-        // ,{urls:'turn:YOUR_TURN_HOST:3478',username:'SHORT_LIVED_USER',credential:'SHORT_LIVED_PASSWORD'}
-    ]}}
-    // To self-host signaling add host, port, path and secure to peerOptions.
-};
-const online={mode:false,side:0,peer:null,conn:null,ready:false,resolving:false,pending:false,seq:0,timer:null,lastSeen:0};
-const netEl=id=>document.getElementById(id);
-function netStatus(s){netEl('onlineStatus').textContent=s;}
-function netSend(data){if(online.conn?.open)online.conn.send(data);}
-function leaveOnline(message){
-    const c=online.conn,p=online.peer;online.conn=null;online.peer=null;
-    clearInterval(online.timer);clearTimeout(online.timeout);online.side=0;online.ready=false;online.pending=false;
-    battleState.active=false;c?.close();p?.destroy();
-    if(online.mode){netStatus(message);netEl('startBattleBtn').disabled=true;updateBattleUI();}
-}
-function netSetupUI(){
-    for(let n=1;n<=2;n++){
-        const panel=netEl('p'+n+'Code').parentElement;
-        panel.hidden=online.mode && online.side!==n;
-        for(const id of ['Code','GetCodeBtn','LoadBtn'])netEl('p'+n+id).hidden=online.mode;
-    }
-    netEl('startBattleBtn').textContent=online.mode?'Ready — lock team & moves':'⚔️ START BATTLE ⚔️';
-}
-function netSnapshot(){
-    online.seq++;
-    netSend({type:'state',seq:online.seq,state:battleState,
-        indices:[battleState.p1Team.indexOf(battleState.p1Current),battleState.p2Team.indexOf(battleState.p2Current)],
-        log:Array.from(netEl('battleLog').children).slice(-150).map(p=>({text:p.textContent,color:p.style.color,event:p.dataset.event}))});
-    netStatus(battleState.active?`You are Player 1 · ${battleState.turn==='p1'?'Your':'Opponent’s'} turn`:'Match finished. See battle log.');
-    updateBattleUI();
-}
-function netTeam(packet){
-    if(!packet||!Array.isArray(packet.team)||packet.team.length<1||packet.team.length>3)throw Error('Invalid team');
-    const moves=Object.create(null),names=new Set();
-    const team=packet.team.map(raw=>{
-        if(!raw||typeof raw.name!=='string'||raw.name.length>150||/[<>]/.test(raw.name)||['__proto__','constructor','prototype'].includes(raw.name)||names.has(raw.name))throw Error('Invalid element');
-        names.add(raw.name);
-        // Recompute combat stats; do not accept opponent-supplied HP, damage or abilities.
-        const el={name:raw.name,emoji:typeof raw.emoji==='string'?raw.emoji.slice(0,32).replace(/[<>]/g,''): '⚪'};
-        for(const k of Object.keys(raw))if(/^is[A-Z][A-Za-z]+$/.test(k)&&raw[k])el[k]=true;
-        initElementForBattle(el);
-        const chosen=packet.moves?.[el.name];
-        if(!Array.isArray(chosen)||chosen.length!==4||new Set(chosen).size!==4||chosen.some(m=>m!=='Struggle'&&!el.availableMoves.includes(m)))throw Error('Select four valid moves per element');
-        moves[el.name]=chosen.slice();return el;
-    });
-    if(team.length>1&&team.some(e=>e.canOnlyUseOne))throw Error('This element must battle alone');
-    return {team,moves};
-}
-function readyOnline(){
-    if(!online.conn?.open||online.ready||battleState.active)return;
-    try{
-        const n=online.side,packet=netTeam({team:battleState['p'+n+'Team'],moves:battleState['p'+n+'Moves']});
-        online.ready=true;netEl('startBattleBtn').disabled=true;netEl('p'+n+'MoveSelect').style.pointerEvents='none';
-        if(n===1){battleState.p1Team=packet.team;battleState.p1Moves=packet.moves;maybeStartOnline();}
-        else netSend({type:'ready',...packet});
-        if(!battleState.active)netStatus('Team locked. Waiting for opponent to be ready.');
-    }catch(e){netStatus(e.message);}
-}
-function maybeStartOnline(){
-    if(!online.ready||!battleState.p2Ready||battleState.active)return;
-    online.resolving=true;try{startBattle();}finally{online.resolving=false;}netSnapshot();
-}
-function resolveOnlineMove(skill,player,seq){
-    if(online.side!==1||!online.conn?.open||!battleState.active||seq!==online.seq||battleState.turn!=='p'+player)return;
-    const el=battleState['p'+player+'Current'];
-    if(!el||!battleState['p'+player+'Moves'][el.name]?.includes(skill))return;
-    if(skill!=='Counter')battleState['p'+player+'CounterLocked']=false;
-    online.resolving=true;
-    try{useSkill(skill,player);}finally{online.resolving=false;}
-    // End-turn replacements and random effects resolve once on the host, then synchronize.
-    netSnapshot();
-}
-function onlineMove(skill,player){
-    if(player!==online.side||online.pending||!online.conn?.open||battleState.turn!=='p'+player||!battleState.active)return;
-    if(player===1)resolveOnlineMove(skill,1,online.seq);
-    else {online.pending=true;netSend({type:'move',skill,seq:online.seq});updateBattleUI();}
-}
-function bindOnlineConnection(c){
-    online.conn=c;
-    clearTimeout(online.timeout);
-    online.timeout=setTimeout(()=>{if(online.conn===c&&!c.open)leaveOnline('Peer connection timed out. Try again; TURN may be required.');},30000);
-    c.on('open',()=>{
-        if(online.conn!==c)return;
-        clearTimeout(online.timeout);online.lastSeen=Date.now();
-        netStatus(`Connected · You are Player ${online.side}. Choose your team and moves.`);
-        const n=online.side;
-        loadPlayerElements(n,btoa(unescape(encodeURIComponent(JSON.stringify({elements:window.craftBattleCollection()})))));
-        netEl('startBattleBtn').disabled=false;netSetupUI();
-        online.timer=setInterval(()=>{if(Date.now()-online.lastSeen>45000){leaveOnline('Connection lost or opponent tab suspended. Match ended.');return;}netSend({type:'ping'});},5000);
-    });
-    c.on('data',data=>{
-        if(online.conn!==c)return;
-        try{
-            if(!data||typeof data!=='object'||JSON.stringify(data).length>250000)throw Error('Invalid network message');
-            online.lastSeen=Date.now();
-            if(data.type==='ping'){netSend({type:'pong'});return;}
-            if(online.side===1){
-                if(data.type==='ready'&&!battleState.p2Ready&&!battleState.active){const p=netTeam(data);battleState.p2Team=p.team;battleState.p2Moves=p.moves;battleState.p2Ready=true;maybeStartOnline();}
-                if(data.type==='move')resolveOnlineMove(data.skill,2,data.seq);
-            }else if(data.type==='state'&&Number.isInteger(data.seq)&&data.seq>online.seq){
-                const s=data.state;
-                if(!s||!Array.isArray(s.p1Team)||!Array.isArray(s.p2Team)||!['p1','p2'].includes(s.turn))throw Error('Invalid state');
-                // Validate display strings before the existing renderer consumes peer data.
-                for(const e of [...s.p1Team,...s.p2Team])if(typeof e.name!=='string'||/[<>]/.test(e.name+e.emoji))throw Error('Invalid state element');
-                battleState=s;online.seq=data.seq;online.pending=false;
-                battleState.p1Current=s.p1Team[data.indices[0]];battleState.p2Current=s.p2Team[data.indices[1]];
-                netEl('battleSetup').style.display='none';netEl('battleArena').style.display='block';
-                netEl('battleLog').replaceChildren();
-                for(const line of data.log){const p=document.createElement('p');p.textContent=line.text;p.style.color=line.color;p.dataset.event=line.event||'system';netEl('battleLog').appendChild(p);}
-                const finisher=data.log.filter(line=>line.event==='ohko').at(-1);
-                if(finisher&&online.lastFinisher!==finisher.text){online.lastFinisher=finisher.text;const f=netEl('battleFinisher');f.textContent=finisher.text;f.hidden=false;clearTimeout(f.hideTimer);f.hideTimer=setTimeout(()=>{f.hidden=true;},2200);}
-                updateBattleUI();netStatus(s.active?`You are Player 2 · ${s.turn==='p2'?'Your':'Opponent’s'} turn`:'Match finished. See battle log.');
-            }
-        }catch(e){leaveOnline('Match ended: '+e.message);}
-    });
-    c.on('close',()=>{if(online.conn===c)leaveOnline('Opponent disconnected. Match ended.');});
-    c.on('error',()=>{if(online.conn===c)leaveOnline('Connection failed. Try again; this network may require TURN.');});
-}
-async function connectOnline(host){
-    if(online.peer||online.connecting)return;
-    const code=netEl('roomCode').value.trim();
-    if(!host&&!/^[a-zA-Z0-9_-]{6,100}$/.test(code)){netStatus('Enter the full room code from the host.');return;}
-    online.connecting=true;netStatus('Connecting to signaling service…');
-    try{
-        if(!window.Peer)await new Promise((resolve,reject)=>{
-            const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js';
-            const timeout=setTimeout(()=>reject(Error('PeerJS download timed out')),15000);
-            s.onload=()=>{clearTimeout(timeout);resolve();};s.onerror=()=>{clearTimeout(timeout);reject(Error('Could not load PeerJS'));};document.head.appendChild(s);
-        });
-        if(!online.mode)return;
-        online.lastFinisher=null;online.side=host?1:2;online.ready=false;online.seq=0;online.pending=false;
-        battleState.active=false;battleState.p1Ready=false;battleState.p2Ready=false;
-        battleState.p1Team=[];battleState.p2Team=[];battleState.p1Moves={};battleState.p2Moves={};
-        for(let n=1;n<=2;n++)netEl('p'+n+'MoveSelect').style.pointerEvents='';
-        netEl('battleLog').replaceChildren();netEl('battleSetup').style.display='block';netEl('battleArena').style.display='none';netSetupUI();
-        const peer=new Peer(undefined,ONLINE_CONFIG.peerOptions);online.peer=peer;
-        online.timeout=setTimeout(()=>{if(!online.conn?.open)leaveOnline('Connection timed out. Check the room code and network; TURN may be required.');},30000);
-        peer.on('open',id=>{
-            if(online.peer!==peer)return;
-            if(host){clearTimeout(online.timeout);netEl('roomCode').value=id;netStatus('Room created. Share this code. Waiting for Player 2…');}
-            else if(code===id)leaveOnline('Cannot join your own peer.');
-            else bindOnlineConnection(peer.connect(code,{reliable:true,serialization:'json'}));
-        });
-        peer.on('connection',c=>{if(!host||online.conn){c.on('open',()=>c.close());return;}bindOnlineConnection(c);});
-        peer.on('error',e=>{if(online.peer===peer)leaveOnline('Online unavailable: '+e.type+'. Check the code or try another network.');});
-        peer.on('disconnected',()=>{if(online.peer===peer&&!online.conn?.open)leaveOnline('Signaling disconnected. Create or join again.');});
-    }catch(e){leaveOnline(e.message+'. Local mode remains available.');}finally{online.connecting=false;}
-}
-document.addEventListener('DOMContentLoaded',()=>{
-    netEl('onlineMode').onclick=()=>{if(online.mode)return;netEl('resetBattleBtn').click();online.mode=true;netEl('onlinePanel').hidden=false;netEl('startBattleBtn').disabled=true;netSetupUI();};
-    netEl('localMode').onclick=()=>{leaveOnline('Left room.');online.mode=false;netEl('onlinePanel').hidden=true;netEl('resetBattleBtn').click();netSetupUI();for(let n=1;n<=2;n++)netEl('p'+n+'MoveSelect').style.pointerEvents='';};
-    netEl('createRoom').onclick=()=>connectOnline(true);netEl('joinRoom').onclick=()=>connectOnline(false);
-    netEl('leaveRoom').onclick=()=>{leaveOnline('Left room.');netSetupUI();};
-    window.addEventListener('beforeunload',()=>online.peer?.destroy());
-});
-
     </script>
-    <!-- Battle Modal -->
-    <div id="battleModal" class="modal-overlay"><div class="modal-box" style="max-width:950px"><button class="modal-close" data-close="battleModal">&times;</button>
-        <h2 class="font-display text-xl mb-4 text-center">⚔️ Resonance Arena</h2>
-        
-        <div class="mb-4" style="padding:12px;border:1px solid var(--border);border-radius:12px">
-            <button id="localMode">🏠 LOCAL</button> · <button id="onlineMode">🌐 ONLINE</button>
-            <div id="onlinePanel" hidden>
-                <p class="text-xs my-2">Two players on separate devices: create a room, share its code, then each select a team and four moves and press Ready. Keep this tab open.</p>
-                <button id="createRoom">Create room</button> · <input id="roomCode" aria-label="Room code" placeholder="Room code" style="color:#111;width:220px"> <button id="joinRoom">Join room</button> · <button id="leaveRoom">Leave</button>
-                <p id="onlineStatus" role="status" style="margin-top:8px">Ready to connect.</p>
-                <details class="text-xs"><summary>Connection help</summary>Uses PeerJS public signaling and real WebRTC data channels. Host resolves combat. Restricted networks may require TURN in ONLINE_CONFIG inside this HTML. No account or competitive anti-cheat is provided. A disconnect ends the match; create a new room to play again.</details>
-            </div>
-        </div>
-        <!-- Setup Phase -->
-        <div id="battleSetup" class="mb-4">
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <!-- Player 1 -->
-                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
-                    <h3 class="font-display text-md mb-2 text-center" style="color:#3b82f6">🔵 Player 1</h3>
-                    <div class="flex gap-2 mb-2">
-                        <button id="p1GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#3b82f6;color:#fff">📋 Get Battle Code</button>
-                    </div>
-                    <textarea id="p1Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." ></textarea>
-                    <button id="p1LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
-                    <div id="p1Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
-                    
-                    <!-- Team Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#3b82f6">📋 Select Your Team (click to select/unselect):</div>
-                        <div id="p1Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(59,130,246,0.1)"></div>
-                    </div>
-                    
-                    <!-- Move Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
-                        <div id="p1MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
-                    </div>
-                </div>
-                
-                <!-- Player 2 -->
-                <div class="rounded-xl p-3" style="background:var(--bg-primary);border:1px solid var(--border)">
-                    <h3 class="font-display text-md mb-2 text-center" style="color:#ef4444">🔴 Player 2</h3>
-                    <div class="flex gap-2 mb-2">
-                        <button id="p2GetCodeBtn" class="text-xs px-3 py-2 rounded-lg font-semibold flex-1" style="background:#ef4444;color:#fff">📋 Get Battle Code</button>
-                    </div>
-                    <textarea id="p2Code" class="w-full h-20 p-2 text-xs font-mono rounded-lg mb-2" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste battle code here..." ></textarea>
-                    <button id="p2LoadBtn" class="w-full text-sm py-2 rounded-lg font-semibold" style="background:#22c55e;color:#fff">🔓 Load & Decrypt</button>
-                    <div id="p2Elements" class="mt-2 text-xs max-h-32 overflow-y-auto"></div>
-                    
-                    <!-- Team Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#ef4444">📋 Select Your Team (click to select/unselect):</div>
-                        <div id="p2Team" class="flex flex-wrap gap-1 justify-center min-h-[60px] p-2 rounded-lg" style="background:rgba(239,68,68,0.1)"></div>
-                    </div>
-                    
-                    <!-- Move Selection Area -->
-                    <div class="mt-3 text-center">
-                        <div class="text-xs font-semibold mb-2" style="color:#a855f7">✨ Select 4 Moves for Each Element:</div>
-                        <div id="p2MoveSelect" class="p-2 rounded-lg max-h-48 overflow-y-auto" style="background:rgba(168,85,247,0.1)"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <button id="startBattleBtn" class="w-full font-semibold text-sm py-3 rounded-full transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e" disabled>⚔️ START BATTLE ⚔️</button>
-        </div>
-        
-        <!-- Battle Arena -->
-        <div id="battleArena" style="display:none"><div id="battleTurnBanner" role="status"></div><div id="battleFinisher" hidden role="status"></div>
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <!-- Player 1 Arena -->
-                <div class="rounded-xl p-3 text-center" style="background:rgba(59,130,246,0.1);border:1px solid #3b82f6">
-                    <div class="font-bold mb-2" style="color:#3b82f6">🔵 Player 1</div>
-                    <div id="p1Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
-                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
-                        <div id="p1HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
-                    </div>
-                    <div id="p1Stats" class="text-xs"></div>
-                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
-                    <div id="p1Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
-                </div>
-                
-                <!-- Player 2 Arena -->
-                <div class="rounded-xl p-3 text-center" style="background:rgba(239,68,68,0.1);border:1px solid #ef4444">
-                    <div class="font-bold mb-2" style="color:#ef4444">🔴 Player 2</div>
-                    <div id="p2Active" class="p-2 rounded-lg mb-2" style="background:var(--bg-card)">Waiting for battle...</div>
-                    <div class="w-full h-2 rounded-full overflow-hidden mb-2" style="background:#333">
-                        <div id="p2HpFill" class="h-full rounded-full transition-all" style="width:100%;background:#22c55e"></div>
-                    </div>
-                    <div id="p2Stats" class="text-xs"></div>
-                    <div class="mt-2 text-xs" style="color:var(--text-secondary)">📜 MOVES:</div>
-                    <div id="p2Skills" class="mt-1 flex flex-wrap gap-1 justify-center"></div>
-                </div>
-            </div>
-            
-            <!-- Battle Log -->
-            <div id="battleLog" class="rounded-xl p-3 h-40 overflow-y-auto text-sm" style="background:var(--bg-primary);border:1px solid var(--border)">
-                <p class="text-center italic" style="color:var(--text-secondary)">Your battle story begins here…</p>
-            </div>
-            
-            <!-- Reset Button -->
-            <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
-        </div>
-    </div></div>
-
-<div id="accountModal" class="modal-overlay"><section class="modal-box">
-<button id="accountClose" class="modal-close" aria-label="Close settings">×</button><h2>⚙️ Your crafter</h2>
-<label for="nicknameInput">Nickname</label><input id="nicknameInput" maxlength="24" placeholder="Choose your nickname" autocomplete="nickname"><button id="saveNickname">Save nickname</button>
-<p class="account-note">Your nickname appears publicly only when you publish a leaderboard score. Nicknames are not unique.</p>
-<button id="googleLogin">Sign in with Google</button><button id="googleLogout" hidden>Sign out</button>
-<p id="accountStatus" role="status">Play locally, or sign in to save across devices.</p>
-<div class="account-actions"><button id="cloudSave" disabled>Save this game to cloud</button><button id="cloudLoad" disabled>Load cloud save</button><button id="publishScore" disabled>Publish my score</button></div>
-<p class="account-note">Cloud loading backs up your current game on this device. A cloud save from another device must be loaded before it can be updated.</p>
-</section></div>
-<div id="leaderboardModal" class="modal-overlay"><section class="modal-box"><button id="leaderboardClose" class="modal-close" aria-label="Close leaderboards">×</button><h2>🏅 Leaderboards</h2><label for="boardMetric">Rank by </label><select id="boardMetric"><option value="prestiges">Prestiges</option><option value="elements">Ranked elements</option></select><p class="account-note">Top 50 published scores · Player-reported scores.</p><div id="leaderboardList" aria-live="polite"></div></section></div>
-
-<script>
-// Public Firebase web configuration: never put service-account credentials here.
-window.CRAFT_FIREBASE_CONFIG = {apiKey:'AIzaSyB7IJGzNu31ETrxam-aaAPzskAti7tqQ9U',authDomain:'craft-madness.firebaseapp.com',projectId:'craft-madness',appId:'1:842806585723:web:52564c9f5eae49d83435de'};
-document.addEventListener('DOMContentLoaded',()=>{
- const $=id=>document.getElementById(id), status=t=>$('accountStatus').textContent=t;
- let profile={nickname:''};try{profile=JSON.parse(localStorage.getItem('cm_profile'))||profile;}catch{}
- let api=null,user=null,revision=null,enabled=false,busy=false,timer=null;
- const valid=n=>/^[\p{L}\p{N} _.-]{2,24}$/u.test(n);
- function nickname(){return String(profile.nickname||'').trim();}
- function draw(){ $('playerName').textContent=nickname()||'New crafter';$('nicknameInput').value=nickname();$('googleLogout').hidden=!user;$('cloudSave').disabled=!user;$('cloudLoad').disabled=!user;$('publishScore').disabled=!user; }
- function open(){ $('accountModal').style.display='block';draw(); }
- $('accountBtn').onclick=open;$('accountClose').onclick=()=>$('accountModal').style.display='none';
- $('saveNickname').onclick=()=>{const n=$('nicknameInput').value.trim();if(!valid(n)){status('Use 2–24 letters, numbers, spaces, dots, hyphens or underscores.');return;}profile.nickname=n;try{localStorage.setItem('cm_profile',JSON.stringify(profile));status('Nickname saved. Publish your score again to update your leaderboard name.');}catch{status('Nickname set for this session. Browser storage is unavailable.');}draw();};
- function fail(e){status(e.message||'Connection failed. Your local save is safe.');}
- async function sdk(){
-  if(api)return api;const config=window.CRAFT_FIREBASE_CONFIG;
-  if(!config.apiKey||!config.projectId)throw Error('Google login and online features are not configured yet. Local play and nicknames still work.');
-  if(location.protocol==='file:')throw Error('Open the hosted HTTPS game to use Google login.');
-  const base='https://www.gstatic.com/firebasejs/10.12.5/';
-  const [app,auth,db]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
-  const a=app.initializeApp(config);api={...auth,...db,auth:auth.getAuth(a),db:db.getFirestore(a)};
-  api.onAuthStateChanged(api.auth,async u=>{user=u;enabled=false;revision=null;clearTimeout(timer);draw();if(!u){status('Playing locally.');return;}status('Signed in. Choose Load cloud save or Save this game to cloud before automatic saving begins.');});return api;
- }
- function ref(){return api.doc(api.db,'saves',user.uid);}
- async function upload(){
-  if(busy||!user)return;busy=true;
-  try{const uid=user.uid,payload=JSON.stringify({...window.craftAccount.snapshot(),profile});if(new TextEncoder().encode(payload).length>850000)throw Error('Save is too large for cloud storage. Your local progress is kept; cloud saving is paused.');
-   await api.runTransaction(api.db,async tx=>{const r=api.doc(api.db,'saves',uid),old=await tx.get(r),version=old.exists()?old.data().revision:0;
-    if(revision!==null&&version!==revision)throw Error('Cloud save changed on another device. Load it before saving again.');
-    if(revision===null&&old.exists())throw Error('A cloud save already exists. Load it first; it will not be overwritten automatically.');
-    tx.set(r,{payload,revision:version+1,updatedAt:api.serverTimestamp()});
-   });revision=(revision||0)+1;enabled=true;status('Cloud saved. Automatic saves are on.');
-  }catch(e){enabled=false;fail(e);}finally{busy=false;}
- }
- $('googleLogin').onclick=async()=>{try{const a=await sdk();await a.signInWithPopup(a.auth,new a.GoogleAuthProvider());}catch(e){fail(e);}};
- $('googleLogout').onclick=async()=>{try{enabled=false;await api.signOut(api.auth);}catch(e){fail(e);}};
- $('cloudSave').onclick=upload;
- $('cloudLoad').onclick=async()=>{if(!user||busy)return;try{const snap=await api.getDocFromServer(ref());if(!snap.exists()){status('No cloud save yet. Use Save this game to cloud.');return;}if(!confirm('Load your cloud save? Your current local game will be backed up on this device.'))return;
-  const d=JSON.parse(snap.data().payload);enabled=false;clearTimeout(timer);timer=null;window.craftAccount.restore(d);if(d.profile&&valid(String(d.profile.nickname||''))){profile={nickname:d.profile.nickname};try{localStorage.setItem('cm_profile',JSON.stringify(profile));}catch{}draw();}revision=snap.data().revision;enabled=true;status('Cloud save loaded. Automatic saves are on.');
- }catch(e){fail(e);}};
- window.addEventListener('craft-save',()=>{if(!enabled||!user||timer)return;timer=setTimeout(()=>{timer=null;upload();},15000);});
- $('publishScore').onclick=async()=>{try{if(!valid(nickname()))throw Error('Set your nickname first.');const s=window.craftAccount.snapshot();await api.setDoc(api.doc(api.db,'leaderboards',user.uid),{nickname:nickname(),prestiges:Math.max(0,Math.floor(s.gs.prestige?.times||0)),elements:new Set(s.elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey&&!e.isPrestige).map(e=>e.name.toLowerCase())).size,updatedAt:api.serverTimestamp()});status('Score published under '+nickname()+'.');}catch(e){fail(e);}};
- $('leaderboardBtn').onclick=async()=>{ $('leaderboardModal').style.display='block';await board();};
- $('leaderboardClose').onclick=()=>$('leaderboardModal').style.display='none';$('boardMetric').onchange=board;
- async function board(){const list=$('leaderboardList');list.textContent='Loading…';try{const a=await sdk(),metric=$('boardMetric').value;const rows=await a.getDocs(a.query(a.collection(a.db,'leaderboards'),a.orderBy(metric,'desc'),a.limit(50)));list.replaceChildren();if(rows.empty)list.textContent='No scores yet. Be the first!';let rank=0;rows.forEach(d=>{const row=document.createElement('p'),v=d.data();row.textContent=++rank+'. '+v.nickname+' — '+v[metric].toLocaleString();list.appendChild(row);});}catch(e){list.textContent=e.message;}}
- draw();if(!nickname())open();if(window.CRAFT_FIREBASE_CONFIG.apiKey)sdk().catch(fail);
-});
-
-</script>
 </body>
 </html>
