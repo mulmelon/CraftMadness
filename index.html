@@ -4373,20 +4373,33 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             let seed=aprilHash(pair),pick=n=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed%n;};
             const clean=s=>s.replace(/[^a-z0-9]/gi,'')||'Thing';
             const readable=s=>s.length<=18?s:s.slice(0,10)+s.slice(-8);
+            const sourceElement=name=>elements.find(e=>e.name.toLowerCase()===String(name).toLowerCase());
             const sourceCore=name=>{
-                const found=elements.find(e=>e.name.toLowerCase()===String(name).toLowerCase());
+                const found=sourceElement(name);
                 return readable(clean(found&&found.isAprilFools&&found.aprilCore?found.aprilCore:name));
             };
             const ordered=[n1,n2].sort((a,b)=>String(a).toLowerCase().localeCompare(String(b).toLowerCase()));
             const a=sourceCore(ordered[0]),b=sourceCore(ordered[1]);
+            const bothApril=!!sourceElement(n1)?.isAprilFools&&!!sourceElement(n2)?.isAprilFools;
             const prefixes=['Ultra','Mega','Mini','Super','Hyper','Turbo','Quantum','Proto','Pseudo','Neo','Anti','Un','Re','De','Pre','Post','Sub','Over','Under','Inter','Extra','Cosmo','Astro','Cyber','Bio','Geo','Pyro','Hydro','Cryo','Electro','Mysti','Giga','Tera','Nano','Omega','Alpha','Lord','Sir','Doctor','Professor','Captain','Baby','Grandpa','Illegal','Suspicious','Budget','Discount','Offbrand','Unlicensed','Cursed','Wobbly','Soggy','Crunchy','Spicy','Sleepy','Angry','Confused','Haunted','Radioactive','Invisible','Extremely'];
             const suffixes=['onium','inator','oid','er','ist','ness','core','ster','zilla','ification','nator','mancer','machine','monster','deluxe','premium','classic','pro','max','plus','lite','two','again','returns','revenge','awakening','finale','electricboogaloo','jr','senior','thethird','supreme','prime','ultimate','thing','creature','person','device','moment','incident','problem','mistake','disaster','sandwich','soup','nugget','goblin','gremlin','wizard','enjoyer','enthusiast','department','corporation','dotexe','fromwalmart','butworse','ofdoom','ofdestiny','fornoreason'];
-            const core=readable(a)+readable(b),affixMode=pick(3);
-            let name=affixMode===0?prefixes[pick(prefixes.length)]+core:affixMode===1?core+suffixes[pick(suffixes.length)]:core;
+            const stroke=pick(100)===0;
+            let core,name;
+            if(stroke){
+                core=readable(pick(2)?a:b);name='';
+                const strokeBits=[...prefixes,...suffixes,'Dragon','Melon','Deep','Sea','fizzle','stoner','mun','noni','unio','pert','tist','glorp','womp','sploot','dingle','erp','izzle','on','oni','blob','snorf','bonk','zoop','plonk','scrunk','mlem','bork','yeet','boing','schlorp','gronk','floob','crump','dongle','pop','mush','nug','oodle','azzle','umbus','onk','ish','ulous','ifer','ator','ifier'];
+                const strokeLength=12+pick(25);
+                for(let i=0;i<strokeLength;i++)name+=strokeBits[pick(strokeBits.length)];
+            }else{
+                const useOne=bothApril||pick(100)<35;
+                core=useOne?(pick(2)?a:b):readable(a)+readable(b);
+                if(bothApril){name=pick(2)?prefixes[pick(prefixes.length)]+core:core+suffixes[pick(suffixes.length)];}
+                else{const affixMode=pick(3);name=affixMode===0?prefixes[pick(prefixes.length)]+core:affixMode===1?core+suffixes[pick(suffixes.length)]:core;}
+            }
             name=name.charAt(0).toUpperCase()+name.slice(1);
-            name=name.slice(0,100);
+            if(!stroke)name=name.slice(0,100);
             const emojis=['🤡','🗿','💀','☠️','👽','👾','🤖','👻','👹','👺','🧌','🫠','🥴','🤪','😵‍💫','🤯','😈','🙃','🫥','🫨','🦆','🪿','🐸','🐔','🐌','🦀','🦞','🦐','🐡','🦑','🐙','🦧','🦥','🦦','🦨','🦩','🐀','🪱','🪰','🪳','🦠','🫘','🍉','🍌','🍋','🥔','🧅','🧄','🥚','🧀','🍞','🥨','🍔','🌭','🍕','🧇','🍩','🍪','🎂','🍄','🧊','🫧','🪨','🧱','🛒','🚽','🪠','🧻','🪣','🧽','🧦','🩴','🎩','🪇','🪗','🎺','🛸','🚜','🛴','🗑️','📦','📎','✏️','🔨','🪤','🧯','💣','🧨','🪩','🎪','🌀','❓','⁉️','💥','💫','✨','🔥','🌚','🌝','🌵','🌪️','🫙','🛎️','🪥','🧲','🔮','🧪','🧬'];
-            return{name,emoji:emojis[pick(emojis.length)],description:n1+' + '+n2+' should not have worked, but here we are.',color:'bg-orange-300',isAprilFools:true,aprilCore:core,excludeFromRank:true};
+            return{name,emoji:emojis[pick(emojis.length)],description:n1+' + '+n2+' should not have worked, but here we are.',color:'bg-orange-300',isAprilFools:true,aprilCore:core,generatorStroke:stroke,excludeFromRank:true};
         }
 
         function processMelt(frozenEl,heatEl){
@@ -4551,7 +4564,8 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(newEl.isExclusive||newEl.isAprilFools)renderEls();
                 updateCount();save();checkStarForgeUnlock();
                 // Notifications for special types
-                if(newEl.isFatalError){notify('FATAL ERROR!',newEl.name+' — critically glitched!','💀');if(!fatalErrorTutShown){fatalErrorTutShown=true;openModal('fatalErrorTutModal');}}
+                if(newEl.generatorStroke){notify('SYSTEM MESSAGE','Oh no... the generator seems to have had a bad day...','🤕',6500);}
+                else if(newEl.isFatalError){notify('FATAL ERROR!',newEl.name+' — critically glitched!','💀');if(!fatalErrorTutShown){fatalErrorTutShown=true;openModal('fatalErrorTutModal');}}
                 else if(newEl.isError){notify('ERROR!',newEl.name+' — glitched element!','⚠️');if(!errorTutShown){errorTutShown=true;openModal('errorTutModal');}}
                 else if(hasPenaltyMod(newEl)){notify('⚠️ PENALTY!',newEl.name+' — debuffs your coin earn!','☠️');if(!penaltyTutShown){penaltyTutShown=true;openModal('penaltyTutModal');}}
                 else if(newEl.isFinal){notify('FINAL Element!','Discovered '+newEl.name+'!','⭐');if(!finalTutShown){finalTutShown=true;openModal('finalTutModal');}}
