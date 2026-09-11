@@ -55,6 +55,27 @@
         #exclusiveGrid .el-emoji { font-size:1.05rem;line-height:1.2; }
         #exclusiveGrid .el-name { font-size:.56rem;line-height:1.2;overflow-wrap:anywhere; }
         #exclusiveGrid .badge { font-size:.43rem;padding:1px 3px;line-height:1.2; }
+        #aprilFoolsToggle { width:30px;height:28px;border:1px dashed #f97316;border-radius:6px;background:#fff7ed;cursor:pointer;transform:rotate(-2deg); }
+        #aprilFoolsToggle:hover { transform:rotate(2deg) scale(1.04); }
+        #aprilFoolsStorage { width:min(100%,460px);margin:0 auto 16px;padding:10px;box-sizing:border-box;border:2px dashed #f97316;border-radius:8px;background:#fff7ed;box-shadow:3px 3px 0 #fdba74; }
+        #aprilFoolsStorage[hidden] { display:none!important; }
+        #aprilFoolsGrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:5px;max-height:180px;overflow-y:auto;padding:3px; }
+        #aprilFoolsGrid .el-card { min-height:48px;padding:5px 3px;border-radius:5px; }
+        #aprilFoolsGrid .el-emoji { font-size:1.05rem;line-height:1.2; }
+        #aprilFoolsGrid .el-name { font-size:.56rem;line-height:1.2;overflow-wrap:anywhere; }
+        .april-fools-el { border:2px dashed #f97316!important;background:#fef3c7!important;color:#7c2d12!important;box-shadow:3px 3px 0 #fb923c!important;transform:rotate(-1deg); }
+        .april-fools-el .card-ribbon { background:#f97316!important;color:#fff!important;font-family:'Comic Sans MS',cursive!important;letter-spacing:0!important; }
+        .april-fools-el .card-orbit,.april-fools-el .card-footer { display:none!important; }
+        @keyframes aprilRainbow { from{filter:hue-rotate(0deg)} to{filter:hue-rotate(360deg)} }
+        @keyframes aprilSplash { 0%{transform:translate(-50%,-50%) scale(.2) rotate(-8deg);opacity:0} 18%{transform:translate(-50%,-50%) scale(1.04) rotate(2deg);opacity:1} 72%{transform:translate(-50%,-50%) scale(1) rotate(-1deg);opacity:1} 100%{transform:translate(-50%,-50%) scale(.95);opacity:0} }
+        body.april-fools-mode,body.april-fools-mode * { font-family:'Comic Sans MS','Comic Sans',cursive!important; }
+        body.april-fools-mode { background:repeating-linear-gradient(37deg,#fffb00 0 35px,#ff7b00 35px 70px,#ff4fd8 70px 105px,#4fffe1 105px 140px)!important;background-attachment:fixed!important; }
+        body.april-fools-mode header { transform:rotate(-.6deg);border-bottom:5px dashed #f00!important;animation:aprilRainbow 3s linear infinite; }
+        body.april-fools-mode .collection-panel,body.april-fools-mode .workshop-panel,body.april-fools-mode .history-panel { border:4px dashed #7c3aed!important;border-radius:27px 5px 31px 8px!important; }
+        body.april-fools-mode button { border:2px dotted #ef4444!important; }
+        body.april-fools-mode h1,body.april-fools-mode h2 { text-shadow:3px 3px 0 #facc15,-3px -3px 0 #22d3ee; }
+        .april-fools-splash { position:fixed;left:50%;top:50%;z-index:99999;width:min(94vw,1100px);padding:28px 18px;text-align:center;font-family:'Comic Sans MS',cursive;font-size:clamp(2rem,8vw,6.5rem);font-weight:900;line-height:.95;color:#fff;background:#ef4444;border:8px dashed #fef08a;border-radius:41px 7px 55px 12px;box-shadow:12px 12px 0 #7c3aed,-12px -12px 0 #22d3ee;text-shadow:5px 5px 0 #7c3aed;pointer-events:none;animation:aprilSplash 2.8s cubic-bezier(.2,.8,.2,1) forwards,aprilRainbow .7s linear infinite; }
+        @media(prefers-reduced-motion:reduce){.april-fools-splash{animation:aprilSplash 1.4s ease forwards}body.april-fools-mode header{animation:none}}
         @media(max-width:640px) { #elementStorageViews { flex-wrap:wrap; } #elementStorageViews > #elGrid { flex-basis:100%; } }
 
         /* Progression gates must also override utility display classes. */
@@ -1071,6 +1092,11 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                     <p style="font-size:.65rem;color:var(--text-secondary);margin-bottom:12px">Your treasures · Kept through reset</p>
                     <div id="exclusiveGrid"></div>
                 </aside>
+                <aside id="aprilFoolsStorage" hidden style="display:none!important" aria-label="April Fools Storer">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><strong style="font-size:.8rem;color:#c2410c">🤡 April Fools Storer</strong><span id="aprilFoolsCount" style="font-size:.65rem;color:#9a3412"></span></div>
+                    <p style="font-size:.65rem;color:#9a3412;margin-bottom:12px">Bad ideas kept safely in a cardboard box.</p>
+                    <div id="aprilFoolsGrid"></div>
+                </aside>
 
         <aside id="craftGuide" hidden aria-label="Crafting guide"><h3>📖 Crafting guide</h3><div id="craftGuideList"></div></aside>
         <aside id="craftHints" hidden style="display:none!important" aria-label="Crafting hints">
@@ -1198,6 +1224,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 <button id="sortType" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="type">Type</button>
                 <button id="sortAlpha" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="alpha">A → Z</button>
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
+                <button type="button" id="aprilFoolsToggle" aria-controls="aprilFoolsStorage" aria-expanded="false" aria-label="Show April Fools Storer" title="Show April Fools Storer">🤡</button>
                 <button type="button" id="hintToggle" aria-controls="craftHints" aria-expanded="false" aria-label="Show crafting hints" title="Show crafting hints">🔑</button>
                 <button type="button" id="guideToggle" aria-controls="craftGuide" aria-expanded="false" aria-label="Show crafting guide" title="Crafting guide">📖</button>
                 <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
@@ -3010,6 +3037,8 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         // ─── GAME STATE ───
         let elements = [...STARTERS];
         let combos = [];
+        // April Fools master switch. Turn this on to make every unknown pairing create something.
+        let OldAllCreate = false;
         let sel1 = null, sel2 = null;
         let fractionalCoins = 0;
         let gs = {
@@ -3174,6 +3203,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         const EVERYTHING_REQUIRED=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal'];
         const ALL_MOD_FLAGS=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal','isHot','isSuperHot','isFinal','isSecret','isExclusive','isValidCombination','isQuestion','isFrozen','isPermafrost','isError','isFatalError','isBlank','isToxic','isViral','isParasitic','isCorrupted','isCursed','isVoid','isCyMoney'];
         function checkIsEverything(el){
+            if(el.isAprilFools)return false;
             if(el.isEverything)return true;
             if(hasPenaltyMod(el))return false;
             if(!(el.isHot||el.isSuperHot))return false;
@@ -3211,6 +3241,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
         function getElClasses(el) {
             if(el.isExclusive)return 'exclusive-el exclusive-showpiece';
+            if(el.isAprilFools)return 'april-fools-el';
             let cls=[];
             // Everything elements get unique cyber styling only
             if(checkIsEverything(el)) return 'everything-el';
@@ -3266,13 +3297,14 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
 
         const TYPE_ORDER = [
-            'Everything','Basic','Final','Exclusive','Secret','Legendary','Divine','Celestial','Ancient',
+            'Everything','Basic','Final','Exclusive','April Fools','Secret','Legendary','Divine','Celestial','Ancient',
             'Holy','Blessed','Purified','Golden','Crystalline','Chromatic','Ethereal','Electric','Magnetic','Temporal',
             'Infernal','Hot','Radioactive','Cursed','Corrupted','Void','Abyssal',
             'Antimatter','Phantom','Unstable','Parasitic','Frozen','Permafrost','Tsunami',
             'Error','Fatal Error','Blank','Normal','Penalty'
         ];
         function getElType(el) {
+            if(el.isAprilFools) return 'April Fools';
             // Everything elements get top priority
             if(checkIsEverything(el)) return 'Everything';
             // Penalty elements always go to Penalty section at the end
@@ -3802,7 +3834,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
 
         function prestigeRequirements(){
-            const owned=new Set(elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey&&!e.isPrestige).map(e=>e.name.toLowerCase()));
+            const owned=new Set(elements.filter(e=>!e.excludeFromRank&&!e.isAprilFools&&!e.isExclusive&&!e.isKey&&!e.isPrestige).map(e=>e.name.toLowerCase()));
             const all=rankedCatalog(),missing=all.filter(n=>!owned.has(n.toLowerCase()));
             // Collection goals are fixed counts, independent of future recipe additions.
             // Keys and coins retain their capped progression in quarter-percent units.
@@ -3893,6 +3925,14 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             toggle.setAttribute('aria-label',panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage');
             toggle.title=panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage';
         });
+        $('aprilFoolsToggle').addEventListener('click',()=>{
+            const panel=$('aprilFoolsStorage'),toggle=$('aprilFoolsToggle');
+            const show=toggle.getAttribute('aria-expanded')!=='true';
+            panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
+            toggle.setAttribute('aria-expanded',String(show));
+            toggle.setAttribute('aria-label',show?'Hide April Fools Storer':'Show April Fools Storer');
+            toggle.title=show?'Hide April Fools Storer':'Show April Fools Storer';
+        });
         // Sculpted card anatomy shared by full renders and freshly discovered cards.
         const MODIFIER_STYLES={"isCyMoney": {"label": "CyMoney", "hue": 185, "sigil": "◇", "family": "circuit"}, "isFatalError": {"label": "FatalError", "hue": 350, "sigil": "⨯", "family": "fracture"}, "isError": {"label": "Error", "hue": 0, "sigil": "!", "family": "fracture"}, "isVoid": {"label": "Void", "hue": 265, "sigil": "◉", "family": "void"}, "isCorrupted": {"label": "Corrupted", "hue": 305, "sigil": "⌁", "family": "fracture"}, "isCursed": {"label": "Cursed", "hue": 285, "sigil": "☽", "family": "runes"}, "isToxic": {"label": "Toxic", "hue": 90, "sigil": "☣", "family": "bubbles"}, "isViral": {"label": "Viral", "hue": 135, "sigil": "✣", "family": "bubbles"}, "isParasitic": {"label": "Parasitic", "hue": 70, "sigil": "❧", "family": "bubbles"}, "isPermafrost": {"label": "Permafrost", "hue": 200, "sigil": "❆", "family": "ice"}, "isFrozen": {"label": "Frozen", "hue": 195, "sigil": "❄", "family": "ice"}, "isDivine": {"label": "Divine", "hue": 45, "sigil": "✧", "family": "halo"}, "isLegendary": {"label": "Legendary", "hue": 280, "sigil": "♔", "family": "runes"}, "isCelestial": {"label": "Celestial", "hue": 225, "sigil": "✦", "family": "cosmic"}, "isAncient": {"label": "Ancient", "hue": 35, "sigil": "⌘", "family": "runes"}, "isHoly": {"label": "Holy", "hue": 48, "sigil": "✟", "family": "halo"}, "isBlessed": {"label": "Blessed", "hue": 55, "sigil": "✥", "family": "halo"}, "isPurified": {"label": "Purified", "hue": 170, "sigil": "◈", "family": "halo"}, "isSuperHot": {"label": "SuperHot", "hue": 5, "sigil": "♨", "family": "flame"}, "isInfernal": {"label": "Infernal", "hue": 12, "sigil": "♨", "family": "flame"}, "isHot": {"label": "Hot", "hue": 25, "sigil": "♨", "family": "flame"}, "isRadioactive": {"label": "Radioactive", "hue": 80, "sigil": "☢", "family": "bubbles"}, "isElectric": {"label": "Electric", "hue": 55, "sigil": "ϟ", "family": "circuit"}, "isMagnetic": {"label": "Magnetic", "hue": 330, "sigil": "∩", "family": "circuit"}, "isAntimatter": {"label": "Antimatter", "hue": 295, "sigil": "⊖", "family": "void"}, "isTemporal": {"label": "Temporal", "hue": 250, "sigil": "◷", "family": "cosmic"}, "isAbyssal": {"label": "Abyssal", "hue": 225, "sigil": "≋", "family": "water"}, "isTsunami": {"label": "Tsunami", "hue": 190, "sigil": "≋", "family": "water"}, "isGolden": {"label": "Golden", "hue": 43, "sigil": "◆", "family": "facets"}, "isCrystalline": {"label": "Crystalline", "hue": 185, "sigil": "⬡", "family": "facets"}, "isChromatic": {"label": "Chromatic", "hue": 315, "sigil": "✺", "family": "facets"}, "isEthereal": {"label": "Ethereal", "hue": 260, "sigil": "✧", "family": "mist"}, "isPhantom": {"label": "Phantom", "hue": 255, "sigil": "◌", "family": "mist"}, "isUnstable": {"label": "Unstable", "hue": 20, "sigil": "⌁", "family": "fracture"}, "isFinal": {"label": "Final", "hue": 42, "sigil": "✶", "family": "runes"}, "isSecret": {"label": "Secret", "hue": 0, "sigil": "◆", "family": "void"}, "isExclusive": {"label": "Exclusive", "hue": 275, "sigil": "✧", "family": "facets"}, "isQuestion": {"label": "Question", "hue": 295, "sigil": "?", "family": "cosmic"}, "isBlank": {"label": "Blank", "hue": 210, "sigil": "□", "family": "mist"}, "isValidCombination": {"label": "ValidCombination", "hue": 165, "sigil": "✓", "family": "facets"}, "isBasic": {"label": "Basic", "hue": 145, "sigil": "•", "family": "facets"}, "isKey": {"label": "Key", "hue": 45, "sigil": "⚿", "family": "runes"}};
         function decorateModifier(card,el){
@@ -3920,7 +3960,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(el.isPrestige)card.classList.add('prestige-showpiece');
             if(Array.from(el.emoji||'').length>3)card.classList.add('multi-icon-card');
             card.style.setProperty('--card-hue',hue);
-            const tier=el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
+            const tier=el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isAprilFools?'🤡 WHOOPS':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
             card.dataset.tier=tier;
             const ribbon=document.createElement('div');ribbon.className='card-ribbon';ribbon.textContent=tier+(el.isKey?' · ×'+keyAmount(el):'');
             const stage=document.createElement('div');stage.className='card-stage';
@@ -3985,12 +4025,25 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             elGrid.innerHTML='';
             // Both views reference the canonical elements array and original selection indices.
             const exclusiveGrid=$('exclusiveGrid');exclusiveGrid.innerHTML='';
+            const aprilFoolsGrid=$('aprilFoolsGrid');aprilFoolsGrid.innerHTML='';
             const count=elements.filter(e=>e.isExclusive).length;
             $('exclusiveCount').textContent=count;
             if(!count){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='A little space for rare discoveries.';exclusiveGrid.appendChild(empty);}
+            const aprilCount=elements.filter(e=>e.isAprilFools).length;
+            $('aprilFoolsCount').textContent=aprilCount;
+            $('aprilFoolsToggle').hidden=OldAllCreate||!aprilCount;
+            if(OldAllCreate){$('aprilFoolsStorage').hidden=true;$('aprilFoolsStorage').style.setProperty('display','none','important');$('aprilFoolsToggle').setAttribute('aria-expanded','false');}
+            if(!aprilCount){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:#9a3412';empty.textContent='No terrible ideas archived yet.';aprilFoolsGrid.appendChild(empty);}
             const sorted = getSortedElements();
             let lastType = null;
             sorted.forEach(({el,origIdx})=>{
+                if(el.isAprilFools&&!OldAllCreate){
+                    const w=document.createElement('div');w.className='el-wrapper';
+                    const d=document.createElement('div');d.className=`el-card ${getElClasses(el)}`;
+                    d.setAttribute('data-idx',origIdx);d.setAttribute('data-name',el.name);d.setAttribute('data-desc',el.description||'');
+                    d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
+                    sculptElementCard(d,el);w.appendChild(d);aprilFoolsGrid.appendChild(w);return;
+                }
                 if(currentSort === 'type' && !el.isExclusive && !el.isPrestige) {
                     const t = getElType(el);
                     if(t !== lastType) {
@@ -4046,7 +4099,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         searchInput.addEventListener('input',e=>{
             const t=e.target.value.trim().toLowerCase();
             let vis=0;
-            document.querySelectorAll('#elGrid .el-card, #exclusiveGrid .el-card').forEach(c=>{
+            document.querySelectorAll('#elGrid .el-card, #exclusiveGrid .el-card, #aprilFoolsGrid .el-card').forEach(c=>{
                 const nm=c.getAttribute('data-name').toLowerCase(), ds=c.getAttribute('data-desc').toLowerCase();
                 const show=c.dataset.prestige==='true'||!t||nm.includes(t)||ds.includes(t);
                 c.closest('.el-wrapper').style.display=show?'':'none';
@@ -4137,9 +4190,16 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         });
 
         // ─── COMBINATION LOGIC ───
+        function aprilPairKey(n1,n2){return [String(n1).toLowerCase(),String(n2).toLowerCase()].sort().join('|');}
         function generateElement(e1,e2){
             const n1=typeof e1==='object'?e1.name:e1, n2=typeof e2==='object'?e2.name:e2;
             const p1=typeof e1==='object'?e1:{}, p2=typeof e2==='object'?e2:{};
+            const pairKey=aprilPairKey(n1,n2);
+            const savedAprilCombo=combos.find(c=>c.isAprilFools&&((c.pairKey&&c.pairKey===pairKey)||(!c.pairKey&&aprilPairKey(c.e1,c.e2)===pairKey)));
+            if(savedAprilCombo){
+                const saved=elements.find(e=>e.isAprilFools&&e.name===savedAprilCombo.r);
+                if(saved)return{...saved};
+            }
 
             // ─── Permafrost blocks (can NEVER be melted, blocks all combos) ───
             if(p1.isPermafrost||p2.isPermafrost){
@@ -4180,7 +4240,10 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 
             const key1=n1+'+'+n2, key2=n2+'+'+n1;
             let result=recipes[key1]||recipes[key2];
-            if(!result)return{invalid:true,name:'Invalid Combination',emoji:'❌',description:'These elements cannot be combined.',color:'bg-gray-500'};
+            if(!result){
+                if(OldAllCreate)return generateAprilFoolsElement(n1,n2);
+                return{invalid:true,name:'Invalid Combination',emoji:'❌',description:'These elements cannot be combined.',color:'bg-gray-500'};
+            }
 
             result={...result};
 
@@ -4291,6 +4354,27 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             return result;
         }
 
+        function aprilHash(text){let h=2166136261;for(const ch of text){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+        function generateAprilFoolsElement(n1,n2){
+            const pair=aprilPairKey(n1,n2);
+            let seed=aprilHash(pair),pick=n=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed%n;};
+            const clean=s=>s.replace(/[^a-z0-9]/gi,'')||'Thing';
+            const a=clean(n1),b=clean(n2);
+            const prefixes=['Ultra','Mega','Mini','Super','Hyper','Turbo','Quantum','Proto','Pseudo','Neo','Anti','Un','Re','De','Pre','Post','Sub','Over','Under','Inter','Extra','Cosmo','Astro','Cyber','Bio','Geo','Pyro','Hydro','Cryo','Electro','Mysti','Giga','Tera','Nano','Omega','Alpha','Lord','Sir','Doctor','Professor','Captain','Baby','Grandpa','Illegal','Suspicious','Budget','Discount','Offbrand','Unlicensed','Cursed','Wobbly','Soggy','Crunchy','Spicy','Sleepy','Angry','Confused','Haunted','Radioactive','Invisible','Extremely'];
+            const chunks=['on','oni','noni','mun','unio','pert','ster','ston','erp','tist','nom','blob','snorf','glorp','womp','bonk','zoop','plonk','scrunk','mlem','bork','yeet','boing','schlorp','gronk','floob','sploot','crump','dingle','dongle','fizzle','pop','mush','nug','oodle','izzle','azzle','umbus','onk','erp','ish','ulous','ifer','ator','inator','ifier','maker','eater','lord'];
+            const suffixes=['onium','inator','oid','er','ist','ness','core','ster','zilla','ification','nator','mancer','machine','monster','deluxe','premium','classic','pro','max','plus','lite','two','again','returns','revenge','awakening','finale','electricboogaloo','jr','senior','thethird','supreme','prime','ultimate','thing','creature','person','device','moment','incident','problem','mistake','disaster','sandwich','soup','nugget','goblin','gremlin','wizard','enjoyer','enthusiast','department','corporation','dotexe','fromwalmart','butworse','ofdoom','ofdestiny','fornoreason'];
+            const bite=(s,start,len)=>s.slice(Math.min(start,Math.max(0,s.length-1)),Math.min(s.length,start+len))||s;
+            const prefix=pick(100)<72?prefixes[pick(prefixes.length)]:'';
+            const glueCount=2+pick(4);
+            let middle=bite(a,0,Math.max(2,Math.ceil(a.length*(.35+pick(45)/100))));
+            for(let i=0;i<glueCount;i++)middle+=chunks[pick(chunks.length)];
+            middle+=bite(b,pick(Math.max(1,Math.floor(b.length/2))),Math.max(2,Math.ceil(b.length*(.45+pick(40)/100))));
+            let name=prefix+middle+suffixes[pick(suffixes.length)];
+            name=name.charAt(0).toUpperCase()+name.slice(1);
+            const emojis=['🤡','🗿','💀','☠️','👽','👾','🤖','👻','👹','👺','🧌','🫠','🥴','🤪','😵‍💫','🤯','😈','🙃','🫥','🫨','🦆','🪿','🐸','🐔','🐌','🦀','🦞','🦐','🐡','🦑','🐙','🦧','🦥','🦦','🦨','🦩','🐀','🪱','🪰','🪳','🦠','🫘','🍉','🍌','🍋','🥔','🧅','🧄','🥚','🧀','🍞','🥨','🍔','🌭','🍕','🧇','🍩','🍪','🎂','🍄','🧊','🫧','🪨','🧱','🛒','🚽','🪠','🧻','🪣','🧽','🧦','🩴','🎩','🪇','🪗','🎺','🛸','🚜','🛴','🗑️','📦','📎','✏️','🔨','🪤','🧯','💣','🧨','🪩','🎪','🌀','❓','⁉️','💥','💫','✨','🔥','🌚','🌝','🌵','🌪️','🫙','🛎️','🪥','🧲','🔮','🧪','🧬'];
+            return{name,emoji:emojis[pick(emojis.length)],description:n1+' + '+n2+' should not have worked, but here we are.',color:'bg-orange-300',isAprilFools:true,excludeFromRank:true};
+        }
+
         function processMelt(frozenEl,heatEl){
             const idx=elements.findIndex(e=>e.name===frozenEl.name&&e.isFrozen);
             if(idx===-1)return null;
@@ -4313,6 +4397,10 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(sfAnimating||ascensionBusy)return;
             if(!sel1||!sel2||isCombining)return;
             isCombining=true;
+            if(!OldAllCreate&&(sel1.isAprilFools||sel2.isAprilFools)){
+                resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>🤡</span></div><h3>Archived nonsense</h3><p>Turn OldAllCreate on before crafting with April Fools elements.</p></div>';
+                resetDZs();return;
+            }
 
             const isHeat1=sel1.isHot||sel1.isSuperHot||sel1.name==='Fire'||sel1.name==='Inferno';
             const isHeat2=sel2.isHot||sel2.isSuperHot||sel2.name==='Fire'||sel2.name==='Inferno';
@@ -4421,6 +4509,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(checkIsEverything(newEl)){stripToEverything(newEl);}
             const exists=elements.findIndex(e=>e.name.toLowerCase()===newEl.name.toLowerCase());
             if(exists!==-1){
+                if(newEl.isAprilFools){
+                    const pairKey=aprilPairKey(sel1.name,sel2.name);
+                    if(!combos.some(c=>c.isAprilFools&&((c.pairKey&&c.pairKey===pairKey)||(!c.pairKey&&aprilPairKey(c.e1,c.e2)===pairKey)))){
+                        combos.push({e1:sel1.name,e2:sel2.name,r:elements[exists].name,isAprilFools:true,pairKey});
+                        addComboEntry(sel1,sel2,elements[exists]);save();
+                    }
+                }
                 if(newEl.isEverything){stripToEverything(elements[exists]);save();renderEls();}
                 // Re-check existing element in case it now qualifies after Star Forge etc.
                 if(checkIsEverything(elements[exists])){stripToEverything(elements[exists]);}
@@ -4428,7 +4523,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             } else {
                 elements.push(newEl);
                 showResult(newEl,true);
-                combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name});
+                combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{})});
                 addComboEntry(sel1,sel2,newEl);
                 const d=document.createElement('div');d.className='el-wrapper';
                 const card=document.createElement('div');
@@ -4439,7 +4534,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(newEl.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width='0%';card.appendChild(mb);}
                 if(newEl.hasLink)card.addEventListener('click',()=>window.open(newEl.link,'_blank'));
                 d.appendChild(card);elGrid.appendChild(d);
-                if(newEl.isExclusive)renderEls();
+                if(newEl.isExclusive||newEl.isAprilFools)renderEls();
                 updateCount();save();checkStarForgeUnlock();
                 // Notifications for special types
                 if(newEl.isFatalError){notify('FATAL ERROR!',newEl.name+' — critically glitched!','💀');if(!fatalErrorTutShown){fatalErrorTutShown=true;openModal('fatalErrorTutModal');}}
@@ -4692,7 +4787,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 const data=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'2.1'});
                 const encrypted=await secureEncrypt(data,pw);
                 $('exportCode').value=encrypted;
-                developerArmed=pw===developerSequence;developerTyped='';
+                developerArmed=await developerSecretMatches(pw);developerTyped='';
                 $('exportCodeWrap').classList.remove('hidden');
                 notify('Encrypted!','Save code ready to copy','🔐');
             }catch(e){$('exportErr').textContent='Encryption error: '+e.message;$('exportErr').classList.remove('hidden');
@@ -4755,17 +4850,22 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         });
 
         function refreshDeveloper(){ $('developerJson').value=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'3.0'},null,2);$('developerError').textContent=''; }
-        // Hidden editor gesture is armed only by a successful export with this password.
-        const developerSequence='jzJERBV2!';
+        // Keep the developer gesture usable without storing its password in plaintext.
+        const DEVELOPER_SECRET_HASH='e4460a20cba16e969662218a8c066921803b228e03de270a5390275e921ca64d';
+        const DEVELOPER_SECRET_LENGTH=9;
+        async function developerSecretMatches(value){
+            const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value));
+            return toHex(digest)===DEVELOPER_SECRET_HASH;
+        }
         let developerArmed=false,developerTyped='';
         new MutationObserver(()=>{if($('exportModal').style.display==='none'){developerArmed=false;developerTyped='';}}).observe($('exportModal'),{attributes:true,attributeFilter:['style']});
-        document.addEventListener('keydown',e=>{
+        document.addEventListener('keydown',async e=>{
             if(!developerArmed||$('exportModal').style.display==='none')return;
             const active=document.activeElement;
             if(active&&(active.matches('input,textarea,select')||active.isContentEditable))return;
             if(e.ctrlKey||e.metaKey||e.altKey||e.key.length!==1)return;
-            developerTyped=(developerTyped+e.key).slice(-developerSequence.length);
-            if(developerTyped===developerSequence){developerArmed=false;developerTyped='';refreshDeveloper();closeModal('exportModal');openModal('developerModal');}
+            developerTyped=(developerTyped+e.key).slice(-DEVELOPER_SECRET_LENGTH);
+            if(developerTyped.length===DEVELOPER_SECRET_LENGTH&&await developerSecretMatches(developerTyped)){developerArmed=false;developerTyped='';refreshDeveloper();closeModal('exportModal');openModal('developerModal');}
         });
         $('refreshDeveloper').addEventListener('click',refreshDeveloper);
         $('applyDeveloper').addEventListener('click',()=>{
@@ -4779,8 +4879,9 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function resetForPrestige(){
             if(ascensionBusy&&!prestigeReset)return;
             // Exclusive ownership stays in the canonical collection across reset.
-            const kept=elements.filter(e=>e.isExclusive);
-            elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];combos=[];fractionalCoins=0;
+            const kept=elements.filter(e=>e.isExclusive||(prestigeReset&&e.isAprilFools));
+            const keptAprilCombos=prestigeReset?combos.filter(c=>c.isAprilFools):[];
+            elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];combos=keptAprilCombos;fractionalCoins=0;
             gs={everythingSeen:[],everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,cyUpgrades:{},cyProgress:0,sfUpgraded:false,sfUnlocked:false};
             cyLastTick=Date.now();clearTimeout(sfPresentationTimer);sfAnimating=false;$('starForgeEffect').hidden=true;
             if(prestigeReset)prestigeData().upgrades={};
@@ -4792,6 +4893,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             starForgeBtn.classList.remove('sf-cooldown');
             starForgeBtn.classList.add('sf-locked');starForgeBtn.style.pointerEvents='none';
             comboHistory.innerHTML='<p class="italic text-center text-sm" style="color:var(--text-secondary)">No combinations yet</p>';
+            if(combos.length)rebuildHistory();
             resultArea.innerHTML='';searchInput.value='';
             currentSort='original';applySortBtnUI();saveSortPref();
             resetDZs();renderEls();updateCount();updateCoinDisplay();save();updateCyMoneyDisplay();
@@ -4800,7 +4902,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 
         // ─── ENDING / RANK ───
         function showEnding(){
-            const counted=rankedCatalog().filter(name=>elements.some(e=>e.name.toLowerCase()===name.toLowerCase()&&!e.isExclusive&&!e.excludeFromRank&&!e.isKey)).length;
+            const counted=rankedCatalog().filter(name=>elements.some(e=>e.name.toLowerCase()===name.toLowerCase()&&!e.isExclusive&&!e.isAprilFools&&!e.excludeFromRank&&!e.isKey)).length;
             const pct=Math.round((counted/totalMain)*100);
             let rank,msg;            
             if(pct<=5){rank='U';msg='Just scratched the surface.';}
@@ -4860,6 +4962,14 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none');});
 
         // ─── INIT ───
+        function applyAprilFoolsMode(){
+            document.body.classList.toggle('april-fools-mode',OldAllCreate);
+            if(!OldAllCreate)return;
+            const splash=document.createElement('div');splash.className='april-fools-splash';
+            splash.textContent='🤡 APRIL FOOOOOOOOOOOOOOOOOOOLSS!!!!! 🤡';
+            document.body.appendChild(splash);setTimeout(()=>splash.remove(),3000);
+        }
+        applyAprilFoolsMode();
         load();
         loadSortPref();
         renderEls();
