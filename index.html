@@ -36,7 +36,7 @@
         #hintToggle { width:30px;height:28px;border:1px solid rgba(234,179,8,.35);border-radius:9px;background:rgba(234,179,8,.1);cursor:pointer; }
         #hintToggle:hover,#hintToggle[aria-expanded="true"] { background:rgba(234,179,8,.22); }
         #hintToggle:focus-visible { outline:2px solid #eab308;outline-offset:3px; }
-        #craftHints { width:min(100%,460px);box-sizing:border-box;margin:0 0 16px auto;padding:12px;border:1px solid rgba(234,179,8,.3);border-radius:14px;background:var(--bg-card);color:var(--text-primary);font-size:.75rem; }
+        #craftHints { width:min(100%,460px);box-sizing:border-box;margin:0 auto 16px;padding:12px;border:1px solid rgba(234,179,8,.3);border-radius:14px;background:var(--bg-card);color:var(--text-primary);font-size:.75rem; }
         #craftHints[hidden], #craftHints [hidden] { display:none!important; }
         #craftHints article+article { margin-top:12px;padding-top:10px;border-top:1px solid var(--border); }
         #craftHints p { margin:5px 0;color:var(--text-secondary);line-height:1.5; }
@@ -48,7 +48,7 @@
         #exclusiveToggle:focus-visible { outline:2px solid #a78bfa;outline-offset:3px; }
         #elementStorageViews { display:flex;align-items:flex-start;gap:14px; }
         #elGrid { flex:1;min-width:0; }
-        #exclusiveStorage { width:min(100%,460px);margin:0 0 16px auto;padding:10px;box-sizing:border-box;border:1px solid rgba(167,139,250,.4);border-radius:16px;background:linear-gradient(145deg,var(--bg-card),var(--bg-primary));box-shadow:0 6px 22px rgba(99,66,160,.1); }
+        #exclusiveStorage { width:min(100%,460px);margin:0 auto 16px;padding:10px;box-sizing:border-box;border:1px solid rgba(167,139,250,.4);border-radius:16px;background:linear-gradient(145deg,var(--bg-card),var(--bg-primary));box-shadow:0 6px 22px rgba(99,66,160,.1); }
         #exclusiveStorage[hidden] { display:none!important; }
         #exclusiveGrid { display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:5px;max-height:180px;overflow-y:auto;padding:3px; }
         #exclusiveGrid .el-card { min-height:48px;padding:5px 3px;border-radius:9px; }
@@ -715,7 +715,9 @@
         .combo-entry { padding:6px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; font-size:0.85rem; }
         .combo-entry:last-child { border-bottom:none; }
 
-    </style>
+    #guideToggle{width:32px;height:32px;padding:0;border:1px solid var(--border);border-radius:9px;background:var(--bg-card);cursor:pointer}#guideToggle[aria-expanded="true"]{box-shadow:0 0 12px #a78bfa80}#craftGuide[hidden]{display:none!important}#craftGuide{width:min(100%,600px);margin:0 auto 16px;padding:14px;border:1px solid #a78bfa70;border-radius:12px 22px;background:var(--bg-card);color:var(--text-primary)}#craftGuide h3{font-size:14px;margin-bottom:10px}#craftGuideList{max-height:350px;overflow:auto}.craft-distance summary{cursor:pointer}.craft-distance p{max-width:440px;padding-top:8px;white-space:pre-line}
+#elGrid>.prestige-pinned{grid-column:1;grid-row:1;order:-1}
+</style>
 <style>/* Craft Madness: observatory interface */
 body {background:var(--bg-primary);background-image:radial-gradient(ellipse at 15% 0%,rgba(99,102,241,.14),transparent 50%),radial-gradient(ellipse at 90% 40%,rgba(20,184,166,.09),transparent 45%);}
 header {padding:28px 18px!important;border-bottom:1px solid var(--border);margin-bottom:24px!important;}
@@ -1012,6 +1014,45 @@ input[type=checkbox] {width:auto;}
 @keyframes stellarIgnite {0%{transform:scale(.3) rotate(-40deg);opacity:.2}65%{transform:scale(1.12) rotate(10deg);opacity:1}100%{transform:scale(1)}}
 @keyframes stellarSpin {to{transform:rotate(180deg)}}
 @media(prefers-reduced-motion:reduce){.stellar-star,.stellar-rings,.stellar-charge,.stellar-report{animation:none!important;}}
+</style><style>#ascensionOverlay {position:fixed;inset:0;z-index:200;background:radial-gradient(ellipse,#302442ee,#080615f5);backdrop-filter:blur(12px);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:white;}
+#ascensionOverlay[hidden]{display:none!important;}
+.ascension-stage {position:relative;width:min(480px,96vw);height:380px;display:grid;place-items:center;}
+#ascensionOrbit {position:absolute;inset:0;animation:ascensionOrbit 1.5s linear;}
+#ascensionOrbit>span {position:absolute;left:50%;top:50%;font-size:9px;border:1px solid #ead8ff55;padding:4px 6px;background:#352745;border-radius:6px;white-space:nowrap;transform:translate(-50%,-50%) rotate(var(--angle)) translateX(175px) rotate(calc(-1 * var(--angle)));}
+#ascensionCore {width:130px;opacity:.35;transform:scale(.85);transition:opacity .7s,transform .7s;}
+#ascensionCore .sculpted-card{width:130px;min-height:170px;}
+.ascension-merge #ascensionOrbit>span {animation:ascensionMerge .85s ease-in both;}
+.ascension-merge #ascensionCore {opacity:1;transform:scale(1.08);filter:drop-shadow(0 0 24px #c6a0ee88);}
+#ascensionMessage {font-size:clamp(18px,4vw,29px);text-align:center;min-height:42px;text-shadow:0 0 18px #e9baff77;margin:10px 20px;}
+@keyframes ascensionOrbit{from{transform:rotate(-180deg)}to{transform:rotate(0)}}
+@keyframes ascensionMerge{to{transform:translate(-50%,-50%) rotate(var(--angle)) translateX(0) scale(.1);opacity:0}}
+.el-card.sculpted-card.prestige-showpiece {background:linear-gradient(120deg,#372252,#72592b,#30264b,#594620)!important;background-size:300% 300%!important;animation:everythingSpectrum 8s ease-in-out infinite!important;border:2px solid #fff1ae!important;box-shadow:inset 0 0 15px #ffd86b33,0 5px 0 #2e2037,0 0 18px #edcf7955!important;overflow:visible!important;}
+.prestige-showpiece .card-ribbon {color:#fff0b5!important;font-weight:900;letter-spacing:1px;}
+.prestige-showpiece .card-stage::before {border:2px double #ffe9a8!important;box-shadow:0 0 12px #eab30844;}
+.prestige-showpiece .card-footer {color:#ffe9a8!important;}
+.special-outcome {width:min(330px,100%);padding:18px;text-align:center;border:1px solid var(--ui-edge);border-radius:12px 28px 12px 28px;background:var(--ui-panel);box-shadow:inset 0 1px #fff3,0 8px 25px #0001;animation:finisherArrival .4s ease-out;}
+.special-outcome h3{font-size:1rem;margin:12px 0 5px;}.special-outcome p{font-size:.73rem;color:var(--text-secondary);}.special-outcome progress{display:block;margin:12px auto 0;height:8px;width:80%;accent-color:#7dd3fc;}
+.craft-distance {display:inline-block;padding:6px 8px;margin:3px;border-radius:7px;font-size:10px;line-height:1.4;background:#16131c;color:#fff;border:1px solid #444;}
+.craft-distance[data-steps="1"]{background:#d1fae5;color:#065f46;border-color:#34d399;}.craft-distance[data-steps="2"]{background:#fef9c3;color:#713f12;border-color:#eab308;}
+.craft-distance[data-steps="3"]{background:#ffedd5;color:#9a3412;}.craft-distance[data-steps="4"]{background:#fed7aa;color:#7c2d12;}.craft-distance[data-steps="5"]{background:#fecaca;color:#7f1d1d;}.craft-distance[data-steps="6"]{background:#fbcfe8;color:#831843;}.craft-distance[data-steps="7"]{background:#e9d5ff;color:#581c87;}.craft-distance[data-steps="8"]{background:#c4b5fd;color:#3b0764;}.craft-distance[data-steps="9"]{background:#7c3aed;color:#fff;}.craft-distance[data-steps="10"]{background:#4c1d95;color:#fff;}
+.craft-distance-note{font-size:10px;line-height:1.6;color:var(--text-secondary);margin-bottom:8px;}
+@media(max-width:450px){.ascension-stage{transform:scale(.82);margin:-25px;}#ascensionOrbit>span{font-size:8px;}}
+@media(prefers-reduced-motion:reduce){#ascensionOrbit,.ascension-merge #ascensionOrbit>span,.prestige-showpiece,.special-outcome{animation:none!important;}#ascensionCore{transition:none;}.ascension-merge #ascensionOrbit{opacity:0;}}
+
+/* Rounded scroll rails: leave breathing room at panel corners. */
+* {scrollbar-width:thin;scrollbar-color:var(--text-secondary) transparent;}
+*::-webkit-scrollbar {width:8px!important;height:8px!important;}
+*::-webkit-scrollbar-track {background:transparent!important;margin:12px 0!important;}
+*::-webkit-scrollbar-thumb {background:var(--text-secondary)!important;border:2px solid transparent;border-radius:999px!important;background-clip:padding-box!important;}
+*::-webkit-scrollbar-thumb:hover {background:var(--gold)!important;background-clip:padding-box!important;}
+*::-webkit-scrollbar-corner {background:transparent;}
+*::-webkit-scrollbar-button {display:none;width:0;height:0;}
+.modal-box::-webkit-scrollbar-track {margin-block:30px!important;}
+.modal-box {scroll-padding-block:24px;overscroll-behavior:contain;}
+#exclusiveGrid,#craftGuideList,.changelog-scroll,#battleLog,#p1MoveSelect,#p2MoveSelect,.stellar-changes {scroll-padding-block:12px;overscroll-behavior:contain;}
+/* Chromium uses the inset custom rail; Firefox retains its native thin rail. */
+@supports selector(::-webkit-scrollbar) {* {scrollbar-width:auto!important;scrollbar-color:auto!important;}}
+.account-toolbar,.account-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin:14px 0}.account-toolbar{font-size:12px}#accountModal button{margin:6px 4px}#nicknameInput,#boardMetric{background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--border);padding:10px;border-radius:10px;max-width:100%}.account-note,#accountStatus{font-size:12px;line-height:1.6;margin:14px 0;color:var(--text-secondary)}#leaderboardList p{padding:12px;border-bottom:1px solid var(--border)}#leaderboardList{max-height:50vh;overflow:auto}
 </style></head>
 <body>
     <script>
@@ -1040,6 +1081,7 @@ input[type=checkbox] {width:auto;}
                 <div id="cyMoneyDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span><span id="cyIncomeRate" style="font-size:.6rem;opacity:.8">0/min</span>
                 </div>
             </div>
+            <div class="account-toolbar"><span id="playerName">New crafter</span><button id="accountBtn">⚙️ Settings & Account</button><button id="leaderboardBtn">🏅 Leaderboards</button></div>
         </header>
 
         <!-- Combination Area -->
@@ -1064,6 +1106,7 @@ input[type=checkbox] {width:auto;}
                     <div id="exclusiveGrid"></div>
                 </aside>
 
+        <aside id="craftGuide" hidden aria-label="Crafting guide"><h3>📖 Crafting guide</h3><div id="craftGuideList"></div></aside>
         <aside id="craftHints" hidden style="display:none!important" aria-label="Crafting hints">
             <h3 style="font-size:.8rem;color:var(--gold);margin-bottom:10px">A few clues</h3>
             <p style="font-size:.7rem;color:var(--text-secondary)">🔑 <span id="keyBalance">0</span> keys · 1 in 500 chance each second while playing. Spend a key to reveal a recipe, or discover its element to unlock it for free.</p>
@@ -1129,16 +1172,16 @@ input[type=checkbox] {width:auto;}
             <h2 class="font-display text-xl mb-3">🏆 Prestige?</h2>
             <p id="prestigeCount" class="text-sm mb-3"></p>
             <p id="prestigeRequirements" class="text-sm mb-3" style="line-height:1.7"></p>
-            <details class="text-xs mb-3"><summary>Required collection</summary><p id="prestigeMissing" style="max-height:150px;overflow:auto;margin-top:8px"></p></details>
-            <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires 250 keys, all ranked elements, and 1,000,000 coins currently held. Rank-excluded and exclusive elements are not required.</p>
-            <p class="text-sm mb-4" style="color:#eab308">Confirming spends 250 keys and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ordinary upgrades. Exclusive elements, CyMoney, CyMoney upgrades, prestige coins and permanent upgrades are kept. You receive exactly 1 prestige coin.</p>
+            <p class="text-xs mb-3">Open the 📖 guide beside hints to see your missing elements and their recipe steps.</p>
+            <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires Shop and Star Forge unlocked. Collect 100 ranked elements for your first Prestige, then 25 more per completed Prestige (100, 125, 150…). These are fixed counts, independent of the total number of elements. Keys start at 25 and coins at 100,000; each Prestige adds 6.25 keys (rounded up) and 25,000 coins, capped at 250 keys and 1,000,000 coins. Any ranked elements count. Rank-excluded and exclusive elements are not required.</p>
+            <p class="text-sm mb-4" style="color:#eab308">Confirming spends the displayed key requirement and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ALL upgrade levels. Exclusive elements, CyMoney and prestige totals are kept. ALL upgrade levels reset, including Prestige Shop purchases. You receive 1 prestige coin, Shop, an unupgraded Star Forge, a Prestige counter element and one additional starting basic element.</p>
             <button id="confirmPrestige" class="text-sm px-4 py-2 rounded-lg disabled:opacity-40" style="background:var(--gold);color:#1a1a2e" disabled>Confirm Prestige · Earn 1 coin</button>
         </div></div>
         <div id="prestigeShopModal" class="modal-overlay"><div class="modal-box" style="max-width:650px">
             <button class="modal-close" data-close="prestigeShopModal">&times;</button>
             <h2 class="font-display text-xl mb-2">🏆 Prestige Shop</h2>
             <p id="prestigeBalance" class="text-sm mb-2"></p>
-            <p class="text-xs mb-4" style="color:var(--text-secondary)">Every level costs 1 prestige coin. All purchases survive reset and prestige. Forge upgrades apply on the next activation; stock upgrades apply on the next restock.</p>
+            <p class="text-xs mb-4" style="color:var(--text-secondary)">Every level costs 1 prestige coin. Purchases survive ordinary Reset but all upgrade levels reset on Prestige. Forge upgrades apply on the next activation; stock upgrades apply on the next restock.</p>
             <div id="prestigeUpgradeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
         </div></div>
 
@@ -1146,11 +1189,12 @@ input[type=checkbox] {width:auto;}
             <button class="modal-close" data-close="cyShopModal">&times;</button>
             <h2 class="font-display text-xl mb-2">💎 CyMoney Workshop</h2>
             <p id="cyShopBalance" class="text-sm mb-2"></p>
-            <p class="text-xs mb-4" style="color:var(--text-secondary)">Each CyMoney element produces 1 CyMoney per minute while this tab is active. Upgrade prices rise with each level. CyMoney upgrades survive Prestige; ordinary Reset clears them.</p>
+            <p class="text-xs mb-4" style="color:var(--text-secondary)">Each CyMoney element produces 1 CyMoney per minute while this tab is active. Upgrade prices rise with each level. CyMoney upgrades reset on both Prestige and ordinary Reset.</p>
             <div id="cyUpgradeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
         </div></div>
         <div id="starForgeEffect" hidden role="status" aria-live="polite"><div class="stellar-activation"><div class="stellar-rings"></div><div class="stellar-star">✦</div><h3>STAR FORGE</h3><p>Constellations align. New power awakens.</p><div class="stellar-charge"></div></div></div>
 
+        <div id="ascensionOverlay" hidden role="status" aria-live="polite"><div class="ascension-stage"><div id="ascensionOrbit"></div><div id="ascensionCore"></div></div><h2 id="ascensionMessage"></h2></div>
         <!-- Loading -->
         <div id="loader" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="background:rgba(0,0,0,0.5);backdrop-filter:blur(3px)">
             <div class="fusion-workbench" role="status" aria-live="polite">
@@ -1180,9 +1224,6 @@ input[type=checkbox] {width:auto;}
                 <div class="flex gap-1.5 order-2 sm:order-3 items-center">
                     <button id="starForgeBtn" data-progression hidden title="Star Forge — Bestow 5 random elements with special blessings (5 min cooldown)">🌟 Star Forge<span class="sf-timer" id="sfTimer"></span></button>
                     <button id="upgradeForgeBtn" data-progression hidden class="text-xs font-medium px-3 py-1.5 rounded-lg transition-all ml-2" style="background:rgba(20,184,166,0.12);color:#14b8a6;pointer-events:auto;opacity:1" title="Upgrade Star Forge (Cost: 1 CyMoney)">⬆️ Upgrade Forge</button>
-                    <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
-                    <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
-                    <button id="resetBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(239,68,68,0.08);color:#ef4444">Reset</button>
                 </div>
             </div>
             <div class="flex flex-wrap gap-1.5 mb-3 items-center">
@@ -1192,6 +1233,7 @@ input[type=checkbox] {width:auto;}
                 <button id="sortAlpha" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="alpha">A → Z</button>
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
                 <button type="button" id="hintToggle" aria-controls="craftHints" aria-expanded="false" aria-label="Show crafting hints" title="Show crafting hints">🔑</button>
+                <button type="button" id="guideToggle" aria-controls="craftGuide" aria-expanded="false" aria-label="Show crafting guide" title="Crafting guide">📖</button>
             </div>
             <div id="noResults" class="hidden text-center py-6 text-sm" style="color:var(--text-secondary)">No elements match your search</div>
             <div id="elementStorageViews"><div id="elGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5"></div>
@@ -1208,63 +1250,6 @@ input[type=checkbox] {width:auto;}
         </section>
     </div>
 
-
-    <!-- Export Modal -->
-    <div id="exportModal" class="modal-overlay"><div class="modal-box">
-        <button class="modal-close" data-close="exportModal">&times;</button>
-        <h2 class="font-display text-xl mb-3">🔒 Secure Export</h2>
-        <p class="text-sm mb-2" style="color:var(--text-secondary)">Set a password to encrypt your save:</p>
-        <div class="flex gap-2 mb-3">
-            <input type="password" id="exportPass" placeholder="Password (min 4 chars)" class="flex-1 px-3 py-2 text-sm rounded-xl" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:16px">
-            <button id="doExportBtn" class="text-sm px-4 py-2 rounded-xl font-semibold transition-all hover:scale-105" style="background:var(--gold);color:#1a1a2e">Encrypt</button>
-        </div>
-        <div id="exportStrength" class="text-xs mb-2 hidden" style="color:var(--text-secondary)"></div>
-        <p id="exportErr" class="hidden text-xs text-red-500 mb-2"></p>
-        <div id="exportCodeWrap" class="hidden">
-            <div class="relative"><textarea id="exportCode" class="w-full h-28 p-3 text-xs font-mono rounded-xl resize-none" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary)" ></textarea>
-            <button id="copyBtn" class="absolute right-2 top-2 text-xs font-semibold px-3 py-1 rounded-lg text-white" style="background:var(--gold);color:#1a1a2e">Copy</button></div>
-        </div>
-        <div id="editModeWrap" class="hidden">
-            <p class="text-xs mb-2 font-semibold" style="color:#a855f6">🔓 Dev Edit Mode — Modify raw save data:</p>
-            <textarea id="editCodeArea" class="w-full h-44 p-3 text-xs font-mono rounded-xl resize-none mb-2" style="background:var(--bg-primary);border:2px solid #a855f6;color:var(--text-primary);font-size:16px" spellcheck="false"></textarea>
-            <p id="editErr" class="hidden text-xs text-red-500 mb-2"></p>
-            <div class="flex gap-2 mb-2">
-                <input type="password" id="reEncryptPass" placeholder="New password to re-encrypt" class="flex-1 px-3 py-2 text-sm rounded-xl" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:16px">
-                <button id="reEncryptBtn" class="text-sm px-4 py-2 rounded-xl font-semibold transition-all hover:scale-105" style="background:#a855f6;color:#fff">Re-encrypt</button>
-            </div>
-            <p class="text-xs" style="color:var(--text-secondary)">⚠️ Be careful — invalid JSON will corrupt your save.</p>
-        </div>
-    </div></div>
-
-    <!-- Import Modal -->
-    <div id="importModal" class="modal-overlay"><div class="modal-box">
-        <button class="modal-close" data-close="importModal">&times;</button>
-        <h2 class="font-display text-xl mb-3">🔒 Secure Import</h2>
-        <p class="text-sm mb-3" style="color:var(--text-secondary)">Paste your encrypted save code:</p>
-        <textarea id="importCode" class="w-full h-28 p-3 text-xs font-mono rounded-xl resize-none mb-2" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary)" placeholder="Paste encrypted code here..."></textarea>
-        <input type="password" id="importPass" placeholder="Enter decryption password" class="w-full px-3 py-2 text-sm rounded-xl mb-3" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);font-size:16px">
-        <p id="importErr" class="hidden text-xs text-red-500 mb-2"></p>
-        <div id="importProgress" class="hidden mb-2">
-            <div class="w-full h-1.5 rounded-full overflow-hidden" style="background:var(--border)">
-                <div id="importProgressBar" class="h-full rounded-full transition-all" style="background:var(--gold);width:0%"></div>
-            </div>
-            <p class="text-xs mt-1" style="color:var(--text-secondary)">Decrypting...</p>
-        </div>
-        <div class="flex justify-end gap-2">
-            <button id="cancelImport" class="text-sm px-4 py-2 rounded-lg" style="background:var(--bg-primary);border:1px solid var(--border)">Cancel</button>
-            <button id="confirmImport" class="text-sm px-4 py-2 rounded-lg font-semibold" style="background:var(--gold);color:#1a1a2e">Decrypt & Import</button>
-        </div>
-    </div></div>
-
-    <!-- Reset Confirm Modal -->
-    <div id="resetModal" class="modal-overlay"><div class="modal-box" style="max-width:400px">
-        <h2 class="font-display text-xl mb-2">Reset Game?</h2>
-        <p class="text-sm mb-5" style="color:var(--text-secondary)">Non-exclusive elements and progress will be lost. Exclusive elements, prestige coins and permanent prestige upgrades will be kept. This cannot be undone.</p>
-        <div class="flex justify-end gap-2">
-            <button class="text-sm px-4 py-2 rounded-lg" style="background:var(--bg-primary);border:1px solid var(--border)" data-close="resetModal">Cancel</button>
-            <button id="confirmReset" class="text-sm px-4 py-2 rounded-lg font-semibold bg-red-500 text-white hover:bg-red-600 transition-colors">Reset</button>
-        </div>
-    </div></div>
 
     <!-- Ending Modal -->
     <div id="endingModal" class="modal-overlay"><div class="modal-box text-center" style="border-color:var(--gold)">
@@ -1586,8 +1571,8 @@ input[type=checkbox] {width:auto;}
                 <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections, notifications and Resonance Arena, with jewel-like exclusive cards and cinematic OHKO finishers.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Strict battle turns and repeat-click guards. All 436 skill labels renamed.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Distinct modifier colors, patterns and sigils; CyMoney cards feature a cyan crystal design and CyMoney label. Star Forge has an animated activation and collectible-card results.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Each CyMoney element earns 1 CyMoney per minute in the active tab. The CyMoney Workshop offers 11 upgrade types; its upgrades survive Prestige.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Prestige: collect every ranked element, hold 250 keys and 1,000,000 coins, then reset for 1 prestige coin. Unlock 12 permanent upgrade types in the Prestige Shop, including Swift Forging.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Each CyMoney element earns 1 CyMoney per minute in the active tab. The CyMoney Workshop offers 11 upgrade types; CyMoney is kept on Prestige, while upgrade levels reset.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys and 100,000 coins, with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. All upgrade levels reset.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Opening a lock now announces: “You hear a lock being broken...”</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Online Battle rooms with synchronized combat and disconnect handling, alongside Local Battle.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Craft Shop to unlock shopping and coin earnings. Keys reveal its recipe but do not unlock Shop. Find the ending to unlock Battle.</li>
@@ -1636,22 +1621,6 @@ input[type=checkbox] {width:auto;}
             Thanks to all players who keep combining! 🧪
         </div>
         </div>
-    </div></div>
-
-    <!-- Bug Report Modal -->
-    <div id="bugReportModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:480px;border-color:#a855f6">
-        <button class="modal-close" data-close="bugReportModal">&times;</button>
-        <h2 class="font-display text-xl mb-3" style="color:#a855f6">🐛 Found a Bug?</h2>
-        <p class="text-sm mb-3" style="color:var(--text-secondary)">If you found a bug, please report it to:</p>
-        <p class="text-base font-bold mb-4" style="color:var(--teal)">📧 ismehhj123@gmail.com</p>
-        <p class="text-sm mb-2" style="color:var(--text-secondary)">We will reward you with a special element!</p>
-        <div class="bugfinder-preview">
-            <span class="bf-badge">EXCLUSIVE</span>
-            <span class="bf-emoji">🐛🔎</span>
-            <span class="bf-name">Bug Finder</span>
-        </div>
-        <p class="text-sm mb-5" style="color:var(--text-secondary)">Send your <strong>import code</strong> and your <strong>encryption password</strong> in the email and we will send your updated import code back with the <strong style="color:#a855f6">Bug Finder</strong> element included! We will only reward the element if the bug is actually <strong style="color:#00ff00">valid</strong>. The encryption password will stay the <strong>same</strong> after the reward.</p>
-        <button class="font-semibold text-sm py-2.5 px-8 rounded-full transition-all hover:scale-105" style="background:#a855f6;color:#fff" data-close="bugReportModal">Got it!</button>
     </div></div>
 
     <!-- Notifications -->
@@ -3048,79 +3017,64 @@ input[type=checkbox] {width:auto;}
         document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
         document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.style.display='none'; }));
 
-        function safeB64Enc(s){return btoa(unescape(encodeURIComponent(s)));}
-        function safeB64Dec(s){return decodeURIComponent(escape(atob(s)));}
-
-
-        const CRYPTO_VERSION = 'CM3';
-        const PBKDF2_ITERATIONS = 600000;
-        const SALT_LEN = 32;
-        const IV_LEN = 12;
-
-        function getRandomBytes(n) { const b = new Uint8Array(n); crypto.getRandomValues(b); return b; }
-        function toHex(buf) { return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join(''); }
-        function fromHex(h) { const b = new Uint8Array(h.length/2); for(let i=0;i<h.length;i+=2) b[i/2]=parseInt(h.substr(i,2),16); return b; }
-        function concatBuf(...bufs) { const t = bufs.reduce((a,b)=>a+b.byteLength,0); const r = new Uint8Array(t); let o=0; bufs.forEach(b=>{r.set(new Uint8Array(b),o);o+=b.byteLength;}); return r.buffer; }
-
-        async function deriveKeys(password, salt) {
-            const enc = new TextEncoder();
-            const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey','deriveBits']);
-            const aesKey1 = await crypto.subtle.deriveKey(
-                { name:'PBKDF2', salt:salt, iterations:PBKDF2_ITERATIONS, hash:'SHA-512' },
-                keyMaterial, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
-            );
-            const salt2 = new Uint8Array(salt.byteLength || salt.length);
-            salt2.set(new Uint8Array(salt instanceof ArrayBuffer ? salt : salt.buffer));
-            salt2.reverse();
-            const aesKey2 = await crypto.subtle.deriveKey(
-                { name:'PBKDF2', salt:salt2, iterations:PBKDF2_ITERATIONS, hash:'SHA-256' },
-                keyMaterial, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
-            );
-            const hmacBits = await crypto.subtle.deriveBits(
-                { name:'PBKDF2', salt:concatBuf(salt, enc.encode('hmac-auth')), iterations:PBKDF2_ITERATIONS, hash:'SHA-512' },
-                keyMaterial, 256
-            );
-            const hmacKey = await crypto.subtle.importKey('raw', hmacBits, { name:'HMAC', hash:'SHA-256' }, false, ['sign','verify']);
-            return { aesKey1, aesKey2, hmacKey };
-        }
-
-        async function secureEncrypt(plaintext, password) {
-            const salt = getRandomBytes(SALT_LEN);
-            const { aesKey1, aesKey2, hmacKey } = await deriveKeys(password, salt);
-            const enc = new TextEncoder();
-            const data = enc.encode(plaintext);
-            const iv1 = getRandomBytes(IV_LEN);
-            const cipher1 = await crypto.subtle.encrypt({ name:'AES-GCM', iv:iv1, tagLength:128 }, aesKey1, data);
-            const iv2 = getRandomBytes(IV_LEN);
-            const cipher2 = await crypto.subtle.encrypt({ name:'AES-GCM', iv:iv2, tagLength:128 }, aesKey2, cipher1);
-            const payload = concatBuf(salt, iv1, iv2, cipher2);
-            const sig = await crypto.subtle.sign('HMAC', hmacKey, payload);
-            const final = concatBuf(new Uint8Array([3]), payload, sig);
-            return CRYPTO_VERSION + '.' + toHex(final);
-        }
-
-        async function secureDecrypt(cipherHex, password) {
-            if (!cipherHex.startsWith(CRYPTO_VERSION + '.')) throw new Error('Invalid or legacy code format');
-            const raw = fromHex(cipherHex.slice(CRYPTO_VERSION.length + 1));
-            if (raw[0] !== 3) throw new Error('Unsupported encryption version');
-            const body = raw.slice(1);
-            const sigLen = 32;
-            const payload = body.slice(0, body.length - sigLen);
-            const sig = body.slice(body.length - sigLen);
-            const salt = payload.slice(0, SALT_LEN);
-            const iv1 = payload.slice(SALT_LEN, SALT_LEN + IV_LEN);
-            const iv2 = payload.slice(SALT_LEN + IV_LEN, SALT_LEN + IV_LEN + IV_LEN);
-            const cipher2 = payload.slice(SALT_LEN + IV_LEN + IV_LEN);
-            const { aesKey1, aesKey2, hmacKey } = await deriveKeys(password, salt);
-            const valid = await crypto.subtle.verify('HMAC', hmacKey, sig, payload);
-            if (!valid) throw new Error('Wrong password or data tampered');
-            const cipher1 = await crypto.subtle.decrypt({ name:'AES-GCM', iv:iv2, tagLength:128 }, aesKey2, cipher2);
-            const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv:iv1, tagLength:128 }, aesKey1, cipher1);
-            return new TextDecoder().decode(plain);
-        }
         function randColor(){const c=['bg-red-400','bg-blue-400','bg-green-400','bg-yellow-400','bg-purple-400','bg-pink-400','bg-indigo-400','bg-teal-400','bg-orange-400','bg-cyan-400','bg-emerald-400','bg-violet-400'];return c[Math.floor(Math.random()*c.length)];}
 
         function hasPenaltyMod(el){return !!(el.isToxic||el.isViral||el.isParasitic||el.isCorrupted||el.isCursed||el.isVoid);}
+
+        let ascensionBusy=false,awakeningReady=false;
+        const everythingTraits=new WeakMap(),awakeningQueue=[];
+        const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+        async function playAscension(tokens,target,message){
+            ascensionBusy=true;
+            const overlay=$('ascensionOverlay'),orbit=$('ascensionOrbit'),core=$('ascensionCore');
+            overlay.hidden=false;overlay.classList.remove('ascension-merge');orbit.replaceChildren();core.replaceChildren();
+            const card=document.createElement('div');card.className='el-card '+getElClasses(target);
+            const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=target.emoji;
+            const name=document.createElement('div');name.className='el-name';name.textContent=target.name;card.append(emoji,name);sculptElementCard(card,target);core.appendChild(card);
+            tokens.forEach((text,i)=>{const chip=document.createElement('span');chip.textContent=text;chip.style.setProperty('--angle',(360*i/tokens.length)+'deg');orbit.appendChild(chip);});
+            $('ascensionMessage').textContent='';
+            const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            try{
+                await pause(reduced?100:1500);overlay.classList.add('ascension-merge');
+                await pause(reduced?100:900);$('ascensionMessage').textContent=message;
+                await pause(reduced?500:1200);
+            }finally{overlay.hidden=true;ascensionBusy=false;}
+        }
+        async function drainAwakenings(){
+            if(ascensionBusy||!awakeningQueue.length)return;
+            if(sfAnimating||isCombining){setTimeout(drainAwakenings,200);return;}
+            const {el,traits}=awakeningQueue.shift();
+            await playAscension(traits,el,'You got an EVERYTHING element!');
+            notify('EVERYTHING','You got an EVERYTHING element!','🌈');
+            drainAwakenings();
+        }
+        function prestigeStarterPool(){
+            const map=new Map([...Object.values(recipes),...Object.values(SPECIAL_ELEMENTS)].filter(e=>!e.isExclusive&&!e.excludeFromRank&&!e.isFinal&&!e.isKey).map(e=>[e.name,e]));
+            const preferred=['A','1','Philosophy','Null'];
+            const names=[...new Set([...preferred,...[...map.values()].filter(e=>e.isBasic).map(e=>e.name),...map.keys()])];
+            return names.filter(n=>map.has(n)&&!['Water','Fire','Earth','Air','Shop','Star Forge','Prestige'].includes(n)).map(n=>map.get(n));
+        }
+        function grantPrestigeStart(){
+            const defs=[{name:'Shop',emoji:'🛒',description:'Your shop, carried into a new era.'},{name:'Star Forge',emoji:'⭐',isLegendary:true,description:'A fresh, unupgraded Star Forge.'},...prestigeStarterPool().slice(0,prestigeData().times).map(e=>({...e,isBasic:true}))];
+            for(const el of defs)if(!elements.some(e=>e.name===el.name))elements.push({...el});
+            gs.shopUnlocked=true;gs.sfUnlocked=true;
+        }
+        function syncPrestigeElement(){
+            const n=prestigeData().times;
+            const existing=elements.find(e=>e.isPrestige);
+            elements=elements.filter(e=>!e.isPrestige);
+            if(n>0&&existing){existing.amountOfPrestige=n;existing.isKey=false;existing.excludeFromRank=true;elements.push(existing);return;}
+            if(n>0)elements.push({name:'Prestige',emoji:'🏆',description:'Your completed Prestiges. Not spendable as keys.',isPrestige:true,amountOfPrestige:n,excludeFromRank:true});
+        }
+        function showSpecialOutcome(title,description,el,progress){
+            resultArea.replaceChildren();const panel=document.createElement('section');panel.className='special-outcome';
+            const card=document.createElement('div');card.className='el-card '+getElClasses(el);
+            const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;
+            const name=document.createElement('div');name.className='el-name';name.textContent=el.name;card.append(emoji,name);sculptElementCard(card,el);panel.appendChild(card);
+            const heading=document.createElement('h3');heading.textContent=title;const text=document.createElement('p');text.textContent=description;panel.append(heading,text);
+            if(progress!==undefined){const meter=document.createElement('progress');meter.max=1;meter.value=Math.min(1,Math.max(0,progress));meter.setAttribute('aria-label','Thawing progress');panel.appendChild(meter);}
+            resultArea.appendChild(panel);
+        }
 
         const EVERYTHING_REQUIRED=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal'];
         const ALL_MOD_FLAGS=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal','isHot','isSuperHot','isFinal','isSecret','isExclusive','isValidCombination','isQuestion','isFrozen','isPermafrost','isError','isFatalError','isBlank','isToxic','isViral','isParasitic','isCorrupted','isCursed','isVoid','isCyMoney'];
@@ -3134,13 +3088,25 @@ input[type=checkbox] {width:auto;}
             return !!el.isCyMoney;
         }
         function stripToEverything(el){
+            if(!el.isEverything)everythingTraits.set(el,ALL_MOD_FLAGS.filter(k=>el[k]).map(k=>k.slice(2)));
             ALL_MOD_FLAGS.forEach(k=>{if(k!=='isExclusive'&&k!=='isCyMoney')delete el[k];});
             el.isEverything=true;
         }
 
         // One normalization/reward path covers Forge upgrades, crafting and save imports.
         function normalizeEverything(){
-            elements.forEach(el=>{if(checkIsEverything(el))stripToEverything(el);});
+            // Persist by element name in gs so reloads, cloned objects and save codes do not replay awakenings.
+            const seen=new Set(Array.isArray(gs.everythingSeen)?gs.everythingSeen:[]);
+            elements.forEach(el=>{
+                if(!checkIsEverything(el))return;
+                stripToEverything(el);
+                const id=el.name.trim().toLowerCase();
+                if(seen.has(id))return;
+                seen.add(id);
+                if(awakeningReady)awakeningQueue.push({el,traits:everythingTraits.get(el)||EVERYTHING_REQUIRED.map(k=>k.slice(2))});
+            });
+            gs.everythingSeen=[...seen];
+            if(awakeningReady&&awakeningQueue.length)setTimeout(drainAwakenings,0);
             if(elements.some(el=>el.isEverything)&&!gs.everythingAwarded){
                 gs.everythingAwarded=true;
                 gs.cyMoney=(gs.cyMoney||0)+1;
@@ -3268,6 +3234,8 @@ input[type=checkbox] {width:auto;}
                     return a.origIdx - b.origIdx;
                 });
             }
+            // Pin the Prestige trophy without changing ownership or selection indices.
+            indexed.sort((a,b)=>Number(!!b.el.isPrestige)-Number(!!a.el.isPrestige));
             return indexed;
         }
         // Add this function BEFORE the battle event listeners
@@ -3284,18 +3252,19 @@ window.generateBattleCode = function() {
             document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('sort-active', b.dataset.sort === currentSort));
         }
 
-        // Export/import codes are the primary portable save; localStorage autosaves with legacy cookie fallback.
+        // Local autosaves with legacy cookie fallback; Google cloud saves provide cross-device storage.
         const _store={};
         // Prefer durable localStorage; read legacy cookies for compatible migration.
-        function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Export your save before closing; browser storage is blocked or full.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
+        function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Browser storage is blocked or full. Sign in and save to cloud before closing.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
-        function save(){normalizeKeyStacks();normalizeEverything();updateProgressionUI();try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
+        function save(){normalizeKeyStacks();normalizeEverything();updateProgressionUI();try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));window.dispatchEvent(new Event('craft-save'));}catch(e){}}
         function load(){
             try{
                 const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
-                if(e){elements=JSON.parse(e);normalizeKeyStacks();elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
+                if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
                 if(c)combos=JSON.parse(c);
                 if(s){const l=JSON.parse(s);gs={...gs,...l};}
+                normalizeKeyStacks();
                 // AFTER loading, update displays
                 updateCyMoneyDisplay();
                 checkStarForgeUnlock();
@@ -3499,6 +3468,7 @@ window.generateBattleCode = function() {
             return Number.isFinite(Number(value))?Math.max(0,Math.min(999999,Math.floor(Number(value)))):1;
         }
         function normalizeKeyStacks(){
+            syncPrestigeElement();
             // Migrate retired content in both autosaves and imported collections.
             elements=elements.filter(e=>!['infinity craft','tomokuta plays'].includes(e.name.toLowerCase()));
             elements.forEach(e=>{if(e.name.toLowerCase()==='blox fruit'){e.isFinal=true;delete e.isSubFinal;}});
@@ -3690,10 +3660,69 @@ window.generateBattleCode = function() {
         function prestigeLevel(id){const u=PRESTIGE_UPGRADES.find(u=>u.id===id);const n=Number(prestigeData().upgrades[id]);return u&&Number.isFinite(n)?Math.max(0,Math.min(u.max,Math.floor(n))):0;}
         function shopPrice(pack){return Math.max(1,Math.ceil(pack.price*Math.max(.25,1-.1*prestigeLevel('discount')-.05*cyLevel('discount'))));}
         function shopRestockMs(){return 300000*(1-.15*prestigeLevel('restock'))*(1-.1*cyLevel('restock'));}
+        let craftPlanCache={signature:'',rows:[]};
+        function missingCraftPlans(missing){
+            const owned=new Set(elements.map(e=>e.name.toLowerCase()));
+            const signature=[...owned].sort().join('|')+'#'+missing.join('|');
+            if(craftPlanCache.signature===signature)return craftPlanCache.rows;
+            const names=new Set([...rankedCatalog(),...Object.values(recipes).map(e=>e.name),...elements.map(e=>e.name)].map(n=>n.toLowerCase()));
+            const byResult=new Map();
+            for(const [pair,result] of Object.entries(recipes)){
+                // Resolve the separator against known names, including names containing '+'.
+                for(let i=pair.indexOf('+');i>=0;i=pair.indexOf('+',i+1)){
+                    const a=pair.slice(0,i).toLowerCase(),b=pair.slice(i+1).toLowerCase();
+                    if(!names.has(a)||!names.has(b))continue;
+                    const key=result.name.toLowerCase();if(!byResult.has(key))byResult.set(key,[]);
+                    byResult.get(key).push([a,b]);
+                }
+            }
+            // Exact bounded dependency-plan search: reusable/shared ingredients count once.
+            function solve(target,budget){
+                function visit(needed,plan){
+                    if(plan.size+needed.size>budget)return null;
+                    if(!needed.size){
+                        const have=new Set(owned),order=[];let changed=true;
+                        while(changed){changed=false;for(const [out,ins] of plan)if(!have.has(out)&&ins.every(n=>have.has(n))){have.add(out);order.push(out);changed=true;}}
+                        if(!have.has(target)||order.length!==plan.size)return null;
+                        order.recipeLines=order.map(out=>plan.get(out).join(' + ')+' → '+out);
+                        return order;
+                    }
+                    const goal=[...needed].sort((a,b)=>(byResult.get(a)?.length||0)-(byResult.get(b)?.length||0))[0];
+                    for(const inputs of byResult.get(goal)||[]){
+                        if(inputs.includes(goal))continue;
+                        const next=new Set(needed);next.delete(goal);const chosen=new Map(plan);chosen.set(goal,inputs);
+                        for(const n of inputs)if(!owned.has(n)&&!chosen.has(n))next.add(n);
+                        const found=visit(next,chosen);if(found)return found;
+                    }
+                    return null;
+                }
+                return visit(new Set([target]),new Map());
+            }
+            const rows=missing.map(name=>{let steps=null;for(let budget=1;budget<=20&&!steps;budget++)steps=solve(name.toLowerCase(),budget);return{name,cost:steps?.length||21,steps};});
+            rows.sort((a,b)=>a.cost-b.cost||a.name.localeCompare(b.name));
+            craftPlanCache={signature,rows};return rows;
+        }
+        function renderMissingCrafts(missing){
+            const container=$('craftGuideList');container.replaceChildren();
+            if(!missing.length){container.textContent='All ranked elements collected!';return;}
+            const legend=document.createElement('p');legend.className='craft-distance-note';legend.textContent='Discovery hints: green = 1 craft away, yellow = 2, orange → purple = 3–20. Black means more than 20 crafts or a different discovery method. Counts assume reusable ingredients; special effects may add steps. Experiment to find the combinations!';container.appendChild(legend);
+            // Show distance only: never reveal ingredients, routes or recipe tooltips.
+            for(const row of missingCraftPlans(missing)){
+                const chip=document.createElement('span');chip.className='craft-distance';chip.dataset.steps=row.cost;
+                if(row.cost>2&&row.cost<=20){chip.style.background=`hsl(${25+(row.cost-3)*15} 65% 24%)`;chip.style.color='#fff';}
+                chip.textContent=row.name+' · '+(row.cost>20?'Unknown distance':row.cost+' craft'+(row.cost===1?'':'s')+' away');container.appendChild(chip);
+            }
+        }
+
         function prestigeRequirements(){
-            const owned=new Set(elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey).map(e=>e.name.toLowerCase()));
+            const owned=new Set(elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey&&!e.isPrestige).map(e=>e.name.toLowerCase()));
             const all=rankedCatalog(),missing=all.filter(n=>!owned.has(n.toLowerCase()));
-            return {all,missing,keys:totalKeys(),coins:gs.coins,ready:missing.length===0&&totalKeys()>=250&&gs.coins>=1000000};
+            // Collection goals are fixed counts, independent of future recipe additions.
+            // Keys and coins retain their capped progression in quarter-percent units.
+            const percentUnits=Math.min(400,40+10*prestigeData().times);
+            const requiredKeys=Math.ceil(250*percentUnits/400),requiredCoins=Math.ceil(1000000*percentUnits/400),requiredElements=100+25*prestigeData().times;
+            return {all,missing,percent:percentUnits/4,requiredKeys,requiredCoins,requiredElements,keys:totalKeys(),coins:gs.coins,
+                ready:!!gs.shopUnlocked&&!!gs.sfUnlocked&&all.length-missing.length>=requiredElements&&totalKeys()>=requiredKeys&&gs.coins>=requiredCoins};
         }
         function updatePrestigeUI(){
             const p=prestigeData();
@@ -3703,9 +3732,9 @@ window.generateBattleCode = function() {
         }
         function renderPrestige(){
             const r=prestigeRequirements();
-            $('prestigeRequirements').textContent=`Keys: ${r.keys} / 250 · Coins: ${Math.floor(r.coins).toLocaleString()} / 1,000,000 · Ranked elements: ${r.all.length-r.missing.length} / ${r.all.length}`;
-            $('prestigeMissing').textContent=r.missing.length?'Still missing: '+r.missing.join(', '):'All ranked elements collected!';
-            $('confirmPrestige').disabled=!r.ready;
+            $('prestigeRequirements').textContent=`Prestige ${prestigeData().times+1} · Keys: ${r.keys} / ${r.requiredKeys} · Coins: ${Math.floor(r.coins).toLocaleString()} / ${r.requiredCoins.toLocaleString()} · Ranked elements: ${r.all.length-r.missing.length} / ${r.requiredElements} required (${r.all.length} total) · Shop: ${gs.shopUnlocked?'✓':'locked'} · Star Forge: ${gs.sfUnlocked?'✓':'locked'}`;
+
+            $('confirmPrestige').disabled=!r.ready||prestigeInFlight;
             $('prestigeCount').textContent=prestigeData().times+' prestiges · '+prestigeData().coins+' prestige coins';
         }
         function renderPrestigeShop(){
@@ -3727,23 +3756,38 @@ window.generateBattleCode = function() {
         $('prestigeBtn').addEventListener('click',()=>{renderPrestige();openModal('prestigeModal');});
         $('prestigeShopBtn').addEventListener('click',()=>{if(prestigeData().times<1)return;renderPrestigeShop();openModal('prestigeShopModal');});
         let prestigeReset=false; // Preserve CyMoney only for a Prestige reset.
-        $('confirmPrestige').addEventListener('click',()=>{
-            if(isCombining||!prestigeRequirements().ready){renderPrestige();return;}
-            // Consume 250 units across stacks, then reuse the normal reset path.
-            let spend=250;for(const e of elements){if(e.isKey&&spend){const n=Math.min(keyAmount(e),spend);e.amountOfKey=keyAmount(e)-n;spend-=n;}}
-            normalizeKeyStacks();
-            const p=prestigeData();p.coins++;p.times++;
-            prestigeReset=true;
-            try{$('confirmReset').click();}finally{prestigeReset=false;}
-            closeModal('prestigeModal');
-            renderPrestigeShop();openModal('prestigeShopModal');
-            notify('Prestige complete!','You earned 1 prestige coin. Permanent upgrades and exclusives are kept.','🏆');
+        let prestigeInFlight=false;
+        $('confirmPrestige').addEventListener('click',async()=>{
+            if(prestigeInFlight||ascensionBusy||sfAnimating||isCombining||!prestigeRequirements().ready){renderPrestige();return;}
+            prestigeInFlight=true;closeModal('prestigeModal');
+            const next=prestigeData().times+1;
+            const basic=elements.filter(e=>e.isBasic&&!['water','fire','earth','air'].includes(e.name.toLowerCase()));
+            const requirement=prestigeRequirements();
+            const tokens=['🔑 ×'+requirement.requiredKeys,'🪙 '+requirement.requiredCoins.toLocaleString(),...['Philosophy','1','A','Null'],...basic.map(e=>e.emoji+' '+e.name).slice(0,12)];
+            try{
+                await playAscension(tokens,{name:'Prestige',emoji:'🏆',isPrestige:true,amountOfPrestige:next},'Prestige '+next+'!');
+                if(!prestigeRequirements().ready)return;
+                let spend=requirement.requiredKeys;for(const e of elements){if(e.isKey&&spend){const n=Math.min(keyAmount(e),spend);e.amountOfKey=keyAmount(e)-n;spend-=n;}}
+                normalizeKeyStacks();const state=prestigeData();state.coins++;state.times++;
+                prestigeReset=true;try{resetForPrestige();}finally{prestigeReset=false;}
+                save();notify('Prestige '+state.times+'!','Shop, an unupgraded Star Forge and your expanded starting collection await.','🏆');
+                renderPrestigeShop();openModal('prestigeShopModal');
+            }finally{prestigeInFlight=false;drainAwakenings();}
         });
 
         // ─── RENDER ELEMENTS ───
         // The diamond toggles the compact panel below Combine; ordinary elements stay visible.
         // Hints toggle independently; hide the full panel just like Exclusive Storage.
         $('showDiscoveredHints').addEventListener('change',updateCraftHints);
+        function updateCraftGuide(){
+            if(!$('craftGuide').hidden)renderMissingCrafts(prestigeRequirements().missing);
+        }
+        $('guideToggle').addEventListener('click',()=>{
+            const panel=$('craftGuide'),show=panel.hidden;panel.hidden=!show;
+            $('guideToggle').setAttribute('aria-expanded',String(show));
+            $('guideToggle').setAttribute('aria-label',show?'Hide crafting guide':'Show crafting guide');
+            updateCraftGuide();
+        });
         $('hintToggle').addEventListener('click',()=>{
             const panel=$('craftHints'),toggle=$('hintToggle');
             const show=toggle.getAttribute('aria-expanded')!=='true';
@@ -3772,7 +3816,7 @@ window.generateBattleCode = function() {
             card.classList.add('modifier-card');card.dataset.modifier=primary;card.dataset.motif=theme.family;
             card.style.setProperty('--card-hue',theme.hue);
             card.title=(el.description||'')+' · '+active.map(k=>MODIFIER_STYLES[k].label).join(' / ');
-            if(!checkIsEverything(el))card.querySelector('.card-ribbon').textContent=theme.label+(el.isKey?' · ×'+keyAmount(el):'');
+            if(!el.isPrestige&&!checkIsEverything(el))card.querySelector('.card-ribbon').textContent=theme.label+(el.isKey?' · ×'+keyAmount(el):'');
             const mark=document.createElement('span');mark.className='modifier-mark';mark.setAttribute('aria-hidden','true');mark.textContent=theme.sigil;
             const pattern=document.createElement('span');pattern.className='modifier-pattern';pattern.setAttribute('aria-hidden','true');
             card.append(pattern,mark);
@@ -3786,15 +3830,16 @@ window.generateBattleCode = function() {
             card.classList.add('sculpted-card');
             if(el.isSecret)card.classList.add('secret-showpiece');
             if(checkIsEverything(el))card.classList.add('everything-showpiece');
+            if(el.isPrestige)card.classList.add('prestige-showpiece');
             if(Array.from(el.emoji||'').length>3)card.classList.add('multi-icon-card');
             card.style.setProperty('--card-hue',hue);
-            const tier=checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
+            const tier=el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
             card.dataset.tier=tier;
             const ribbon=document.createElement('div');ribbon.className='card-ribbon';ribbon.textContent=tier+(el.isKey?' · ×'+keyAmount(el):'');
             const stage=document.createElement('div');stage.className='card-stage';
             const orbit=document.createElement('span');orbit.className='card-orbit';orbit.setAttribute('aria-hidden','true');stage.appendChild(orbit);
             const emoji=card.querySelector('.el-emoji');if(emoji)stage.appendChild(emoji);
-            if(checkIsEverything(el)){
+            if(checkIsEverything(el)||el.isPrestige){
                 const foil=document.createElement('span');foil.className='everything-foil';foil.setAttribute('aria-hidden','true');
                 foil.innerHTML='<i class="everything-shimmer"></i><i class="everything-spark spark-one">✧</i><i class="everything-spark spark-two">✦</i><i class="everything-spark spark-three">·</i>';
                 const crown=document.createElement('span');crown.className='everything-crown';crown.setAttribute('aria-hidden','true');
@@ -3830,7 +3875,7 @@ window.generateBattleCode = function() {
             const sorted = getSortedElements();
             let lastType = null;
             sorted.forEach(({el,origIdx})=>{
-                if(currentSort === 'type' && !el.isExclusive) {
+                if(currentSort === 'type' && !el.isExclusive && !el.isPrestige) {
                     const t = getElType(el);
                     if(t !== lastType) {
                         lastType = t;
@@ -3847,9 +3892,11 @@ window.generateBattleCode = function() {
                 }
                 const w=document.createElement('div');
                 w.className='el-wrapper';
+                if(el.isPrestige){w.classList.add('prestige-pinned');}
                 const d=document.createElement('div');
                 d.className=`el-card ${getElClasses(el)}`;
                 d.setAttribute('data-idx',origIdx);
+                if(el.isPrestige)d.dataset.prestige='true';
                 d.setAttribute('data-name',el.name);
                 d.setAttribute('data-desc',el.description||'');
                 d.setAttribute('draggable','true');
@@ -3859,7 +3906,7 @@ window.generateBattleCode = function() {
                 if(el.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width=`${((el.meltProgress||0)/(el.meltGoal||10))*100}%`;d.appendChild(mb);}
                 if(el.hasLink) d.addEventListener('click',e=>{if(!e.defaultPrevented)window.open(el.link,'_blank');});
                 w.appendChild(d);
-                (el.isExclusive?exclusiveGrid:elGrid).appendChild(w);
+                (el.isExclusive&&!el.isPrestige?exclusiveGrid:elGrid).appendChild(w);
             });
         }
 
@@ -3885,7 +3932,7 @@ window.generateBattleCode = function() {
             let vis=0;
             document.querySelectorAll('#elGrid .el-card, #exclusiveGrid .el-card').forEach(c=>{
                 const nm=c.getAttribute('data-name').toLowerCase(), ds=c.getAttribute('data-desc').toLowerCase();
-                const show=!t||nm.includes(t)||ds.includes(t);
+                const show=c.dataset.prestige==='true'||!t||nm.includes(t)||ds.includes(t);
                 c.closest('.el-wrapper').style.display=show?'':'none';
                 if(show)vis++;
             });
@@ -4146,7 +4193,7 @@ window.generateBattleCode = function() {
         }
 
         async function combine(){
-            if(sfAnimating)return;
+            if(sfAnimating||ascensionBusy)return;
             if(!sel1||!sel2||isCombining)return;
             isCombining=true;
 
@@ -4216,16 +4263,16 @@ window.generateBattleCode = function() {
                 }
             }
 
-            if(result.frozen){resultArea.innerHTML='<div class="text-center text-xs" style="color:var(--text-secondary)">❄️ Frozen! Use heat to thaw.</div>';setTimeout(resetDZs,1500);return;}
-            if(result.permafrostBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card permafrost-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">🔒</div><div class="el-name">Permafrost!</div></div><div class="text-xs" style="color:var(--text-secondary)">Permanently frozen — nothing can thaw this</div></div>';setTimeout(resetDZs,0);return;}
-            if(result.voidAbsorb){resultArea.innerHTML=`<div class="text-center"><div class="el-card void-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">🕳️</div><div class="el-name">Absorbed!</div></div><div class="text-xs" style="color:var(--text-secondary)">The Void consumed <strong>${result.consumed}</strong> — it is gone</div></div>`;setTimeout(resetDZs,0);return;}
-            if(result.phantomFail){resultArea.innerHTML=`<div class="text-center"><div class="el-card phantom-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">👻</div><div class="el-name">Phased Out!</div></div><div class="text-xs" style="color:var(--text-secondary)">${result.phantomName} flickered out of existence</div></div>`;setTimeout(resetDZs,0);return;}
-            if(result.cursedCorrupt){resultArea.innerHTML='<div class="text-center"><div class="el-card cursed-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💀</div><div class="el-name">Curse Activated!</div></div><div class="text-xs" style="color:var(--text-secondary)">The curse corrupted the combination!</div></div>';setTimeout(resetDZs,0);return;}
-            if(result.unstableExplode){const ex=result.explodedInto;resultArea.innerHTML=`<div class="text-center"><div class="el-card unstable-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💥</div><div class="el-name">Explosion!</div></div><div class="text-xs" style="color:var(--text-secondary)">Unstable element exploded into <strong>${ex.name}</strong>!</div></div>`;setTimeout(resetDZs,0);return;}
-            if(result.timeLoop){const lp=result.loopedInto;resultArea.innerHTML=`<div class="text-center"><div class="el-card temporal-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">🔁</div><div class="el-name">Time Loop!</div></div><div class="text-xs" style="color:var(--text-secondary)">Time folded — you got <strong>${lp.name}</strong> again!</div></div>`;setTimeout(resetDZs,0);return;}
-            if(result.shortCircuit){resultArea.innerHTML='<div class="text-center"><div class="el-card electric-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">⚡</div><div class="el-name">Short Circuit!</div></div><div class="text-xs" style="color:var(--text-secondary)">The electric charge fried the combination!</div></div>';setTimeout(resetDZs,0);return;}
-            if(result.finalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card final-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">⭐</div><div class="el-name">Final Item</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot be combined further</div></div>';setTimeout(resetDZs,0);return;}
-            if(result.fatalBlock){resultArea.innerHTML='<div class="text-center"><div class="el-card fatal-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">💀</div><div class="el-name">Fatal Error</div></div><div class="text-xs" style="color:var(--text-secondary)">Cannot process combination</div></div>';setTimeout(resetDZs,0);return;}
+            if(result.frozen){showSpecialOutcome('Frozen!','Use a hot element to thaw it.',{name:'Frozen',emoji:'❄️',isFrozen:true});resetDZs();return;}
+            if(result.permafrostBlock){showSpecialOutcome('Permafrost','This eternal ice cannot be thawed.',{name:'Permafrost',emoji:'🔒',isPermafrost:true});resetDZs();return;}
+            if(result.voidAbsorb){showSpecialOutcome('Absorbed','The Void consumed '+result.consumed+'.',{name:'Void',emoji:'🕳️',isVoid:true});resetDZs();return;}
+            if(result.phantomFail){showSpecialOutcome('Phased Out','The phantom flickered out of existence.',{name:'Phantom',emoji:'👻',isPhantom:true});resetDZs();return;}
+            if(result.cursedCorrupt){showSpecialOutcome('Curse Awakened','The curse corrupted the combination.',{name:'Cursed',emoji:'☽',isCursed:true});resetDZs();return;}
+            if(result.unstableExplode){showSpecialOutcome('Unstable eruption','The eruption produced '+result.explodedInto.name+'.',{name:'Unstable',emoji:'💥',isUnstable:true});resetDZs();return;}
+            if(result.timeLoop){showSpecialOutcome('Time Loop','Time folded back into '+result.loopedInto.name+'.',{name:'Temporal',emoji:'◷',isTemporal:true});resetDZs();return;}
+            if(result.shortCircuit){showSpecialOutcome('Short Circuit','The electric charge disrupted the fusion.',{name:'Short Circuit',emoji:'ϟ',isElectric:true});resetDZs();return;}
+            if(result.finalBlock){showSpecialOutcome('Final Element','Its journey is complete. Try another pairing.',{name:'Final Element',emoji:'✦',isFinal:true});resetDZs();return;}
+            if(result.fatalBlock){showSpecialOutcome('Fatal Error','This element cannot process the combination.',{name:'Fatal Error',emoji:'💀',isFatalError:true});resetDZs();return;}
             if(result.invalid){
                 resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>◇</span></div><h3>No fusion found</h3><p></p><small>Try a different pairing</small></div>';
                 resultArea.querySelector('p').textContent=result.description||'These elements do not resonate together yet.';
@@ -4240,8 +4287,7 @@ window.generateBattleCode = function() {
         }
 
         function showMeltResult(r){
-            if(r.melted) resultArea.innerHTML=`<div class="text-center"><div class="el-card inline-flex flex-col items-center p-4 mb-2" data-name="${r.el.name}"><div class="el-emoji">${r.el.emoji}</div><div class="el-name">${r.el.name}</div></div><div class="text-xs font-semibold" style="color:var(--teal)">Thawed!</div></div>`;
-            else resultArea.innerHTML=`<div class="text-center"><div class="el-card frozen-el inline-flex flex-col items-center p-4 mb-2 relative"><div class="el-emoji">${r.el.emoji}</div><div class="el-name">${r.el.name}</div><div class="melt-bar" style="width:${(r.prog/r.goal)*100}%"></div></div><div class="text-xs" style="color:var(--text-secondary)">Warming... ${r.prog}/${r.goal}</div></div>`;
+            showSpecialOutcome(r.melted?'Thawed!':'Thawing…',r.melted?'The ice has melted. Ready to craft again.':r.prog+' / '+r.goal+' heat applied',r.el,r.melted?1:r.prog/r.goal);
             resetDZs();
         }
 
@@ -4353,6 +4399,7 @@ window.generateBattleCode = function() {
             $('hintsComplete').hidden=remaining!==0;
         }
         function updateProgressionUI(){
+            updateCraftGuide();
             updatePrestigeUI();
             updateCraftHints();
             gs.shopUnlocked=!!(prestigeLevel('shopStart')||gs.shopUnlocked||elements.some(e=>e.name==='Shop'));
@@ -4384,7 +4431,7 @@ window.generateBattleCode = function() {
 
         let sfAnimating=false,sfPresentationTimer=null;
         function activateStarForge(){
-            if(sfAnimating||isCombining)return;
+            if(sfAnimating||isCombining||ascensionBusy)return;
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
             const eligible=elements.filter(e=>!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
@@ -4498,108 +4545,16 @@ window.generateBattleCode = function() {
             });
         }
 
-        // ─── EXPORT / IMPORT (Secure AES-256-GCM Double Encryption) ───
-        function getPassStrength(p) {
-            let s=0;
-            if(p.length>=4)s++; if(p.length>=8)s++; if(p.length>=12)s++;
-            if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;
-            if(/\d/.test(p))s++;
-            if(/[^A-Za-z0-9]/.test(p))s++;
-            const labels=['Very Weak','Weak','Fair','Good','Strong','Very Strong','Maximum'];
-            const colors=['#ef4444','#f97316','#eab308','#84cc16','#22c55e','#14b8a6','#06b6d4'];
-            return {score:s, label:labels[Math.min(s,6)], color:colors[Math.min(s,6)]};
-        }
-        $('exportPass').addEventListener('input',e=>{
-            const p=e.target.value;
-            const str=$('exportStrength');
-            if(p.length===0){str.classList.add('hidden');return;}
-            const r=getPassStrength(p);
-            str.classList.remove('hidden');
-            str.innerHTML=`Password strength: <span style="color:${r.color};font-weight:700">${r.label}</span>`;
-        });
-        $('exportBtn').addEventListener('click',()=>{
-            $('exportPass').value='';$('exportCode').value='';$('exportCodeWrap').classList.add('hidden');
-            $('exportErr').classList.add('hidden');$('exportStrength').classList.add('hidden');
-            $('editModeWrap').classList.add('hidden');$('editErr').classList.add('hidden');$('reEncryptPass').value='';
-            openModal('exportModal');
-        });
-        $('doExportBtn').addEventListener('click',async()=>{
-            const pw=$('exportPass').value;
-            if(pw.length<4){$('exportErr').textContent='Password must be at least 4 characters';$('exportErr').classList.remove('hidden');return;}
-            $('exportErr').classList.add('hidden');
-            $('doExportBtn').disabled=true;$('doExportBtn').textContent='Encrypting...';
-            try{
-                const data=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'2.1'});
-                const encrypted=await secureEncrypt(data,pw);
-                $('exportCode').value=encrypted;
-                $('exportCodeWrap').classList.remove('hidden');
-                notify('Encrypted!','Save code ready to copy','🔐');
-            }catch(e){$('exportErr').textContent='Encryption error: '+e.message;$('exportErr').classList.remove('hidden');
-            }finally{$('doExportBtn').disabled=false;$('doExportBtn').textContent='Encrypt';}
-        });
-        $('copyBtn').addEventListener('click',()=>{
-            $('exportCode').select();document.execCommand('copy');
-            $('copyBtn').textContent='Copied!';setTimeout(()=>$('copyBtn').textContent='Copy',2000);
-        });
-        $('importBtn').addEventListener('click',()=>{$('importErr').classList.add('hidden');$('importPass').value='';$('importCode').value='';$('importProgress').classList.add('hidden');openModal('importModal');});
-        $('cancelImport').addEventListener('click',()=>closeModal('importModal'));
-        $('confirmImport').addEventListener('click',async()=>{
-            const code=$('importCode').value.trim();
-            const pw=$('importPass').value;
-            if(!code){$('importErr').textContent='Please paste a code';$('importErr').classList.remove('hidden');return;}
-            $('importErr').classList.add('hidden');
-            $('confirmImport').disabled=true;$('confirmImport').textContent='Decrypting...';
-            try{
-                let raw;
-                if(code.startsWith(CRYPTO_VERSION+'.')){
-                    if(!pw){$('importErr').textContent='This is an encrypted save — enter your password';$('importErr').classList.remove('hidden');return;}
-                    $('importProgress').classList.remove('hidden');$('importProgressBar').style.width='30%';
-                    raw=await secureDecrypt(code,pw);
-                    $('importProgressBar').style.width='100%';
-                } else {
-                    try{raw=safeB64Dec(code);}catch(e2){throw new Error('Invalid code format');}
-                }
-                const d=JSON.parse(raw);
-                if(!d.elements||!Array.isArray(d.elements))throw new Error('Invalid save format');
-                // MERGE: import elements first, then append user's unique elements after
-                const ownedExclusive=elements.filter(e=>e.isExclusive);
-                d.elements=d.elements.map(e=>ownedExclusive.find(x=>x.name===e.name)||e);
-                const importedNames=new Set(d.elements.map(e=>e.name));
-                const userOnly=elements.filter(e=>!importedNames.has(e.name));
-                elements=[...d.elements,...userOnly];
-                normalizeKeyStacks();
-                // Strip elements that qualify as Everything
-                elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});
-                // MERGE combos: import combos first, then append user's unique combos
-                const importCombos=d.combos||[];
-                const importComboKeys=new Set(importCombos.map(c=>c.e1+'|'+c.e2+'|'+c.r));
-                const userOnlyCombos=combos.filter(c=>!importComboKeys.has(c.e1+'|'+c.e2+'|'+c.r));
-                combos=[...importCombos,...userOnlyCombos];
-                if(d.gs){
-                    const unlockedRecipes=[...new Set([...(Array.isArray(gs.unlockedRecipes)?gs.unlockedRecipes:[]),...(Array.isArray(d.gs.unlockedRecipes)?d.gs.unlockedRecipes:[])])];
-                    gs={...gs,...d.gs,unlockedRecipes};
-                }
-                if(d.sortMode&&['original','type','alpha'].includes(d.sortMode)){currentSort=d.sortMode;applySortBtnUI();}
-                const added=userOnly.length;
-                renderEls();rebuildHistory();updateCount();updateCoinDisplay();save();checkStarForgeUnlock();
-                closeModal('importModal');notify('Imported!',elements.length+' elements loaded'+(added?' ('+added+' of your elements kept)':''),'✅');
-            }catch(e){
-                $('importErr').textContent=e.message.includes('tampered')||e.message.includes('Wrong password')?'❌ Wrong password or corrupted data':'Invalid code: '+e.message;
-                $('importErr').classList.remove('hidden');
-            }finally{
-                $('confirmImport').disabled=false;$('confirmImport').textContent='Decrypt & Import';
-                $('importProgress').classList.add('hidden');$('importProgressBar').style.width='0%';
-            }
-        });
-
         // ─── RESET ───
-        $('resetBtn').addEventListener('click',()=>openModal('resetModal'));
-        $('confirmReset').addEventListener('click',()=>{
+        function resetForPrestige(){
+            if(ascensionBusy&&!prestigeReset)return;
             // Exclusive ownership stays in the canonical collection across reset.
             const kept=elements.filter(e=>e.isExclusive);
             elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];combos=[];fractionalCoins=0;
-            gs={everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,cyUpgrades:prestigeReset?(gs.cyUpgrades||{}):{},cyProgress:prestigeReset?(gs.cyProgress||0):0,sfUpgraded:prestigeReset?!!gs.sfUpgraded:false,sfUnlocked:false};
+            gs={everythingSeen:[],everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,cyUpgrades:{},cyProgress:0,sfUpgraded:false,sfUnlocked:false};
             cyLastTick=Date.now();clearTimeout(sfPresentationTimer);sfAnimating=false;$('starForgeEffect').hidden=true;
+            if(prestigeReset)prestigeData().upgrades={};
+            if(prestigeData().times>0)grantPrestigeStart();
             // Reset Star Forge to locked
             sfCooldownEnd=0;gs.sfCooldownEnd=0;
             if(sfInterval){clearInterval(sfInterval);sfInterval=null;}
@@ -4610,9 +4565,8 @@ window.generateBattleCode = function() {
             resultArea.innerHTML='';searchInput.value='';
             currentSort='original';applySortBtnUI();saveSortPref();
             resetDZs();renderEls();updateCount();updateCoinDisplay();save();updateCyMoneyDisplay();
-            closeModal('resetModal');
             if($('viewRankBtn'))$('viewRankBtn').classList.add('hidden');
-        });
+        }
 
         // ─── ENDING / RANK ───
         function showEnding(){
@@ -4675,22 +4629,18 @@ window.generateBattleCode = function() {
         // ─── KEYBOARD SHORTCUTS ───
         window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none');});
 
-        // ─── PROTECTED ───
-        eval(atob('KGZ1bmN0aW9uKCl7dmFyIF9rPVsxMDYsMTIyLDc0LDY5LDgyLDY2LDg2LDUwLDMzXTt2YXIgX3M9X2subWFwKGZ1bmN0aW9uKGMpe3JldHVybiBTdHJpbmcuZnJvbUNoYXJDb2RlKGMpfSkuam9pbignJyk7dmFyIF9nPWZhbHNlLF9iPScnOyQoJ2RvRXhwb3J0QnRuJykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLGZ1bmN0aW9uKCl7aWYoJCgnZXhwb3J0UGFzcycpLnZhbHVlPT09X3Mpe19nPXRydWU7X2I9Jyd9fSk7ZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigna2V5ZG93bicsZnVuY3Rpb24oZSl7aWYoIV9nKXJldHVybjt2YXIgbT0kKCdleHBvcnRNb2RhbCcpO2lmKCFtfHxtLnN0eWxlLmRpc3BsYXk9PT0nbm9uZScpcmV0dXJuO3ZhciB0PWRvY3VtZW50LmFjdGl2ZUVsZW1lbnQ/ZG9jdW1lbnQuYWN0aXZlRWxlbWVudC50YWdOYW1lLnRvTG93ZXJDYXNlKCk6Jyc7aWYodD09PSdpbnB1dCd8fHQ9PT0ndGV4dGFyZWEnfHx0PT09J3NlbGVjdCcpcmV0dXJuO2lmKGUua2V5Lmxlbmd0aCE9PTEpcmV0dXJuO19iKz1lLmtleTtpZihfYi5sZW5ndGg+MjApX2I9X2Iuc2xpY2UoLTIwKTtpZihfYi5lbmRzV2l0aChfcykpe19nPWZhbHNlO19iPScnO19kZSgpfX0pO2Z1bmN0aW9uIF9kZSgpe3ZhciBkPUpTT04uc3RyaW5naWZ5KHtlbGVtZW50czplbGVtZW50cyxjb21ib3M6Y29tYm9zLGdzOmdzLHNvcnRNb2RlOmN1cnJlbnRTb3J0LHY6JzMuMCd9LG51bGwsMik7JCgnZXhwb3J0Q29kZVdyYXAnKS5jbGFzc0xpc3QuYWRkKCdoaWRkZW4nKTskKCdlZGl0TW9kZVdyYXAnKS5jbGFzc0xpc3QucmVtb3ZlKCdoaWRkZW4nKTskKCdlZGl0Q29kZUFyZWEnKS52YWx1ZT1kfXZhciBfZW09JCgnZXhwb3J0TW9kYWwnKTtpZihfZW0pe25ldyBNdXRhdGlvbk9ic2VydmVyKGZ1bmN0aW9uKG1zKXttcy5mb3JFYWNoKGZ1bmN0aW9uKG11KXtpZihtdS5hdHRyaWJ1dGVOYW1lPT09J3N0eWxlJyYmX2VtLnN0eWxlLmRpc3BsYXk9PT0nbm9uZScpe19nPWZhbHNlO19iPScnfX0pfSkub2JzZXJ2ZShfZW0se2F0dHJpYnV0ZXM6dHJ1ZSxhdHRyaWJ1dGVGaWx0ZXI6WydzdHlsZSddfSl9JCgncmVFbmNyeXB0QnRuJykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLGFzeW5jIGZ1bmN0aW9uKCl7dmFyIG5wPSQoJ3JlRW5jcnlwdFBhc3MnKS52YWx1ZTtpZihucC5sZW5ndGg8NCl7JCgnZWRpdEVycicpLnRleHRDb250ZW50PSdQYXNzd29yZCBtdXN0IGJlIGF0IGxlYXN0IDQgY2hhcmFjdGVycyc7JCgnZWRpdEVycicpLmNsYXNzTGlzdC5yZW1vdmUoJ2hpZGRlbicpO3JldHVybn0kKCdlZGl0RXJyJykuY2xhc3NMaXN0LmFkZCgnaGlkZGVuJyk7dHJ5e0pTT04ucGFyc2UoJCgnZWRpdENvZGVBcmVhJykudmFsdWUpfWNhdGNoKGUpeyQoJ2VkaXRFcnInKS50ZXh0Q29udGVudD0nSW52YWxpZCBKU09OOiAnK2UubWVzc2FnZTskKCdlZGl0RXJyJykuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyk7cmV0dXJufSQoJ3JlRW5jcnlwdEJ0bicpLmRpc2FibGVkPXRydWU7JCgncmVFbmNyeXB0QnRuJykudGV4dENvbnRlbnQ9J0VuY3J5cHRpbmcuLi4nO3RyeXt2YXIgZW5jPWF3YWl0IHNlY3VyZUVuY3J5cHQoJCgnZWRpdENvZGVBcmVhJykudmFsdWUsbnApOyQoJ2VkaXRNb2RlV3JhcCcpLmNsYXNzTGlzdC5hZGQoJ2hpZGRlbicpOyQoJ2V4cG9ydENvZGVXcmFwJykuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyk7JCgnZXhwb3J0Q29kZScpLnZhbHVlPWVuYztub3RpZnkoJ1JlLWVuY3J5cHRlZCEnLCdFZGl0ZWQgc2F2ZSBjb2RlIHJlYWR5IHRvIGNvcHknLCfwn5SQJyl9Y2F0Y2goZSl7JCgnZWRpdEVycicpLnRleHRDb250ZW50PSdFbmNyeXB0aW9uIGVycm9yOiAnK2UubWVzc2FnZTskKCdlZGl0RXJyJykuY2xhc3NMaXN0LnJlbW92ZSgnaGlkZGVuJyl9ZmluYWxseXskKCdyZUVuY3J5cHRCdG4nKS5kaXNhYmxlZD1mYWxzZTskKCdyZUVuY3J5cHRCdG4nKS50ZXh0Q29udGVudD0nUmUtZW5jcnlwdCd9fSl9KSgpOw=='));
-
-        // ─── BUG REPORT (after changelog close) ───
-        (function(){
-            var _br=false;
-            var _cm=$('changelogModal');
-            new MutationObserver(function(muts){
-                muts.forEach(function(m){
-                    if(m.attributeName==='style'&&_cm.style.display==='none'&&!_br){
-                        _br=true;
-                        setTimeout(function(){openModal('bugReportModal')},350);
-                    }
-                });
-            }).observe(_cm,{attributes:true});
-        })();
+        window.craftAccount={
+            snapshot:()=>JSON.parse(JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'3.0'})),
+            restore:d=>{
+                if(!d||!Array.isArray(d.elements)||!Array.isArray(d.combos)||!d.gs||typeof d.gs!=='object'||d.elements.some(e=>!e||typeof e.name!=='string'||typeof e.emoji!=='string'))throw Error('Invalid cloud save.');
+                if(isCombining||sfAnimating||ascensionBusy)throw Error('Finish the current animation before loading.');
+                localStorage.setItem('cm_before_cloud_load',JSON.stringify(window.craftAccount.snapshot()));
+                awakeningQueue.length=0;awakeningReady=false;
+                elements=d.elements;combos=d.combos;gs=d.gs;
+                currentSort=['original','alpha','type'].includes(d.sortMode)?d.sortMode:'original';
+                normalizeKeyStacks();normalizeEverything();resetDZs();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();sfLoadCooldown();applySortBtnUI();save();awakeningReady=true;
+            }
+        };
 
         // ─── INIT ───
         load();
@@ -4707,7 +4657,9 @@ window.generateBattleCode = function() {
         if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();
         else renderShop();
 
-        keyLockNotificationsReady=true;
+        // Seed older saves before enabling celebrations; existing ownership is not a new discovery.
+        save();
+        keyLockNotificationsReady=true;awakeningReady=true;
         // One independent roll per active second; no offline key catch-up.
         setInterval(()=>{if(!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))*(1+.15*cyLevel('luck'))/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
         setInterval(tickCyIncome,1000);
@@ -4718,7 +4670,7 @@ window.generateBattleCode = function() {
 
         window.craftBattleCollection=()=>JSON.parse(JSON.stringify(elements.filter(e=>!e.isFrozen&&!e.isPermafrost&&!e.isError)));
         // Show changelog on first visit
-        setTimeout(()=>openModal('changelogModal'),600);
+        setTimeout(()=>{if($('accountModal').style.display!=='block')openModal('changelogModal');},600);
     });
     // Move IDs are retained internally for saved team/effect compatibility; all UI uses new names.
 const BATTLE_MOVE_NAMES={
@@ -6437,5 +6389,66 @@ document.addEventListener('DOMContentLoaded',()=>{
             <button id="resetBattleBtn" class="w-full font-semibold text-sm py-2 rounded-full mt-3 transition-all" style="background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)">🔄 Back to Setup</button>
         </div>
     </div></div>
+
+<div id="accountModal" class="modal-overlay"><section class="modal-box">
+<button id="accountClose" class="modal-close" aria-label="Close settings">×</button><h2>⚙️ Your crafter</h2>
+<label for="nicknameInput">Nickname</label><input id="nicknameInput" maxlength="24" placeholder="Choose your nickname" autocomplete="nickname"><button id="saveNickname">Save nickname</button>
+<p class="account-note">Your nickname appears publicly only when you publish a leaderboard score. Nicknames are not unique.</p>
+<button id="googleLogin">Sign in with Google</button><button id="googleLogout" hidden>Sign out</button>
+<p id="accountStatus" role="status">Play locally, or sign in to save across devices.</p>
+<div class="account-actions"><button id="cloudSave" disabled>Save this game to cloud</button><button id="cloudLoad" disabled>Load cloud save</button><button id="publishScore" disabled>Publish my score</button></div>
+<p class="account-note">Cloud loading backs up your current game on this device. A cloud save from another device must be loaded before it can be updated.</p>
+</section></div>
+<div id="leaderboardModal" class="modal-overlay"><section class="modal-box"><button id="leaderboardClose" class="modal-close" aria-label="Close leaderboards">×</button><h2>🏅 Leaderboards</h2><label for="boardMetric">Rank by </label><select id="boardMetric"><option value="prestiges">Prestiges</option><option value="elements">Ranked elements</option></select><p class="account-note">Top 50 published scores · Player-reported scores.</p><div id="leaderboardList" aria-live="polite"></div></section></div>
+
+<script>
+// Public Firebase web configuration: never put service-account credentials here.
+window.CRAFT_FIREBASE_CONFIG = {apiKey:'AIzaSyB7IJGzNu31ETrxam-aaAPzskAti7tqQ9U',authDomain:'craft-madness.firebaseapp.com',projectId:'craft-madness',appId:'1:842806585723:web:52564c9f5eae49d83435de'};
+document.addEventListener('DOMContentLoaded',()=>{
+ const $=id=>document.getElementById(id), status=t=>$('accountStatus').textContent=t;
+ let profile={nickname:''};try{profile=JSON.parse(localStorage.getItem('cm_profile'))||profile;}catch{}
+ let api=null,user=null,revision=null,enabled=false,busy=false,timer=null;
+ const valid=n=>/^[\p{L}\p{N} _.-]{2,24}$/u.test(n);
+ function nickname(){return String(profile.nickname||'').trim();}
+ function draw(){ $('playerName').textContent=nickname()||'New crafter';$('nicknameInput').value=nickname();$('googleLogout').hidden=!user;$('cloudSave').disabled=!user;$('cloudLoad').disabled=!user;$('publishScore').disabled=!user; }
+ function open(){ $('accountModal').style.display='block';draw(); }
+ $('accountBtn').onclick=open;$('accountClose').onclick=()=>$('accountModal').style.display='none';
+ $('saveNickname').onclick=()=>{const n=$('nicknameInput').value.trim();if(!valid(n)){status('Use 2–24 letters, numbers, spaces, dots, hyphens or underscores.');return;}profile.nickname=n;try{localStorage.setItem('cm_profile',JSON.stringify(profile));status('Nickname saved. Publish your score again to update your leaderboard name.');}catch{status('Nickname set for this session. Browser storage is unavailable.');}draw();};
+ function fail(e){status(e.message||'Connection failed. Your local save is safe.');}
+ async function sdk(){
+  if(api)return api;const config=window.CRAFT_FIREBASE_CONFIG;
+  if(!config.apiKey||!config.projectId)throw Error('Google login and online features are not configured yet. Local play and nicknames still work.');
+  if(location.protocol==='file:')throw Error('Open the hosted HTTPS game to use Google login.');
+  const base='https://www.gstatic.com/firebasejs/10.12.5/';
+  const [app,auth,db]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
+  const a=app.initializeApp(config);api={...auth,...db,auth:auth.getAuth(a),db:db.getFirestore(a)};
+  api.onAuthStateChanged(api.auth,async u=>{user=u;enabled=false;revision=null;clearTimeout(timer);draw();if(!u){status('Playing locally.');return;}status('Signed in. Choose Load cloud save or Save this game to cloud before automatic saving begins.');});return api;
+ }
+ function ref(){return api.doc(api.db,'saves',user.uid);}
+ async function upload(){
+  if(busy||!user)return;busy=true;
+  try{const uid=user.uid,payload=JSON.stringify({...window.craftAccount.snapshot(),profile});if(new TextEncoder().encode(payload).length>850000)throw Error('Save is too large for cloud storage. Your local progress is kept; cloud saving is paused.');
+   await api.runTransaction(api.db,async tx=>{const r=api.doc(api.db,'saves',uid),old=await tx.get(r),version=old.exists()?old.data().revision:0;
+    if(revision!==null&&version!==revision)throw Error('Cloud save changed on another device. Load it before saving again.');
+    if(revision===null&&old.exists())throw Error('A cloud save already exists. Load it first; it will not be overwritten automatically.');
+    tx.set(r,{payload,revision:version+1,updatedAt:api.serverTimestamp()});
+   });revision=(revision||0)+1;enabled=true;status('Cloud saved. Automatic saves are on.');
+  }catch(e){enabled=false;fail(e);}finally{busy=false;}
+ }
+ $('googleLogin').onclick=async()=>{try{const a=await sdk();await a.signInWithPopup(a.auth,new a.GoogleAuthProvider());}catch(e){fail(e);}};
+ $('googleLogout').onclick=async()=>{try{enabled=false;await api.signOut(api.auth);}catch(e){fail(e);}};
+ $('cloudSave').onclick=upload;
+ $('cloudLoad').onclick=async()=>{if(!user||busy)return;try{const snap=await api.getDocFromServer(ref());if(!snap.exists()){status('No cloud save yet. Use Save this game to cloud.');return;}if(!confirm('Load your cloud save? Your current local game will be backed up on this device.'))return;
+  const d=JSON.parse(snap.data().payload);enabled=false;clearTimeout(timer);timer=null;window.craftAccount.restore(d);if(d.profile&&valid(String(d.profile.nickname||''))){profile={nickname:d.profile.nickname};try{localStorage.setItem('cm_profile',JSON.stringify(profile));}catch{}draw();}revision=snap.data().revision;enabled=true;status('Cloud save loaded. Automatic saves are on.');
+ }catch(e){fail(e);}};
+ window.addEventListener('craft-save',()=>{if(!enabled||!user||timer)return;timer=setTimeout(()=>{timer=null;upload();},15000);});
+ $('publishScore').onclick=async()=>{try{if(!valid(nickname()))throw Error('Set your nickname first.');const s=window.craftAccount.snapshot();await api.setDoc(api.doc(api.db,'leaderboards',user.uid),{nickname:nickname(),prestiges:Math.max(0,Math.floor(s.gs.prestige?.times||0)),elements:new Set(s.elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey&&!e.isPrestige).map(e=>e.name.toLowerCase())).size,updatedAt:api.serverTimestamp()});status('Score published under '+nickname()+'.');}catch(e){fail(e);}};
+ $('leaderboardBtn').onclick=async()=>{ $('leaderboardModal').style.display='block';await board();};
+ $('leaderboardClose').onclick=()=>$('leaderboardModal').style.display='none';$('boardMetric').onchange=board;
+ async function board(){const list=$('leaderboardList');list.textContent='Loading…';try{const a=await sdk(),metric=$('boardMetric').value;const rows=await a.getDocs(a.query(a.collection(a.db,'leaderboards'),a.orderBy(metric,'desc'),a.limit(50)));list.replaceChildren();if(rows.empty)list.textContent='No scores yet. Be the first!';let rank=0;rows.forEach(d=>{const row=document.createElement('p'),v=d.data();row.textContent=++rank+'. '+v.nickname+' — '+v[metric].toLocaleString();list.appendChild(row);});}catch(e){list.textContent=e.message;}}
+ draw();if(!nickname())open();if(window.CRAFT_FIREBASE_CONFIG.apiKey)sdk().catch(fail);
+});
+
+</script>
 </body>
 </html>
