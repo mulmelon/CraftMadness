@@ -80,10 +80,42 @@
         body.april-fools-mode .el-wrapper:nth-child(3n+1) { transform:rotate(-2deg); }
         body.april-fools-mode .el-wrapper:nth-child(3n+2) { transform:rotate(1.5deg); }
         body.april-fools-mode .el-wrapper:nth-child(5n) { transform:rotate(3deg) translateY(2px); }
+        body.april-fools-mode .el-card { background:#fef08a!important;border:3px dashed #ef4444!important;border-radius:7px 25px 5px 19px!important;box-shadow:5px 5px 0 #111!important;color:#111!important;overflow:visible!important; }
+        body.april-fools-mode .el-wrapper:nth-child(4n+1) .el-card { background:#86efac!important;border-color:#7c3aed!important;border-style:dotted!important;border-radius:50% 9px 50% 12px!important;box-shadow:6px 4px 0 #f97316!important; }
+        body.april-fools-mode .el-wrapper:nth-child(4n+2) .el-card { background:#f9a8d4!important;border-color:#0ea5e9!important;border-style:double!important;border-width:5px!important;border-radius:3px 31px 3px 31px!important;box-shadow:-4px 6px 0 #facc15!important; }
+        body.april-fools-mode .el-wrapper:nth-child(4n+3) .el-card { background:#93c5fd!important;border-color:#16a34a!important;border-style:ridge!important;border-radius:28px 4px 18px 2px!important;box-shadow:5px -3px 0 #a855f7!important; }
+        body.april-fools-mode .el-wrapper:nth-child(7n) .el-card { background:repeating-linear-gradient(45deg,#fde047 0 9px,#fb7185 9px 18px,#67e8f9 18px 27px)!important;border:4px dotted #111!important;border-radius:40% 8% 35% 12%!important; }
+        body.april-fools-mode .el-card .card-ribbon { position:relative;z-index:12;background:#111!important;color:#fff!important;border-radius:3px!important;letter-spacing:0!important;text-transform:none!important;font-size:.55rem!important;transform:rotate(-2deg); }
+        body.april-fools-mode .el-wrapper:nth-child(even) .card-ribbon { background:#ef4444!important;transform:rotate(2deg); }
+        body.april-fools-mode .el-card .card-stage { position:relative;z-index:10;background:rgba(255,255,255,.62)!important;border:2px dotted rgba(0,0,0,.7)!important;box-shadow:none!important;border-radius:13px 5px 16px 4px!important; }
+        body.april-fools-mode .el-card .card-orbit { z-index:0;border:2px dotted #111!important;border-radius:43% 57% 39% 61%!important;opacity:.38!important; }
+        body.april-fools-mode .el-card .el-emoji { position:relative;z-index:14;font-size:clamp(1.45rem,4vw,2.25rem)!important;filter:drop-shadow(2px 2px 0 #fff)!important;transform:rotate(-8deg) scale(1.08); }
+        body.april-fools-mode .el-wrapper:nth-child(even) .el-emoji { transform:rotate(11deg) scale(.94); }
+        body.april-fools-mode .el-wrapper:nth-child(5n) .el-emoji { transform:rotate(180deg) scale(1.05); }
+        body.april-fools-mode .el-card .el-name { position:relative;z-index:15;background:#fff!important;color:#111!important;border:2px solid #111;border-radius:2px 9px 3px 7px;padding:2px 4px!important;font-weight:900!important;text-transform:none!important;overflow-wrap:anywhere;word-break:break-word;transform:rotate(1deg); }
+        body.april-fools-mode .el-wrapper:nth-child(3n) .el-name { background:#fef08a!important;transform:rotate(-2deg); }
+        body.april-fools-mode .el-card .card-footer { color:#111!important; }
+        body.april-fools-mode .el-card .card-footer span:first-child::after { content:' honk';font-size:.48rem;font-weight:900; }
+        body.april-fools-mode .el-wrapper:nth-child(6n+1)::after { content:'certified';position:absolute;right:-5px;bottom:-5px;z-index:8;padding:1px 4px;background:#ef4444;color:#fff;border:1px solid #111;font-size:.45rem;font-weight:900;transform:rotate(-12deg);pointer-events:none; }
+        body.april-fools-mode .el-wrapper:nth-child(6n+2)::after { content:'probably safe';position:absolute;right:-7px;top:17px;z-index:8;padding:1px 3px;background:#22c55e;color:#111;border:1px dashed #111;font-size:.43rem;font-weight:900;transform:rotate(9deg);pointer-events:none; }
+        body.april-fools-mode .el-wrapper { position:relative; }
+        body.april-fools-mode .drop-zone { border:4px dashed #ef4444!important;border-radius:30px 5px 24px 8px!important;background:#fef08a!important; }
+        body.april-fools-mode .drop-zone:nth-of-type(even) { background:#a7f3d0!important;border-color:#7c3aed!important; }
         body.april-fools-mode .modal-box { border:5px dotted #f97316!important;border-radius:35px 5px 24px 9px!important;box-shadow:10px 10px 0 #22d3ee!important; }
         body.april-fools-mode #combineBtn,body.april-fools-mode #combineBtnM { background:linear-gradient(90deg,#ef4444,#facc15,#22c55e,#22d3ee,#a855f7)!important;color:#111!important;font-size:1.05rem!important;text-shadow:1px 1px #fff; }
         .april-permanent-banner { position:sticky;top:0;z-index:45;text-align:center;padding:5px 42px;background:#111;color:#fef08a;border-bottom:4px dashed #ff4fd8;font-family:'Comic Sans MS',cursive;font-weight:900;font-size:clamp(.8rem,2.5vw,1.25rem);letter-spacing:.08em;pointer-events:none; }
         .april-permanent-banner::before { content:'🚨 '; }.april-permanent-banner::after { content:' 🚨'; }
+        .april-extra-banner { position:fixed;z-index:43;padding:4px 12px;font-family:'Comic Sans MS',cursive;font-size:.67rem;font-weight:900;letter-spacing:.06em;text-align:center;pointer-events:none;border:2px dashed #111;box-shadow:3px 3px 0 #111; }
+        .april-banner-bottom { left:8%;right:8%;bottom:4px;background:#a7f3d0;color:#7c2d12;transform:rotate(.5deg); }
+        .april-banner-left { left:-56px;top:48%;width:150px;background:#f9a8d4;color:#111;transform:rotate(90deg); }
+        .april-banner-right { right:-62px;top:35%;width:170px;background:#fde047;color:#7c2d12;transform:rotate(-90deg); }
+        .april-banner-mid { position:relative;z-index:5;margin:5px auto;width:min(92%,760px);background:#67e8f9;color:#581c87;transform:rotate(-.4deg); }
+        .april-ad-rack { width:min(96%,1050px);margin:8px auto 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;position:relative;z-index:4;pointer-events:none; }
+        .april-fake-ad { position:relative;min-height:78px;padding:9px 10px;background:#fff;border:4px outset #c0c0c0;color:#111;box-shadow:5px 5px 0 #111;font-family:'Comic Sans MS',cursive;text-align:center;overflow:hidden; }
+        .april-fake-ad:nth-child(2){background:#dcfce7;transform:rotate(1deg)}.april-fake-ad:nth-child(3){background:#fce7f3;transform:rotate(-1deg)}
+        .april-fake-ad strong { display:block;font-size:.83rem;line-height:1.1;color:#dc2626; }.april-fake-ad small { display:block;margin-top:4px;font-size:.58rem;line-height:1.25; }
+        .april-fake-ad b { display:inline-block;margin-top:5px;padding:2px 8px;background:#facc15;border:2px solid #111;font-size:.58rem;box-shadow:2px 2px 0 #ef4444; }
+        .april-fake-ad::before { content:'FAKE AD';position:absolute;left:-24px;top:8px;width:82px;background:#111;color:#fff;font-size:.45rem;transform:rotate(-38deg); }
         .april-chaos-sticker { position:fixed;z-index:44;font-size:clamp(1.5rem,4vw,3.5rem);pointer-events:none;filter:drop-shadow(3px 3px 0 #fff);animation:aprilStickerFloat var(--speed) ease-in-out infinite alternate; }
         @keyframes aprilStickerFloat { from{transform:translateY(-8px) rotate(var(--tilt))} to{transform:translateY(8px) rotate(var(--tilt-back))} }
         .april-corner-note { position:fixed;right:8px;bottom:8px;z-index:44;max-width:190px;padding:7px 10px;background:#fef08a;color:#7c2d12;border:3px solid #111;box-shadow:5px 5px 0 #ef4444;font-family:'Comic Sans MS',cursive;font-weight:900;font-size:.72rem;transform:rotate(-3deg);pointer-events:none; }
@@ -4994,6 +5026,27 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             document.body.classList.toggle('april-fools-mode',OldAllCreate);
             if(!OldAllCreate)return;
             const banner=document.createElement('div');banner.className='april-permanent-banner';banner.textContent='THIS IS A VERY SERIOUS CRAFTING WEBSITE';document.body.prepend(banner);
+            const banners=[
+                ['april-banner-mid','⚠️ WARNING: ELEMENTS MAY CONTAIN ELEMENTS ⚠️'],
+                ['april-banner-bottom','🤡 CERTIFIED 100% SCIENTIFIC BY A GUY NAMED GREG 🤡'],
+                ['april-banner-left','DO NOT FEED THE GENERATOR'],
+                ['april-banner-right','HONK IF YOU DISCOVERED SOUP']
+            ];
+            banners.forEach(([kind,text])=>{const b=document.createElement('div');b.className='april-extra-banner '+kind;b.textContent=text;banner.after(b);});
+            const adRack=document.createElement('div');adRack.className='april-ad-rack';
+            const fakeAds=[
+                ['🎮 TRY THIS AMAZING CRAFTING GAMEEEEEEEE','Combine Dirt + Dirt to unlock Slightly Different Dirt!','PLAY FOR 900 HOURS'],
+                ['🔥 FOREVER FORGE 2: THE FORGENING','Now featuring at least four and a half recipes.','CRAFT IMMEDIATELY'],
+                ['🪨 TINY WIZARD: ROCK EDITION','Every combination makes Rock. Critics call it “a rock.”','BECOME ROCK'],
+                ['🦆 DUCK CRAFT ULTRA','Water + Duck = Wet Duck. Technology has peaked.','HONK TO INSTALL'],
+                ['🥣 ELEMENT SOUP SIMULATOR 7','Craft soup, upgrade soup, prestige soup, become soup.','SOUP NOW'],
+                ['💎 CYMONEY CLICKER DELUXE','Click 4,000 times to receive almost one currency!','INCREDIBLE VALUE'],
+                ['🌊 DEEP SEA COMBINER PRO','Deep Sea + Deep Sea = Even Deeper Sea. Probably.','DIVE INTO ADS'],
+                ['🤡 CRAFTING GAME TYCOON.EXE','Includes procedural names reviewed by absolutely nobody.','TRUST THE GENERATOR'],
+                ['🌋 MINCERAFT: LAVA EDITION','FAKE AD — Everything is lava. The floor is lava. Your house is lava. Steve is probably lava.','BUY LAVA NOW']
+            ];
+            fakeAds.forEach(([title,copy,button])=>{const ad=document.createElement('div');ad.className='april-fake-ad';const strong=document.createElement('strong');strong.textContent=title;const small=document.createElement('small');small.textContent=copy;const b=document.createElement('b');b.textContent=button;ad.append(strong,small,b);adRack.appendChild(ad);});
+            const header=document.querySelector('header');if(header)header.after(adRack);else banner.after(adRack);
             const splash=document.createElement('div');splash.className='april-fools-splash';
             splash.textContent='🤡 APRIL FOOOOOOOOOOOOOOOOOOOLSS!!!!! 🤡';
             document.body.appendChild(splash);setTimeout(()=>splash.remove(),3000);
