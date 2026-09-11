@@ -1139,7 +1139,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             <p id="prestigeCount" class="text-sm mb-3"></p>
             <p id="prestigeRequirements" class="text-sm mb-3" style="line-height:1.7"></p>
             <p class="text-xs mb-3">Open the 📖 guide beside hints to see your missing elements and their recipe steps.</p>
-            <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires Shop and Star Forge unlocked. Collect 100 ranked elements for your first Prestige, then 25 more per completed Prestige (100, 125, 150…). These are fixed counts, independent of the total number of elements. Keys start at 25 and coins at 100,000; each Prestige adds 6.25 keys (rounded up) and 25,000 coins, capped at 250 keys and 1,000,000 coins. CyMoney starts at 50 and increases by 50 per Prestige; it is required but not spent. Any ranked elements count. Rank-excluded and exclusive elements are not required.</p>
+            <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires Shop and Star Forge unlocked. Collect 100 ranked elements for your first Prestige, then 25 more per completed Prestige (100, 125, 150…). These are fixed counts, independent of the total number of elements. Keys start at 25 and coins at 100,000; each Prestige adds 6.25 keys (rounded up) and 25,000 coins, capped at 250 keys and 1,000,000 coins. Any ranked elements count. Rank-excluded and exclusive elements are not required.</p>
             <p class="text-sm mb-4" style="color:#eab308">Confirming spends the displayed key requirement and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ALL upgrade levels. Exclusive elements, CyMoney and prestige totals are kept. ALL upgrade levels reset, including Prestige Shop purchases. You receive 1 prestige coin, Shop, an unupgraded Star Forge, a Prestige counter element and one additional starting basic element.</p>
             <button id="confirmPrestige" class="text-sm px-4 py-2 rounded-lg disabled:opacity-40" style="background:var(--gold);color:#1a1a2e" disabled>Confirm Prestige · Earn 1 coin</button>
         </div></div>
@@ -1586,7 +1586,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections and notifications, with jewel-like exclusive cards.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Distinct modifier colors, patterns and sigils; CyMoney cards feature a cyan crystal design and CyMoney label. Star Forge has an animated activation and collectible-card results.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Each CyMoney element earns 1 CyMoney per minute in the active tab. The CyMoney Workshop offers 11 upgrade types; CyMoney is kept on Prestige, while upgrade levels reset.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys, 100,000 coins and 50 CyMoney (50 more each Prestige, kept after Prestige), with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. All upgrade levels reset.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys and 100,000 coins, with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. All upgrade levels reset.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Opening a lock now announces: “You hear a lock being broken...”</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Craft Shop to unlock shopping and coin earnings. Keys reveal its recipe but do not unlock Shop. Find the ending to see your rank.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Forge controls and CyMoney appear as you unlock them.</li>
@@ -3808,9 +3808,8 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             // Keys and coins retain their capped progression in quarter-percent units.
             const percentUnits=Math.min(400,40+10*prestigeData().times);
             const requiredKeys=Math.ceil(250*percentUnits/400),requiredCoins=Math.ceil(1000000*percentUnits/400),requiredElements=100+25*prestigeData().times;
-            const requiredCyMoney=50*(prestigeData().times+1),cyMoney=Number(gs.cyMoney)||0;
-            return {all,missing,percent:percentUnits/4,requiredKeys,requiredCoins,requiredElements,requiredCyMoney,cyMoney,keys:totalKeys(),coins:gs.coins,
-                ready:!!gs.shopUnlocked&&!!gs.sfUnlocked&&all.length-missing.length>=requiredElements&&totalKeys()>=requiredKeys&&gs.coins>=requiredCoins&&cyMoney>=requiredCyMoney};
+            return {all,missing,percent:percentUnits/4,requiredKeys,requiredCoins,requiredElements,keys:totalKeys(),coins:gs.coins,
+                ready:!!gs.shopUnlocked&&!!gs.sfUnlocked&&all.length-missing.length>=requiredElements&&totalKeys()>=requiredKeys&&gs.coins>=requiredCoins};
         }
         function updatePrestigeUI(){
             const p=prestigeData();
@@ -3820,7 +3819,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
         function renderPrestige(){
             const r=prestigeRequirements();
-            $('prestigeRequirements').textContent=`Prestige ${prestigeData().times+1} · Keys: ${r.keys} / ${r.requiredKeys} · Coins: ${Math.floor(r.coins).toLocaleString()} / ${r.requiredCoins.toLocaleString()} · CyMoney: ${r.cyMoney.toLocaleString()} / ${r.requiredCyMoney.toLocaleString()} · Ranked elements: ${r.all.length-r.missing.length} / ${r.requiredElements} required (${r.all.length} total) · Shop: ${gs.shopUnlocked?'✓':'locked'} · Star Forge: ${gs.sfUnlocked?'✓':'locked'}`;
+            $('prestigeRequirements').textContent=`Prestige ${prestigeData().times+1} · Keys: ${r.keys} / ${r.requiredKeys} · Coins: ${Math.floor(r.coins).toLocaleString()} / ${r.requiredCoins.toLocaleString()} · Ranked elements: ${r.all.length-r.missing.length} / ${r.requiredElements} required (${r.all.length} total) · Shop: ${gs.shopUnlocked?'✓':'locked'} · Star Forge: ${gs.sfUnlocked?'✓':'locked'}`;
 
             $('confirmPrestige').disabled=!r.ready||prestigeInFlight;
             $('prestigeCount').textContent=prestigeData().times+' prestiges · '+prestigeData().coins+' prestige coins';
