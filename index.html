@@ -110,11 +110,12 @@
         .april-banner-left { left:-56px;top:48%;width:150px;background:#f9a8d4;color:#111;transform:rotate(90deg); }
         .april-banner-right { right:-62px;top:35%;width:170px;background:#fde047;color:#7c2d12;transform:rotate(-90deg); }
         .april-banner-mid { position:relative;z-index:5;margin:5px auto;width:min(92%,760px);background:#67e8f9;color:#581c87;transform:rotate(-.4deg); }
-        .april-ad-rack { width:min(96%,1050px);margin:8px auto 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;position:relative;z-index:4;pointer-events:none; }
-        .april-fake-ad { position:relative;min-height:78px;padding:9px 10px;background:#fff;border:4px outset #c0c0c0;color:#111;box-shadow:5px 5px 0 #111;font-family:'Comic Sans MS',cursive;text-align:center;overflow:hidden; }
-        .april-fake-ad:nth-child(2){background:#dcfce7;transform:rotate(1deg)}.april-fake-ad:nth-child(3){background:#fce7f3;transform:rotate(-1deg)}
-        .april-fake-ad strong { display:block;font-size:.83rem;line-height:1.1;color:#dc2626; }.april-fake-ad small { display:block;margin-top:4px;font-size:.58rem;line-height:1.25; }
-        .april-fake-ad b { display:inline-block;margin-top:5px;padding:2px 8px;background:#facc15;border:2px solid #111;font-size:.58rem;box-shadow:2px 2px 0 #ef4444; }
+        .april-ad-rack { width:min(88%,540px);height:70px;margin:6px auto 10px;position:relative;z-index:4;pointer-events:none; }
+        .april-fake-ad { position:absolute;inset:0;display:none;min-height:0;padding:7px 70px 7px 22px;background:#fff;border:3px outset #c0c0c0;color:#111;box-shadow:4px 4px 0 #111;font-family:'Comic Sans MS',cursive;text-align:left;overflow:hidden; }
+        .april-fake-ad.april-ad-visible { display:block; }
+        .april-fake-ad:nth-child(3n+2){background:#dcfce7}.april-fake-ad:nth-child(3n){background:#fce7f3}
+        .april-fake-ad strong { display:block;font-size:.76rem;line-height:1.05;color:#dc2626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }.april-fake-ad small { display:block;margin-top:3px;font-size:.54rem;line-height:1.15;max-height:2.3em;overflow:hidden; }
+        .april-fake-ad b { position:absolute;right:7px;top:50%;transform:translateY(-50%) rotate(2deg);display:inline-block;width:58px;padding:3px;background:#facc15;border:2px solid #111;font-size:.5rem;line-height:1.05;text-align:center;box-shadow:2px 2px 0 #ef4444; }
         .april-fake-ad::before { content:'FAKE AD';position:absolute;left:-24px;top:8px;width:82px;background:#111;color:#fff;font-size:.45rem;transform:rotate(-38deg); }
         .april-chaos-sticker { position:fixed;z-index:44;font-size:clamp(1.5rem,4vw,3.5rem);pointer-events:none;filter:drop-shadow(3px 3px 0 #fff);animation:aprilStickerFloat var(--speed) ease-in-out infinite alternate; }
         @keyframes aprilStickerFloat { from{transform:translateY(-8px) rotate(var(--tilt))} to{transform:translateY(8px) rotate(var(--tilt-back))} }
@@ -5045,7 +5046,8 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 ['🤡 CRAFTING GAME TYCOON.EXE','Includes procedural names reviewed by absolutely nobody.','TRUST THE GENERATOR'],
                 ['🌋 MINCERAFT: LAVA EDITION','FAKE AD — Everything is lava. The floor is lava. Your house is lava. Steve is probably lava.','BUY LAVA NOW']
             ];
-            fakeAds.forEach(([title,copy,button])=>{const ad=document.createElement('div');ad.className='april-fake-ad';const strong=document.createElement('strong');strong.textContent=title;const small=document.createElement('small');small.textContent=copy;const b=document.createElement('b');b.textContent=button;ad.append(strong,small,b);adRack.appendChild(ad);});
+            fakeAds.forEach(([title,copy,button],i)=>{const ad=document.createElement('div');ad.className='april-fake-ad'+(i===0?' april-ad-visible':'');const strong=document.createElement('strong');strong.textContent=title;const small=document.createElement('small');small.textContent=copy;const b=document.createElement('b');b.textContent=button;ad.append(strong,small,b);adRack.appendChild(ad);});
+            let adIndex=0;setInterval(()=>{const ads=adRack.querySelectorAll('.april-fake-ad');if(!ads.length)return;ads[adIndex].classList.remove('april-ad-visible');adIndex=(adIndex+1)%ads.length;ads[adIndex].classList.add('april-ad-visible');},4200);
             const header=document.querySelector('header');if(header)header.after(adRack);else banner.after(adRack);
             const splash=document.createElement('div');splash.className='april-fools-splash';
             splash.textContent='🤡 APRIL FOOOOOOOOOOOOOOOOOOOLSS!!!!! 🤡';
