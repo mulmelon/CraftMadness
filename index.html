@@ -102,6 +102,17 @@
         body.april-fools-mode .drop-zone { border:4px dashed #ef4444!important;border-radius:30px 5px 24px 8px!important;background:#fef08a!important; }
         body.april-fools-mode .drop-zone:nth-of-type(even) { background:#a7f3d0!important;border-color:#7c3aed!important; }
         body.april-fools-mode .modal-box { border:5px dotted #f97316!important;border-radius:35px 5px 24px 9px!important;box-shadow:10px 10px 0 #22d3ee!important; }
+        body.april-fools-mode .modal-box::before { content:'📢 EXTREMELY EDUCATIONAL POPUP 📢';display:block;margin:-5px -5px 10px;padding:5px;background:#facc15;color:#7c2d12;border-bottom:3px dashed #111;border-radius:30px 4px 0 0;text-align:center;font-size:.62rem;font-weight:900;transform:rotate(-.5deg); }
+        body.april-fools-mode .modal-box h2 { display:inline-block;background:#f9a8d4!important;color:#111!important;border:3px dotted #7c3aed;padding:4px 9px;transform:rotate(-2deg);text-shadow:2px 2px #fff!important; }
+        body.april-fools-mode .modal-box p { background:rgba(255,255,255,.8);border-radius:7px;padding:3px 5px; }
+        body.april-fools-mode .modal-close { background:#ef4444!important;color:#fff!important;border:3px solid #111!important;border-radius:50% 7px 50% 8px!important;font-size:1.25rem!important; }
+        body.april-fools-mode .notif { background:#fef08a!important;color:#111!important;border:4px dashed #ef4444!important;border-radius:5px 24px 7px 19px!important;box-shadow:7px 7px 0 #7c3aed!important;transform:rotate(-1deg); }
+        body.april-fools-mode .notif:nth-child(even) { background:#a7f3d0!important;border-color:#0ea5e9!important;transform:rotate(1deg); }
+        body.april-fools-mode .notif::before { content:'SYSTEM GOBLIN SAYS:';display:block;margin-bottom:3px;color:#dc2626;font-size:.52rem;font-weight:900;letter-spacing:.08em; }
+        body.april-fools-mode .notif strong { font-size:.86rem!important;text-transform:uppercase; }
+        body.april-fools-mode .notif-bar { background:repeating-linear-gradient(90deg,#ef4444 0 12px,#facc15 12px 24px,#22c55e 24px 36px,#3b82f6 36px 48px)!important;height:5px!important; }
+        body.april-fools-mode .type-divider { background:#fef08a!important;color:#7c2d12!important;border:3px dashed #ef4444!important;border-radius:4px 17px 5px 13px!important;padding:5px!important;text-align:center!important;font-weight:900!important;transform:rotate(-.5deg); }
+        body.april-fools-mode .type-divider:nth-of-type(even) { background:#f9a8d4!important;transform:rotate(.7deg); }
         body.april-fools-mode #combineBtn,body.april-fools-mode #combineBtnM { background:linear-gradient(90deg,#ef4444,#facc15,#22c55e,#22d3ee,#a855f7)!important;color:#111!important;font-size:1.05rem!important;text-shadow:1px 1px #fff; }
         .april-permanent-banner { position:sticky;top:0;z-index:45;text-align:center;padding:5px 42px;background:#111;color:#fef08a;border-bottom:4px dashed #ff4fd8;font-family:'Comic Sans MS',cursive;font-weight:900;font-size:clamp(.8rem,2.5vw,1.25rem);letter-spacing:.08em;pointer-events:none; }
         .april-permanent-banner::before { content:'🚨 '; }.april-permanent-banner::after { content:' 🚨'; }
@@ -121,6 +132,8 @@
         @keyframes aprilStickerFloat { from{transform:translateY(-8px) rotate(var(--tilt))} to{transform:translateY(8px) rotate(var(--tilt-back))} }
         .april-corner-note { position:fixed;right:8px;bottom:8px;z-index:44;max-width:190px;padding:7px 10px;background:#fef08a;color:#7c2d12;border:3px solid #111;box-shadow:5px 5px 0 #ef4444;font-family:'Comic Sans MS',cursive;font-weight:900;font-size:.72rem;transform:rotate(-3deg);pointer-events:none; }
         .april-fools-splash { position:fixed;left:50%;top:50%;z-index:99999;width:min(94vw,1100px);padding:28px 18px;text-align:center;font-family:'Comic Sans MS',cursive;font-size:clamp(2rem,8vw,6.5rem);font-weight:900;line-height:.95;color:#fff;background:#ef4444;border:8px dashed #fef08a;border-radius:41px 7px 55px 12px;box-shadow:12px 12px 0 #7c3aed,-12px -12px 0 #22d3ee;text-shadow:5px 5px 0 #7c3aed;pointer-events:none;animation:aprilSplash 2.8s cubic-bezier(.2,.8,.2,1) forwards,aprilRainbow .7s linear infinite; }
+        .site-copyright { width:100%;margin-top:28px;padding:14px;text-align:center;color:var(--text-secondary);font-size:.7rem;border-top:1px solid var(--border);background:var(--bg-card);white-space:pre-line; }
+        body.april-fools-mode .site-copyright { width:min(94%,720px);margin:30px auto 42px;padding:13px;background:#facc15!important;color:#7c2d12!important;border:5px dashed #ef4444!important;border-radius:40% 5px 35% 8px;font-size:1.15rem;font-weight:900;box-shadow:8px 8px 0 #7c3aed;transform:rotate(-1deg); }
         @media(prefers-reduced-motion:reduce){.april-fools-splash{animation:aprilSplash 1.4s ease forwards}body.april-fools-mode header,.april-chaos-sticker{animation:none}}
         @media(max-width:640px) { #elementStorageViews { flex-wrap:wrap; } #elementStorageViews > #elGrid { flex-basis:100%; } }
 
@@ -3393,6 +3406,11 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             return 'Normal';
         }
 
+        const GOOFY_TYPE_NAMES={
+            'Everything':'🌈 LITERALLY EVERYTHING HELP','Basic':'🍼 BABY ELEMENT','Final':'🛑 NO MORE CRAFTING','Exclusive':'💎 VIP GREMLIN','April Fools':'🤡 CERTIFIED NONSENSE','Secret':'🤫 DEFINITELY NOT SECRET','Legendary':'👑 UNREASONABLY IMPORTANT','Divine':'🙏 HOLY MOLY DELUXE','Celestial':'🛸 SPACE NONSENSE','Ancient':'👴 OLD AND CRUNCHY','Holy':'😇 AGGRESSIVELY WHOLESOME','Blessed':'✨ SLIGHTLY BLESSED MAYBE','Purified':'🧼 WASHED WITH DISH SOAP','Golden':'🧀 EXPENSIVE CHEESE COLOR','Crystalline':'💎 SHARP SHINY ROCK','Chromatic':'🌈 TOO MANY COLORS','Ethereal':'👻 MOSTLY TRANSPARENT VIBES','Electric':'⚡ DO NOT LICK','Magnetic':'🧲 FRIDGE COMPATIBLE','Temporal':'⏰ TIME DID A FLIP','Infernal':'🔥 SPICY BEYOND REASON','Hot':'🥵 TOUCHING NOT ADVISED','Radioactive':'☢️ EXTRA CRISPY ATOMS','Cursed':'💀 BAD VIBES PREMIUM','Corrupted':'🖥️ FILE GOT HUNGRY','Void':'🕳️ SUSPICIOUSLY EMPTY','Abyssal':'🌊 VERY DEEP PROBLEM','Antimatter':'💥 MATTER BUT ANGRY','Phantom':'👻 RENT-FREE GHOST','Unstable':'💣 SHAKE FOR SURPRISE','Parasitic':'🪱 UNINVITED ROOMMATE','Frozen':'🧊 EMOTIONALLY UNAVAILABLE','Permafrost':'🔒 FOREVER ICE CUBE','Tsunami':'🌊 WATER BUT TOO MUCH','Error':'⚠️ OOPS ELEMENT','Fatal Error':'💀 OOPS BUT WORSE','Blank':'⬜ PREMIUM NOTHING','Normal':'🙂 SUSPICIOUSLY NORMAL','Penalty':'☠️ TAX AUDIT ELEMENT','Key':'🔑 DOOR SNACK'
+        };
+        function goofyTypeLabel(type){return GOOFY_TYPE_NAMES[type]||('🤨 '+String(type).toUpperCase()+' THING');}
+
         let currentSort = 'original';
 
         function getSortedElements() {
@@ -3989,7 +4007,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             card.classList.add('modifier-card');card.dataset.modifier=primary;card.dataset.motif=theme.family;
             card.style.setProperty('--card-hue',theme.hue);
             card.title=(el.description||'')+' · '+active.map(k=>MODIFIER_STYLES[k].label).join(' / ');
-            if(!el.isPrestige&&!checkIsEverything(el))card.querySelector('.card-ribbon').textContent=theme.label+(el.isKey?' · ×'+keyAmount(el):'');
+            if(!el.isPrestige&&!checkIsEverything(el))card.querySelector('.card-ribbon').textContent=(OldAllCreate?goofyTypeLabel(el.isKey?'Key':getElType(el)):theme.label)+(el.isKey?' · ×'+keyAmount(el):'');
             const mark=document.createElement('span');mark.className='modifier-mark';mark.setAttribute('aria-hidden','true');mark.textContent=theme.sigil;
             const pattern=document.createElement('span');pattern.className='modifier-pattern';pattern.setAttribute('aria-hidden','true');
             card.append(pattern,mark);
@@ -4006,7 +4024,9 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(el.isPrestige)card.classList.add('prestige-showpiece');
             if(Array.from(el.emoji||'').length>3)card.classList.add('multi-icon-card');
             card.style.setProperty('--card-hue',hue);
-            const tier=el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isAprilFools?'🤡 WHOOPS':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
+            const realType=checkIsEverything(el)?'Everything':el.isExclusive?'Exclusive':el.isAprilFools?'April Fools':el.isFinal?'Final':el.isLegendary?'Legendary':el.isSecret?'Secret':el.isKey?'Key':getElType(el);
+            const originalTier=el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isAprilFools?'🤡 WHOOPS':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
+            const tier=OldAllCreate?(el.isPrestige?'🏆 RESET FLEX ×'+el.amountOfPrestige:goofyTypeLabel(realType)):originalTier;
             card.dataset.tier=tier;
             const ribbon=document.createElement('div');ribbon.className='card-ribbon';ribbon.textContent=tier+(el.isKey?' · ×'+keyAmount(el):'');
             const stage=document.createElement('div');stage.className='card-stage';
@@ -4097,10 +4117,10 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                         const div = document.createElement('div');
                         if(t === 'Penalty'){
                             div.className = 'type-divider penalty-divider';
-                            div.innerHTML = '<span style="color:#ef4444">⚠️ ELEMENTS WITH PENALTIES</span> <span style="font-weight:400;font-size:0.55rem;display:block;margin-top:2px;color:#f87171">PURIFY THEM WITH HOLY OR BLESSED QUICKLY, THEY LESSEN YOUR BASE COIN EARNING!</span>';
+                            div.innerHTML = OldAllCreate?'<span>☠️ TAX AUDIT ELEMENTS</span><span style="font-weight:400;font-size:0.55rem;display:block;margin-top:2px">THESE LITTLE CRIMINALS ARE EATING YOUR COIN INCOME. WASH THEM.</span>':'<span style="color:#ef4444">⚠️ ELEMENTS WITH PENALTIES</span> <span style="font-weight:400;font-size:0.55rem;display:block;margin-top:2px;color:#f87171">PURIFY THEM WITH HOLY OR BLESSED QUICKLY, THEY LESSEN YOUR BASE COIN EARNING!</span>';
                         } else {
                             div.className = 'type-divider';
-                            div.textContent = t;
+                            div.textContent = OldAllCreate?goofyTypeLabel(t):t;
                         }
                         elGrid.appendChild(div);
                     }
@@ -5023,6 +5043,11 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none');});
 
         // ─── INIT ───
+        function applySiteFooter(){
+            const footer=document.createElement('footer');footer.className='site-copyright';
+            footer.textContent=OldAllCreate?'this game stinks\nprobably copyright Melon Studios ARR':'Copyright Melon Studios ARR';
+            document.body.appendChild(footer);
+        }
         function applyAprilFoolsMode(){
             document.body.classList.toggle('april-fools-mode',OldAllCreate);
             if(!OldAllCreate)return;
@@ -5057,6 +5082,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             stickerSpots.forEach((spot,i)=>{const s=document.createElement('span');s.className='april-chaos-sticker';s.textContent=stickerEmoji[(aprilHash(String(i))+i)%stickerEmoji.length];s.style.left=spot[0]+'vw';s.style.top=spot[1]+'vh';s.style.setProperty('--speed',(1.3+i*.27)+'s');s.style.setProperty('--tilt',(-18+i*7)+'deg');s.style.setProperty('--tilt-back',(18-i*7)+'deg');document.body.appendChild(s);});
             const note=document.createElement('div');note.className='april-corner-note';note.textContent='⚠️ QUALITY CONTROL HAS LEFT THE BUILDING';document.body.appendChild(note);
         }
+        applySiteFooter();
         applyAprilFoolsMode();
         load();
         loadSortPref();
