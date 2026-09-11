@@ -134,8 +134,6 @@
         .april-fools-splash { position:fixed;left:50%;top:50%;z-index:99999;width:min(94vw,1100px);padding:28px 18px;text-align:center;font-family:'Comic Sans MS',cursive;font-size:clamp(2rem,8vw,6.5rem);font-weight:900;line-height:.95;color:#fff;background:#ef4444;border:8px dashed #fef08a;border-radius:41px 7px 55px 12px;box-shadow:12px 12px 0 #7c3aed,-12px -12px 0 #22d3ee;text-shadow:5px 5px 0 #7c3aed;pointer-events:none;animation:aprilSplash 2.8s cubic-bezier(.2,.8,.2,1) forwards,aprilRainbow .7s linear infinite; }
         .site-copyright { width:100%;margin-top:28px;padding:14px;text-align:center;color:var(--text-secondary);font-size:.7rem;border-top:1px solid var(--border);background:var(--bg-card);white-space:pre-line; }
         body.april-fools-mode .site-copyright { width:min(94%,720px);margin:30px auto 42px;padding:13px;background:#facc15!important;color:#7c2d12!important;border:5px dashed #ef4444!important;border-radius:40% 5px 35% 8px;font-size:1.15rem;font-weight:900;box-shadow:8px 8px 0 #7c3aed;transform:rotate(-1deg); }
-        .sound-toggle { position:fixed;right:9px;top:9px;z-index:99998;width:38px;height:34px;padding:0!important;display:flex;align-items:center;justify-content:center;background:var(--bg-card)!important;color:var(--text-primary)!important;border:2px solid var(--border)!important;border-radius:9px!important;font-size:1rem;box-shadow:3px 3px 0 #0003!important; }
-        body.april-fools-mode .sound-toggle { background:#facc15!important;border:3px dashed #ef4444!important;border-radius:50% 5px 50% 8px!important;box-shadow:4px 4px 0 #7c3aed!important; }
         @media(prefers-reduced-motion:reduce){.april-fools-splash{animation:aprilSplash 1.4s ease forwards}body.april-fools-mode header,.april-chaos-sticker{animation:none}}
         @media(max-width:640px) { #elementStorageViews { flex-wrap:wrap; } #elementStorageViews > #elGrid { flex-basis:100%; } }
 
@@ -3118,60 +3116,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         const coinAmt=$('coinAmt'), cpm=$('cpm'), shopCoins=$('shopCoins');
 
         // ─── HELPERS ───
-        let soundContext=null,audioMuted=false,aprilIntroPending=OldAllCreate;
-        const SFX_MASTER_VOLUME=2.6;
-        function ensureAudio(){
-            if(audioMuted)return null;
-            if(!soundContext)soundContext=new (window.AudioContext||window.webkitAudioContext)();
-            if(soundContext.state==='suspended')soundContext.resume();
-            return soundContext;
-        }
-        function soundTone(freq,duration=.1,type='sine',volume=.035,delay=0,endFreq=freq){
-            const ctx=ensureAudio();if(!ctx)return;
-            const start=ctx.currentTime+delay,osc=ctx.createOscillator(),gain=ctx.createGain();
-            osc.type=type;osc.frequency.setValueAtTime(Math.max(30,freq),start);osc.frequency.exponentialRampToValueAtTime(Math.max(30,endFreq),start+duration);
-            gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(Math.min(.16,volume*SFX_MASTER_VOLUME),start+.008);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
-            osc.connect(gain);gain.connect(ctx.destination);osc.start(start);osc.stop(start+duration+.02);
-        }
-        function soundNoise(duration=.09,volume=.018,delay=0){
-            const ctx=ensureAudio();if(!ctx)return;
-            const length=Math.max(1,Math.floor(ctx.sampleRate*duration)),buffer=ctx.createBuffer(1,length,ctx.sampleRate),data=buffer.getChannelData(0);
-            for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
-            const source=ctx.createBufferSource(),gain=ctx.createGain();source.buffer=buffer;gain.gain.value=Math.min(.12,volume*SFX_MASTER_VOLUME);source.connect(gain);gain.connect(ctx.destination);source.start(ctx.currentTime+delay);
-        }
-        function playSfx(kind='click'){
-            if(audioMuted||!soundContext)return;
-            if(!OldAllCreate){
-                if(kind==='click')soundTone(440,.045,'sine',.018,0,520);
-                else if(kind==='hover')soundTone(620,.025,'sine',.008,0,670);
-                else if(kind==='combine'){soundTone(330,.11,'sine',.025);soundTone(495,.14,'sine',.022,.07);}
-                else if(kind==='discovery'){soundTone(523,.1,'triangle',.026);soundTone(659,.12,'triangle',.024,.07);soundTone(784,.15,'triangle',.022,.14);}
-                else if(kind==='error'){soundTone(180,.16,'square',.025);soundTone(130,.2,'square',.02,.11);}
-                else if(kind==='notify'){soundTone(660,.08,'sine',.025);soundTone(880,.1,'sine',.02,.07);}
-                else if(kind==='tutorial'||kind==='modal')soundTone(520,.08,'triangle',.02);
-                else if(kind==='starForge'){[330,440,660,990].forEach((f,i)=>soundTone(f,.18,'sine',.025,i*.07));}
-                else if(kind==='prestige'){[392,523,659,784].forEach((f,i)=>soundTone(f,.24,'triangle',.03,i*.11));}
-                return;
-            }
-            if(kind==='click'){const f=150+Math.random()*170;soundTone(f,.09,'square',.025,0,f*.58);}
-            else if(kind==='hover'){const f=210+Math.random()*240;soundTone(f,.045,Math.random()>.5?'square':'triangle',.01,0,f*(.7+Math.random()*.7));}
-            else if(kind==='combine'){soundTone(115,.28,'sawtooth',.045,0,520);soundTone(720,.12,'square',.025,.18,190);soundNoise(.1,.018,.12);}
-            else if(kind==='discovery'){[220,330,495,742,371].forEach((f,i)=>soundTone(f,.15,i%2?'square':'triangle',.032,i*.055,f*1.1));soundNoise(.08,.012,.16);}
-            else if(kind==='error'){soundTone(145,.32,'sawtooth',.04,0,72);soundTone(118,.28,'square',.035,.12,55);soundNoise(.2,.022,.04);}
-            else if(kind==='notify'){soundTone(190,.16,'square',.035);soundTone(285,.12,'sawtooth',.03,.08);soundTone(142,.2,'square',.025,.17);}
-            else if(kind==='tutorial'||kind==='modal'){soundTone(310,.2,'sawtooth',.028,0,180);soundTone(260,.22,'sawtooth',.028,.14,130);}
-            else if(kind==='starForge'){[110,165,247,370,555,220].forEach((f,i)=>soundTone(f,.2,i%2?'square':'sawtooth',.035,i*.065,f*1.35));soundNoise(.34,.025,.08);}
-            else if(kind==='prestige'){[262,330,392,466,349,698,233].forEach((f,i)=>soundTone(f,.28,i%2?'square':'triangle',.04,i*.09,f*(i===6?.6:1.03)));}
-            else if(kind==='aprilIntro'){[130,196,262,175,349,117,523,155].forEach((f,i)=>soundTone(f,.32,i%3===0?'sawtooth':'square',.035,i*.075,f*(.65+Math.random())));soundNoise(.55,.022,.1);}
-        }
-        document.addEventListener('pointerdown',()=>{
-            ensureAudio();
-            if(aprilIntroPending){aprilIntroPending=false;setTimeout(()=>playSfx('aprilIntro'),20);}
-        },{once:true,capture:true});
-        document.addEventListener('click',e=>{if(e.target.closest('button,.el-card,summary,input[type="checkbox"]'))playSfx('click');},true);
-        document.addEventListener('pointerover',e=>{const target=e.target.closest('button,.el-card,summary');if(target&&(!e.relatedTarget||!target.contains(e.relatedTarget)))playSfx('hover');},true);
         function notify(title, msg, icon='ℹ️', duration=4000) {
-            const soundKind=/prestige/i.test(title)?'prestige':/star forge/i.test(title)?'starForge':/error|locked|need|not available|penalty/i.test(title)?'error':'notify';playSfx(soundKind);
             const n = document.createElement('div');
             n.className='notif';
             n.innerHTML=`<div class="flex items-center gap-2 mb-1"><span>${icon}</span><strong class="text-sm">${title}</strong></div><div class="text-xs" style="color:var(--text-secondary)">${msg}</div><div class="notif-bar"></div>`;
@@ -3179,7 +3124,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             setTimeout(()=>{ n.style.opacity='0'; n.style.transition='opacity 0.3s'; setTimeout(()=>n.remove(),300); }, duration);
         }
 
-        function openModal(id) { $(id).style.display='block';playSfx(/tut/i.test(id)?'tutorial':'modal'); }
+        function openModal(id) { $(id).style.display='block'; }
         function closeModal(id) { $(id).style.display='none'; }
 
         document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
@@ -3264,7 +3209,6 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
         async function playAscension(tokens,target,message){
             ascensionBusy=true;
-            playSfx(target&&target.isPrestige?'prestige':'notify');
             const overlay=$('ascensionOverlay'),orbit=$('ascensionOrbit'),core=$('ascensionCore');
             overlay.hidden=false;overlay.classList.remove('ascension-merge');orbit.replaceChildren();core.replaceChildren();
             const card=document.createElement('div');card.className='el-card '+getElClasses(target);
@@ -3306,7 +3250,6 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(n>0)elements.push({name:'Prestige',emoji:'🏆',description:'Your completed Prestiges. Not spendable as keys.',isPrestige:true,amountOfPrestige:n,excludeFromRank:true});
         }
         function showSpecialOutcome(title,description,el,progress){
-            playSfx(/blocked|fatal|absorbed|phased|short circuit/i.test(title)?'error':'discovery');
             resultArea.replaceChildren();const panel=document.createElement('section');panel.className='special-outcome';
             const card=document.createElement('div');card.className='el-card '+getElClasses(el);
             const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;
@@ -4538,7 +4481,6 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>🤡</span></div><h3>Archived nonsense</h3><p>Turn OldAllCreate on before crafting with April Fools elements.</p></div>';
                 resetDZs();return;
             }
-            playSfx('combine');
 
             const isHeat1=sel1.isHot||sel1.isSuperHot||sel1.name==='Fire'||sel1.name==='Inferno';
             const isHeat2=sel2.isHot||sel2.isSuperHot||sel2.name==='Fire'||sel2.name==='Inferno';
@@ -4659,7 +4601,6 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(checkIsEverything(elements[exists])){stripToEverything(elements[exists]);}
                 showResult(elements[exists],false);
             } else {
-                playSfx('discovery');
                 elements.push(newEl);
                 showResult(newEl,true);
                 combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{})});
@@ -4783,7 +4724,6 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             // Prestige trophies cannot receive Forge modifiers.
             const eligible=elements.filter(e=>!e.isPrestige&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
-            playSfx('starForge');
             sfAnimating=true;$('starForgeEffect').hidden=false;
             tickCyIncome();
             let count = Math.min(5+prestigeLevel('forgeReach')+cyLevel('reach'), eligible.length);
@@ -5103,11 +5043,6 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none');});
 
         // ─── INIT ───
-        function installSoundToggle(){
-            const button=document.createElement('button');button.type='button';button.className='sound-toggle';button.textContent='🔊';button.title='Mute sound effects';button.setAttribute('aria-label','Mute sound effects');
-            button.addEventListener('click',()=>{audioMuted=!audioMuted;button.textContent=audioMuted?'🔇':'🔊';button.title=audioMuted?'Enable sound effects':'Mute sound effects';button.setAttribute('aria-label',button.title);if(audioMuted&&soundContext)soundContext.suspend();else if(!audioMuted)ensureAudio();});
-            document.body.appendChild(button);
-        }
         function applySiteFooter(){
             const footer=document.createElement('footer');footer.className='site-copyright';
             footer.textContent=OldAllCreate?'this game stinks\nprobably copyright Melon Studios ARR':'Copyright Melon Studios ARR';
@@ -5147,7 +5082,6 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             stickerSpots.forEach((spot,i)=>{const s=document.createElement('span');s.className='april-chaos-sticker';s.textContent=stickerEmoji[(aprilHash(String(i))+i)%stickerEmoji.length];s.style.left=spot[0]+'vw';s.style.top=spot[1]+'vh';s.style.setProperty('--speed',(1.3+i*.27)+'s');s.style.setProperty('--tilt',(-18+i*7)+'deg');s.style.setProperty('--tilt-back',(18-i*7)+'deg');document.body.appendChild(s);});
             const note=document.createElement('div');note.className='april-corner-note';note.textContent='⚠️ QUALITY CONTROL HAS LEFT THE BUILDING';document.body.appendChild(note);
         }
-        installSoundToggle();
         applySiteFooter();
         applyAprilFoolsMode();
         load();
