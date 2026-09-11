@@ -3119,6 +3119,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 
         // ─── HELPERS ───
         let soundContext=null,audioMuted=false,aprilIntroPending=OldAllCreate;
+        const SFX_MASTER_VOLUME=2.6;
         function ensureAudio(){
             if(audioMuted)return null;
             if(!soundContext)soundContext=new (window.AudioContext||window.webkitAudioContext)();
@@ -3129,20 +3130,23 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             const ctx=ensureAudio();if(!ctx)return;
             const start=ctx.currentTime+delay,osc=ctx.createOscillator(),gain=ctx.createGain();
             osc.type=type;osc.frequency.setValueAtTime(Math.max(30,freq),start);osc.frequency.exponentialRampToValueAtTime(Math.max(30,endFreq),start+duration);
-            gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(volume,start+.008);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+            gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(Math.min(.16,volume*SFX_MASTER_VOLUME),start+.008);gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
             osc.connect(gain);gain.connect(ctx.destination);osc.start(start);osc.stop(start+duration+.02);
         }
         function soundNoise(duration=.09,volume=.018,delay=0){
             const ctx=ensureAudio();if(!ctx)return;
             const length=Math.max(1,Math.floor(ctx.sampleRate*duration)),buffer=ctx.createBuffer(1,length,ctx.sampleRate),data=buffer.getChannelData(0);
             for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
-            const source=ctx.createBufferSource(),gain=ctx.createGain();source.buffer=buffer;gain.gain.value=volume;source.connect(gain);gain.connect(ctx.destination);source.start(ctx.currentTime+delay);
+            const source=ctx.createBufferSource(),gain=ctx.createGain();source.buffer=buffer;gain.gain.value=Math.min(.12,volume*SFX_MASTER_VOLUME);source.connect(gain);gain.connect(ctx.destination);source.start(ctx.currentTime+delay);
         }
         function playSfx(kind='click'){
             if(audioMuted||!soundContext)return;
             if(!OldAllCreate){
                 if(kind==='click')soundTone(440,.045,'sine',.018,0,520);
+                else if(kind==='hover')soundTone(620,.025,'sine',.008,0,670);
                 else if(kind==='combine'){soundTone(330,.11,'sine',.025);soundTone(495,.14,'sine',.022,.07);}
+                else if(kind==='discovery'){soundTone(523,.1,'triangle',.026);soundTone(659,.12,'triangle',.024,.07);soundTone(784,.15,'triangle',.022,.14);}
+                else if(kind==='error'){soundTone(180,.16,'square',.025);soundTone(130,.2,'square',.02,.11);}
                 else if(kind==='notify'){soundTone(660,.08,'sine',.025);soundTone(880,.1,'sine',.02,.07);}
                 else if(kind==='tutorial'||kind==='modal')soundTone(520,.08,'triangle',.02);
                 else if(kind==='starForge'){[330,440,660,990].forEach((f,i)=>soundTone(f,.18,'sine',.025,i*.07));}
@@ -3150,7 +3154,10 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 return;
             }
             if(kind==='click'){const f=150+Math.random()*170;soundTone(f,.09,'square',.025,0,f*.58);}
+            else if(kind==='hover'){const f=210+Math.random()*240;soundTone(f,.045,Math.random()>.5?'square':'triangle',.01,0,f*(.7+Math.random()*.7));}
             else if(kind==='combine'){soundTone(115,.28,'sawtooth',.045,0,520);soundTone(720,.12,'square',.025,.18,190);soundNoise(.1,.018,.12);}
+            else if(kind==='discovery'){[220,330,495,742,371].forEach((f,i)=>soundTone(f,.15,i%2?'square':'triangle',.032,i*.055,f*1.1));soundNoise(.08,.012,.16);}
+            else if(kind==='error'){soundTone(145,.32,'sawtooth',.04,0,72);soundTone(118,.28,'square',.035,.12,55);soundNoise(.2,.022,.04);}
             else if(kind==='notify'){soundTone(190,.16,'square',.035);soundTone(285,.12,'sawtooth',.03,.08);soundTone(142,.2,'square',.025,.17);}
             else if(kind==='tutorial'||kind==='modal'){soundTone(310,.2,'sawtooth',.028,0,180);soundTone(260,.22,'sawtooth',.028,.14,130);}
             else if(kind==='starForge'){[110,165,247,370,555,220].forEach((f,i)=>soundTone(f,.2,i%2?'square':'sawtooth',.035,i*.065,f*1.35));soundNoise(.34,.025,.08);}
@@ -3162,8 +3169,9 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(aprilIntroPending){aprilIntroPending=false;setTimeout(()=>playSfx('aprilIntro'),20);}
         },{once:true,capture:true});
         document.addEventListener('click',e=>{if(e.target.closest('button,.el-card,summary,input[type="checkbox"]'))playSfx('click');},true);
+        document.addEventListener('pointerover',e=>{const target=e.target.closest('button,.el-card,summary');if(target&&(!e.relatedTarget||!target.contains(e.relatedTarget)))playSfx('hover');},true);
         function notify(title, msg, icon='ℹ️', duration=4000) {
-            const soundKind=/prestige/i.test(title)?'prestige':/star forge/i.test(title)?'starForge':'notify';playSfx(soundKind);
+            const soundKind=/prestige/i.test(title)?'prestige':/star forge/i.test(title)?'starForge':/error|locked|need|not available|penalty/i.test(title)?'error':'notify';playSfx(soundKind);
             const n = document.createElement('div');
             n.className='notif';
             n.innerHTML=`<div class="flex items-center gap-2 mb-1"><span>${icon}</span><strong class="text-sm">${title}</strong></div><div class="text-xs" style="color:var(--text-secondary)">${msg}</div><div class="notif-bar"></div>`;
@@ -3298,6 +3306,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(n>0)elements.push({name:'Prestige',emoji:'🏆',description:'Your completed Prestiges. Not spendable as keys.',isPrestige:true,amountOfPrestige:n,excludeFromRank:true});
         }
         function showSpecialOutcome(title,description,el,progress){
+            playSfx(/blocked|fatal|absorbed|phased|short circuit/i.test(title)?'error':'discovery');
             resultArea.replaceChildren();const panel=document.createElement('section');panel.className='special-outcome';
             const card=document.createElement('div');card.className='el-card '+getElClasses(el);
             const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;
@@ -4650,6 +4659,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(checkIsEverything(elements[exists])){stripToEverything(elements[exists]);}
                 showResult(elements[exists],false);
             } else {
+                playSfx('discovery');
                 elements.push(newEl);
                 showResult(newEl,true);
                 combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{})});
