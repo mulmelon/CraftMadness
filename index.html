@@ -74,8 +74,21 @@
         body.april-fools-mode .collection-panel,body.april-fools-mode .workshop-panel,body.april-fools-mode .history-panel { border:4px dashed #7c3aed!important;border-radius:27px 5px 31px 8px!important; }
         body.april-fools-mode button { border:2px dotted #ef4444!important; }
         body.april-fools-mode h1,body.april-fools-mode h2 { text-shadow:3px 3px 0 #facc15,-3px -3px 0 #22d3ee; }
+        body.april-fools-mode h1 { transform:skew(-7deg) rotate(-1deg);font-size:clamp(1.5rem,5vw,3.4rem)!important;color:#ef4444!important; }
+        body.april-fools-mode h2:nth-of-type(odd) { transform:skew(5deg);color:#7c3aed!important; }
+        body.april-fools-mode input,body.april-fools-mode textarea { border:3px dashed #22c55e!important;border-radius:18px 3px 21px 5px!important;background:#fff!important; }
+        body.april-fools-mode .el-wrapper:nth-child(3n+1) { transform:rotate(-2deg); }
+        body.april-fools-mode .el-wrapper:nth-child(3n+2) { transform:rotate(1.5deg); }
+        body.april-fools-mode .el-wrapper:nth-child(5n) { transform:rotate(3deg) translateY(2px); }
+        body.april-fools-mode .modal-box { border:5px dotted #f97316!important;border-radius:35px 5px 24px 9px!important;box-shadow:10px 10px 0 #22d3ee!important; }
+        body.april-fools-mode #combineBtn,body.april-fools-mode #combineBtnM { background:linear-gradient(90deg,#ef4444,#facc15,#22c55e,#22d3ee,#a855f7)!important;color:#111!important;font-size:1.05rem!important;text-shadow:1px 1px #fff; }
+        .april-permanent-banner { position:sticky;top:0;z-index:45;text-align:center;padding:5px 42px;background:#111;color:#fef08a;border-bottom:4px dashed #ff4fd8;font-family:'Comic Sans MS',cursive;font-weight:900;font-size:clamp(.8rem,2.5vw,1.25rem);letter-spacing:.08em;pointer-events:none; }
+        .april-permanent-banner::before { content:'🚨 '; }.april-permanent-banner::after { content:' 🚨'; }
+        .april-chaos-sticker { position:fixed;z-index:44;font-size:clamp(1.5rem,4vw,3.5rem);pointer-events:none;filter:drop-shadow(3px 3px 0 #fff);animation:aprilStickerFloat var(--speed) ease-in-out infinite alternate; }
+        @keyframes aprilStickerFloat { from{transform:translateY(-8px) rotate(var(--tilt))} to{transform:translateY(8px) rotate(var(--tilt-back))} }
+        .april-corner-note { position:fixed;right:8px;bottom:8px;z-index:44;max-width:190px;padding:7px 10px;background:#fef08a;color:#7c2d12;border:3px solid #111;box-shadow:5px 5px 0 #ef4444;font-family:'Comic Sans MS',cursive;font-weight:900;font-size:.72rem;transform:rotate(-3deg);pointer-events:none; }
         .april-fools-splash { position:fixed;left:50%;top:50%;z-index:99999;width:min(94vw,1100px);padding:28px 18px;text-align:center;font-family:'Comic Sans MS',cursive;font-size:clamp(2rem,8vw,6.5rem);font-weight:900;line-height:.95;color:#fff;background:#ef4444;border:8px dashed #fef08a;border-radius:41px 7px 55px 12px;box-shadow:12px 12px 0 #7c3aed,-12px -12px 0 #22d3ee;text-shadow:5px 5px 0 #7c3aed;pointer-events:none;animation:aprilSplash 2.8s cubic-bezier(.2,.8,.2,1) forwards,aprilRainbow .7s linear infinite; }
-        @media(prefers-reduced-motion:reduce){.april-fools-splash{animation:aprilSplash 1.4s ease forwards}body.april-fools-mode header{animation:none}}
+        @media(prefers-reduced-motion:reduce){.april-fools-splash{animation:aprilSplash 1.4s ease forwards}body.april-fools-mode header,.april-chaos-sticker{animation:none}}
         @media(max-width:640px) { #elementStorageViews { flex-wrap:wrap; } #elementStorageViews > #elGrid { flex-basis:100%; } }
 
         /* Progression gates must also override utility display classes. */
@@ -4398,7 +4411,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(!sel1||!sel2||isCombining)return;
             isCombining=true;
             if(!OldAllCreate&&(sel1.isAprilFools||sel2.isAprilFools)){
-                resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>🤡</span></div><h3>Archived nonsense</h3><p>Turn OldAllCreate on before crafting with April Fools elements.</p></div>';
+                resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>🤡</span></div><h3>Archived nonsense</h3><p>April Fools elements.</p></div>';
                 resetDZs();return;
             }
 
@@ -4965,9 +4978,14 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function applyAprilFoolsMode(){
             document.body.classList.toggle('april-fools-mode',OldAllCreate);
             if(!OldAllCreate)return;
+            const banner=document.createElement('div');banner.className='april-permanent-banner';banner.textContent='THIS IS A VERY SERIOUS CRAFTING WEBSITE';document.body.prepend(banner);
             const splash=document.createElement('div');splash.className='april-fools-splash';
             splash.textContent='🤡 APRIL FOOOOOOOOOOOOOOOOOOOLSS!!!!! 🤡';
             document.body.appendChild(splash);setTimeout(()=>splash.remove(),3000);
+            const stickerEmoji=['🤡','🗿','💀','🫘','🦆','🧀','🍉','🪿','🚽','🥔'];
+            const stickerSpots=[[2,16],[91,20],[3,72],[92,68],[12,88],[82,87]];
+            stickerSpots.forEach((spot,i)=>{const s=document.createElement('span');s.className='april-chaos-sticker';s.textContent=stickerEmoji[(aprilHash(String(i))+i)%stickerEmoji.length];s.style.left=spot[0]+'vw';s.style.top=spot[1]+'vh';s.style.setProperty('--speed',(1.3+i*.27)+'s');s.style.setProperty('--tilt',(-18+i*7)+'deg');s.style.setProperty('--tilt-back',(18-i*7)+'deg');document.body.appendChild(s);});
+            const note=document.createElement('div');note.className='april-corner-note';note.textContent='⚠️ QUALITY CONTROL HAS LEFT THE BUILDING';document.body.appendChild(note);
         }
         applyAprilFoolsMode();
         load();
