@@ -744,6 +744,11 @@ body.boss-mode #craftHints,body.boss-mode #craftGuide{display:none!important}
 #bossStartInfo{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--ui-button);font-size:.78rem;color:var(--text-secondary)}
 .boss-defeat-showpiece{--card-hue:8!important}.boss-defeat-showpiece .card-ribbon{background:linear-gradient(90deg,rgba(127,29,29,.88),rgba(180,83,9,.88));color:#fff7ed!important}.boss-defeat-showpiece::after{content:'⚔';position:absolute;right:8px;bottom:7px;font-size:.8rem;opacity:.5;pointer-events:none}
 @media(max-width:600px){.boss-bars{grid-template-columns:1fr}.boss-name{font-size:1rem}}
+.boss-coin-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border:1px solid rgba(245,158,11,.4);border-radius:999px;background:rgba(245,158,11,.1);font-size:.72rem;font-weight:800;color:#b45309}
+.boss-upgrade-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.boss-upgrade{padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--ui-button);text-align:left}.boss-upgrade strong{display:block;font-size:.76rem}.boss-upgrade small{display:block;margin-top:3px;color:var(--text-secondary);font-size:.64rem}.boss-upgrade button{margin-top:7px;width:100%;padding:6px 8px;border-radius:9px;background:var(--gold);color:#1a1a2e;font-size:.68rem;font-weight:800}.boss-upgrade button:disabled{opacity:.45}
+.boss-locked-card{filter:grayscale(.8) brightness(.68)!important;outline:2px solid rgba(239,68,68,.7)!important;pointer-events:none!important}.boss-locked-card::after{content:'🔒 ' attr(data-lock-turns) ' turns';position:absolute;inset:auto 5px 5px 5px;padding:4px;border-radius:7px;background:rgba(127,29,29,.92);color:white;font-size:.58rem;font-weight:900;text-align:center;z-index:50}
+@media(max-width:600px){.boss-upgrade-grid{grid-template-columns:1fr}}
+
 
 </style><style>/* Unified faceted workshop surfaces. */
 :root {--bg-primary:#efedf6;--bg-card:#faf9ff;--bg-card-hover:#e9e5f5;--border:#d3cbe6;--text-primary:#28213f;--text-secondary:#726581;--gold:#82603b;--gold-glow:#b599dd25;--teal:#317f85;--ui-panel:linear-gradient(145deg,#fcfaff,#e9e5f3);--ui-button:linear-gradient(145deg,#f9f6ff,#e3ddf1);--ui-edge:#b5a5d0;}
@@ -1535,12 +1540,11 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
     <div id="bossModal" class="modal-overlay"><div class="modal-box" style="max-width:560px">
         <button class="modal-close" data-close="bossModal">&times;</button>
         <h2 class="font-display text-xl mb-2">👹 Boss Challenge</h2>
-        <div id="bossStartInfo">
-            <strong>The Unmaker</strong><br>
-            Enter a sealed challenge save with only the four starter elements. Your normal save is untouched. Every successful craft damages the boss, then it retaliates. Win for a huge coin payout and a permanent Boss Defeat trophy. Losing still pays some coins based on progress.
-        </div>
-        <div class="mt-4 text-xs" style="color:var(--text-secondary)">Reward: <strong style="color:var(--gold)">25,000 coins</strong> · Loss reward scales up to 4,500 coins.</div>
-        <button id="bossStartBtn" class="w-full mt-4 font-semibold py-2.5 rounded-xl" style="background:#ef4444;color:white">Start fresh challenge</button>
+        <div id="bossStartInfo">Enter a sealed challenge save with only the four starter elements. Wins give coins, Boss Coins and a permanent Boss Defeat trophy. Losses still give consolation coins and a few Boss Coins.</div>
+        <div class="mt-3 flex items-center justify-between gap-2 flex-wrap"><label class="text-xs font-bold" for="bossSelect">Choose boss</label><span id="bossCoinModal" class="boss-coin-pill">🪙 0 Boss Coins</span></div>
+        <select id="bossSelect" class="w-full mt-2 p-2 rounded-xl text-sm" style="background:var(--ui-button);border:1px solid var(--border);color:var(--text-primary)"></select>
+        <div id="bossUpgradeGrid" class="boss-upgrade-grid"></div>
+        <button id="bossStartBtn" class="w-full mt-4 font-semibold py-2.5 rounded-xl" style="background:#ef4444;color:white">Start challenge</button>
     </div></div>
 
     <div id="shopModal" class="modal-overlay"><div class="modal-box" style="max-width:640px">
@@ -1842,7 +1846,20 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         <h2 class="font-display text-xl mb-5">Changelog</h2>
         <div class="changelog-scroll" tabindex="0" role="region" aria-label="Version history">
         <div class="changelog-version">
-            <h3>v3.0 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
+            <h3>v3.1 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
+            <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
+                <li><span class="changelog-tag tag-new">NEW</span> Boss Coins: boss wins award large BC payouts and losses still award a smaller amount based on progress.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Six permanent Boss upgrades for damage, defense, Resolve, recovery, discovery damage and random child mutations.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Mutation Engine upgrades raise mutation chance and the number of simultaneous mutations. Everything is an ultra-rare 0.1% mutation while the engine is active.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Three sequential bosses: The Unmaker → The Chronophage → The Null Sovereign.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> The Unmaker can skip an attack and lock one discovered element for 3 crafts.</li>
+                <li><span class="changelog-tag tag-ui">UI</span> Boss lobby now shows Boss Coins, boss selection, unlock requirements and permanent upgrades.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> 20 automatic seasonal events with 100 rank-excluded discoveries each, event-specific animated cards and the Seasonal Vault.</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> Star Forge excludes Exclusive, Seasonal and April Fools elements and can finally cleanse penalty elements.</li>
+            </ul>
+        </div>
+        <div class="changelog-version">
+            <h3>v3.0</h3>
             <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
                 <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections and notifications, with jewel-like exclusive cards.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Distinct modifier colors, patterns and sigils; CyMoney cards feature a cyan crystal design and CyMoney label. Star Forge has an animated activation and collectible-card results.</li>
@@ -3411,14 +3428,26 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 
         // ─── BOSS CHALLENGE DEFINITIONS ───
         const BOSS_DEFS={
-            unmaker:{id:'unmaker',name:'The Unmaker',emoji:'👹',maxHp:1400,playerMaxHp:150,winCoins:25000,lossMaxCoins:4500,
-                phases:[
-                    'Normal damage. Modifier-rich elements hit harder.',
-                    'Phase 2 — Heat is resisted; Electric, Magnetic and Crystalline attacks are stronger.',
-                    'Phase 3 — Penalty elements are rejected; Celestial, Divine and Purified attacks surge.'
-                ]}
+            unmaker:{id:'unmaker',name:'The Unmaker',emoji:'👹',maxHp:1150,playerMaxHp:180,winCoins:22000,lossMaxCoins:5000,winBC:20,lossBC:6,phases:['The Unmaker tests your creations.','Phase 2 — Heat is resisted; Electric, Magnetic and Crystalline attacks are stronger.','Phase 3 — Penalty elements are rejected; Celestial, Divine and Purified attacks surge.']},
+            chronophage:{id:'chronophage',name:'The Chronophage',emoji:'⏳',maxHp:1750,playerMaxHp:205,winCoins:42000,lossMaxCoins:8500,winBC:35,lossBC:9,requires:'unmaker',phases:['Time itself bites back. New discoveries are especially valuable.','Phase 2 — repeated discoveries weaken while Temporal attacks surge.','Phase 3 — the Chronophage attacks harder, but Divine and Celestial crafts tear through it.']},
+            nullking:{id:'nullking',name:'The Null Sovereign',emoji:'🕳️',maxHp:2450,playerMaxHp:230,winCoins:70000,lossMaxCoins:13000,winBC:60,lossBC:12,requires:'chronophage',phases:['The Null Sovereign erases weak patterns.','Phase 2 — ordinary attacks are reduced; rare modifiers become vital.','Phase 3 — Everything and purified cosmic elements become devastating.']}
         };
+        const BOSS_UPGRADE_DEFS={
+            damage:{name:'Forged Strength',emoji:'⚔️',max:8,base:6,step:4,desc:'More damage on every successful craft.'},
+            defense:{name:'Reinforced Resolve',emoji:'🛡️',max:8,base:6,step:4,desc:'Reduces damage from boss attacks.'},
+            resolve:{name:'Deep Reserves',emoji:'❤️',max:6,base:8,step:5,desc:'Start each challenge with more Resolve.'},
+            recovery:{name:'Second Wind',emoji:'💚',max:5,base:10,step:7,desc:'Chance to heal Resolve after a successful craft.'},
+            insight:{name:'Discovery Strike',emoji:'💡',max:5,base:8,step:6,desc:'New discoveries deal extra boss damage.'},
+            mutation:{name:'Mutation Engine',emoji:'🧬',max:5,base:12,step:9,desc:'Children may gain random mutations; higher levels allow more at once.'}
+        };
+        const BOSS_MUTATIONS=['isHot','isSuperHot','isElectric','isMagnetic','isCrystalline','isGolden','isChromatic','isEthereal','isPhantom','isLegendary','isAncient','isHoly','isBlessed','isDivine','isCelestial','isTemporal','isAbyssal','isTsunami','isPurified','isRadioactive','isUnstable'];
         let bossMode=false;
+        function bossMeta(){if(!gs.bossMeta||typeof gs.bossMeta!=='object')gs.bossMeta={coins:0,upgrades:{},defeats:{}};gs.bossMeta.coins=Math.max(0,Math.floor(Number(gs.bossMeta.coins)||0));gs.bossMeta.upgrades=gs.bossMeta.upgrades||{};gs.bossMeta.defeats=gs.bossMeta.defeats||{};return gs.bossMeta;}
+        function bossUpgradeLevel(id,meta=bossMeta()){return Math.max(0,Math.floor(Number(meta.upgrades?.[id])||0));}
+        function bossUpgradeCost(id){const d=BOSS_UPGRADE_DEFS[id],lv=bossUpgradeLevel(id);return d.base+d.step*lv;}
+        function bossUnlocked(id){const d=BOSS_DEFS[id];if(!d)return false;if(!d.requires)return !!gs.shopUnlocked;return (bossMeta().defeats[d.requires]||0)>0;}
+        function bossMutationChance(level){return [0,.06,.12,.20,.29,.40][Math.max(0,Math.min(5,level))]||0;}
+        function bossMutationMax(level){return [0,1,1,2,2,3][Math.max(0,Math.min(5,level))]||0;}
 
         // ─── GAME STATE ───
         let elements = [...STARTERS];
@@ -3853,7 +3882,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         // Prefer durable localStorage; read legacy cookies for compatible migration.
         function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Browser storage is blocked or full. Export your save before closing.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
-        function baseGameState(){return {prestige:{coins:0,times:0,upgrades:{}},coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,sfUnlocked:false,cyMoney:0,sfUpgraded:false};}
+        function baseGameState(){return {prestige:{coins:0,times:0,upgrades:{}},bossMeta:{coins:0,upgrades:{},defeats:{}},coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,sfUnlocked:false,cyMoney:0,sfUpgraded:false};}
         function save(){
             normalizeKeyStacks();normalizeEverything();updateProgressionUI();
             try{
@@ -3882,93 +3911,26 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
 
         function bossData(){return bossMode&&gs.bossRun?gs.bossRun:null;}
-        function updateBossUI(){
-            const panel=$('bossPanel'),b=bossData();
-            document.body.classList.toggle('boss-mode',!!b);
-            if(!b){panel.hidden=true;return;}
-            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
-            panel.hidden=false;
-            $('bossEmoji').textContent=def.emoji;$('bossName').textContent=def.name;$('bossPhase').textContent='Phase '+b.phase;
-            $('bossTurnCount').textContent=(b.crafts||0)+' craft'+((b.crafts||0)===1?'':'s');
-            $('bossHpText').textContent=Math.max(0,b.hp)+' / '+def.maxHp;
-            $('bossPlayerHpText').textContent=Math.max(0,b.playerHp)+' / '+def.playerMaxHp;
-            $('bossHpFill').style.width=Math.max(0,Math.min(100,b.hp/def.maxHp*100))+'%';
-            $('bossPlayerHpFill').style.width=Math.max(0,Math.min(100,b.playerHp/def.playerMaxHp*100))+'%';
-            $('bossRule').textContent=def.phases[Math.max(0,Math.min(def.phases.length-1,b.phase-1))];
-        }
-        function bossDamageFromElement(el,isNew){
-            const b=bossData();if(!b)return 0;
-            let dmg=34+(isNew?12:0);
-            if(el.isBasic)dmg+=6;if(el.isHot)dmg+=10;if(el.isSuperHot)dmg+=24;if(el.isElectric)dmg+=20;if(el.isMagnetic)dmg+=18;
-            if(el.isCrystalline)dmg+=18;if(el.isLegendary)dmg+=28;if(el.isDivine)dmg+=34;if(el.isCelestial)dmg+=40;if(el.isPurified)dmg+=22;
-            if(el.isFinal)dmg+=18;if(el.isEverything)dmg=260;
-            if(b.phase===2){if(el.isHot||el.isSuperHot)dmg=Math.floor(dmg*.55);if(el.isElectric||el.isMagnetic||el.isCrystalline)dmg+=28;}
-            if(b.phase===3){if(hasPenaltyMod(el))return 0;if(el.isCelestial||el.isDivine)dmg=Math.floor(dmg*1.65);if(el.isPurified)dmg+=35;}
-            return Math.max(0,Math.floor(dmg));
-        }
-        function bossCounterDamage(el){
-            const b=bossData();if(!b)return 0;
-            let dmg=[0,5,7,9][b.phase]||9;
-            dmg+=Math.floor(Math.random()*4);
-            if(el.isHoly||el.isBlessed||el.isDivine||el.isPurified)dmg=Math.max(2,dmg-3);
-            if(el.isFrozen||el.isPermafrost)dmg+=2;
-            return dmg;
-        }
-        function bossAfterCraft(el,isNew){
-            const b=bossData();if(!b)return false;
-            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
-            b.crafts=(b.crafts||0)+1;
-            const dmg=bossDamageFromElement(el,isNew);b.hp=Math.max(0,b.hp-dmg);
-            if(b.hp<=0){save();finishBossFight(true);return true;}
-            const ratio=b.hp/def.maxHp;
-            const nextPhase=ratio<=.33?3:ratio<=.66?2:1;
-            if(nextPhase>b.phase){b.phase=nextPhase;notify('BOSS PHASE '+nextPhase,def.phases[nextPhase-1],nextPhase===3?'💀':'⚠️',4500);}
-            const retaliation=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-retaliation);
-            notify('Boss hit',el.name+' dealt '+dmg+' damage. '+def.name+' struck back for '+retaliation+'.','⚔️',2600);
-            updateBossUI();save();
-            if(b.playerHp<=0){finishBossFight(false);return true;}
-            return false;
-        }
-        function bossMissedCraft(){
-            const b=bossData();if(!b)return false;
-            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
-            const dmg=([0,8,11,14][b.phase]||14)+Math.floor(Math.random()*3);
-            b.playerHp=Math.max(0,b.playerHp-dmg);b.crafts=(b.crafts||0)+1;
-            notify('The Unmaker retaliates','The failed fusion cost '+dmg+' Resolve.','👹',2200);updateBossUI();save();
-            if(b.playerHp<=0){finishBossFight(false);return true;}return false;
-        }
+        function bossRunUpgrade(id){const b=bossData();return Math.max(0,Math.floor(Number(b?.upgrades?.[id])||0));}
+        function bossLockedTurns(name){const b=bossData();return b?Math.max(0,Math.floor(Number(b.locks?.[name])||0)):0;}
+        function tickBossLocks(){const b=bossData();if(!b)return;b.locks=b.locks||{};Object.keys(b.locks).forEach(n=>{b.locks[n]--;if(b.locks[n]<=0)delete b.locks[n];});}
+        function refreshBossLockedCards(){if(!bossMode)return;document.querySelectorAll('.el-card[data-name]').forEach(c=>{const t=bossLockedTurns(c.dataset.name);c.classList.toggle('boss-locked-card',t>0);if(t>0)c.dataset.lockTurns=t;else delete c.dataset.lockTurns;});}
+        function updateBossUI(){const panel=$('bossPanel'),b=bossData();document.body.classList.toggle('boss-mode',!!b);if(!b){panel.hidden=true;return;}panel.hidden=false;const d=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker,max=d.playerMaxHp+bossRunUpgrade('resolve')*25;$('bossEmoji').textContent=d.emoji;$('bossName').textContent=d.name;$('bossPhase').textContent='Phase '+b.phase;$('bossTurnCount').textContent=(b.crafts||0)+' crafts';$('bossHpText').textContent=Math.max(0,b.hp)+' / '+d.maxHp;$('bossPlayerHpText').textContent=Math.max(0,b.playerHp)+' / '+max;$('bossHpFill').style.width=Math.max(0,Math.min(100,b.hp/d.maxHp*100))+'%';$('bossPlayerHpFill').style.width=Math.max(0,Math.min(100,b.playerHp/max*100))+'%';const locks=Object.entries(b.locks||{}).filter(([,v])=>v>0).map(([n,t])=>n+' 🔒'+t);$('bossRule').textContent=d.phases[Math.max(0,Math.min(2,b.phase-1))]+(locks.length?' · Locked: '+locks.join(', '):'');refreshBossLockedCards();}
+        function bossDamageFromElement(el,isNew){const b=bossData();if(!b)return 0;let x=34+(isNew?12:0)+bossRunUpgrade('damage')*7+(isNew?bossRunUpgrade('insight')*8:0);if(el.isBasic)x+=6;if(el.isHot)x+=10;if(el.isSuperHot)x+=24;if(el.isElectric)x+=20;if(el.isMagnetic)x+=18;if(el.isCrystalline)x+=18;if(el.isLegendary)x+=28;if(el.isDivine)x+=34;if(el.isCelestial)x+=40;if(el.isPurified)x+=22;if(el.isFinal)x+=18;if(el.isEverything)x=300+bossRunUpgrade('damage')*10;if(b.id==='unmaker'){if(b.phase===2){if(el.isHot||el.isSuperHot)x=Math.floor(x*.55);if(el.isElectric||el.isMagnetic||el.isCrystalline)x+=28;}if(b.phase===3){if(hasPenaltyMod(el))return 0;if(el.isCelestial||el.isDivine)x=Math.floor(x*1.65);if(el.isPurified)x+=35;}}else if(b.id==='chronophage'){if(!isNew&&b.phase>=2)x=Math.floor(x*.7);if(el.isTemporal)x+=45;if(b.phase===3&&(el.isDivine||el.isCelestial))x=Math.floor(x*1.5);}else if(b.id==='nullking'){if(b.phase>=2&&!el.isLegendary&&!el.isDivine&&!el.isCelestial&&!el.isEverything)x=Math.floor(x*.72);if(b.phase===3&&(el.isPurified||el.isCelestial||el.isDivine))x=Math.floor(x*1.7);}return Math.max(0,Math.floor(x));}
+        function bossCounterDamage(el){const b=bossData();if(!b)return 0;let x=([0,5,7,9][b.phase]||9)+(b.id==='chronophage'?2:b.id==='nullking'?4:0)+Math.floor(Math.random()*4);x=Math.max(1,x-bossRunUpgrade('defense')*1.25);if(el.isHoly||el.isBlessed||el.isDivine||el.isPurified)x=Math.max(1,x-3);if(el.isFrozen||el.isPermafrost)x+=2;return Math.floor(x);}
+        function maybeBossLockInsteadOfAttack(){const b=bossData();if(!b||b.id!=='unmaker'||Math.random()>=.22)return false;const pool=elements.filter(e=>!STARTERS.some(s=>s.name===e.name)&&!e.isPrestige&&!e.isBossDefeat&&bossLockedTurns(e.name)<=0);if(!pool.length)return false;const t=pool[Math.floor(Math.random()*pool.length)];b.locks=b.locks||{};b.locks[t.name]=3;notify('ELEMENT SEALED',`The Unmaker locked ${t.name} for 3 crafts instead of attacking.`,'🔒',3600);return true;}
+        function maybeBossRecovery(){const b=bossData(),lv=bossRunUpgrade('recovery');if(!b||!lv)return;const d=BOSS_DEFS[b.id],max=d.playerMaxHp+bossRunUpgrade('resolve')*25;if(Math.random()<lv*.08){const h=3+lv*2;b.playerHp=Math.min(max,b.playerHp+h);notify('Second Wind',`Recovered ${h} Resolve.`,'💚',1800);}}
+        function applyBossMutations(el){const b=bossData(),lv=bossRunUpgrade('mutation');if(!b||!lv||!el||el.isFinal||el.isSeasonal||el.isAprilFools||el.isExclusive)return el;if(Math.random()<.001){el.isEverything=true;stripToEverything(el);notify('IMPOSSIBLE MUTATION','The child mutated directly into Everything. 0.1% chance.','🌈',6500);return el;}if(Math.random()>=bossMutationChance(lv))return el;const max=bossMutationMax(lv),amt=1+Math.floor(Math.random()*max),pool=BOSS_MUTATIONS.filter(k=>!el[k]).sort(()=>Math.random()-.5),got=pool.slice(0,Math.min(amt,pool.length));got.forEach(k=>el[k]=true);if(got.length)notify('Mutation!',`${el.name} gained ${got.length} random mutation${got.length===1?'':'s'}.`,'🧬',2400);return el;}
+        function bossAfterCraft(el,isNew){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();const hit=bossDamageFromElement(el,isNew);b.hp=Math.max(0,b.hp-hit);if(b.hp<=0){save();finishBossFight(true);return true;}const r=b.hp/d.maxHp,np=r<=.33?3:r<=.66?2:1;if(np>b.phase){b.phase=np;notify('BOSS PHASE '+np,d.phases[np-1],np===3?'💀':'⚠️',4500);}if(!maybeBossLockInsteadOfAttack()){const back=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-back);notify('Boss hit',`${el.name} dealt ${hit} damage. ${d.name} struck back for ${back}.`,'⚔️',2600);}else notify('Boss hit',`${el.name} dealt ${hit} damage. The Unmaker sealed an element instead of attacking.`,'⚔️',2600);maybeBossRecovery();updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
+        function bossMissedCraft(){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
-        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');loadNamedSave(false);renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();}
-        function awardBossDefeat(def){
-            let trophy=elements.find(e=>e.isBossDefeat&&e.bossId===def.id);
-            const n=(trophy?.amountOfBossDefeat||0)+1;
-            const name=`Boss ${def.name} Defeated ${n} ${n===1?'time':'times'}`;
-            if(trophy){trophy.amountOfBossDefeat=n;trophy.name=name;trophy.description=`You defeated ${def.name} ${n} ${n===1?'time':'times'}.`;}
-            else elements.push({name,emoji:'🏆',description:`You defeated ${def.name} 1 time.`,isBossDefeat:true,bossId:def.id,bossName:def.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});
-        }
-        function finishBossFight(won){
-            const b=bossData();if(!b)return;
-            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
-            const progress=Math.max(0,Math.min(1,1-b.hp/def.maxHp));
-            const reward=won?def.winCoins:Math.floor(def.lossMaxCoins*progress*progress);
-            clearBossSave();restoreMainGame();
-            gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;
-            if(won)awardBossDefeat(def);
-            save();renderEls();updateCount();updateCoinDisplay();
-            notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${def.name} fell. +${reward.toLocaleString()} coins and your Boss Defeat trophy was updated.`:`You pushed ${def.name} to ${Math.round(progress*100)}%. +${reward.toLocaleString()} consolation coins.`,won?'🏆':'💀',7000);
-        }
-        function startBossFight(id='unmaker'){
-            if(bossMode)return;
-            const def=BOSS_DEFS[id]||BOSS_DEFS.unmaker;
-            if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}
-            save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;
-            elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();
-            gs.bossRun={id:def.id,hp:def.maxHp,playerHp:def.playerMaxHp,phase:1,crafts:0,startedAt:Date.now()};
-            currentSort='original';document.body.classList.add('boss-mode');
-            renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');
-            notify('BOSS CHALLENGE',`${def.name} has sealed your collection. Rebuild from the four starters and fight back.`,'👹',6000);
-        }
+        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();}
+        function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else elements.push({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
+        function finishBossFight(won){const b=bossData();if(!b)return;const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));clearBossSave();restoreMainGame();const m=bossMeta();m.coins+=bc;gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);}
+        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{}};currentSort='original';document.body.classList.add('boss-mode');renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');notify('BOSS CHALLENGE',`${d.name} has sealed your collection. Rebuild from the four starters and fight back.`,d.emoji,6000);}
         function surrenderBossFight(){if(!bossMode)return;finishBossFight(false);}
+        function buyBossUpgrade(id){if(bossMode)return;const d=BOSS_UPGRADE_DEFS[id];if(!d)return;const m=bossMeta(),lv=bossUpgradeLevel(id,m);if(lv>=d.max)return;const c=bossUpgradeCost(id);if(m.coins<c){notify('Not enough Boss Coins',`Need ${c} BC.`,'🪙');return;}m.coins-=c;m.upgrades[id]=lv+1;save();renderBossLobby();notify('Boss upgrade',`${d.name} is now level ${lv+1}.`,d.emoji,2200);}
+        function renderBossLobby(){if(bossMode)return;const m=bossMeta(),s=$('bossSelect'),g=$('bossUpgradeGrid');$('bossCoinModal').textContent=`🪙 ${m.coins} Boss Coins`;$('bossBtn').textContent=`👹 Boss Challenge · 🪙 ${m.coins}`;s.innerHTML='';Object.values(BOSS_DEFS).forEach(d=>{const o=document.createElement('option'),u=bossUnlocked(d.id);o.value=d.id;o.disabled=!u;o.textContent=`${d.emoji} ${d.name}${u?'':' 🔒'}`;s.appendChild(o);});g.innerHTML='';Object.entries(BOSS_UPGRADE_DEFS).forEach(([id,d])=>{const lv=bossUpgradeLevel(id,m),c=bossUpgradeCost(id),box=document.createElement('div');box.className='boss-upgrade';const extra=id==='mutation'&&lv?` · ${Math.round(bossMutationChance(lv)*100)}% chance · up to ${bossMutationMax(lv)} mutation${bossMutationMax(lv)===1?'':'s'}`:'';box.innerHTML=`<strong>${d.emoji} ${d.name} · Lv ${lv}/${d.max}</strong><small>${d.desc}${extra}</small><button type="button" ${lv>=d.max?'disabled':''}>${lv>=d.max?'MAX':`Upgrade · ${c} BC`}</button>`;box.querySelector('button').addEventListener('click',()=>buyBossUpgrade(id));g.appendChild(box);});}
 
 
         // ─── COIN SYSTEM (fixed fractional accumulation) ───
@@ -4165,9 +4127,9 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         $('bossBtn').addEventListener('click',()=>{
             if(bossMode)return;
             if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}
-            openModal('bossModal');
+            renderBossLobby();openModal('bossModal');
         });
-        $('bossStartBtn').addEventListener('click',()=>startBossFight('unmaker'));
+        $('bossStartBtn').addEventListener('click',()=>startBossFight($('bossSelect').value||'unmaker'));
         $('bossSurrenderBtn').addEventListener('click',()=>surrenderBossFight());
 
         // Keys live in the canonical collection. Save imports are snapshots: duplicate
@@ -4753,6 +4715,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 w.appendChild(d);
                 (el.isExclusive&&!el.isPrestige?exclusiveGrid:elGrid).appendChild(w);
             });
+            if(bossMode)refreshBossLockedCards();
         }
 
         function updateCount(){elCount.textContent=elements.length+' Discovered';}
@@ -5091,6 +5054,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         async function combine(){
             if(sfAnimating||ascensionBusy)return;
             if(!sel1||!sel2||isCombining)return;
+            if(bossMode&&(bossLockedTurns(sel1.name)>0||bossLockedTurns(sel2.name)>0)){const locked=bossLockedTurns(sel1.name)>0?sel1:sel2;notify('Element locked',`${locked.name} cannot be used for ${bossLockedTurns(locked.name)} more crafts.`,'🔒',2600);resetDZs();return;}
             isCombining=true;
             if(!OldAllCreate&&(sel1.isAprilFools||sel2.isAprilFools)){
                 resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>🤡</span></div><h3>Archived nonsense</h3><p>Turn OldAllCreate on before crafting with April Fools elements.</p></div>';
@@ -5182,6 +5146,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             }
 
             const newEl={...result,color:result.color||randColor()};
+            if(bossMode)applyBossMutations(newEl);
             if(newEl.isFrozen&&!newEl.meltProgress){newEl.meltProgress=0;newEl.meltGoal=10;}
 
             if(newEl.isEndGameTrigger){addElement(newEl);setTimeout(showEnding,800);return;}
@@ -5326,7 +5291,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 $(id).hidden=!visible;
             }
             $('shopBtn').textContent=gs.shopUnlocked?'🛒 Shop':'🔒 Shop & Coins';
-            $('bossBtn').hidden=!gs.shopUnlocked;
+            $('bossBtn').hidden=!gs.shopUnlocked;if(gs.shopUnlocked){const bm=bossMeta();$('bossBtn').textContent=`👹 Boss Challenge · 🪙 ${bm.coins}`;}
             const forge=$('starForgeBtn'),upgrade=$('upgradeForgeBtn');
             forge.classList.toggle('sf-locked',!gs.sfUnlocked);
             forge.style.pointerEvents=gs.sfUnlocked?'':'none';
