@@ -633,6 +633,59 @@
 
     #guideToggle{width:32px;height:32px;padding:0;border:1px solid var(--border);border-radius:9px;background:var(--bg-card);cursor:pointer}#guideToggle[aria-expanded="true"]{box-shadow:0 0 12px #a78bfa80}#craftGuide[hidden]{display:none!important}#craftGuide{width:min(100%,600px);margin:0 auto 16px;padding:14px;border:1px solid #a78bfa70;border-radius:12px 22px;background:var(--bg-card);color:var(--text-primary)}#craftGuide h3{font-size:14px;margin-bottom:10px}#craftGuideList{max-height:350px;overflow:auto}.craft-distance summary{cursor:pointer}.craft-distance p{max-width:440px;padding-top:8px;white-space:pre-line}
 #elGrid>.prestige-pinned{grid-column:1;grid-row:1;order:-1}
+
+#bossGameHeading{display:none;text-align:center;margin:2px 0 10px;position:relative}
+body.boss-mode #normalGameHeading{display:none!important}
+body.boss-mode #bossGameHeading{display:block!important}
+.boss-game-kicker{
+    margin-bottom:2px;
+    font-family:'Lexend',system-ui,sans-serif;
+    font-size:.66rem;
+    font-weight:900;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#cbd5e1;
+}
+.boss-game-kicker span{
+    color:#ef4444;
+    text-shadow:0 0 12px rgba(239,68,68,.45);
+}
+.boss-game-logo{
+    display:flex;
+    align-items:baseline;
+    justify-content:center;
+    gap:.28em;
+    line-height:.92;
+    white-space:nowrap;
+}
+.boss-game-logo .boss-word{
+    font-family:'Righteous','Arial Black',Impact,sans-serif;
+    font-size:clamp(2rem,8vw,3.45rem);
+    font-weight:900;
+    letter-spacing:.02em;
+    transform:skew(-5deg) rotate(-1deg);
+    color:#ef4444;
+    -webkit-text-stroke:1px rgba(69,10,10,.45);
+    text-shadow:0 3px 0 #7f1d1d,0 0 18px rgba(239,68,68,.38);
+}
+.boss-game-logo .madness-word{
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:clamp(1.72rem,7vw,3rem);
+    font-weight:900;
+    font-style:italic;
+    letter-spacing:-.045em;
+    color:#f8fafc;
+    text-shadow:0 3px 0 rgba(15,23,42,.8),0 0 16px rgba(248,250,252,.16);
+}
+body.boss-mode #bossGameHeading::after{
+    content:"";
+    display:block;
+    width:min(250px,62vw);
+    height:2px;
+    margin:8px auto 0;
+    background:linear-gradient(90deg,transparent,#ef4444,transparent);
+    box-shadow:0 0 12px rgba(239,68,68,.35);
+}
 </style>
 <style>/* Craft Madness: observatory interface */
 body {background:var(--bg-primary);background-image:radial-gradient(ellipse at 15% 0%,rgba(99,102,241,.14),transparent 50%),radial-gradient(ellipse at 90% 40%,rgba(20,184,166,.09),transparent 45%);}
@@ -1398,8 +1451,14 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         <!-- Header -->
         <header class="text-center mb-6">
             <div class="workshop-label">✧ Discover · Forge · Collect ✧</div>
-            <h1 class="font-display text-4xl md:text-5xl mb-1" style="color:var(--gold)">Craft Madness</h1>
+            <div id="normalGameHeading">
+<h1 class="font-display text-4xl md:text-5xl mb-1" style="color:var(--gold)">Craft Madness</h1>
             <p class="text-sm" style="color:var(--text-secondary)">Combine elements to discover new ones</p>
+                </div>
+                <div id="bossGameHeading" hidden aria-label="Boss Madness">
+                    <div class="boss-game-kicker">COMBINE. FORGE. <span>FIGHT.</span></div>
+                    <div class="boss-game-logo"><span class="boss-word">BOSS</span> <span class="madness-word">MADNESS</span></div>
+                </div>
             <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
                 <span id="elCount" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:var(--gold-glow);color:var(--gold)">4 Discovered</span>
                 <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button>
@@ -4079,10 +4138,10 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function bossAfterCraft(el,isNew){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();const hit=bossDamageFromElement(el,isNew);b.hp=Math.max(0,b.hp-hit);if(b.hp<=0){save();finishBossFight(true);return true;}const r=b.hp/d.maxHp,np=r<=.33?3:r<=.66?2:1;if(np>b.phase){b.phase=np;notify('BOSS PHASE '+np,d.phases[np-1],np===3?'💀':'⚠️',4500);}if(!maybeBossLockInsteadOfAttack()){const back=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-back);notify('Boss hit',`${el.name} dealt ${hit} damage. ${d.name} struck back for ${back}.`,'⚔️',2600);}else notify('Boss hit',`${el.name} dealt ${hit} damage. The Unmaker sealed an element instead of attacking.`,'⚔️',2600);maybeBossRecovery();updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function bossMissedCraft(){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
-        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
+        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');document.title='Craft Madness';if($('bossGameHeading'))$('bossGameHeading').hidden=true;loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
         function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else elements.push({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
         function finishBossFight(won){const b=bossData();if(!b)return;const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));resetDZs();clearBossSave();restoreMainGame();const m=bossMeta();m.coins+=bc;if(b.upgrades?.mutationMemory&&b.mutationMemory)m.mutationMemory={...(m.mutationMemory||{}),...b.mutationMemory};gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);}
-        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{})};currentSort='original';document.body.classList.add('boss-mode');
+        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{})};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;
             ['shopModal','starForgeModal','exportModal','importModal'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
             ['storagePanel','exclusiveStorage','seasonalStorage','aprilFoolsStorage','hintPanel','craftGuide'].forEach(id=>{const el=$(id);if(el){el.hidden=true;el.style.display='none';}});
             renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');notify('BOSS CHALLENGE',`${d.name} has sealed your collection. Rebuild from the four starters and fight back.`,d.emoji,6000);}
