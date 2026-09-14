@@ -763,7 +763,35 @@ header button,header #elCount,header #coinDisplay,header #cyMoneyDisplay,.collec
 button:disabled {opacity:.4;box-shadow:none!important;}
 button:focus-visible {outline:2px solid #b39ad9;outline-offset:3px;}
 .collection-panel .sort-active {background:linear-gradient(130deg,#72538f,#493665)!important;color:#fff!important;}
-#exclusiveToggle,#hintToggle {width:32px;height:32px;padding:0!important;}
+#exclusiveToggle,#seasonalToggle,#aprilFoolsToggle,#hintToggle,#guideToggle{
+    width:32px;
+    height:32px;
+    min-width:32px;
+    min-height:32px;
+    padding:0!important;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+    font-size:1rem;
+    vertical-align:middle;
+    box-sizing:border-box;
+}
+#seasonalToggle{
+    border:1px solid rgba(125,211,252,.42);
+    border-radius:9px;
+    background:linear-gradient(135deg,rgba(56,189,248,.14),rgba(167,139,250,.14),rgba(244,114,182,.11));
+    cursor:pointer;
+    transition:transform .2s,box-shadow .2s,background .2s;
+}
+#seasonalToggle:hover{
+    transform:translateY(-1px);
+    background:linear-gradient(135deg,rgba(56,189,248,.23),rgba(167,139,250,.22),rgba(244,114,182,.18));
+}
+#seasonalToggle[aria-expanded="true"]{
+    box-shadow:0 0 0 2px rgba(56,189,248,.16),0 0 14px rgba(167,139,250,.18);
+}
+#seasonalToggle:focus-visible{outline:2px solid #7dd3fc;outline-offset:3px}
 input,textarea {border:1px solid var(--ui-edge)!important;background:var(--bg-card)!important;color:var(--text-primary)!important;border-radius:9px 15px 9px 15px!important;accent-color:#9871b9;}
 input[type=checkbox] {width:auto;}
 .modal-box {background:var(--ui-panel)!important;border:1px solid var(--ui-edge)!important;border-radius:16px 30px 16px 30px!important;box-shadow:inset 0 1px #ffffff20,0 25px 90px #0005;}
@@ -1122,8 +1150,114 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 </style>
 <style id="seasonalStyles">
 /* ─── SEASONAL VAULT + SHOWPIECES ─── */
-#seasonalStorage{margin:14px 0;padding:14px;border:1px solid rgba(124,58,237,.28);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(245,243,255,.82));box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
-#seasonalGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;max-height:260px;overflow-y:auto;padding:5px 4px 10px}
+#seasonalStorage{
+    position:relative;
+    width:min(100%,520px);
+    margin:0 auto 16px;
+    padding:0 12px 12px;
+    box-sizing:border-box;
+    overflow:hidden;
+    border:1px solid rgba(125,211,252,.55);
+    border-radius:18px;
+    background:
+        radial-gradient(circle at 14% 18%,rgba(125,211,252,.13),transparent 28%),
+        radial-gradient(circle at 86% 12%,rgba(244,114,182,.12),transparent 30%),
+        linear-gradient(145deg,#11172a 0%,#1d1a38 50%,#102b32 100%);
+    box-shadow:
+        0 12px 42px rgba(56,189,248,.13),
+        inset 0 1px 0 rgba(255,255,255,.09),
+        inset 0 -20px 36px rgba(0,0,0,.18);
+    color:#eef7ff;
+}
+#seasonalStorage::before{
+    content:"";
+    display:block;
+    height:5px;
+    margin:0 -12px 10px;
+    background:linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6,#facc15,#34d399,#38bdf8);
+    background-size:220% 100%;
+    animation:seasonVaultGlow 8s linear infinite;
+}
+#seasonalStorage::after{
+    content:"✦  ❄  ♡  ☄  🍂  ✦";
+    position:absolute;
+    right:12px;
+    bottom:7px;
+    z-index:0;
+    font-size:1.7rem;
+    letter-spacing:.28rem;
+    opacity:.055;
+    pointer-events:none;
+}
+.seasonal-vault-head{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:7px;
+}
+.seasonal-vault-title{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:.82rem;
+    font-weight:900;
+    letter-spacing:.04em;
+    color:#e9d5ff;
+    text-shadow:0 0 14px rgba(167,139,250,.35);
+}
+.seasonal-vault-emblem{
+    display:inline-grid;
+    place-items:center;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:linear-gradient(145deg,rgba(56,189,248,.28),rgba(244,114,182,.24));
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:inset 0 0 12px rgba(255,255,255,.06),0 0 14px rgba(56,189,248,.12);
+}
+#seasonalCount{
+    flex:none;
+    padding:3px 7px;
+    border-radius:999px;
+    border:1px solid rgba(125,211,252,.25);
+    background:rgba(15,23,42,.5);
+    color:#bae6fd!important;
+    font-size:.59rem!important;
+    font-weight:800;
+    letter-spacing:.04em;
+}
+#seasonalStatus{
+    position:relative;
+    z-index:2;
+    margin:0 0 10px!important;
+    padding:7px 9px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:10px;
+    background:rgba(15,23,42,.42);
+    color:#cbd5e1!important;
+    font-size:.62rem!important;
+    line-height:1.45;
+}
+#seasonalGrid{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(76px,1fr));
+    gap:8px;
+    max-height:260px;
+    overflow-y:auto;
+    padding:6px 4px 10px;
+    border-top:1px solid rgba(255,255,255,.06);
+}
+#seasonalGrid::-webkit-scrollbar{width:7px}
+#seasonalGrid::-webkit-scrollbar-thumb{background:linear-gradient(#38bdf8,#a78bfa);border-radius:999px}
+#seasonalGrid::-webkit-scrollbar-track{background:rgba(255,255,255,.03);border-radius:999px}
+@keyframes seasonVaultGlow{from{background-position:0% 50%}to{background-position:220% 50%}}
+@media(prefers-reduced-motion:reduce){#seasonalStorage::before{animation:none}}
+
 #seasonalGrid .el-wrapper{min-width:0}
 #seasonalGrid .seasonal-showpiece{min-height:118px;padding:7px 5px!important}
 #seasonalGrid .seasonal-stage{height:48px}
@@ -1314,8 +1448,11 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 </aside>
 
                 <aside id="seasonalStorage" hidden style="display:none!important" aria-label="Seasonal Vault">
-                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px"><strong style="font-size:.8rem;color:#7c3aed">🎉 Seasonal Vault</strong><span id="seasonalCount" style="font-size:.65rem;color:var(--text-secondary)"></span></div>
-                    <p id="seasonalStatus" style="font-size:.65rem;color:var(--text-secondary);margin-bottom:12px">Off-season discoveries rest here until their event returns.</p>
+                    <div class="seasonal-vault-head">
+                        <strong class="seasonal-vault-title"><span class="seasonal-vault-emblem">🎉</span>Seasonal Vault</strong>
+                        <span id="seasonalCount"></span>
+                    </div>
+                    <p id="seasonalStatus">Off-season discoveries rest here until their event returns.</p>
                     <div id="seasonalGrid"></div>
                 </aside>
 
