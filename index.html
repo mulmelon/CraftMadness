@@ -746,6 +746,12 @@ body.boss-mode #craftHints,body.boss-mode #craftGuide{display:none!important}
 @media(max-width:600px){.boss-bars{grid-template-columns:1fr}.boss-name{font-size:1rem}}
 .boss-coin-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border:1px solid rgba(245,158,11,.4);border-radius:999px;background:rgba(245,158,11,.1);font-size:.72rem;font-weight:800;color:#b45309}
 .boss-upgrade-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.boss-upgrade{padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--ui-button);text-align:left}.boss-upgrade strong{display:block;font-size:.76rem}.boss-upgrade small{display:block;margin-top:3px;color:var(--text-secondary);font-size:.64rem}.boss-upgrade button{margin-top:7px;width:100%;padding:6px 8px;border-radius:9px;background:var(--gold);color:#1a1a2e;font-size:.68rem;font-weight:800}.boss-upgrade button:disabled{opacity:.45}
+.boss-mode #storageToggle,.boss-mode #exclusiveToggle,.boss-mode #seasonalToggle,.boss-mode #aprilFoolsToggle,.boss-mode #hintToggle,.boss-mode #guideToggle,.boss-mode #exportBtn,.boss-mode #importBtn,.boss-mode #shopBtn,.boss-mode #starForgeBtn,.boss-mode #openShop,.boss-mode #sfBtn,.boss-mode #exportOpen,.boss-mode #importOpen{
+    opacity:.48;
+    filter:grayscale(.75);
+    cursor:not-allowed!important;
+    position:relative;
+}
 .boss-locked-card{filter:grayscale(.8) brightness(.68)!important;outline:2px solid rgba(239,68,68,.7)!important;pointer-events:none!important}.boss-locked-card::after{content:'🔒 ' attr(data-lock-turns) ' turns';position:absolute;inset:auto 5px 5px 5px;padding:4px;border-radius:7px;background:rgba(127,29,29,.92);color:white;font-size:.58rem;font-weight:900;text-align:center;z-index:50}
 @media(max-width:600px){.boss-upgrade-grid{grid-template-columns:1fr}}
 
@@ -1995,6 +2001,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 <li><span class="changelog-tag tag-fix">FIX</span> Boss Coins, BC upgrades, mutation memory, boss unlocks and Boss Defeat trophies now survive Prestige resets.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Three sequential bosses: The Unmaker → The Chronophage → The Null Sovereign.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> The Unmaker can skip an attack and lock one discovered element for 3 crafts.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Boss challenges now lock Storage, Guide, Hints, Import/Export, Shop and Star Forge. Trying to use them shows “The boss has locked some of your powers...”</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Boss lobby now shows Boss Coins, boss selection, unlock requirements and permanent upgrades.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> 20 automatic seasonal events with 100 rank-excluded discoveries each, event-specific animated cards and the Seasonal Vault.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Star Forge excludes Exclusive, Seasonal and April Fools elements and can finally cleanse penalty elements.</li>
@@ -4053,6 +4060,8 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             }catch(e){}
         }
 
+        function bossPowerLocked(){return !!bossMode;}
+        function notifyBossPowerLock(){notify('POWER LOCKED','The boss has locked some of your powers...','🔒',2600);}
         function bossData(){return bossMode&&gs.bossRun?gs.bossRun:null;}
         function bossRunUpgrade(id){const b=bossData();return Math.max(0,Math.floor(Number(b?.upgrades?.[id])||0));}
         function bossLockedTurns(name){const b=bossData();return b?Math.max(0,Math.floor(Number(b.locks?.[name])||0)):0;}
@@ -4070,10 +4079,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function bossAfterCraft(el,isNew){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();const hit=bossDamageFromElement(el,isNew);b.hp=Math.max(0,b.hp-hit);if(b.hp<=0){save();finishBossFight(true);return true;}const r=b.hp/d.maxHp,np=r<=.33?3:r<=.66?2:1;if(np>b.phase){b.phase=np;notify('BOSS PHASE '+np,d.phases[np-1],np===3?'💀':'⚠️',4500);}if(!maybeBossLockInsteadOfAttack()){const back=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-back);notify('Boss hit',`${el.name} dealt ${hit} damage. ${d.name} struck back for ${back}.`,'⚔️',2600);}else notify('Boss hit',`${el.name} dealt ${hit} damage. The Unmaker sealed an element instead of attacking.`,'⚔️',2600);maybeBossRecovery();updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function bossMissedCraft(){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
-        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();}
+        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
         function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else elements.push({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
-        function finishBossFight(won){const b=bossData();if(!b)return;const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));clearBossSave();restoreMainGame();const m=bossMeta();m.coins+=bc;if(b.upgrades?.mutationMemory&&b.mutationMemory)m.mutationMemory={...(m.mutationMemory||{}),...b.mutationMemory};gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);}
-        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{})};currentSort='original';document.body.classList.add('boss-mode');renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');notify('BOSS CHALLENGE',`${d.name} has sealed your collection. Rebuild from the four starters and fight back.`,d.emoji,6000);}
+        function finishBossFight(won){const b=bossData();if(!b)return;const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));resetDZs();clearBossSave();restoreMainGame();const m=bossMeta();m.coins+=bc;if(b.upgrades?.mutationMemory&&b.mutationMemory)m.mutationMemory={...(m.mutationMemory||{}),...b.mutationMemory};gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);}
+        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{})};currentSort='original';document.body.classList.add('boss-mode');
+            ['shopModal','starForgeModal','exportModal','importModal'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
+            ['storagePanel','exclusiveStorage','seasonalStorage','aprilFoolsStorage','hintPanel','craftGuide'].forEach(id=>{const el=$(id);if(el){el.hidden=true;el.style.display='none';}});
+            renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');notify('BOSS CHALLENGE',`${d.name} has sealed your collection. Rebuild from the four starters and fight back.`,d.emoji,6000);}
         function surrenderBossFight(){if(!bossMode)return;finishBossFight(false);}
         function buyBossUpgrade(id){if(bossMode)return;const d=BOSS_UPGRADE_DEFS[id];if(!d)return;const m=bossMeta(),lv=bossUpgradeLevel(id,m);if(d.requires&&bossUpgradeLevel(d.requires,m)<=0){notify('Upgrade locked',`Buy ${BOSS_UPGRADE_DEFS[d.requires].name} first.`,'🔒');return;}if(lv>=d.max)return;const c=bossUpgradeCost(id);if(m.coins<c){notify('Not enough Boss Coins',`Need ${c} BC.`,'🪙');return;}m.coins-=c;m.upgrades[id]=lv+1;save();renderBossLobby();notify('Boss upgrade',`${d.name} is now level ${lv+1}.`,d.emoji,2200);}
         function exchangeBossCoins(amount){if(bossMode)return;const m=bossMeta();let n=amount==='all'?m.coins:Math.max(0,Math.floor(Number(amount)||0));n=Math.min(n,m.coins);if(n<1){notify('No Boss Coins','There are no Boss Coins to exchange.','🪙');return;}const req=25+10*prestigeData().times,after=m.coins-n;if(after<req&&m.coins>=req&&!confirm(`This leaves ${after} BC, below the ${req} BC requirement for your next Prestige. Exchange anyway?`))return;m.coins-=n;const gain=n*500;gs.coins=(gs.coins||0)+gain;gs.totalCoins=(gs.totalCoins||0)+gain;save();updateCoinDisplay();renderBossLobby();updatePrestigeUI();notify('Boss Coins exchanged',`${n} BC → ${gain.toLocaleString()} coins.`,'💱',2600);}
@@ -4263,7 +4275,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
 
         $('flipOpenBtn').addEventListener('click',()=>$('flipCard').classList.add('flipped'));
-        $('shopBtn').addEventListener('click',()=>{
+        $('shopBtn').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             if(!gs.shopUnlocked){notify('Shop locked','Craft Shop to unlock shopping and coin earnings. Keys can reveal its recipe, but cannot unlock Shop.','🔒');return;}
             updateCoinDisplay();
             const mins=(Date.now()-gs.shopRefresh)/60000;
@@ -4604,13 +4616,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function updateCraftGuide(){
             if(!$('craftGuide').hidden)renderMissingCrafts(prestigeRequirements().missing);
         }
-        $('guideToggle').addEventListener('click',()=>{
+        $('guideToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('craftGuide'),show=panel.hidden;panel.hidden=!show;
             $('guideToggle').setAttribute('aria-expanded',String(show));
             $('guideToggle').setAttribute('aria-label',show?'Hide crafting guide':'Show crafting guide');
             updateCraftGuide();
         });
-        $('hintToggle').addEventListener('click',()=>{
+        $('hintToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('craftHints'),toggle=$('hintToggle');
             const show=toggle.getAttribute('aria-expanded')!=='true';
             panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
@@ -4618,7 +4630,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             toggle.setAttribute('aria-label',show?'Hide crafting hints':'Show crafting hints');
             toggle.title=show?'Hide crafting hints':'Show crafting hints';
         });
-        $('exclusiveToggle').addEventListener('click',()=>{
+        $('exclusiveToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('exclusiveStorage'),toggle=$('exclusiveToggle');
             // Toggle the entire container, including its heading, padding and border.
             const show=toggle.getAttribute('aria-expanded')!=='true';
@@ -4628,7 +4640,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             toggle.setAttribute('aria-label',panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage');
             toggle.title=panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage';
         });
-        $('seasonalToggle').addEventListener('click',()=>{
+        $('seasonalToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('seasonalStorage'),toggle=$('seasonalToggle');
             const show=toggle.getAttribute('aria-expanded')!=='true';
             panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
@@ -4636,7 +4648,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             toggle.setAttribute('aria-label',show?'Hide Seasonal Vault':'Show Seasonal Vault');
             toggle.title=show?'Hide Seasonal Vault':'Show Seasonal Vault';
         });
-        $('aprilFoolsToggle').addEventListener('click',()=>{
+        $('aprilFoolsToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('aprilFoolsStorage'),toggle=$('aprilFoolsToggle');
             const show=toggle.getAttribute('aria-expanded')!=='true';
             panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
@@ -5590,7 +5602,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             str.classList.remove('hidden');
             str.innerHTML=`Password strength: <span style="color:${r.color};font-weight:700">${r.label}</span>`;
         });
-        $('exportBtn').addEventListener('click',()=>{
+        $('exportBtn').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             $('exportPass').value='';$('exportCode').value='';$('exportCodeWrap').classList.add('hidden');
             $('exportErr').classList.add('hidden');$('exportStrength').classList.add('hidden');
             $('editModeWrap').classList.add('hidden');$('editErr').classList.add('hidden');$('reEncryptPass').value='';
@@ -5616,7 +5628,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             $('exportCode').select();document.execCommand('copy');
             $('copyBtn').textContent='Copied!';setTimeout(()=>$('copyBtn').textContent='Copy',2000);
         });
-        $('importBtn').addEventListener('click',()=>{$('importErr').classList.add('hidden');$('importPass').value='';$('importCode').value='';$('importProgress').classList.add('hidden');openModal('importModal');});
+        $('importBtn').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}$('importErr').classList.add('hidden');$('importPass').value='';$('importCode').value='';$('importProgress').classList.add('hidden');openModal('importModal');});
         $('cancelImport').addEventListener('click',()=>closeModal('importModal'));
         $('confirmImport').addEventListener('click',async()=>{
             const code=$('importCode').value.trim();
@@ -5678,6 +5690,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
         let developerArmed=false,developerTyped='';
         new MutationObserver(()=>{if($('exportModal').style.display==='none'){developerArmed=false;developerTyped='';}}).observe($('exportModal'),{attributes:true,attributeFilter:['style']});
+        document.addEventListener('click',e=>{
+            if(!bossPowerLocked())return;
+            const locked=e.target.closest('#storageToggle,#exclusiveToggle,#seasonalToggle,#aprilFoolsToggle,#hintToggle,#guideToggle,#exportBtn,#importBtn,#shopBtn,#starForgeBtn,#openShop,#sfBtn,#exportOpen,#importOpen,[data-open="shopModal"],[data-open="starForgeModal"],[data-open="exportModal"],[data-open="importModal"]');
+            if(!locked)return;
+            e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+            notifyBossPowerLock();
+        },true);
         document.addEventListener('keydown',async e=>{
             if(!developerArmed||$('exportModal').style.display==='none')return;
             const active=document.activeElement;
