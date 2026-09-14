@@ -1895,6 +1895,98 @@ html[lang="ko"] .font-display{
     border-radius:8px;background:var(--ui-button,var(--bg-card-hover));color:var(--text-primary);
     cursor:pointer;font-size:.75rem;font-weight:700;
 }
+
+/* ─── SEASONAL CARD ALIGNMENT FIX ───
+   Seasonal cards keep their identity but line up with normal cards. */
+#elGrid .seasonal-showpiece{
+    min-height:158px!important;
+    height:auto!important;
+    padding:8px 7px 10px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+}
+#elGrid .seasonal-ribbon{
+    width:auto!important;
+    max-width:92%!important;
+    min-height:16px;
+    padding:2px 6px!important;
+    margin:0 auto 2px!important;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:999px!important;
+    font-size:6px!important;
+    line-height:1.25!important;
+    letter-spacing:.55px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    text-align:center!important;
+}
+#elGrid .seasonal-stage{
+    width:72px!important;
+    height:72px!important;
+    flex:0 0 72px!important;
+    margin:2px auto 4px!important;
+    display:grid!important;
+    place-items:center!important;
+}
+#elGrid .seasonal-showpiece .el-name{
+    width:100%;
+    min-height:34px;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+    margin:0 auto 4px!important;
+    padding:0 3px!important;
+    font-size:.76rem!important;
+    line-height:1.28!important;
+    overflow-wrap:anywhere;
+}
+#elGrid .seasonal-footer{
+    width:78%!important;
+    margin:auto auto 0!important;
+    justify-content:center!important;
+    text-align:center!important;
+}
+#elGrid .seasonal-footer span:nth-of-type(2){
+    max-width:72px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+#elGrid .seasonal-showpiece::after{
+    right:50%!important;
+    transform:translateX(50%) rotate(-8deg)!important;
+    bottom:-10px!important;
+}
+
+/* Keep Seasonal Vault cards compact, but centered too. */
+#seasonalGrid .seasonal-showpiece{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    text-align:center!important;
+}
+#seasonalGrid .seasonal-ribbon{
+    width:auto!important;max-width:94%!important;margin:0 auto!important;
+    white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+#seasonalGrid .seasonal-stage{margin-left:auto!important;margin-right:auto!important}
+#seasonalGrid .el-name{
+    width:100%!important;text-align:center!important;display:flex!important;
+    align-items:center!important;justify-content:center!important;
+}
+
+/* Cooldown looks unavailable, but remains clickable for status feedback. */
+#starForgeBtn.sf-cooldown{
+    pointer-events:auto!important;
+    cursor:pointer!important;
+}
+
+#cmViewportPortal>#starForgeEffect[hidden],
+#starForgeEffect[hidden]{display:none!important;visibility:hidden!important;pointer-events:none!important}
 </style>
 
 </head>
@@ -2176,9 +2268,9 @@ html[lang="ko"] .font-display{
                 <small><span data-i18n="settings.website_color_desc">System follows your device. Light and Dark force the whole Craft Madness interface.</span></small>
             </div>
             <select id="themeModeSetting" class="settings-select" aria-label="Website color">
-                <option value="system">System</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
+                <option value="system" data-en="System" data-ko="시스템">System</option>
+                <option value="light" data-en="Light" data-ko="밝게">Light</option>
+                <option value="dark" data-en="Dark" data-ko="어둡게">Dark</option>
             </select>
         </div>
 
@@ -2188,9 +2280,9 @@ html[lang="ko"] .font-display{
                 <small><span data-i18n="settings.element_color_desc">Keep the same card design, but choose normal element cards in Dark or a brighter Light version.</span></small>
             </div>
             <select id="elementThemeSetting" class="settings-select" aria-label="Element color">
-                <option value="auto">Match website</option>
-                <option value="light">Light elements</option>
-                <option value="dark">Dark elements</option>
+                <option value="auto" data-en="Match website" data-ko="웹사이트에 맞춤">Match website</option>
+                <option value="light" data-en="Light elements" data-ko="밝은 원소">Light elements</option>
+                <option value="dark" data-en="Dark elements" data-ko="어두운 원소">Dark elements</option>
             </select>
         </div>
 
@@ -2200,8 +2292,8 @@ html[lang="ko"] .font-display{
                 <small><span data-i18n="settings.animations_desc">Reduced lowers card movement and combat motion without removing gameplay.</span></small>
             </div>
             <select id="motionSetting" class="settings-select" aria-label="Animations">
-                <option value="full">Full</option>
-                <option value="reduced">Reduced</option>
+                <option value="full" data-en="Full" data-ko="전체">Full</option>
+                <option value="reduced" data-en="Reduced" data-ko="줄이기">Reduced</option>
             </select>
         </div>
 
@@ -2212,9 +2304,9 @@ html[lang="ko"] .font-display{
                 <small><span data-i18n="settings.card_size_desc">Change collection card size without changing the card design.</span></small>
             </div>
             <select id="cardSizeSetting" class="settings-select" aria-label="Element card size">
-                <option value="compact">Compact</option>
-                <option value="normal">Normal</option>
-                <option value="large">Large</option>
+                <option value="compact" data-en="Compact" data-ko="작게">Compact</option>
+                <option value="normal" data-en="Normal" data-ko="보통">Normal</option>
+                <option value="large" data-en="Large" data-ko="크게">Large</option>
             </select>
         </div>
 
@@ -2224,8 +2316,8 @@ html[lang="ko"] .font-display{
                 <small><span data-i18n="settings.card_hover_desc">Turn off the lift/tilt effect when hovering or tapping cards.</span></small>
             </div>
             <select id="cardHoverSetting" class="settings-select" aria-label="Card hover motion">
-                <option value="on">On</option>
-                <option value="off">Off</option>
+                <option value="on" data-en="On" data-ko="켜기">On</option>
+                <option value="off" data-en="Off" data-ko="끄기">Off</option>
             </select>
         </div>
 
@@ -2235,9 +2327,9 @@ html[lang="ko"] .font-display{
                 <small><span data-i18n="settings.message_time_desc">Choose how long normal system notifications stay visible.</span></small>
             </div>
             <select id="notificationTimeSetting" class="settings-select" aria-label="System message time">
-                <option value="short">Short</option>
-                <option value="normal">Normal</option>
-                <option value="long">Long</option>
+                <option value="short" data-en="Short" data-ko="짧게">Short</option>
+                <option value="normal" data-en="Normal" data-ko="보통">Normal</option>
+                <option value="long" data-en="Long" data-ko="길게">Long</option>
             </select>
         </div>
 
@@ -2711,6 +2803,10 @@ html[lang="ko"] .font-display{
         <div class="changelog-version">
             <h3>v3.1 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
             <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
+                <li><span class="changelog-tag tag-fix">FIX</span> Fixed the actual Star Forge animation freeze caused by renderEls throwing during Forge activation. Added a hard animation watchdog so the overlay cannot remain stuck.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Korean localization now covers displayed element names, descriptions, modifier labels, fusion failures, special outcomes, system notifications, Star Forge reports, discovery counts, history, search, settings options and the changelog.</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> Star Forge cooldown no longer turns the Forge into an unclickable locked button; stale Forge animation state can recover and cooldown clicks now show remaining time.</li>
+                <li><span class="changelog-tag tag-fix">FIX</span> Seasonal cards are centered and aligned to the normal card height instead of stretching awkwardly in the collection grid.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Developer panel can force any seasonal event from a dropdown or return to automatic real-date season detection.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Added Korean localization from Settings. Core UI, settings, credits, seasonal labels and element names can display in Korean; April Fools Korean intentionally uses absurd bad translations.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Rebuilt fixed-screen UI through a viewport portal so modals, system messages and the changelog button stay attached to the actual screen instead of jumping to a transformed half-page area on mobile.</li>
@@ -4526,7 +4622,8 @@ html[lang="ko"] .font-display{
             duration=notificationDuration(duration);
             const n = document.createElement('div');
             n.className='notif';
-            n.innerHTML=`<div class="flex items-center gap-2 mb-1"><span>${icon}</span><strong class="text-sm">${title}</strong></div><div class="text-xs" style="color:var(--text-secondary)">${msg}</div><div class="notif-bar"></div>`;
+            const shownTitle=translateSystemText(title),shownMsg=translateSystemText(msg);
+            n.innerHTML=`<div class="flex items-center gap-2 mb-1"><span>${icon}</span><strong class="text-sm">${shownTitle}</strong></div><div class="text-xs" style="color:var(--text-secondary)">${shownMsg}</div><div class="notif-bar"></div>`;
             $('notifContainer').appendChild(n);
             setTimeout(()=>{ n.style.opacity='0'; n.style.transition='opacity 0.3s'; setTimeout(()=>n.remove(),300); }, duration);
         }
@@ -4625,6 +4722,135 @@ html[lang="ko"] .font-display{
             'Blessed':'축복받음','Holy':'성스러움','Golden':'황금','Temporal':'시간성','Hot':'뜨거움'
         };
 
+
+        const MODIFIER_KO={
+            isCyMoney:'CyMoney',isFatalError:'치명적 오류',isError:'오류',isVoid:'공허',isCorrupted:'오염됨',
+            isCursed:'저주받음',isToxic:'독성',isViral:'바이러스성',isParasitic:'기생',isPermafrost:'영구동토',
+            isFrozen:'얼어붙음',isDivine:'신성',isLegendary:'전설',isCelestial:'천상',isAncient:'고대',
+            isHoly:'성스러움',isBlessed:'축복',isPurified:'정화됨',isSuperHot:'초고온',isInfernal:'지옥불',
+            isHot:'뜨거움',isRadioactive:'방사성',isElectric:'전기',isMagnetic:'자성',isAntimatter:'반물질',
+            isTemporal:'시간성',isAbyssal:'심연',isTsunami:'쓰나미',isGolden:'황금',isCrystalline:'결정',
+            isChromatic:'색채',isEthereal:'영체',isPhantom:'환영',isUnstable:'불안정',isFinal:'최종',
+            isSecret:'비밀',isExclusive:'독점',isQuestion:'의문',isBlank:'공백',isValidCombination:'유효 조합',
+            isBasic:'기본',isKey:'열쇠'
+        };
+
+        const ELEMENT_TOKEN_KO={
+            Water:'물',Fire:'불',Earth:'땅',Air:'공기',Ocean:'바다',Sea:'바다',Steam:'증기',Mud:'진흙',
+            Cloud:'구름',Smoke:'연기',Stone:'돌',Rock:'바위',Sand:'모래',Glass:'유리',Wood:'나무',
+            Tree:'나무',Forest:'숲',Plant:'식물',Life:'생명',Death:'죽음',Human:'인간',Animal:'동물',
+            Energy:'에너지',Power:'힘',Electric:'전기',Electricity:'전기',Lightning:'번개',Thunder:'천둥',
+            Sun:'태양',Moon:'달',Star:'별',Galaxy:'은하',Universe:'우주',Space:'우주',Planet:'행성',
+            World:'세계',Time:'시간',Future:'미래',Past:'과거',Day:'낮',Night:'밤',Light:'빛',Dark:'어둠',
+            Darkness:'어둠',Shadow:'그림자',Void:'공허',Abyss:'심연',Null:'널',Error:'오류',Fatal:'치명적',
+            Final:'최종',End:'끝',Beginning:'시작',Start:'시작',Game:'게임',Craft:'제작',Forge:'대장간',
+            Shop:'상점',Key:'열쇠',Coin:'코인',Coins:'코인',Gold:'금',Golden:'황금',Silver:'은',
+            Metal:'금속',Iron:'철',Steel:'강철',Copper:'구리',Crystal:'수정',Crystalline:'결정',
+            Diamond:'다이아몬드',Gem:'보석',Magic:'마법',Arcane:'비전',Divine:'신성',Holy:'성스러운',
+            Blessed:'축복받은',Curse:'저주',Cursed:'저주받은',Demon:'악마',Angel:'천사',God:'신',
+            Heaven:'천국',Hell:'지옥',Inferno:'화염',Infernal:'지옥불',Lava:'용암',Volcano:'화산',
+            Heat:'열',Hot:'뜨거운',Cold:'추위',Ice:'얼음',Frozen:'얼어붙은',Snow:'눈',Winter:'겨울',
+            Frost:'서리',Blizzard:'눈보라',Rain:'비',Storm:'폭풍',Wind:'바람',Tornado:'토네이도',
+            Hurricane:'허리케인',Tsunami:'쓰나미',Wave:'파도',River:'강',Lake:'호수',Island:'섬',
+            Mountain:'산',Valley:'계곡',Desert:'사막',Field:'들판',Flower:'꽃',Garden:'정원',
+            Spring:'봄',Summer:'여름',Autumn:'가을',Fall:'가을',Harvest:'수확',Christmas:'크리스마스',
+            Halloween:'할로윈',Festival:'축제',New:'새로운',Year:'해',Love:'사랑',Heart:'마음',
+            Blood:'피',Bone:'뼈',Body:'몸',Mind:'정신',Soul:'영혼',Spirit:'영혼',Ghost:'유령',
+            Zombie:'좀비',Monster:'괴물',Dragon:'용',Phoenix:'불사조',Bird:'새',Fish:'물고기',
+            Whale:'고래',Shark:'상어',Cat:'고양이',Dog:'개',Horse:'말',Snake:'뱀',Bug:'벌레',
+            Machine:'기계',Engine:'엔진',Robot:'로봇',Computer:'컴퓨터',AI:'AI',Code:'코드',
+            Internet:'인터넷',Network:'네트워크',Virus:'바이러스',Technology:'기술',Science:'과학',
+            Chemical:'화학물질',Acid:'산',Nuclear:'핵',Radioactive:'방사성',Antimatter:'반물질',
+            Magnetic:'자성',Temporal:'시간성',Ancient:'고대',Legendary:'전설',Celestial:'천상',
+            Ethereal:'영체',Phantom:'환영',Unstable:'불안정',Everything:'모든 것',Nothing:'아무것도 없음',
+            Something:'무언가',Truth:'진실',Knowledge:'지식',Wisdom:'지혜',Idea:'아이디어',
+            Philosophy:'철학',Paradox:'역설',Balance:'균형',Chaos:'혼돈',Order:'질서',
+            Creation:'창조',Destruction:'파괴',Infinity:'무한',Eternity:'영원',Reality:'현실',
+            Dream:'꿈',Memory:'기억',Hope:'희망',Fear:'공포',Happiness:'행복',Sadness:'슬픔',
+            War:'전쟁',Peace:'평화',Army:'군대',Weapon:'무기',Sword:'검',Arrow:'화살',Bomb:'폭탄',
+            House:'집',Home:'집',City:'도시',Village:'마을',Castle:'성',Tower:'탑',Bridge:'다리',
+            Road:'도로',Car:'자동차',Train:'기차',Plane:'비행기',Airplane:'비행기',Ship:'배',
+            Boat:'보트',Rocket:'로켓',School:'학교',Book:'책',Writing:'글쓰기',Letter:'글자',
+            Music:'음악',Song:'노래',Art:'예술',Artist:'예술가',YouTube:'유튜브',YouTuber:'유튜버',
+            Food:'음식',Bread:'빵',Cake:'케이크',Cookie:'쿠키',Apple:'사과',Fruit:'과일',
+            Milk:'우유',Coffee:'커피',Tea:'차',Chocolate:'초콜릿',Candy:'사탕',
+            Tool:'도구',Factory:'공장',Armor:'갑옷',Shield:'방패',
+            King:'왕',Queen:'여왕',Prince:'왕자',Princess:'공주',Hero:'영웅',Villain:'악당',
+            Black:'검은',White:'흰',Red:'빨간',Blue:'파란',Green:'초록',Purple:'보라',Pink:'분홍',
+            Big:'큰',Small:'작은',Super:'슈퍼',Mega:'메가',Ultra:'울트라',Core:'핵심',
+            Reactor:'반응로',Portal:'포털',Dimension:'차원',Alternate:'대체',Parallel:'평행',
+            Quantum:'양자',Cosmic:'우주',Solar:'태양',Lunar:'달',Stellar:'항성',Hole:'구멍',
+            Singularity:'특이점'
+        };
+
+        const SYSTEM_KO_EXACT={
+            'Locked':'잠김','System':'시스템','Imported!':'가져오기 완료!','Key found!':'열쇠 발견!',
+            'Star Forge':'스타 포지','Star Forge complete':'스타 포지 완료','Star Forge Ready!':'스타 포지 준비 완료!',
+            'Star Forge cooling down':'스타 포지 재충전 중','No eligible elements to bless!':'축복할 수 있는 원소가 없습니다!',
+            'Finish the current action first.':'현재 작업이 끝날 때까지 기다려 주세요.',
+            'The forge is still finishing its current blessing.':'스타 포지가 아직 현재 축복을 마무리하고 있습니다.',
+            'Discover the ⭐ Star Forge element to unlock!':'⭐ 스타 포지 원소를 발견하면 잠금이 해제됩니다!',
+            'No fusion found':'융합 결과 없음','Try a different pairing':'다른 조합을 시도해 보세요',
+            'These elements do not resonate together yet.':'이 원소들은 아직 서로 공명하지 않습니다.',
+            'Frozen!':'얼어붙음!','Use a hot element to thaw it.':'뜨거운 원소를 사용해 녹이세요.',
+            'Permafrost':'영구동토','This eternal ice cannot be thawed.':'이 영원한 얼음은 녹일 수 없습니다.',
+            'Absorbed':'흡수됨','Phased Out':'위상 이탈','Curse Awakened':'저주 발동',
+            'Unstable eruption':'불안정 폭발','Time Loop':'시간 루프','Short Circuit':'합선',
+            'Final Element':'최종 원소','Fatal Error':'치명적 오류','Seasonal Vault':'시즌 보관함',
+            'Thawed!':'해동 완료!','Thawing…':'해동 중…','Purified!':'정화 완료!',
+            'Already Upgraded!':'이미 업그레이드됨!','Need CyMoney!':'CyMoney가 필요합니다!',
+            'Upgrade locked':'업그레이드 잠김','Not enough Boss Coins':'보스 코인이 부족합니다',
+            'No Boss Coins':'보스 코인이 없습니다','Boss Coins exchanged':'보스 코인 교환 완료',
+            'Boss upgrade':'보스 업그레이드','BOSS CHALLENGE':'보스 도전','DEV SEASON':'개발자 시즌',
+            'ENDING SECURED':'엔딩 확보','EVERYTHING AWAKENED':'모든 것 각성',
+            'Shop Unlocked!':'상점 잠금 해제!','Star Forge Awakened!':'스타 포지 각성!',
+            'No elements match your search':'검색과 일치하는 원소가 없습니다'
+        };
+
+        const DESCRIPTION_KO_EXACT={
+            'A clear, essential liquid':'맑고 생명에 필수적인 액체',
+            'Hot, burning energy':'뜨겁게 타오르는 에너지',
+            'Solid ground and minerals':'단단한 지면과 광물',
+            'Invisible gas we breathe':'우리가 숨 쉬는 보이지 않는 기체',
+            'A vast body of saltwater':'광대한 바닷물',
+            'Water in gas form':'기체 상태의 물',
+            'Wet soil mixture':'물에 젖은 흙의 혼합물',
+            'Water droplets in the sky':'하늘에 떠 있는 물방울',
+            'Intense, raging fire':'거세게 타오르는 불',
+            'Molten rock from volcanoes':'화산에서 나오는 녹은 암석',
+            'Byproduct of burning':'연소 과정에서 생기는 부산물',
+            'Existence in the physical world':'물리적 세계에 존재하는 생명',
+            'A living organism that grows':'자라나는 생명체',
+            'A large woody plant':'크고 목질로 이루어진 식물',
+            'Material from trees':'나무에서 얻는 재료',
+            'Object used to accomplish a task':'작업을 수행하는 데 쓰는 도구',
+            'Skill in making things by hand':'손으로 무언가를 만드는 기술',
+            'The void from which all things emerge':'모든 것이 태어나는 공허',
+            'Wait. What?':'잠깐. 뭐라고?',
+            'Error Code -1 | Unknown Error':'오류 코드 -1 | 알 수 없는 오류',
+            'A void between elements':'원소 사이의 공백',
+            'Opposite of invalid — think outside the box':'유효하지 않음의 반대입니다. 틀 밖에서 생각해 보세요.',
+            'Opposite of invalid combination':'잘못된 조합의 반대',
+            'The first letter':'첫 번째 글자','The second letter':'두 번째 글자','The third letter':'세 번째 글자',
+            'Frozen water':'얼어붙은 물','Low temperature':'낮은 온도','Coldest season':'가장 추운 계절',
+            'Severe snowstorm':'매우 거센 눈보라','Extremely cold':'극도로 추운 상태',
+            'Your completed Prestiges. Not spendable as keys.':'완료한 프레스티지 기록입니다. 열쇠처럼 사용할 수 없습니다.'
+        };
+
+        const CHANGELOG_KO={
+            'Settings menu with System/Light/Dark website themes, independent Light/Dark element card appearance, reduced animations, and Credits.':'시스템/밝게/어둡게 웹사이트 테마, 독립적인 원소 카드 밝기, 애니메이션 줄이기, 제작진을 포함한 설정 메뉴를 추가했습니다.',
+            'Active seasonal events now give the whole game a subtle event wallpaper with themed ambient particles. Christmas adds gentle snow with red/green holiday accents; April Fools still overrides seasonal themes.':'시즌 이벤트의 전체 배경 효과를 추가했습니다. 이후 전체 배경은 제거되고 시즌 카드 스타일만 유지됩니다.',
+            'Seasonal elements now inherit restrained event-specific card accents while keeping the normal Craft Madness card structure.':'시즌 원소는 기본 카드 구조를 유지하면서 이벤트별 색상과 장식을 사용합니다.',
+            'Seasonal full-page wallpapers were removed; seasonal identity now stays on the element cards so the main game background remains clean.':'전체 화면 시즌 배경을 제거했습니다. 시즌 분위기는 원소 카드에만 남아 기본 배경을 깔끔하게 유지합니다.',
+            'Rebuilt fixed-screen UI through a viewport portal so modals, system messages and the changelog button stay attached to the actual screen instead of jumping to a transformed half-page area on mobile.':'모바일에서 모달, 시스템 메시지, 변경 기록 버튼이 화면 중간으로 튀는 문제를 막기 위해 고정 UI 구조를 다시 만들었습니다.',
+            'Added element card size, card hover motion and system-message duration settings.':'원소 카드 크기, 카드 호버 움직임, 시스템 메시지 표시 시간 설정을 추가했습니다.',
+            'Added Korean localization from Settings. Core UI, settings, credits, seasonal labels and element names can display in Korean; April Fools Korean intentionally uses absurd bad translations.':'설정에서 한국어를 선택할 수 있습니다. 기본 UI, 설정, 제작진, 시즌 라벨, 원소 이름이 한국어로 표시되며 만우절에는 일부러 엉망 번역을 사용합니다.',
+            'Developer panel can force any seasonal event from a dropdown or return to automatic real-date season detection.':'개발자 패널에서 원하는 시즌을 강제로 선택하거나 실제 날짜 자동 감지로 돌아갈 수 있습니다.',
+            'Star Forge cooldown no longer turns the Forge into an unclickable locked button; stale Forge animation state can recover and cooldown clicks now show remaining time.':'스타 포지 재사용 대기시간 동안 버튼이 완전히 잠기지 않으며, 멈춘 애니메이션 상태를 복구하고 남은 시간을 표시합니다.',
+            'Seasonal cards are centered and aligned to the normal card height instead of stretching awkwardly in the collection grid.':'시즌 카드가 일반 카드 높이에 맞춰 중앙 정렬되도록 수정했습니다.',
+            'Fixed the actual Star Forge animation freeze caused by renderEls throwing during Forge activation. Added a hard animation watchdog so the overlay cannot remain stuck.':'스타 포지 사용 중 renderEls 오류로 애니메이션이 영구적으로 멈추던 실제 원인을 수정했습니다. 오버레이가 절대 계속 남지 않도록 안전 타이머도 추가했습니다.',
+            'Korean localization now covers displayed element names, descriptions, modifier labels, fusion failures, special outcomes, system notifications, Star Forge reports, discovery counts, history, search, settings options and the changelog.':'한국어 번역이 원소 이름, 설명, 모든 modifier 라벨, 융합 실패, 특수 결과, 시스템 메시지, 스타 포지 결과, 발견 수, 기록, 검색, 설정 옵션, 변경 기록까지 적용됩니다.'
+        };
         const TYPE_KO={
             'NORMAL':'일반','BASIC':'기본','FINAL':'최종','LEGENDARY':'전설','SECRET':'비밀','KEY':'열쇠',
             'EXCLUSIVE':'독점','EVERYTHING':'모든 것','BOSS DEFEAT':'보스 처치','Prestige':'프레스티지',
@@ -4653,12 +4879,69 @@ html[lang="ko"] .font-display{
         }
         function translateElementName(name){
             if(currentLanguage()!=='ko')return name;
-            let out=ELEMENT_KO[name]||name;
-            if(OldAllCreate){
-                if(name==='Waldo')return '안녕하신가! 힘쎄고 좋은아침. 만약 물어본다면 나는 왈도.';
-                out=aprilFoolsBadKorean(out);
+            if(OldAllCreate&&name==='Waldo')return '안녕하신가! 힘쎄고 좋은아침. 만약 물어본다면 나는 왈도.';
+            let out=ELEMENT_KO[name];
+            if(!out){
+                const parts=String(name).split(/(\s+|[-+&/])/);
+                let changed=false;
+                out=parts.map(part=>{
+                    const clean=part.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g,'');
+                    const mapped=ELEMENT_TOKEN_KO[clean];
+                    if(mapped){changed=true;return part.replace(clean,mapped);}
+                    return part;
+                }).join('');
+                if(!changed)out=name;
             }
-            return out;
+            return OldAllCreate?aprilFoolsBadKorean(out):out;
+        }
+        function translateModifierLabel(flagOrLabel){
+            if(currentLanguage()!=='ko')return MODIFIER_STYLES?.[flagOrLabel]?.label||flagOrLabel;
+            if(MODIFIER_KO[flagOrLabel])return MODIFIER_KO[flagOrLabel];
+            const hit=Object.entries(MODIFIER_STYLES||{}).find(([,v])=>v.label===flagOrLabel);
+            return hit?MODIFIER_KO[hit[0]]||flagOrLabel:flagOrLabel;
+        }
+        function translateDescription(elOrText){
+            if(currentLanguage()!=='ko')return typeof elOrText==='string'?elOrText:(elOrText?.description||'');
+            const el=typeof elOrText==='object'?elOrText:null;
+            const raw=typeof elOrText==='string'?elOrText:(el?.description||'');
+            if(OldAllCreate)return aprilFoolsBadKorean(DESCRIPTION_KO_EXACT[raw]||raw||'뭔가 설명이 있었던 것 같음.');
+            if(DESCRIPTION_KO_EXACT[raw])return DESCRIPTION_KO_EXACT[raw];
+            if(el?.isSeasonal){
+                const ev=seasonalEventFromElement(el);
+                return `${ev?(SEASON_NAME_KO[ev.id]||ev.name):'시즌'} 한정 원소 · ${translateElementName(el.name)}`;
+            }
+            if(el?.isAprilFools)return `만우절 원소 · ${translateElementName(el.name)}`;
+            return raw?raw:`${translateElementName(el?.name||'이 원소')}에 관한 원소입니다.`;
+        }
+        function translateSystemText(value){
+            if(currentLanguage()!=='ko')return String(value??'');
+            let s=String(value??'');
+            if(OldAllCreate)return aprilFoolsBadKorean(SYSTEM_KO_EXACT[s]||s);
+            if(SYSTEM_KO_EXACT[s])return SYSTEM_KO_EXACT[s];
+            s=s.replace(/^Ready in (\d+):(\d+)\.$/,(_,m,sec)=>`${m}:${sec} 후 준비됩니다.`);
+            s=s.replace(/^(\d+) blessings and infusions applied\.$/,(_,n)=>`축복 및 주입 효과 ${n}개를 적용했습니다.`);
+            s=s.replace(/^You gained a key\. Use it for recipe clues or Key Services\.$/,'열쇠를 얻었습니다. 레시피 힌트나 열쇠 서비스에 사용할 수 있습니다.');
+            s=s.replace(/^(.+) has been purified! \(−([\d,]+) coins\)$/,(m,n,c)=>`${translateElementName(n)} 정화 완료! (−${c} 코인)`);
+            s=s.replace(/^The Void consumed (.+)\.$/,(m,n)=>`공허가 ${translateElementName(n)}을(를) 삼켰습니다.`);
+            s=s.replace(/^The eruption produced (.+)\.$/,(m,n)=>`폭발로 ${translateElementName(n)}이(가) 생성되었습니다.`);
+            s=s.replace(/^Time folded back into (.+)\.$/,(m,n)=>`시간이 접히며 ${translateElementName(n)}(으)로 되돌아갔습니다.`);
+            s=s.replace(/^(.+) is not active right now\. This element is archived until the event returns\.$/,(m,n)=>`${n} 시즌은 현재 진행 중이 아닙니다. 이벤트가 돌아올 때까지 이 원소는 보관됩니다.`);
+            return s;
+        }
+        function translateChangelog(){
+            const ko=currentLanguage()==='ko';
+            document.querySelectorAll('#changelogModal li').forEach(li=>{
+                if(!li.dataset.enText){
+                    const clone=li.cloneNode(true);
+                    clone.querySelectorAll('.changelog-tag').forEach(x=>x.remove());
+                    li.dataset.enText=clone.textContent.trim();
+                }
+                const tag=li.querySelector('.changelog-tag');
+                const en=li.dataset.enText;
+                const shown=ko?(CHANGELOG_KO[en]||en):en;
+                const tagHtml=tag?tag.outerHTML+' ':'';
+                li.innerHTML=tagHtml+shown;
+            });
         }
         function translateTierLabel(label){
             if(currentLanguage()!=='ko')return label;
@@ -4681,12 +4964,15 @@ html[lang="ko"] .font-display{
                 el.placeholder=tr(el.dataset.i18nPlaceholder,el.placeholder);
             });
             if($('languageSetting'))$('languageSetting').value=lang;
+            document.querySelectorAll('option[data-en][data-ko]').forEach(o=>{o.textContent=lang==='ko'?o.dataset.ko:o.dataset.en;});
+            translateChangelog();
             if(typeof renderEls==='function'&&Array.isArray(window.elements||elements)){
                 try{renderEls();}catch(e){}
             }
             if(typeof renderSeasonalStorage==='function'){try{renderSeasonalStorage();}catch(e){}}
             if(typeof renderBossLobby==='function'){try{renderBossLobby();}catch(e){}}
             if(typeof updateProgressionUI==='function'){try{updateProgressionUI();}catch(e){}}
+            try{updateCount();rebuildHistory();}catch(e){}
         }
 
         function effectiveWebsiteIsDark(){
@@ -4901,8 +5187,8 @@ html[lang="ko"] .font-display{
             resultArea.replaceChildren();const panel=document.createElement('section');panel.className='special-outcome';
             const card=document.createElement('div');card.className='el-card '+getElClasses(el);
             const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;
-            const name=document.createElement('div');name.className='el-name';name.textContent=el.name;card.append(emoji,name);sculptElementCard(card,el);panel.appendChild(card);
-            const heading=document.createElement('h3');heading.textContent=title;const text=document.createElement('p');text.textContent=description;panel.append(heading,text);
+            const name=document.createElement('div');name.className='el-name';name.textContent=translateElementName(el.name);card.append(emoji,name);sculptElementCard(card,el);panel.appendChild(card);
+            const heading=document.createElement('h3');heading.textContent=translateSystemText(title);const text=document.createElement('p');text.textContent=translateSystemText(description);panel.append(heading,text);
             if(progress!==undefined){const meter=document.createElement('progress');meter.max=1;meter.value=Math.min(1,Math.max(0,progress));meter.setAttribute('aria-label','Thawing progress');panel.appendChild(meter);}
             resultArea.appendChild(panel);
         }
@@ -5877,8 +6163,11 @@ html[lang="ko"] .font-display{
             const primary=el.isExclusive?'isExclusive':el.isCyMoney?'isCyMoney':key,theme=MODIFIER_STYLES[primary];
             card.classList.add('modifier-card');card.dataset.modifier=primary;card.dataset.motif=theme.family;
             card.style.setProperty('--card-hue',theme.hue);
-            card.title=(el.description||'')+' · '+active.map(k=>MODIFIER_STYLES[k].label).join(' / ');
-            if(!el.isPrestige&&!checkIsEverything(el))card.querySelector('.card-ribbon').textContent=(OldAllCreate?goofyTypeLabel(el.isKey?'Key':getElType(el)):theme.label)+(el.isKey?' · ×'+keyAmount(el):'');
+            card.title=translateDescription(el)+' · '+active.map(k=>translateModifierLabel(k)).join(' / ');
+            if(!el.isPrestige&&!checkIsEverything(el)){
+                const rawLabel=OldAllCreate?goofyTypeLabel(el.isKey?'Key':getElType(el)):theme.label;
+                card.querySelector('.card-ribbon').textContent=(currentLanguage()==='ko'&&!OldAllCreate?translateModifierLabel(primary):translateTierLabel(rawLabel))+(el.isKey?' · ×'+keyAmount(el):'');
+            }
             const mark=document.createElement('span');mark.className='modifier-mark';mark.setAttribute('aria-hidden','true');mark.textContent=theme.sigil;
             const pattern=document.createElement('span');pattern.className='modifier-pattern';pattern.setAttribute('aria-hidden','true');
             card.append(pattern,mark);
@@ -5948,7 +6237,7 @@ html[lang="ko"] .font-display{
             const footer=document.createElement('div');footer.className='seasonal-footer';footer.setAttribute('aria-hidden','true');footer.innerHTML='<span>'+ev.sigil+'</span><i></i><span>ARCHIVE EDITION</span><i></i><span>'+ev.sigil+'</span>';
             card.prepend(backdrop,fx,ribbon,stage);card.append(footer);
             const seasonNameEl=card.querySelector('.el-name');if(seasonNameEl)seasonNameEl.textContent=translateElementName(el.name);
-            card.title=(currentLanguage()==='ko'?translateElementName(el.name):el.description||'')+' · '+(currentLanguage()==='ko'?(SEASON_NAME_KO[ev.id]||ev.name):ev.name);
+            card.title=translateDescription(el)+' · '+(currentLanguage()==='ko'?(SEASON_NAME_KO[ev.id]||ev.name):ev.name);
         }
 
         function sculptElementCard(card,el){
@@ -6052,14 +6341,18 @@ html[lang="ko"] .font-display{
                     const w=document.createElement('div');w.className='el-wrapper';
                     const d=document.createElement('div');d.className=`el-card ${getElClasses(el)}`;
                     d.setAttribute('data-idx',origIdx);d.setAttribute('data-name',el.name);d.setAttribute('data-desc',el.description||'');
-                    d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
+                    d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name"></div>`;
+                    d.querySelector('.el-name').textContent=translateElementName(el.name);
+                    d.title=translateDescription(el);
                     sculptElementCard(d,el);w.appendChild(d);seasonalGrid.appendChild(w);return;
                 }
                 if(el.isAprilFools&&!OldAllCreate){
                     const w=document.createElement('div');w.className='el-wrapper';
                     const d=document.createElement('div');d.className=`el-card ${getElClasses(el)}`;
                     d.setAttribute('data-idx',origIdx);d.setAttribute('data-name',el.name);d.setAttribute('data-desc',el.description||'');
-                    d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
+                    d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name"></div>`;
+                    d.querySelector('.el-name').textContent=translateElementName(el.name);
+                    d.title=translateDescription(el);
                     sculptElementCard(d,el);w.appendChild(d);aprilFoolsGrid.appendChild(w);return;
                 }
                 if(currentSort === 'type' && !el.isExclusive && !el.isPrestige) {
@@ -6087,8 +6380,9 @@ html[lang="ko"] .font-display{
                 d.setAttribute('data-name',el.name);
                 d.setAttribute('data-desc',el.description||'');
                 d.setAttribute('draggable','true');
-                d.title=el.description||'';
-                d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
+                d.title=translateDescription(el);
+                d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name"></div>`;
+                d.querySelector('.el-name').textContent=translateElementName(el.name);
                 sculptElementCard(d,el);
                 if(el.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width=`${((el.meltProgress||0)/(el.meltGoal||10))*100}%`;d.appendChild(mb);}
                 if(el.hasLink) d.addEventListener('click',e=>{if(!e.defaultPrevented)window.open(el.link,'_blank');});
@@ -6096,10 +6390,12 @@ html[lang="ko"] .font-display{
                 (el.isExclusive&&!el.isPrestige?exclusiveGrid:elGrid).appendChild(w);
             });
             if(bossMode)refreshBossLockedCards();
-            const localizedName=card.querySelector('.el-name');if(localizedName)localizedName.textContent=translateElementName(el.name);
+            const localizedName=card.querySelector('.el-name');
+            if(localizedName)localizedName.textContent=translateElementName(el.name);
+            card.title=translateDescription(el)+(Object.keys(MODIFIER_STYLES).some(k=>el[k])?' · '+Object.keys(MODIFIER_STYLES).filter(k=>el[k]).map(k=>translateModifierLabel(k)).join(' / '):'');
         }
 
-        function updateCount(){elCount.textContent=elements.length+' Discovered';}
+        function updateCount(){elCount.textContent=currentLanguage()==='ko'?elements.length+'개 발견':elements.length+' Discovered';}
 
         // ─── SORT CONTROLS ───
         document.querySelectorAll('.sort-btn').forEach(btn=>{
@@ -6121,7 +6417,9 @@ html[lang="ko"] .font-display{
             let vis=0;
             document.querySelectorAll('#elGrid .el-card, #exclusiveGrid .el-card, #aprilFoolsGrid .el-card').forEach(c=>{
                 const nm=c.getAttribute('data-name').toLowerCase(), ds=c.getAttribute('data-desc').toLowerCase();
-                const show=c.dataset.prestige==='true'||!t||nm.includes(t)||ds.includes(t);
+                const idx=Number(c.getAttribute('data-idx')),el=Number.isFinite(idx)?elements[idx]:null;
+                const localName=(el?translateElementName(el.name):'').toLowerCase(),localDesc=(el?translateDescription(el):'').toLowerCase();
+                const show=c.dataset.prestige==='true'||!t||nm.includes(t)||ds.includes(t)||localName.includes(t)||localDesc.includes(t);
                 c.closest('.el-wrapper').style.display=show?'':'none';
                 if(show)vis++;
             });
@@ -6155,7 +6453,7 @@ html[lang="ko"] .font-display{
             cnt.replaceChildren();
             const card=document.createElement('div');card.className='el-card '+getElClasses(el);
             const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;
-            const name=document.createElement('div');name.className='el-name';name.textContent=el.name;
+            const name=document.createElement('div');name.className='el-name';name.textContent=translateElementName(el.name);
             card.append(emoji,name);sculptElementCard(card,el);cnt.appendChild(card);
             const closeBtn=document.createElement('button');
             closeBtn.className='absolute top-1 right-1 text-xs rounded-full w-5 h-5 flex items-center justify-center';
@@ -6522,8 +6820,10 @@ html[lang="ko"] .font-display{
             if(result.finalBlock){showSpecialOutcome('Final Element','Its journey is complete. Try another pairing.',{name:'Final Element',emoji:'✦',isFinal:true});resetDZs();return;}
             if(result.fatalBlock){showSpecialOutcome('Fatal Error','This element cannot process the combination.',{name:'Fatal Error',emoji:'💀',isFatalError:true});resetDZs();return;}
             if(result.invalid){
-                resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>◇</span></div><h3>No fusion found</h3><p></p><small>Try a different pairing</small></div>';
-                resultArea.querySelector('p').textContent=result.description||'These elements do not resonate together yet.';
+                resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>◇</span></div><h3></h3><p></p><small></small></div>';
+                resultArea.querySelector('h3').textContent=translateSystemText('No fusion found');
+                resultArea.querySelector('p').textContent=translateSystemText(result.description||'These elements do not resonate together yet.');
+                resultArea.querySelector('small').textContent=translateSystemText('Try a different pairing');
                 if(bossMode)bossMissedCraft();
                 resetDZs();return;
             }
@@ -6582,8 +6882,9 @@ html[lang="ko"] .font-display{
                 const d=document.createElement('div');d.className='el-wrapper';
                 const card=document.createElement('div');
                 card.className=`el-card new-el ${getElClasses(newEl)}`;
-                card.setAttribute('data-idx',elements.length-1);card.setAttribute('data-name',newEl.name);card.setAttribute('data-desc',newEl.description||'');card.setAttribute('draggable','true');card.title=newEl.description||'';
-                card.innerHTML=`<div class="el-emoji">${newEl.emoji}</div><div class="el-name">${newEl.name}</div>`;
+                card.setAttribute('data-idx',elements.length-1);card.setAttribute('data-name',newEl.name);card.setAttribute('data-desc',newEl.description||'');card.setAttribute('draggable','true');card.title=translateDescription(newEl);
+                card.innerHTML=`<div class="el-emoji">${newEl.emoji}</div><div class="el-name"></div>`;
+                card.querySelector('.el-name').textContent=translateElementName(newEl.name);
                 sculptElementCard(card,newEl);
                 if(newEl.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width='0%';card.appendChild(mb);}
                 if(newEl.hasLink)card.addEventListener('click',()=>window.open(newEl.link,'_blank'));
@@ -6641,6 +6942,8 @@ html[lang="ko"] .font-display{
         }
 
         function sfStartTimer(){
+            starForgeBtn.classList.remove('sf-locked');
+            starForgeBtn.style.pointerEvents='';
             starForgeBtn.classList.add('sf-cooldown');
             if(sfInterval)clearInterval(sfInterval);
             sfInterval=setInterval(()=>{
@@ -6694,6 +6997,11 @@ html[lang="ko"] .font-display{
             const forge=$('starForgeBtn'),upgrade=$('upgradeForgeBtn');
             forge.classList.toggle('sf-locked',!gs.sfUnlocked);
             forge.style.pointerEvents=gs.sfUnlocked?'':'none';
+            if(gs.sfUnlocked&&sfCooldownEnd>Date.now()){
+                forge.classList.remove('sf-locked');
+                forge.classList.add('sf-cooldown');
+                forge.style.pointerEvents='';
+            }
             // Explicitly restore these after reset/import; the old handler left the button disabled.
             upgrade.disabled=!!gs.sfUpgraded||!gs.sfUnlocked;
             upgrade.style.pointerEvents='';upgrade.style.opacity=upgrade.disabled?'0.5':'1';
@@ -6705,14 +7013,34 @@ html[lang="ko"] .font-display{
         function checkStarForgeUnlock(){updateProgressionUI();}
 
         let sfAnimating=false,sfPresentationTimer=null;
+        function resetStarForgePresentation(){
+            sfAnimating=false;
+            if(sfPresentationTimer){clearTimeout(sfPresentationTimer);sfPresentationTimer=null;}
+            const fx=$('starForgeEffect');
+            if(fx){fx.hidden=true;fx.style.display='none';}
+        }
         function activateStarForge(){
-            if(sfAnimating||isCombining||ascensionBusy)return;
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
-            if(sfCooldownEnd>Date.now())return;
+            if(sfAnimating){
+                // Recover from a stale presentation state instead of leaving the Forge dead forever.
+                if(!$('starForgeEffect')||$('starForgeEffect').hidden){sfAnimating=false;}
+                else {notify('Star Forge','The forge is still finishing its current blessing.','🌟',1800);return;}
+            }
+            if(isCombining||ascensionBusy){notify('Star Forge','Finish the current action first.','⏳',1800);return;}
+            if(sfCooldownEnd>Date.now()){
+                const rem=Math.max(0,sfCooldownEnd-Date.now()),m=Math.floor(rem/60000),s=Math.floor((rem%60000)/1000);
+                notify('Star Forge cooling down',`Ready in ${m}:${String(s).padStart(2,'0')}.`,'🌟',2200);
+                return;
+            }
             // Prestige trophies cannot receive Forge modifiers.
             const eligible=elements.filter(e=>!e.isPrestige&&!e.isExclusive&&!isSeasonalElement(e)&&!e.isAprilFools&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
-            sfAnimating=true;$('starForgeEffect').hidden=false;
+            sfAnimating=true;
+            const forgeFx=$('starForgeEffect');
+            forgeFx.hidden=false;forgeFx.style.display='grid';
+            if(sfPresentationTimer)clearTimeout(sfPresentationTimer);
+            // Absolute fail-safe: animation overlay can never stay stuck forever.
+            sfPresentationTimer=setTimeout(()=>resetStarForgePresentation(),2600);
             tickCyIncome();
             let count = Math.min(5+prestigeLevel('forgeReach')+cyLevel('reach'), eligible.length);
             // Shuffle and pick
@@ -6755,23 +7083,28 @@ html[lang="ko"] .font-display{
             sfCooldownEnd=Date.now()+SF_COOLDOWN*(1-.15*prestigeLevel('forgeSpeed'))*(1-.1*cyLevel('cooldown'));
             gs.sfCooldownEnd=sfCooldownEnd;
             save();renderEls();sfStartTimer();
-            // Reset button to locked mode during cooldown
-            starForgeBtn.classList.add('sf-locked');starForgeBtn.style.pointerEvents='none';
+            // Cooldown is NOT a lock. Keep the button clickable so it can report remaining time.
+            starForgeBtn.classList.remove('sf-locked');
+            starForgeBtn.classList.add('sf-cooldown');
+            starForgeBtn.style.pointerEvents='';
             // Animate button
             starForgeBtn.classList.add('sf-activate');
             setTimeout(()=>starForgeBtn.classList.remove('sf-activate'),700);
+            if(sfPresentationTimer)clearTimeout(sfPresentationTimer);
             sfPresentationTimer=setTimeout(()=>{
-                sfAnimating=false;$('starForgeEffect').hidden=true;
+                resetStarForgePresentation();
                 renderForgeReport(results,chosen);
                 notify('Star Forge complete',results.length+' blessings and infusions applied.','✦');
-            },window.matchMedia('(prefers-reduced-motion: reduce)').matches?150:1200);
+            },window.matchMedia('(prefers-reduced-motion: reduce)').matches||document.documentElement.classList.contains('reduced-motion')?150:1200);
         }
         function renderForgeReport(results,chosen){
             resultArea.replaceChildren();
             const report=document.createElement('section');report.className='stellar-report';
-            report.innerHTML='<div class="stellar-report-heading"><span>✦</span><div><small>CONSTELLATION COMPLETE</small><h3>Star Forge awakened</h3></div></div><div class="stellar-result-cards"></div><div class="stellar-changes"></div>';
+            report.innerHTML='<div class="stellar-report-heading"><span>✦</span><div><small></small><h3></h3></div></div><div class="stellar-result-cards"></div><div class="stellar-changes"></div>';
+            report.querySelector('small').textContent=currentLanguage()==='ko'?'별자리 완성':'CONSTELLATION COMPLETE';
+            report.querySelector('h3').textContent=currentLanguage()==='ko'?'스타 포지 각성':'Star Forge awakened';
             const cards=report.querySelector('.stellar-result-cards');
-            for(const el of chosen){const card=document.createElement('div');card.className='el-card '+getElClasses(el);card.setAttribute('data-name',el.name);const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;const name=document.createElement('div');name.className='el-name';name.textContent=el.name;card.append(emoji,name);sculptElementCard(card,el);cards.appendChild(card);}
+            for(const el of chosen){const card=document.createElement('div');card.className='el-card '+getElClasses(el);card.setAttribute('data-name',el.name);const emoji=document.createElement('div');emoji.className='el-emoji';emoji.textContent=el.emoji;const name=document.createElement('div');name.className='el-name';name.textContent=translateElementName(el.name);card.append(emoji,name);sculptElementCard(card,el);cards.appendChild(card);}
             for(const text of results){const row=document.createElement('p');row.textContent=text;report.querySelector('.stellar-changes').appendChild(row);}
             resultArea.appendChild(report);
         }
@@ -6804,7 +7137,7 @@ html[lang="ko"] .font-display{
         function addComboEntry(e1,e2,res){
             if(comboHistory.querySelector('p.italic'))comboHistory.innerHTML='';
             const d=document.createElement('div');d.className='combo-entry';
-            d.innerHTML=`<span>${e1.emoji}</span><span class="mx-1 text-xs">${e1.name}</span><span class="mx-1" style="color:var(--text-secondary)">+</span><span>${e2.emoji}</span><span class="mx-1 text-xs">${e2.name}</span><span class="mx-1" style="color:var(--text-secondary)">=</span><span>${res.emoji}</span><span class="mx-1 text-xs font-semibold">${res.name}</span>`;
+            d.innerHTML=`<span>${e1.emoji}</span><span class="mx-1 text-xs">${translateElementName(e1.name)}</span><span class="mx-1" style="color:var(--text-secondary)">+</span><span>${e2.emoji}</span><span class="mx-1 text-xs">${translateElementName(e2.name)}</span><span class="mx-1" style="color:var(--text-secondary)">=</span><span>${res.emoji}</span><span class="mx-1 text-xs font-semibold">${translateElementName(res.name)}</span>`;
             comboHistory.insertBefore(d,comboHistory.firstChild);
         }
 
@@ -6816,7 +7149,7 @@ html[lang="ko"] .font-display{
                 const e2=elements.find(e=>e.name===c.e2)||{emoji:'❓',name:c.e2};
                 const res=elements.find(e=>e.name===c.r)||{emoji:'❓',name:c.r};
                 const d=document.createElement('div');d.className='combo-entry';
-                d.innerHTML=`<span>${e1.emoji}</span><span class="mx-1 text-xs">${e1.name}</span><span class="mx-1" style="color:var(--text-secondary)">+</span><span>${e2.emoji}</span><span class="mx-1 text-xs">${e2.name}</span><span class="mx-1" style="color:var(--text-secondary)">=</span><span>${res.emoji}</span><span class="mx-1 text-xs font-semibold">${res.name}</span>`;
+                d.innerHTML=`<span>${e1.emoji}</span><span class="mx-1 text-xs">${translateElementName(e1.name)}</span><span class="mx-1" style="color:var(--text-secondary)">+</span><span>${e2.emoji}</span><span class="mx-1 text-xs">${translateElementName(e2.name)}</span><span class="mx-1" style="color:var(--text-secondary)">=</span><span>${res.emoji}</span><span class="mx-1 text-xs font-semibold">${translateElementName(res.name)}</span>`;
                 comboHistory.insertBefore(d,comboHistory.firstChild);
             });
         }
@@ -7132,6 +7465,7 @@ html[lang="ko"] .font-display{
         }
         installViewportPortal();
 
+        if($('starForgeEffect')){$('starForgeEffect').hidden=true;$('starForgeEffect').style.display='none';}
         // ─── INIT ───
         function applySiteFooter(){
             const footer=document.createElement('footer');footer.className='site-copyright';
