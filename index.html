@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -732,6 +731,20 @@ button:disabled {cursor:not-allowed;}
 #resultArea .sculpted-card .card-stage {width:86px;height:86px;}
 #resultArea .sculpted-card .el-emoji {font-size:2.7rem!important;}
 #resultArea .sculpted-card .el-name {font-size:.9rem!important;}
+
+/* ─── BOSS CHALLENGE ─── */
+#bossBtn{background:rgba(239,68,68,.12);color:#ef4444}
+#bossPanel{margin-bottom:18px;border:1px solid rgba(239,68,68,.35);border-radius:14px 28px 14px 28px;padding:18px;background:linear-gradient(135deg,rgba(127,29,29,.10),rgba(15,23,42,.08));overflow:hidden;position:relative}
+#bossPanel::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(239,68,68,.035) 22px 24px)}
+.boss-head{display:flex;gap:12px;align-items:center;justify-content:space-between;position:relative;z-index:1;flex-wrap:wrap}.boss-title{display:flex;align-items:center;gap:10px}.boss-emoji{font-size:2rem}.boss-name{font-family:'Righteous',sans-serif;font-size:1.15rem}.boss-phase{font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#ef4444}
+.boss-bars{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;position:relative;z-index:1}.boss-meter-label{display:flex;justify-content:space-between;gap:8px;font-size:.68rem;font-weight:700;margin-bottom:5px}.boss-track{height:12px;border-radius:999px;background:rgba(15,23,42,.16);overflow:hidden;border:1px solid var(--border)}.boss-fill{height:100%;width:100%;transition:width .35s ease}.boss-fill.enemy{background:linear-gradient(90deg,#7f1d1d,#ef4444)}.boss-fill.player{background:linear-gradient(90deg,#0f766e,#22c55e)}
+#bossRule{font-size:.72rem;color:var(--text-secondary);margin-top:10px;position:relative;z-index:1}.boss-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:1}.boss-actions button{font-size:.72rem;font-weight:700;padding:7px 12px;border-radius:999px;border:1px solid var(--border);background:var(--ui-button)}
+body.boss-mode #prestigeBtn,body.boss-mode #prestigeShopBtn,body.boss-mode #viewRankBtn,body.boss-mode #coinDisplay,body.boss-mode #shopBtn,body.boss-mode #cyShopBtn,body.boss-mode #cyMoneyDisplay,body.boss-mode #starForgeBtn,body.boss-mode #upgradeForgeBtn,body.boss-mode #bossBtn{display:none!important}
+body.boss-mode #craftHints,body.boss-mode #craftGuide{display:none!important}
+#bossStartInfo{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--ui-button);font-size:.78rem;color:var(--text-secondary)}
+.boss-defeat-showpiece{--card-hue:8!important}.boss-defeat-showpiece .card-ribbon{background:linear-gradient(90deg,rgba(127,29,29,.88),rgba(180,83,9,.88));color:#fff7ed!important}.boss-defeat-showpiece::after{content:'⚔';position:absolute;right:8px;bottom:7px;font-size:.8rem;opacity:.5;pointer-events:none}
+@media(max-width:600px){.boss-bars{grid-template-columns:1fr}.boss-name{font-size:1rem}}
+
 </style><style>/* Unified faceted workshop surfaces. */
 :root {--bg-primary:#efedf6;--bg-card:#faf9ff;--bg-card-hover:#e9e5f5;--border:#d3cbe6;--text-primary:#28213f;--text-secondary:#726581;--gold:#82603b;--gold-glow:#b599dd25;--teal:#317f85;--ui-panel:linear-gradient(145deg,#fcfaff,#e9e5f3);--ui-button:linear-gradient(145deg,#f9f6ff,#e3ddf1);--ui-edge:#b5a5d0;}
 .dark {--bg-primary:#100e1b;--bg-card:#201a30;--bg-card-hover:#302640;--border:#40334f;--text-primary:#f0e9fb;--text-secondary:#b3a3c6;--gold:#e5be87;--gold-glow:#d7aaff25;--teal:#83d1c5;--ui-panel:linear-gradient(145deg,#282036,#191624);--ui-button:linear-gradient(145deg,#3a2d4e,#262037);--ui-edge:#796189;}
@@ -1101,7 +1114,135 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 .everything-showpiece .card-stage{position:relative;z-index:1;}
 @keyframes holoWingTint{0%,100%{color:#8defff;filter:drop-shadow(0 0 3px #80efff66)}40%{color:#e3a5ff;filter:drop-shadow(0 0 4px #c98fff77)}70%{color:#ffe8b7;filter:drop-shadow(0 0 3px #efd19955)}}
 @media(prefers-reduced-motion:reduce){.el-card.sculpted-card.prestige-showpiece::before,.holo-gothic-wings svg{animation:none!important;}}
-</style></head>
+</style>
+<style id="seasonalStyles">
+/* ─── SEASONAL VAULT + SHOWPIECES ─── */
+#seasonalStorage{margin:14px 0;padding:14px;border:1px solid rgba(124,58,237,.28);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(245,243,255,.82));box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+#seasonalGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;max-height:260px;overflow-y:auto;padding:5px 4px 10px}
+#seasonalGrid .el-wrapper{min-width:0}
+#seasonalGrid .seasonal-showpiece{min-height:118px;padding:7px 5px!important}
+#seasonalGrid .seasonal-stage{height:48px}
+#seasonalGrid .el-name{font-size:.56rem!important;line-height:1.25!important}
+#seasonalGrid .seasonal-ribbon{font-size:5px}
+#seasonalGrid .seasonal-index{font-size:5px}
+.seasonal-showpiece{--season-a:#7c3aed;--season-b:#22d3ee;--season-c:#fbbf24;position:relative!important;isolation:isolate;overflow:hidden!important;border:1px solid color-mix(in srgb,var(--season-a) 60%,white)!important;border-radius:15px 24px 15px 24px!important;background:linear-gradient(155deg,color-mix(in srgb,var(--season-a) 26%,#09090b),color-mix(in srgb,var(--season-b) 17%,#111827) 55%,color-mix(in srgb,var(--season-c) 20%,#111827))!important;color:white!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -18px 28px rgba(0,0,0,.24),0 6px 18px color-mix(in srgb,var(--season-a) 24%,transparent)!important}
+.seasonal-showpiece:before{content:"";position:absolute;inset:3px;border:1px solid rgba(255,255,255,.25);border-radius:12px 20px 12px 20px;pointer-events:none;z-index:1}
+.seasonal-showpiece:after{content:attr(data-season-sigil);position:absolute;right:4px;bottom:-8px;font-size:42px;line-height:1;opacity:.10;filter:saturate(1.4);transform:rotate(-10deg);pointer-events:none;z-index:0}
+.seasonal-backdrop{position:absolute;inset:0;z-index:0;opacity:.9;pointer-events:none;background:radial-gradient(circle at calc(15% + var(--season-shift,0%)) 18%,color-mix(in srgb,var(--season-c) 55%,transparent) 0 1px,transparent 2px),radial-gradient(circle at 76% 30%,rgba(255,255,255,.55) 0 1px,transparent 2px),linear-gradient(120deg,transparent 25%,rgba(255,255,255,.09) 47%,transparent 62%);background-size:21px 21px,29px 29px,100% 100%}
+.seasonal-ribbon{position:relative;z-index:4;width:100%;padding:2px 4px;text-align:center;font-weight:900;letter-spacing:.85px;text-transform:uppercase;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.8);border-bottom:1px solid rgba(255,255,255,.25)}
+.seasonal-stage{position:relative;z-index:3;width:100%;display:flex;align-items:center;justify-content:center;margin:5px 0 6px}
+.seasonal-stage:before,.seasonal-stage:after{content:"";position:absolute;width:38px;height:38px;border:1px solid color-mix(in srgb,var(--season-b) 70%,white);border-radius:50%;opacity:.55}
+.seasonal-stage:before{animation:seasonOrbit 8s linear infinite}.seasonal-stage:after{width:30px;height:30px;border-style:dashed;animation:seasonOrbit 5s linear infinite reverse}
+.seasonal-stage .el-emoji{position:relative;z-index:2;font-size:1.7rem!important;filter:drop-shadow(0 2px 5px rgba(0,0,0,.45)) drop-shadow(0 0 7px color-mix(in srgb,var(--season-c) 50%,transparent))}
+.seasonal-showpiece .el-name{position:relative;z-index:4;font-weight:900!important;color:white!important;text-shadow:0 1px 5px #000,0 0 9px color-mix(in srgb,var(--season-a) 55%,transparent)!important}
+.seasonal-footer{position:relative;z-index:4;margin-top:auto;width:100%;display:flex;align-items:center;gap:4px;font-size:5px;letter-spacing:.6px;color:rgba(255,255,255,.8)}
+.seasonal-footer i{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--season-c),transparent)}
+.seasonal-index{position:absolute;left:5px;bottom:4px;z-index:4;padding:1px 4px;border-radius:999px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.2);font-weight:800;letter-spacing:.4px}
+@keyframes seasonOrbit{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.seasonal-stage:before,.seasonal-stage:after{animation:none!important}}
+/* Each season deliberately has its own palette + pattern language. */
+.season-newyear{--season-a:#f59e0b;--season-b:#7c3aed;--season-c:#fde68a}.season-newyear .seasonal-backdrop{background-image:repeating-radial-gradient(circle at 20% 20%,transparent 0 8px,rgba(255,255,255,.12) 9px 10px),radial-gradient(circle at 75% 24%,#fde68a 0 1px,transparent 2px)}
+.season-valentine{--season-a:#ec4899;--season-b:#be123c;--season-c:#fbcfe8}.season-valentine .seasonal-backdrop{background-image:radial-gradient(circle at 25% 25%,rgba(255,255,255,.28) 0 5px,transparent 6px),radial-gradient(circle at 70% 60%,rgba(251,207,232,.28) 0 8px,transparent 9px)}
+.season-spring{--season-a:#22c55e;--season-b:#f472b6;--season-c:#fef08a}.season-spring .seasonal-backdrop{background-image:radial-gradient(ellipse at 20% 25%,rgba(244,114,182,.35) 0 4px,transparent 5px),radial-gradient(ellipse at 72% 62%,rgba(254,240,138,.28) 0 5px,transparent 6px)}
+.season-earthweek{--season-a:#15803d;--season-b:#0284c7;--season-c:#86efac}.season-earthweek .seasonal-backdrop{background-image:repeating-radial-gradient(ellipse at 50% 60%,transparent 0 9px,rgba(134,239,172,.15) 10px 11px)}
+.season-mayfestival{--season-a:#e11d48;--season-b:#f59e0b;--season-c:#fef3c7}.season-mayfestival .seasonal-backdrop{background-image:repeating-linear-gradient(62deg,transparent 0 9px,rgba(255,255,255,.12) 10px 12px,transparent 13px 22px)}
+.season-oceanweek{--season-a:#0369a1;--season-b:#06b6d4;--season-c:#a5f3fc}.season-oceanweek .seasonal-backdrop{background-image:repeating-radial-gradient(ellipse at 50% 110%,transparent 0 10px,rgba(165,243,252,.18) 11px 13px)}
+.season-midsummer{--season-a:#ea580c;--season-b:#facc15;--season-c:#fff7ae}.season-midsummer .seasonal-backdrop{background-image:conic-gradient(from 0deg at 50% 50%,rgba(255,255,255,.15),transparent 8deg,transparent 22deg,rgba(255,255,255,.12) 30deg,transparent 40deg)}
+.season-fireworks{--season-a:#7c3aed;--season-b:#2563eb;--season-c:#fb7185}.season-fireworks .seasonal-backdrop{background-image:repeating-radial-gradient(circle at 25% 30%,transparent 0 7px,rgba(251,113,133,.18) 8px 9px,transparent 10px 14px),repeating-radial-gradient(circle at 75% 65%,transparent 0 5px,rgba(96,165,250,.16) 6px 7px,transparent 8px 13px)}
+.season-beachweek{--season-a:#0891b2;--season-b:#f59e0b;--season-c:#fde68a}.season-beachweek .seasonal-backdrop{background-image:linear-gradient(172deg,rgba(34,211,238,.18) 0 48%,transparent 49%),radial-gradient(circle at 24% 72%,rgba(253,230,138,.32) 0 1px,transparent 2px);background-size:100% 100%,12px 12px}
+.season-meteorweek{--season-a:#312e81;--season-b:#0ea5e9;--season-c:#e0f2fe}.season-meteorweek .seasonal-backdrop{background-image:repeating-linear-gradient(135deg,transparent 0 18px,rgba(224,242,254,.18) 19px 20px,transparent 21px 38px),radial-gradient(circle at 70% 20%,white 0 1px,transparent 2px)}
+.season-school{--season-a:#1d4ed8;--season-b:#f59e0b;--season-c:#f8fafc}.season-school .seasonal-backdrop{background-image:repeating-linear-gradient(0deg,transparent 0 12px,rgba(255,255,255,.12) 13px 14px),linear-gradient(90deg,transparent 0 20%,rgba(248,113,113,.2) 21% 22%,transparent 23%)}
+.season-harvest{--season-a:#b45309;--season-b:#92400e;--season-c:#fbbf24}.season-harvest .seasonal-backdrop{background-image:repeating-linear-gradient(45deg,transparent 0 10px,rgba(251,191,36,.12) 11px 12px),repeating-linear-gradient(-45deg,transparent 0 10px,rgba(251,191,36,.08) 11px 12px)}
+.season-autumn{--season-a:#c2410c;--season-b:#7f1d1d;--season-c:#f59e0b}.season-autumn .seasonal-backdrop{background-image:radial-gradient(ellipse at 25% 25%,rgba(245,158,11,.22) 0 4px,transparent 5px),radial-gradient(ellipse at 73% 66%,rgba(248,113,113,.18) 0 5px,transparent 6px)}
+.season-halloween{--season-a:#7e22ce;--season-b:#111827;--season-c:#f97316}.season-halloween .seasonal-backdrop{background-image:repeating-linear-gradient(135deg,rgba(249,115,22,.08) 0 7px,transparent 8px 17px),radial-gradient(circle at 72% 24%,rgba(255,255,255,.2) 0 6px,transparent 7px)}
+.season-bonfire{--season-a:#dc2626;--season-b:#7c2d12;--season-c:#fbbf24}.season-bonfire .seasonal-backdrop{background-image:radial-gradient(ellipse at 50% 110%,rgba(251,191,36,.36) 0 12%,rgba(249,115,22,.18) 13% 30%,transparent 31%),radial-gradient(circle at 20% 20%,#fbbf24 0 1px,transparent 2px)}
+.season-wishweek{--season-a:#4338ca;--season-b:#7c3aed;--season-c:#fef08a}.season-wishweek .seasonal-backdrop{background-image:radial-gradient(circle at 15% 20%,#fef08a 0 1px,transparent 2px),radial-gradient(circle at 65% 35%,#fff 0 1px,transparent 2px),radial-gradient(circle at 80% 75%,#fef08a 0 1px,transparent 2px);background-size:26px 26px,31px 31px,39px 39px}
+.season-winterlights{--season-a:#0f766e;--season-b:#7c3aed;--season-c:#fde047}.season-winterlights .seasonal-backdrop{background-image:radial-gradient(circle,#fde047 0 2px,transparent 3px),radial-gradient(circle,#fb7185 0 2px,transparent 3px),radial-gradient(circle,#67e8f9 0 2px,transparent 3px);background-position:5px 6px,19px 18px,34px 8px;background-size:42px 28px}
+.season-snowweek{--season-a:#0369a1;--season-b:#7dd3fc;--season-c:#f0f9ff}.season-snowweek .seasonal-backdrop{background-image:radial-gradient(circle at 20% 20%,white 0 1px,transparent 2px),radial-gradient(circle at 70% 60%,rgba(240,249,255,.8) 0 1px,transparent 2px);background-size:17px 17px,23px 23px}
+.season-christmas{--season-a:#b91c1c;--season-b:#166534;--season-c:#fbbf24}.season-christmas .seasonal-backdrop{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.08) 0 6px,transparent 7px 14px),radial-gradient(circle at 75% 20%,#fbbf24 0 2px,transparent 3px)}
+.season-yearend{--season-a:#111827;--season-b:#475569;--season-c:#f8fafc}.season-yearend .seasonal-backdrop{background-image:repeating-radial-gradient(circle at 50% 50%,transparent 0 9px,rgba(248,250,252,.13) 10px 11px),linear-gradient(90deg,transparent 49%,rgba(255,255,255,.11) 50% 51%,transparent 52%)}
+
+/* Every event is its own real modifier-style family, not one generic isSeasonal skin. */
+.season-flag-new-year{border-width:2px!important;border-style:double!important;border-radius:50% 16px 50% 16px!important}.season-flag-new-year .seasonal-stage:before{box-shadow:0 0 0 5px rgba(251,191,36,.08),0 0 18px rgba(251,191,36,.35)}
+.season-flag-valentine{border-radius:28px 28px 12px 12px!important}.season-flag-valentine:before{border-radius:24px 24px 9px 9px}.season-flag-valentine .seasonal-stage:after{transform:rotate(45deg);border-radius:9px!important}
+.season-flag-spring-bloom{border-radius:26px 10px 26px 10px!important}.season-flag-spring-bloom .seasonal-stage:before{border-radius:60% 40% 60% 40%}.season-flag-spring-bloom .seasonal-ribbon{background:linear-gradient(90deg,transparent,rgba(244,114,182,.25),transparent)}
+.season-flag-earth-week{border-radius:32px 32px 18px 18px!important}.season-flag-earth-week .seasonal-stage:before{border-width:3px;border-style:dotted}.season-flag-earth-week .seasonal-footer i{height:3px;border-radius:99px}
+.season-flag-may-festival{border-radius:8px 28px 8px 28px!important}.season-flag-may-festival .seasonal-ribbon{background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 7px,transparent 7px 14px)}
+.season-flag-ocean-week{border-radius:34px 10px 34px 10px!important}.season-flag-ocean-week .seasonal-stage:before,.season-flag-ocean-week .seasonal-stage:after{border-radius:50% 45% 55% 48%;transform:rotate(-12deg)}
+.season-flag-midsummer{border-radius:50% 50% 16px 16px!important}.season-flag-midsummer .seasonal-stage:before{border:3px double #fde68a;box-shadow:0 0 18px rgba(250,204,21,.45)}
+.season-flag-fireworks-festival{border-radius:8px 8px 26px 26px!important;border-style:dashed!important}.season-flag-fireworks-festival .seasonal-stage:after{border-style:dotted;box-shadow:0 0 12px rgba(251,113,133,.55)}
+.season-flag-beach-week{border-radius:24px 24px 36px 36px!important}.season-flag-beach-week .seasonal-footer{background:linear-gradient(90deg,transparent,rgba(253,230,138,.18),transparent);padding:2px 0}
+.season-flag-meteor-week{border-radius:6px 28px 6px 28px!important}.season-flag-meteor-week:before{transform:skewX(-2deg)}.season-flag-meteor-week .seasonal-stage:after{border-radius:4px 50% 50% 50%}
+.season-flag-back-to-school{border-radius:6px!important;border-left:6px double #f8fafc!important}.season-flag-back-to-school:before{border-radius:3px}.season-flag-back-to-school .seasonal-ribbon{text-align:left;padding-left:10px}
+.season-flag-harvest-festival{border-radius:20px 6px 20px 6px!important}.season-flag-harvest-festival:before{border-style:dashed}.season-flag-harvest-festival .seasonal-stage:before{border-radius:45% 55% 35% 65%}
+.season-flag-autumn-festival{border-radius:34px 8px 34px 8px!important}.season-flag-autumn-festival .seasonal-stage:before{border-radius:70% 20% 70% 20%;transform:rotate(35deg)}
+.season-flag-halloween{border-radius:4px 24px 4px 24px!important;border-width:2px!important}.season-flag-halloween:before{border-style:dotted}.season-flag-halloween .seasonal-stage:before{border-radius:4px;transform:rotate(45deg)}
+.season-flag-bonfire-week{border-radius:30px 30px 8px 8px!important}.season-flag-bonfire-week .seasonal-stage:before{border-radius:60% 40% 55% 45%;transform:rotate(45deg);box-shadow:0 0 18px rgba(251,146,60,.55)}
+.season-flag-wish-week{border-radius:10px 26px 10px 26px!important}.season-flag-wish-week .seasonal-stage:before{border-style:dashed}.season-flag-wish-week .seasonal-stage:after{box-shadow:0 0 16px rgba(254,240,138,.5)}
+.season-flag-winter-lights{border-radius:18px!important;box-shadow:inset 0 0 0 2px rgba(255,255,255,.15),0 0 10px rgba(253,224,71,.18)!important}.season-flag-winter-lights .seasonal-ribbon{border-bottom-style:dotted}
+.season-flag-snow-week{border-radius:4px 22px 4px 22px!important;border-style:double!important}.season-flag-snow-week .seasonal-stage:before,.season-flag-snow-week .seasonal-stage:after{border-radius:0;transform:rotate(45deg)}
+.season-flag-christmas{border-radius:16px 16px 30px 30px!important;border-width:3px!important;border-style:double!important}.season-flag-christmas:before{border:2px dashed rgba(255,255,255,.3)}.season-flag-christmas .seasonal-ribbon{background:repeating-linear-gradient(135deg,rgba(185,28,28,.35) 0 7px,rgba(255,255,255,.13) 7px 14px,rgba(22,101,52,.35) 14px 21px)}
+.season-flag-years-end{border-radius:50% 50% 12px 12px!important;border-style:double!important}.season-flag-years-end .seasonal-stage:before{border-width:2px}.season-flag-years-end .seasonal-stage:after{width:20px;height:20px;border-style:solid}
+
+/* Per-event animated ornament layer. Each season has its own motion language. */
+.seasonal-fx{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;border-radius:inherit;contain:paint}
+.seasonal-fx i{position:absolute;left:var(--x,50%);top:-18%;font-style:normal;font-weight:900;font-size:var(--size,10px);line-height:1;opacity:0;color:rgba(255,255,255,.92);text-shadow:0 0 6px currentColor;animation-duration:var(--dur,4.8s);animation-delay:var(--delay,0s);animation-iteration-count:infinite;animation-timing-function:linear;will-change:transform,opacity}
+@keyframes seasonConfetti{0%{transform:translate3d(0,-10px,0) rotate(0deg);opacity:0}10%{opacity:.95}100%{transform:translate3d(var(--drift,10px),150px,0) rotate(520deg);opacity:0}}
+@keyframes seasonFloat{0%{transform:translate3d(0,132px,0) scale(.65);opacity:0}20%{opacity:.9}75%{opacity:.8}100%{transform:translate3d(var(--drift,8px),-28px,0) scale(1.2) rotate(12deg);opacity:0}}
+@keyframes seasonPetal{0%{transform:translate3d(-10px,-12px,0) rotate(0);opacity:0}12%{opacity:.9}50%{transform:translate3d(16px,66px,0) rotate(150deg)}100%{transform:translate3d(-5px,150px,0) rotate(340deg);opacity:0}}
+@keyframes seasonOrbitDot{0%{transform:translate3d(-20px,48px,0) scale(.5);opacity:0}20%{opacity:.85}50%{transform:translate3d(20px,65px,0) scale(1)}80%{opacity:.85}100%{transform:translate3d(-20px,82px,0) scale(.5);opacity:0}}
+@keyframes seasonRibbon{0%{transform:translate3d(-16px,-8px,0) rotate(-35deg);opacity:0}15%{opacity:.9}50%{transform:translate3d(18px,65px,0) rotate(35deg)}100%{transform:translate3d(-10px,145px,0) rotate(-25deg);opacity:0}}
+@keyframes seasonBubble{0%{transform:translate3d(0,145px,0) scale(.45);opacity:0}15%{opacity:.65}70%{opacity:.8}100%{transform:translate3d(var(--drift,10px),-22px,0) scale(1.15);opacity:0}}
+@keyframes seasonRay{0%,100%{transform:translate3d(0,54px,0) scale(.5) rotate(0);opacity:.15}50%{transform:translate3d(0,54px,0) scale(1.45) rotate(180deg);opacity:1}}
+@keyframes seasonBurst{0%,70%{transform:translate3d(0,70px,0) scale(.2);opacity:0}76%{opacity:1}88%{transform:translate3d(var(--drift,12px),40px,0) scale(1.5);opacity:1}100%{transform:translate3d(calc(var(--drift,12px) * 1.6),22px,0) scale(.5);opacity:0}}
+@keyframes seasonWave{0%{transform:translate3d(-12px,118px,0) rotate(-8deg);opacity:0}15%{opacity:.75}50%{transform:translate3d(14px,82px,0) rotate(8deg)}100%{transform:translate3d(-8px,30px,0) rotate(-8deg);opacity:0}}
+@keyframes seasonMeteor{0%{transform:translate3d(-42px,-22px,0) rotate(-35deg);opacity:0}10%{opacity:1}35%{transform:translate3d(70px,105px,0) rotate(-35deg);opacity:.85}36%,100%{opacity:0}}
+@keyframes seasonPaper{0%{transform:translate3d(-8px,-15px,0) rotate(-8deg);opacity:0}15%{opacity:.8}55%{transform:translate3d(10px,65px,0) rotate(8deg)}100%{transform:translate3d(-5px,145px,0) rotate(-12deg);opacity:0}}
+@keyframes seasonGrain{0%{transform:translate3d(0,-12px,0) rotate(0);opacity:0}20%{opacity:.8}100%{transform:translate3d(var(--drift,8px),145px,0) rotate(180deg);opacity:0}}
+@keyframes seasonLeaf{0%{transform:translate3d(-12px,-14px,0) rotate(0);opacity:0}12%{opacity:.9}40%{transform:translate3d(18px,45px,0) rotate(160deg)}75%{transform:translate3d(-8px,95px,0) rotate(300deg)}100%{transform:translate3d(14px,150px,0) rotate(440deg);opacity:0}}
+@keyframes seasonBat{0%{transform:translate3d(-35px,70px,0) scale(.55);opacity:0}10%{opacity:.9}48%{transform:translate3d(18px,40px,0) scale(1)}100%{transform:translate3d(70px,82px,0) scale(.65);opacity:0}}
+@keyframes seasonEmber{0%{transform:translate3d(0,140px,0) scale(.45);opacity:0}15%{opacity:1}100%{transform:translate3d(var(--drift,8px),5px,0) scale(.2);opacity:0}}
+@keyframes seasonTwinkle{0%,100%{transform:scale(.35) rotate(0);opacity:.1}45%{transform:scale(1.35) rotate(120deg);opacity:1}60%{transform:scale(.8) rotate(200deg);opacity:.55}}
+@keyframes seasonBlink{0%,100%{opacity:.15;transform:scale(.75)}20%{opacity:1;transform:scale(1.15)}40%{opacity:.25}60%{opacity:.9}80%{opacity:.2}}
+@keyframes seasonSnow{0%{transform:translate3d(-5px,-14px,0) rotate(0);opacity:0}10%{opacity:.95}50%{transform:translate3d(10px,65px,0) rotate(160deg)}100%{transform:translate3d(-8px,150px,0) rotate(340deg);opacity:0}}
+@keyframes seasonClock{0%{transform:translate3d(0,54px,0) rotate(0) scale(.6);opacity:.12}35%{opacity:.8}70%{transform:translate3d(0,54px,0) rotate(270deg) scale(1.15);opacity:.95}100%{transform:translate3d(0,54px,0) rotate(360deg) scale(.6);opacity:.12}}
+
+.fx-confetti i{animation-name:seasonConfetti;color:#fde68a}.fx-hearts i{animation-name:seasonFloat;color:#fbcfe8}.fx-petals i{animation-name:seasonPetal;color:#f9a8d4}.fx-planet i{animation-name:seasonOrbitDot;color:#86efac}.fx-ribbons i{animation-name:seasonRibbon;color:#fef3c7}.fx-bubbles i{animation-name:seasonBubble;color:#cffafe}.fx-sunrays i{animation-name:seasonRay;color:#fff7ae;top:14%!important}.fx-fireworks i{animation-name:seasonBurst;color:#fda4af}.fx-waves i{animation-name:seasonWave;color:#fde68a}.fx-meteors i{animation-name:seasonMeteor;color:#e0f2fe}.fx-school i{animation-name:seasonPaper;color:#f8fafc}.fx-harvest i{animation-name:seasonGrain;color:#fbbf24}.fx-autumn i{animation-name:seasonLeaf;color:#fdba74}.fx-halloween i{animation-name:seasonBat;color:#fdba74}.fx-embers i{animation-name:seasonEmber;color:#fbbf24}.fx-wishes i{animation-name:seasonTwinkle;color:#fef08a;top:var(--y,40%)!important}.fx-lights i{animation-name:seasonBlink;top:var(--y,30%)!important}.fx-snow i{animation-name:seasonSnow;color:#f0f9ff}.fx-christmas-snow i{animation-name:seasonSnow;color:#fff}.fx-yearend i{animation-name:seasonClock;color:#f8fafc;top:8%!important}
+
+/* Extra event-specific ornamentation so no two seasonal families collapse into the same skin. */
+.season-flag-new-year .seasonal-backdrop{animation:seasonBackdropPulse 2.8s ease-in-out infinite}.season-flag-new-year .seasonal-stage{filter:drop-shadow(0 0 8px rgba(251,191,36,.38))}
+.season-flag-valentine .seasonal-backdrop{background-size:28px 28px,44px 44px}.season-flag-valentine .el-name{text-shadow:0 0 10px rgba(251,113,133,.75),0 1px 5px #000!important}
+.season-flag-spring-bloom .seasonal-stage{transform:rotate(-2deg)}.season-flag-spring-bloom .seasonal-footer i{background:linear-gradient(90deg,transparent,#f9a8d4,#86efac,transparent)}
+.season-flag-earth-week .seasonal-stage{background:radial-gradient(circle,rgba(34,197,94,.12),transparent 66%);border-radius:50%}
+.season-flag-may-festival .seasonal-showpiece{background-image:linear-gradient(155deg,#4c0519,#78350f)!important}.season-flag-may-festival .seasonal-stage{filter:drop-shadow(0 0 7px rgba(254,243,199,.4))}
+.season-flag-ocean-week .seasonal-stage{background:radial-gradient(ellipse at 50% 65%,rgba(103,232,249,.16),transparent 68%);border-radius:50%}
+.season-flag-midsummer .seasonal-backdrop{animation:seasonBackdropSpin 16s linear infinite}.season-flag-midsummer .el-emoji{filter:drop-shadow(0 0 12px rgba(250,204,21,.65))!important}
+.season-flag-fireworks-festival .seasonal-backdrop{animation:seasonBackdropFlash 2.6s steps(4,end) infinite}.season-flag-fireworks-festival .seasonal-ribbon{letter-spacing:1.35px}
+.season-flag-beach-week .seasonal-showpiece{box-shadow:inset 0 -26px 25px rgba(245,158,11,.15),0 6px 18px rgba(8,145,178,.25)!important}.season-flag-beach-week .seasonal-stage:before{border-style:dotted}
+.season-flag-meteor-week .seasonal-backdrop{animation:seasonBackdropDrift 7s linear infinite}.season-flag-meteor-week .seasonal-stage{transform:skewX(-3deg)}
+.season-flag-back-to-school .seasonal-showpiece{background-image:linear-gradient(180deg,#172554,#1e3a8a)!important}.season-flag-back-to-school .seasonal-footer{font-family:monospace}
+.season-flag-harvest-festival .seasonal-showpiece{box-shadow:inset 0 -24px 25px rgba(120,53,15,.35),0 5px 16px rgba(180,83,9,.3)!important}.season-flag-harvest-festival .seasonal-stage{filter:sepia(.12)}
+.season-flag-autumn-festival .seasonal-backdrop{animation:seasonBackdropDrift 11s ease-in-out infinite alternate}.season-flag-autumn-festival .seasonal-ribbon{background:linear-gradient(90deg,transparent,rgba(245,158,11,.25),transparent)}
+.season-flag-halloween .seasonal-showpiece{box-shadow:inset 0 0 25px rgba(0,0,0,.55),0 0 17px rgba(126,34,206,.28)!important}.season-flag-halloween .seasonal-stage{filter:drop-shadow(0 0 9px rgba(249,115,22,.45))}
+.season-flag-bonfire-week .seasonal-backdrop{animation:seasonBackdropHeat 2.1s ease-in-out infinite}.season-flag-bonfire-week .seasonal-stage{filter:drop-shadow(0 0 12px rgba(249,115,22,.6))}
+.season-flag-wish-week .seasonal-showpiece{box-shadow:inset 0 0 24px rgba(67,56,202,.25),0 0 16px rgba(254,240,138,.18)!important}.season-flag-wish-week .seasonal-stage:before{animation-duration:12s}
+.season-flag-winter-lights .seasonal-backdrop{animation:seasonBackdropLights 3.4s steps(3,end) infinite}.season-flag-winter-lights .seasonal-stage{filter:drop-shadow(0 0 9px rgba(253,224,71,.5))}
+.season-flag-snow-week .seasonal-showpiece{box-shadow:inset 0 0 25px rgba(224,242,254,.22),0 6px 18px rgba(3,105,161,.25)!important}.season-flag-snow-week .seasonal-stage{filter:drop-shadow(0 0 8px rgba(240,249,255,.55))}
+.season-flag-christmas .seasonal-showpiece{box-shadow:inset 0 0 0 2px rgba(255,255,255,.08),inset 0 -24px 35px rgba(22,101,52,.22),0 0 18px rgba(185,28,28,.25)!important}.season-flag-christmas .seasonal-backdrop{animation:seasonBackdropLights 2.8s steps(4,end) infinite}.season-flag-christmas .seasonal-stage{filter:drop-shadow(0 0 9px rgba(251,191,36,.52))}
+.season-flag-years-end .seasonal-backdrop{animation:seasonBackdropSpin 24s linear infinite}.season-flag-years-end .seasonal-ribbon{font-variant-numeric:tabular-nums}
+
+@keyframes seasonBackdropPulse{50%{filter:brightness(1.3) saturate(1.2)}}
+@keyframes seasonBackdropSpin{to{transform:rotate(360deg) scale(1.35)}}
+@keyframes seasonBackdropFlash{50%{filter:brightness(1.45) saturate(1.5)}}
+@keyframes seasonBackdropDrift{from{background-position:0 0,0 0}to{background-position:38px 26px,-22px 14px}}
+@keyframes seasonBackdropHeat{0%,100%{filter:brightness(.92) saturate(1)}50%{filter:brightness(1.22) saturate(1.35)}}
+@keyframes seasonBackdropLights{0%,100%{filter:brightness(.85)}50%{filter:brightness(1.35) saturate(1.3)}}
+
+@media (prefers-reduced-motion:reduce){.seasonal-fx i,.season-flag-new-year .seasonal-backdrop,.season-flag-midsummer .seasonal-backdrop,.season-flag-fireworks-festival .seasonal-backdrop,.season-flag-meteor-week .seasonal-backdrop,.season-flag-autumn-festival .seasonal-backdrop,.season-flag-bonfire-week .seasonal-backdrop,.season-flag-winter-lights .seasonal-backdrop,.season-flag-christmas .seasonal-backdrop,.season-flag-years-end .seasonal-backdrop{animation:none!important}.seasonal-fx i{opacity:.45!important}}
+
+</style>
+
+</head>
 <body>
     <script>
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark');
@@ -1124,11 +1265,26 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                     <span class="text-[0.65rem] ml-1" style="color:var(--text-secondary)">+<span id="cpm">0</span>/min</span>
                 </div>
                 <button id="shopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105" style="background:rgba(13,148,136,0.12);color:var(--teal)">🛒 Shop</button>
+                <button id="bossBtn" hidden class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:scale-105">👹 Boss Challenge</button>
                 <button id="cyShopBtn" data-progression hidden class="text-xs px-3 py-1 rounded-lg">💎 CyMoney Workshop</button>
                 <div id="cyMoneyDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(20,184,166,0.12);color:#14b8a6"> 💎 <span id="cyMoneyAmt">0</span><span id="cyIncomeRate" style="font-size:.6rem;opacity:.8">0/min</span>
                 </div>
             </div>
         </header>
+
+        <!-- Boss Challenge -->
+        <section id="bossPanel" hidden aria-label="Boss challenge">
+            <div class="boss-head">
+                <div class="boss-title"><span class="boss-emoji" id="bossEmoji">👹</span><div><div class="boss-name" id="bossName">The Unmaker</div><div class="boss-phase" id="bossPhase">Phase 1</div></div></div>
+                <strong id="bossTurnCount" class="text-xs" style="color:var(--text-secondary)">0 crafts</strong>
+            </div>
+            <div class="boss-bars">
+                <div><div class="boss-meter-label"><span>Boss HP</span><span id="bossHpText">0 / 0</span></div><div class="boss-track"><div id="bossHpFill" class="boss-fill enemy"></div></div></div>
+                <div><div class="boss-meter-label"><span>Your Resolve</span><span id="bossPlayerHpText">0 / 0</span></div><div class="boss-track"><div id="bossPlayerHpFill" class="boss-fill player"></div></div></div>
+            </div>
+            <p id="bossRule">Craft elements to attack. The boss retaliates after each successful craft.</p>
+            <div class="boss-actions"><button id="bossSurrenderBtn">🏳️ Surrender</button></div>
+        </section>
 
         <!-- Combination Area -->
         <section class="mb-8 workshop-panel">
@@ -1151,6 +1307,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                     <p style="font-size:.65rem;color:var(--text-secondary);margin-bottom:12px">Your treasures · Kept through reset</p>
                     <div id="exclusiveGrid"></div>
                 </aside>
+
+                <aside id="seasonalStorage" hidden style="display:none!important" aria-label="Seasonal Vault">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px"><strong style="font-size:.8rem;color:#7c3aed">🎉 Seasonal Vault</strong><span id="seasonalCount" style="font-size:.65rem;color:var(--text-secondary)"></span></div>
+                    <p id="seasonalStatus" style="font-size:.65rem;color:var(--text-secondary);margin-bottom:12px">Off-season discoveries rest here until their event returns.</p>
+                    <div id="seasonalGrid"></div>
+                </aside>
+
                 <aside id="aprilFoolsStorage" hidden style="display:none!important" aria-label="April Fools Storer">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><strong style="font-size:.8rem;color:#c2410c">🤡 April Fools Storer</strong><span id="aprilFoolsCount" style="font-size:.65rem;color:#9a3412"></span></div>
                     <p style="font-size:.65rem;color:#9a3412;margin-bottom:12px">Bad ideas kept safely in a cardboard box.</p>
@@ -1283,6 +1446,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 <button id="sortType" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="type">Type</button>
                 <button id="sortAlpha" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="alpha">A → Z</button>
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
+                <button type="button" id="seasonalToggle" aria-controls="seasonalStorage" aria-expanded="false" aria-label="Show Seasonal Vault" title="Show Seasonal Vault">🎉</button>
                 <button type="button" id="aprilFoolsToggle" aria-controls="aprilFoolsStorage" aria-expanded="false" aria-label="Show April Fools Storer" title="Show April Fools Storer">🤡</button>
                 <button type="button" id="hintToggle" aria-controls="craftHints" aria-expanded="false" aria-label="Show crafting hints" title="Show crafting hints">🔑</button>
                 <button type="button" id="guideToggle" aria-controls="craftGuide" aria-expanded="false" aria-label="Show crafting guide" title="Crafting guide">📖</button>
@@ -1368,6 +1532,17 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
     </div></div>
 
     <!-- Shop Modal -->
+    <div id="bossModal" class="modal-overlay"><div class="modal-box" style="max-width:560px">
+        <button class="modal-close" data-close="bossModal">&times;</button>
+        <h2 class="font-display text-xl mb-2">👹 Boss Challenge</h2>
+        <div id="bossStartInfo">
+            <strong>The Unmaker</strong><br>
+            Enter a sealed challenge save with only the four starter elements. Your normal save is untouched. Every successful craft damages the boss, then it retaliates. Win for a huge coin payout and a permanent Boss Defeat trophy. Losing still pays some coins based on progress.
+        </div>
+        <div class="mt-4 text-xs" style="color:var(--text-secondary)">Reward: <strong style="color:var(--gold)">25,000 coins</strong> · Loss reward scales up to 4,500 coins.</div>
+        <button id="bossStartBtn" class="w-full mt-4 font-semibold py-2.5 rounded-xl" style="background:#ef4444;color:white">Start fresh challenge</button>
+    </div></div>
+
     <div id="shopModal" class="modal-overlay"><div class="modal-box" style="max-width:640px">
         <button class="modal-close" data-close="shopModal">&times;</button>
         <div class="flex justify-between items-center mb-5 pb-3" style="border-bottom:1px solid var(--border)">
@@ -3090,14 +3265,253 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             war:{id:'war',name:'War Pack',price:2000,description:'A war-related element',maxStock:1,stockChance:0.5,
                 elements:[{name:'Grenade',emoji:'💣',description:'Explosive weapon',weight:25},{name:'Gun',emoji:'🔫',description:'Fires projectiles',weight:25},{name:'Assault',emoji:'🪖',description:'Violent attack',weight:20},{name:'Shield',emoji:'🛡️',description:'Protective covering',weight:10},{name:'Kit',emoji:'🎒',description:'Equipment set',weight:19},{name:'Bullet',emoji:'🔴',description:'Projectile',weight:1}]},
             mythical:{id:'mythical',name:'Mythical Pack',price:5000,description:'A mythical element',maxStock:3,stockChance:0.05,
-                elements:[{name:'Mythical',emoji:'🦄',description:'Existing only in myth',weight:50},{name:'Legend',emoji:'👑',description:'Famous person',weight:50}]}
+                elements:[{name:'Mythical',emoji:'🦄',description:'Existing only in myth',weight:50},{name:'Legend',emoji:'👑',description:'Famous person',weight:50}]},
+            civilization:{id:'civilization',name:'Civilization Archive',price:12000,description:'Foundations of organized society — each pull opens new recipe branches.',maxStock:2,stockChance:0.55,
+                elements:[{name:'Currency',emoji:'💱',description:'A system for exchanging value',weight:30},{name:'Law',emoji:'⚖️',description:'Rules that govern society',weight:25},{name:'Government',emoji:'🏛️',description:'Authority that organizes a state',weight:25},{name:'Society',emoji:'👥',description:'People living under shared systems',weight:20}]},
+            mindscape:{id:'mindscape',name:'Mindscape Cache',price:30000,description:'Abstract pieces of the mind that connect into psychology, identity and ideas.',maxStock:2,stockChance:0.40,
+                elements:[{name:'Thought',emoji:'💭',description:'A unit of thinking',weight:30},{name:'Memory',emoji:'🧠',description:'A preserved experience',weight:25},{name:'Emotion',emoji:'💓',description:'A feeling given form',weight:25},{name:'Instinct',emoji:'🐾',description:'Knowledge without deliberate thought',weight:20}]},
+            mythicRelics:{id:'mythicRelics',name:'Relic Vault',price:65000,description:'Fragments of forgotten legends. Their recipes grow into prophecies, heroes and divine artifacts.',maxStock:1,stockChance:0.25,
+                elements:[{name:'Myth',emoji:'📜',description:'A story older than proof',weight:30},{name:'Relic',emoji:'🏺',description:'An object left by a vanished age',weight:25},{name:'Fate',emoji:'🧵',description:'The thread of what must happen',weight:25},{name:'Omen',emoji:'🐦‍⬛',description:'A sign of what may come',weight:20}]},
+            deepSpace:{id:'deepSpace',name:'Deep Space Cache',price:150000,description:'Extreme cosmic matter and stellar objects that unlock a large late-game recipe network.',maxStock:1,stockChance:0.15,
+                elements:[{name:'Pulsar',emoji:'📡',description:'A rapidly rotating neutron beacon',weight:30},{name:'Quasar',emoji:'🌠',description:'A galaxy core blazing across the universe',weight:25},{name:'Cosmic Dust',emoji:'✨',description:'Fine matter drifting between stars',weight:25},{name:'Dark Energy',emoji:'🌌',description:'The force pushing the universe apart',weight:20}]},
+            fracturedReality:{id:'fracturedReality',name:'Fractured Reality Crate',price:300000,description:'Pieces of impossible space. Expensive, dangerous and connected to endgame reality recipes.',maxStock:1,stockChance:0.08,
+                elements:[{name:'Dimension',emoji:'🧊',description:'An axis along which reality can exist',weight:30},{name:'Parallel World',emoji:'🪞',description:'A reality beside this one',weight:25},{name:'Reality Shard',emoji:'🔷',description:'A broken piece of existence',weight:25},{name:'Spatial Rift',emoji:'🕳️',description:'A tear connecting distant places',weight:20}]}
         };
+
+
+        // ─── EXPANSION PACK RECIPE NETWORK ───
+        // Shop roots are not dead-end collectibles: each one feeds back into the main recipe graph.
+        Object.assign(recipes,{
+            // Civilization Archive
+            'Currency+Shop':{name:'Marketplace',emoji:'🏪',description:'Trade concentrated into one place'},
+            'Currency+House':{name:'Rent',emoji:'🧾',description:'The recurring price of having a roof'},
+            'Currency+Technology':{name:'Digital Currency',emoji:'💳',description:'Value represented by machines'},
+            'Currency+War':{name:'War Economy',emoji:'🏭',description:'Industry bent toward conflict'},
+            'Law+Human':{name:'Citizen',emoji:'🧑‍⚖️',description:'A person recognized by a state'},
+            'Law+Writing':{name:'Legal Code',emoji:'📚',description:'Rules made permanent in writing'},
+            'Law+Government':{name:'Constitution',emoji:'📜',description:'The rules that govern the government'},
+            'Law+War':{name:'War Crime',emoji:'⚠️',description:'A grave violation during conflict',isSecret:true,excludeFromRank:true},
+            'Government+City':{name:'Capital',emoji:'🏙️',description:'A city where a government is centered'},
+            'Government+King':{name:'Monarchy',emoji:'👑',description:'Government led by a monarch'},
+            'Government+Human':{name:'Election',emoji:'🗳️',description:'A public choice of leaders'},
+            'Government+War':{name:'Martial Law',emoji:'🪖',description:'Government under emergency military authority'},
+            'Society+City':{name:'Metropolis',emoji:'🌆',description:'A vast center of society'},
+            'Society+Technology':{name:'Information Age',emoji:'🌐',description:'Society reshaped by computation and networks'},
+            'Society+War':{name:'Revolution',emoji:'✊',description:'Society overturning an existing order'},
+            'Society+Peace':{name:'Civil Society',emoji:'🤝',description:'People organizing beyond direct state power'},
+            'Marketplace+Government':{name:'Economy',emoji:'📈',description:'A system of production, trade and value'},
+            'Economy+Technology':{name:'Corporation',emoji:'🏢',description:'Large-scale organized commerce'},
+            'Corporation+City':{name:'Business District',emoji:'🏙️',description:'A city center built around commerce'},
+            'Constitution+Citizen':{name:'Rights',emoji:'📜',description:'Protections recognized for a citizen'},
+            'Election+Society':{name:'Democracy',emoji:'🗳️',description:'Government chosen by the people'},
+            'Monarchy+Revolution':{name:'Republic',emoji:'🏛️',description:'Rule transferred away from a crown'},
+
+            // Mindscape Cache
+            'Thought+Human':{name:'Idea',emoji:'💡',description:'A thought sharp enough to keep'},
+            'Thought+Thought':{name:'Contemplation',emoji:'🤔',description:'Thought examining itself'},
+            'Thought+Computer':{name:'Algorithm',emoji:'🧮',description:'Thought reduced to steps'},
+            'Thought+Philosophy':{name:'Reason',emoji:'🧠',description:'Thought disciplined by logic'},
+            'Memory+Human':{name:'Identity',emoji:'🪪',description:'The story a person carries about themself'},
+            'Memory+Time':{name:'Nostalgia',emoji:'📼',description:'Memory colored by distance'},
+            'Memory+Computer':{name:'Data Archive',emoji:'💾',description:'Memory stored outside the mind'},
+            'Memory+Fire':{name:'Burning Memory',emoji:'🔥',description:'A memory that refuses to fade',isHot:true},
+            'Emotion+Human':{name:'Empathy',emoji:'🫂',description:'Feeling with another person'},
+            'Emotion+Music':{name:'Mood',emoji:'🎶',description:'Feeling shaped by sound'},
+            'Emotion+Fire':{name:'Passion',emoji:'❤️‍🔥',description:'Emotion with enough heat to act',isHot:true},
+            'Emotion+Void':{name:'Apathy',emoji:'🫥',description:'Feeling drained toward nothingness'},
+            'Instinct+Human':{name:'Intuition',emoji:'✨',description:'A conclusion reached before explanation'},
+            'Instinct+Animal':{name:'Survival Instinct',emoji:'🐾',description:'The urge to stay alive'},
+            'Instinct+War':{name:'Fight or Flight',emoji:'⚡',description:'The body choosing action before thought'},
+            'Idea+Dream':{name:'Imagination',emoji:'🌈',description:'Ideas free from ordinary limits'},
+            'Identity+Memory':{name:'Self',emoji:'🪞',description:'A mind recognizing its own continuity'},
+            'Self+Thought':{name:'Consciousness',emoji:'👁️',description:'Awareness observing itself'},
+            'Consciousness+Dream':{name:'Lucid Dream',emoji:'🌙',description:'A dream aware that it is dreaming',isPhantom:true},
+            'Consciousness+Computer':{name:'Synthetic Mind',emoji:'🤖',description:'Awareness emerging from computation'},
+            'Reason+Emotion':{name:'Judgment',emoji:'⚖️',description:'Thought and feeling reaching a decision'},
+            'Imagination+Technology':{name:'Invention',emoji:'🛠️',description:'An imagined thing made real'},
+
+            // Relic Vault
+            'Myth+Human':{name:'Folklore',emoji:'📖',description:'Myths carried from person to person'},
+            'Myth+Hero':{name:'Epic',emoji:'🏹',description:'A heroic myth stretched across generations'},
+            'Myth+History':{name:'Legendary Past',emoji:'🏺',description:'History blurred into myth',isLegendary:true},
+            'Relic+Ancient Ruins':{name:'Artifact',emoji:'🏺',description:'A surviving object with a story'},
+            'Relic+Magic':{name:'Enchanted Relic',emoji:'🔮',description:'An artifact still holding old magic'},
+            'Relic+Blessing':{name:'Sacred Relic',emoji:'✝️',description:'An object revered as holy',isHoly:true},
+            'Fate+Time':{name:'Destiny',emoji:'🧵',description:'Time following a path that feels inevitable'},
+            'Fate+Human':{name:'Chosen One',emoji:'⭐',description:'A person burdened with destiny'},
+            'Fate+War':{name:'Last Stand',emoji:'🛡️',description:'A battle that destiny refuses to avoid'},
+            'Omen+Bird':{name:'Augury',emoji:'🐦‍⬛',description:'Reading signs in the natural world'},
+            'Omen+Time':{name:'Prophecy',emoji:'📜',description:'A warning aimed at the future'},
+            'Omen+Fire':{name:'Bad Omen',emoji:'🔥',description:'A warning that arrives with smoke',isCursed:true},
+            'Prophecy+Hero':{name:'Prophesied Hero',emoji:'⚔️',description:'A hero expected before they arrived',isLegendary:true},
+            'Prophecy+The End':{name:'Apocalypse',emoji:'☄️',description:'The ending foretold in advance',isFinal:true},
+            'Enchanted Relic+Legend':{name:'Legendary Relic',emoji:'🏆',description:'An artifact famous enough to become a story',isLegendary:true},
+            'Sacred Relic+Blessing':{name:'Divine Relic',emoji:'✨',description:'A holy artifact carrying divine favor',isDivine:true},
+            'Chosen One+Legendary Blade':{name:'Mythic Champion',emoji:'🗡️',description:'A hero armed for a story larger than history',isLegendary:true},
+            'Destiny+Opposite':{name:'Free Will',emoji:'🕊️',description:'A choice that refuses the expected path'},
+
+            // Deep Space Cache
+            'Pulsar+Electricity':{name:'Cosmic Beacon',emoji:'📡',description:'A stellar signal pulsing through space',isElectric:true},
+            'Pulsar+Magnetic Field':{name:'Magnetar Pulse',emoji:'🧲',description:'A pulse from an impossibly magnetic star',isMagnetic:true},
+            'Pulsar+Time':{name:'Millisecond Pulsar',emoji:'⏱️',description:'A neutron star spinning hundreds of times a second',isTemporal:true},
+            'Quasar+Galaxy':{name:'Active Galaxy',emoji:'🌌',description:'A galaxy blazing from its central engine'},
+            'Quasar+Black Hole':{name:'Accretion Disk',emoji:'🌀',description:'Matter shining as it falls toward darkness'},
+            'Quasar+Light':{name:'Cosmic Lighthouse',emoji:'💫',description:'A beacon visible across absurd distances',isCelestial:true},
+            'Cosmic Dust+Gravity':{name:'Protoplanetary Disk',emoji:'💿',description:'Dust beginning to organize into worlds'},
+            'Cosmic Dust+Star':{name:'Stellar Nursery',emoji:'🌟',description:'Dust collapsing into newborn stars',isCelestial:true},
+            'Cosmic Dust+Earth':{name:'Meteorite',emoji:'☄️',description:'Ancient space material reaching the ground'},
+            'Dark Energy+Universe':{name:'Accelerating Universe',emoji:'🌌',description:'Expansion getting faster instead of slower',isFinal:true},
+            'Dark Energy+Gravity':{name:'Cosmic Tension',emoji:'🕸️',description:'Expansion and attraction pulling against each other'},
+            'Dark Energy+Void':{name:'Vacuum Energy',emoji:'⬛',description:'Energy hidden in apparently empty space',isVoid:true},
+            'Stellar Nursery+Time':{name:'Star Cluster',emoji:'✨',description:'A family of stars born together'},
+            'Star Cluster+Galaxy':{name:'Cosmic Web',emoji:'🕸️',description:'Structure connecting galaxies across the universe',isCelestial:true},
+            'Accretion Disk+Magnetic Field':{name:'Relativistic Jet',emoji:'💥',description:'Matter launched near the speed of light',isMagnetic:true},
+            'Millisecond Pulsar+Gravity':{name:'Neutron Star',emoji:'🔵',description:'An ultra-dense stellar remnant'},
+            'Neutron Star+Star':{name:'Binary Star System',emoji:'🌟',description:'Two stars bound by gravity'},
+            'Neutron Star+Black Hole':{name:'Kilonova',emoji:'💥',description:'A catastrophic compact-object collision',isSuperHot:true,isUnstable:true},
+
+            // Fractured Reality Crate
+            'Dimension+Time':{name:'Timeline',emoji:'🕒',description:'A dimension ordered by before and after',isTemporal:true},
+            'Dimension+Universe':{name:'Higher Dimension',emoji:'🔷',description:'Reality extending beyond familiar directions'},
+            'Dimension+Void':{name:'Pocket Dimension',emoji:'🫧',description:'A small reality folded away from the rest',isVoid:true},
+            'Parallel World+Human':{name:'Alternate Self',emoji:'🪞',description:'You, but from a neighboring possibility'},
+            'Parallel World+Earth':{name:'Alternate Earth',emoji:'🌍',description:'A familiar planet with a different history'},
+            'Parallel World+Time':{name:'Branching Timeline',emoji:'🌿',description:'History splitting into incompatible paths',isTemporal:true},
+            'Reality Shard+Error':{name:'Reality Glitch',emoji:'⚠️',description:'Existence failing to agree with itself',isError:true},
+            'Reality Shard+The End':{name:'Fractured Everything',emoji:'💠',description:'Everything, cracked without becoming nothing',isFinal:true},
+            'Reality Shard+Magic':{name:'Reality Rune',emoji:'🔷',description:'A symbol that edits the world around it'},
+            'Spatial Rift+Galaxy':{name:'Wormhole',emoji:'🌀',description:'A shortcut through curved space'},
+            'Spatial Rift+Time':{name:'Temporal Rift',emoji:'⏳',description:'A tear connecting different moments',isTemporal:true},
+            'Spatial Rift+Void':{name:'Void Gate',emoji:'⬛',description:'A doorway opening into nothingness',isVoid:true},
+            'Timeline+Opposite':{name:'Timeline Split',emoji:'⑂',description:'One history becoming two',isTemporal:true},
+            'Timeline Split+Parallel World':{name:'Alternate Reality',emoji:'🌐',description:'A complete reality produced by a different history'},
+            'Alternate Reality+Alternate Reality':{name:'Multiversal Junction',emoji:'✳️',description:'A crossing point between realities',isFinal:true},
+            'Pocket Dimension+House':{name:'Impossible Room',emoji:'🚪',description:'A room larger on the inside',isSecret:true},
+            'Wormhole+Black Hole':{name:'Einstein-Rosen Bridge',emoji:'🕳️',description:'A theoretical bridge through spacetime',isFinal:true},
+            'Higher Dimension+Consciousness':{name:'Hyperawareness',emoji:'👁️',description:'A mind perceiving more directions than it should',isSecret:true},
+            'Reality Glitch+Valid Combination':{name:'Reality Patch',emoji:'✅',description:'A workaround applied directly to existence',isSecret:true,excludeFromRank:true},
+
+            // Cross-pack recipes
+            'Currency+Emotion':{name:'Greed',emoji:'🤑',description:'Emotion focused entirely on possession'},
+            'Law+Fate':{name:'Cosmic Law',emoji:'⚖️',description:'A rule reality itself appears to obey',isCelestial:true},
+            'Government+Prophecy':{name:'Mandate',emoji:'📜',description:'Authority justified by destiny'},
+            'Thought+Myth':{name:'Archetype',emoji:'🗿',description:'A pattern repeated across stories and minds'},
+            'Memory+Relic':{name:'Memento',emoji:'📿',description:'An object carrying a memory'},
+            'Emotion+Omen':{name:'Dread',emoji:'😨',description:'Fear arriving before the danger'},
+            'Fate+Timeline':{name:'Fixed Point',emoji:'📌',description:'An event that resists every timeline change',isTemporal:true},
+            'Myth+Parallel World':{name:'Living Myth',emoji:'🐉',description:'A legend that is factual somewhere else',isLegendary:true},
+            'Pulsar+Thought':{name:'Signal',emoji:'📶',description:'A pattern carrying information across distance'},
+            'Dark Energy+Emotion':{name:'Existential Dread',emoji:'🌌',description:'The universe is expanding and you noticed',isVoid:true},
+            'Cosmic Dust+Relic':{name:'Star Relic',emoji:'💫',description:'An artifact older than planets',isAncient:true,isCelestial:true},
+            'Quasar+Dimension':{name:'Dimensional Beacon',emoji:'🌠',description:'A signal bright enough to cross realities',isCelestial:true},
+            'Society+Parallel World':{name:'Alternate Civilization',emoji:'🏙️',description:'A society that developed along another path'},
+            'Consciousness+Dimension':{name:'Mindscape',emoji:'🧠',description:'A reality constructed from thought'},
+            'Divine Relic+Reality Shard':{name:'Creation Fragment',emoji:'💎',description:'A shard said to predate reality itself',isDivine:true,isCrystalline:true,isFinal:true}
+        });
+
+        // ─── BOSS CHALLENGE DEFINITIONS ───
+        const BOSS_DEFS={
+            unmaker:{id:'unmaker',name:'The Unmaker',emoji:'👹',maxHp:1400,playerMaxHp:150,winCoins:25000,lossMaxCoins:4500,
+                phases:[
+                    'Normal damage. Modifier-rich elements hit harder.',
+                    'Phase 2 — Heat is resisted; Electric, Magnetic and Crystalline attacks are stronger.',
+                    'Phase 3 — Penalty elements are rejected; Celestial, Divine and Purified attacks surge.'
+                ]}
+        };
+        let bossMode=false;
 
         // ─── GAME STATE ───
         let elements = [...STARTERS];
         let combos = [];
         // April Fools master switch. Turn this on to make every unknown pairing create something.
         let OldAllCreate = false;
+
+        // ─── SEASONAL EVENTS ───
+        // 20 date-driven events. Each owns exactly 100 rank-excluded discoveries.
+        const SEASONAL_CATALYSTS=['Fire','Water','Earth','Air'];
+        const SEASONAL_EVENTS=[
+            {id:'newyear',flag:'isNewYear',name:'New Year',icon:'🎆',sigil:'✦',start:[1,1],end:[1,7],a:['Midnight','Golden','First','Bright','Lucky','Rising','Fresh','Crystal','Firework','Crowned'],n:['Spark','Countdown','Bell','Promise','Lantern','Confetti','Clock','Toast','Comet','Dawn']},
+            {id:'valentine',flag:'isValentine',name:"Valentine's",icon:'💗',sigil:'♥',start:[2,10],end:[2,14],a:['Rose','Velvet','Sweet','Blushing','Cupid','Heartfelt','Ribbon','Candy','Secret','Everlasting'],n:['Heart','Letter','Bouquet','Arrow','Chocolate','Promise','Locket','Serenade','Kiss','Valentine']},
+            {id:'spring',flag:'isSpringBloom',name:'Spring Bloom',icon:'🌸',sigil:'❀',start:[3,15],end:[3,21],a:['Petal','Dewy','Blooming','Meadow','Pastel','Breezy','Pollen','Fresh','Garden','Sunlit'],n:['Blossom','Sprout','Tulip','Daisy','Butterfly','Nest','Bud','Rain','Fern','Orchard']},
+            {id:'earthweek',flag:'isEarthWeek',name:'Earth Week',icon:'🌍',sigil:'◉',start:[4,20],end:[4,26],a:['Green','Living','Wild','Recycled','Forest','Oceanic','Clean','Solar','Ancient','Planetary'],n:['Canopy','River','Seed','Habitat','Breeze','Reef','Grove','Mountain','Ecosystem','Earth']},
+            {id:'mayfestival',flag:'isMayFestival',name:'May Festival',icon:'🎀',sigil:'✿',start:[5,1],end:[5,7],a:['Ribbon','Dancing','Flowered','Festival','Colorful','Maypole','Sunny','Village','Garland','Cheerful'],n:['Crown','Ribbon','Dance','Basket','Bell','Parade','Picnic','Wreath','Song','Festival']},
+            {id:'oceanweek',flag:'isOceanWeek',name:'Ocean Week',icon:'🌊',sigil:'≋',start:[6,5],end:[6,11],a:['Tidal','Coral','Pearl','Abyssal','Foamy','Azure','Sailing','Deep','Moonlit','Saltwater'],n:['Wave','Shell','Reef','Current','Lagoon','Tidepool','Voyage','Trench','Dolphin','Horizon']},
+            {id:'midsummer',flag:'isMidsummer',name:'Midsummer',icon:'☀️',sigil:'☼',start:[6,20],end:[6,26],a:['Solar','Golden','Blazing','Meadow','Longest','Honey','Sunlit','Warm','Radiant','Noonday'],n:['Sun','Halo','Bonfire','Crown','Field','Solstice','Ray','Picnic','Day','Horizon']},
+            {id:'fireworks',flag:'isFireworksFestival',name:'Fireworks Festival',icon:'🎇',sigil:'✺',start:[7,1],end:[7,7],a:['Rocket','Sparkling','Neon','Bursting','Crackling','Skybound','Glitter','Comet','Thunder','Grand'],n:['Firework','Fuse','Salute','Spark','Rocket','Burst','Sky','Festival','Starburst','Finale']},
+            {id:'beachweek',flag:'isBeachWeek',name:'Beach Week',icon:'🏖️',sigil:'☀',start:[7,15],end:[7,21],a:['Sandy','Sunny','Tropical','Seashell','Surfing','Palm','Boardwalk','Salty','Coral','Sunset'],n:['Castle','Wave','Umbrella','Coconut','Towel','Surfboard','Shore','Shell','Lagoon','Beach']},
+            {id:'meteorweek',flag:'isMeteorWeek',name:'Meteor Week',icon:'☄️',sigil:'✧',start:[8,10],end:[8,16],a:['Meteor','Starlit','Orbital','Cosmic','Falling','Radiant','Deep-Sky','Comet','Perseid','Night'],n:['Trail','Shower','Fragment','Orbit','Radiance','Telescope','Wish','Crater','Sky','Constellation']},
+            {id:'school',flag:'isBackToSchool',name:'Back-to-School',icon:'📚',sigil:'✎',start:[8,25],end:[9,3],a:['Fresh','Sharpened','Notebook','Campus','Study','Bright','Honors','Library','Chalkboard','First-Day'],n:['Pencil','Notebook','Backpack','Lesson','Bell','Desk','Book','Quiz','Locker','Diploma']},
+            {id:'harvest',flag:'isHarvestFestival',name:'Harvest Festival',icon:'🌾',sigil:'❋',start:[9,10],end:[9,16],a:['Golden','Ripe','Rustic','Bountiful','Wheat','Orchard','Farmhouse','Honey','Amber','Country'],n:['Sheaf','Apple','Basket','Field','Corn','Cider','Barn','Pumpkin','Feast','Harvest']},
+            {id:'autumn',flag:'isAutumnFestival',name:'Autumn Festival',icon:'🍁',sigil:'◆',start:[9,23],end:[9,30],a:['Crimson','Maple','Copper','Falling','Rustling','Amber','Foggy','Crisp','Woodland','Scarlet'],n:['Leaf','Acorn','Trail','Breeze','Canopy','Lantern','Forest','Mushroom','Equinox','Autumn']},
+            {id:'halloween',flag:'isHalloween',name:'Halloween',icon:'🎃',sigil:'☾',start:[10,24],end:[10,31],a:['Haunted','Spooky','Pumpkin','Ghostly','Cackling','Midnight','Candy','Cursed','Cobweb','Moonlit'],n:['Lantern','Mask','Cauldron','Bat','Mansion','Trick','Treat','Graveyard','Witch','Night']},
+            {id:'bonfire',flag:'isBonfireWeek',name:'Bonfire Week',icon:'🔥',sigil:'♨',start:[11,1],end:[11,7],a:['Ember','Smoky','Crackling','Blazing','Ashen','Copper','Spark','Campfire','Roaring','Warm'],n:['Bonfire','Coal','Flame','Spark','Torch','Cinder','Smoke','Log','Glow','Night']},
+            {id:'wishweek',flag:'isWishWeek',name:'Wish Week',icon:'🌠',sigil:'☆',start:[11,11],end:[11,17],a:['Wishing','Lucky','Starlit','Dreaming','Silver','Eleven','Hopeful','Twinkling','Quiet','Infinite'],n:['Star','Wish','Coin','Ribbon','Dream','Charm','Promise','Sky','Moment','Miracle']},
+            {id:'winterlights',flag:'isWinterLights',name:'Winter Lights',icon:'✨',sigil:'✦',start:[12,1],end:[12,7],a:['Twinkling','Jewel','Lantern','Glowing','Aurora','Neon','Crystal','Festive','Radiant','Midnight'],n:['Light','Bulb','Garland','Window','Lantern','Street','Glow','Star','Parade','Illumination']},
+            {id:'snowweek',flag:'isSnowWeek',name:'Snow Week',icon:'❄️',sigil:'❄',start:[12,8],end:[12,14],a:['Powder','Frosted','Icy','Flurried','Crystal','Snowy','Arctic','White','Frozen','Silent'],n:['Snowflake','Drift','Snowman','Sled','Icicle','Fort','Glacier','Flurry','Hill','Winter']},
+            {id:'christmas',flag:'isChristmas',name:'Christmas',icon:'🎄',sigil:'✶',start:[12,15],end:[12,25],a:['Merry','Tinsel','Jolly','Evergreen','Candy-Cane','Gift-Wrapped','Holly','Golden','Cozy','North-Pole'],n:['Tree','Present','Stocking','Bell','Ornament','Sleigh','Cookie','Wreath','Star','Christmas']},
+            {id:'yearend',flag:'isYearsEnd',name:"Year's End",icon:'🕛',sigil:'◷',start:[12,26],end:[12,31],a:['Final','Last','Silver','Midnight','Reflective','Closing','Countdown','Old-Year','Clockwork','Farewell'],n:['Hour','Page','Clock','Memory','Calendar','Countdown','Firework','Chapter','Moment','Year']}
+        ];
+        const SEASONAL_FLAG_KEYS=SEASONAL_EVENTS.map(e=>e.flag);
+        let activeSeasonalIds=new Set();
+        function seasonalEventById(id){return SEASONAL_EVENTS.find(e=>e.id===id)||null;}
+        function seasonalEventFromElement(el){
+            if(!el)return null;
+            if(el.seasonalEvent){const byId=seasonalEventById(el.seasonalEvent);if(byId)return byId;}
+            return SEASONAL_EVENTS.find(ev=>!!el[ev.flag])||null;
+        }
+        function isSeasonalElement(el){return !!(el&&(el.isSeasonal||seasonalEventFromElement(el)));}
+        function normalizeSeasonalElement(el){
+            if(!el)return el;
+            const ev=seasonalEventFromElement(el);
+            if(!ev&&!el.isSeasonal)return el;
+            el.isSeasonal=true;
+            el.excludeFromRank=true;
+            if(ev){el.seasonalEvent=ev.id;el[ev.flag]=true;}
+            return el;
+        }
+        function seasonalDateInRange(ev,date=new Date()){
+            const m=date.getMonth()+1,d=date.getDate(),v=m*100+d,s=ev.start[0]*100+ev.start[1],e=ev.end[0]*100+ev.end[1];
+            return s<=e?(v>=s&&v<=e):(v>=s||v<=e);
+        }
+        function getActiveSeasonalEvents(date=new Date()){return bossMode?[]:SEASONAL_EVENTS.filter(ev=>seasonalDateInRange(ev,date));}
+        function isSeasonActive(id){return activeSeasonalIds.has(id);}
+        function seasonalName(ev,i){return ev.a[Math.floor(i/10)]+' '+ev.n[i%10];}
+        const SEASON_GLYPHS=['✦','✧','◆','◇','❖','✺','❋','☆','☼','◈'];
+        function makeSeasonalElement(ev,i){
+            return{name:seasonalName(ev,i),emoji:ev.icon+SEASON_GLYPHS[i%SEASON_GLYPHS.length],description:ev.name+' seasonal discovery '+(i+1)+' of 100.',color:'bg-violet-500',isSeasonal:true,[ev.flag]:true,seasonalEvent:ev.id,seasonalIndex:i,excludeFromRank:true};
+        }
+        function seasonalRecipeFor(n1,n2){
+            if(bossMode)return null;
+            for(const ev of getActiveSeasonalEvents()){
+                for(let i=1;i<100;i++){
+                    const parent=seasonalName(ev,Math.floor((i-1)/4));
+                    const catalyst=SEASONAL_CATALYSTS[(i-1)%4];
+                    if((n1===parent&&n2===catalyst)||(n2===parent&&n1===catalyst))return makeSeasonalElement(ev,i);
+                }
+            }
+            return null;
+        }
+        function syncSeasonalEvents(announce=false){
+            elements.forEach(normalizeSeasonalElement);
+            const before=[...activeSeasonalIds].sort().join('|');
+            activeSeasonalIds=new Set(getActiveSeasonalEvents().map(e=>e.id));
+            const after=[...activeSeasonalIds].sort().join('|');
+            if(!gs.seasonalSeen||!Array.isArray(gs.seasonalSeen))gs.seasonalSeen=[];
+            let changed=false;
+            for(const ev of getActiveSeasonalEvents()){
+                if(!elements.some(el=>el.isSeasonal&&el.seasonalEvent===ev.id&&el.seasonalIndex===0)){
+                    elements.push(makeSeasonalElement(ev,0));changed=true;
+                }
+                if(!gs.seasonalSeen.includes(ev.id)){
+                    gs.seasonalSeen.push(ev.id);changed=true;
+                    if(announce)notify(ev.icon+' '+ev.name+' is live!','100 seasonal discoveries are available until '+ev.end[0]+'/'+ev.end[1]+'.',ev.icon,6500);
+                }
+            }
+            if(before!==after)changed=true;
+            if(changed&&announce){renderEls();updateCount();save();}
+            return changed;
+        }
+
         let sel1 = null, sel2 = null;
         let fractionalCoins = 0;
         let gs = {
@@ -3262,7 +3676,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         const EVERYTHING_REQUIRED=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal'];
         const ALL_MOD_FLAGS=['isBasic','isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal','isHot','isSuperHot','isFinal','isSecret','isExclusive','isValidCombination','isQuestion','isFrozen','isPermafrost','isError','isFatalError','isBlank','isToxic','isViral','isParasitic','isCorrupted','isCursed','isVoid','isCyMoney'];
         function checkIsEverything(el){
-            if(el.isAprilFools)return false;
+            if(el.isAprilFools||isSeasonalElement(el))return false;
             if(el.isEverything)return true;
             if(hasPenaltyMod(el))return false;
             if(!(el.isHot||el.isSuperHot))return false;
@@ -3299,6 +3713,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             }
         }
         function getElClasses(el) {
+            if(el.isSeasonal)return 'seasonal-el seasonal-showpiece season-'+el.seasonalEvent;
             if(el.isExclusive)return 'exclusive-el exclusive-showpiece';
             if(el.isAprilFools)return 'april-fools-el';
             let cls=[];
@@ -3438,19 +3853,123 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         // Prefer durable localStorage; read legacy cookies for compatible migration.
         function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Browser storage is blocked or full. Export your save before closing.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
-        function save(){normalizeKeyStacks();normalizeEverything();updateProgressionUI();try{_setItem('fc_el',JSON.stringify(elements));_setItem('fc_co',JSON.stringify(combos));_setItem('fc_gs',JSON.stringify(gs));}catch(e){}}
-        function load(){
+        function baseGameState(){return {prestige:{coins:0,times:0,upgrades:{}},coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,sfUnlocked:false,cyMoney:0,sfUpgraded:false};}
+        function save(){
+            normalizeKeyStacks();normalizeEverything();updateProgressionUI();
             try{
-                const e=_getItem('fc_el'),c=_getItem('fc_co'),s=_getItem('fc_gs');
-                if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
-                if(c)combos=JSON.parse(c);
-                if(s){const l=JSON.parse(s);gs={...gs,...l};}
-                normalizeKeyStacks();
-                // AFTER loading, update displays
-                updateCyMoneyDisplay();
-                checkStarForgeUnlock();
+                const pre=bossMode?'fc_boss_':'fc_';
+                _setItem(pre+'el',JSON.stringify(elements));_setItem(pre+'co',JSON.stringify(combos));_setItem(pre+'gs',JSON.stringify(gs));
+                if(bossMode)_setItem('fc_boss_active','1');
             }catch(e){}
         }
+        function loadNamedSave(isBoss){
+            const pre=isBoss?'fc_boss_':'fc_';
+            elements=[...STARTERS.map(e=>({...e}))];combos=[];gs=baseGameState();
+            const e=_getItem(pre+'el'),c=_getItem(pre+'co'),st=_getItem(pre+'gs');
+            if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
+            if(c)combos=JSON.parse(c);
+            if(st){const l=JSON.parse(st);gs={...gs,...l};}
+            normalizeKeyStacks();
+        }
+        function load(){
+            try{
+                bossMode=_getItem('fc_boss_active')==='1';
+                loadNamedSave(bossMode);
+                document.body.classList.toggle('boss-mode',bossMode);
+                updateCyMoneyDisplay();checkStarForgeUnlock();
+                if(bossMode)updateBossUI();
+            }catch(e){}
+        }
+
+        function bossData(){return bossMode&&gs.bossRun?gs.bossRun:null;}
+        function updateBossUI(){
+            const panel=$('bossPanel'),b=bossData();
+            document.body.classList.toggle('boss-mode',!!b);
+            if(!b){panel.hidden=true;return;}
+            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
+            panel.hidden=false;
+            $('bossEmoji').textContent=def.emoji;$('bossName').textContent=def.name;$('bossPhase').textContent='Phase '+b.phase;
+            $('bossTurnCount').textContent=(b.crafts||0)+' craft'+((b.crafts||0)===1?'':'s');
+            $('bossHpText').textContent=Math.max(0,b.hp)+' / '+def.maxHp;
+            $('bossPlayerHpText').textContent=Math.max(0,b.playerHp)+' / '+def.playerMaxHp;
+            $('bossHpFill').style.width=Math.max(0,Math.min(100,b.hp/def.maxHp*100))+'%';
+            $('bossPlayerHpFill').style.width=Math.max(0,Math.min(100,b.playerHp/def.playerMaxHp*100))+'%';
+            $('bossRule').textContent=def.phases[Math.max(0,Math.min(def.phases.length-1,b.phase-1))];
+        }
+        function bossDamageFromElement(el,isNew){
+            const b=bossData();if(!b)return 0;
+            let dmg=34+(isNew?12:0);
+            if(el.isBasic)dmg+=6;if(el.isHot)dmg+=10;if(el.isSuperHot)dmg+=24;if(el.isElectric)dmg+=20;if(el.isMagnetic)dmg+=18;
+            if(el.isCrystalline)dmg+=18;if(el.isLegendary)dmg+=28;if(el.isDivine)dmg+=34;if(el.isCelestial)dmg+=40;if(el.isPurified)dmg+=22;
+            if(el.isFinal)dmg+=18;if(el.isEverything)dmg=260;
+            if(b.phase===2){if(el.isHot||el.isSuperHot)dmg=Math.floor(dmg*.55);if(el.isElectric||el.isMagnetic||el.isCrystalline)dmg+=28;}
+            if(b.phase===3){if(hasPenaltyMod(el))return 0;if(el.isCelestial||el.isDivine)dmg=Math.floor(dmg*1.65);if(el.isPurified)dmg+=35;}
+            return Math.max(0,Math.floor(dmg));
+        }
+        function bossCounterDamage(el){
+            const b=bossData();if(!b)return 0;
+            let dmg=[0,5,7,9][b.phase]||9;
+            dmg+=Math.floor(Math.random()*4);
+            if(el.isHoly||el.isBlessed||el.isDivine||el.isPurified)dmg=Math.max(2,dmg-3);
+            if(el.isFrozen||el.isPermafrost)dmg+=2;
+            return dmg;
+        }
+        function bossAfterCraft(el,isNew){
+            const b=bossData();if(!b)return false;
+            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
+            b.crafts=(b.crafts||0)+1;
+            const dmg=bossDamageFromElement(el,isNew);b.hp=Math.max(0,b.hp-dmg);
+            if(b.hp<=0){save();finishBossFight(true);return true;}
+            const ratio=b.hp/def.maxHp;
+            const nextPhase=ratio<=.33?3:ratio<=.66?2:1;
+            if(nextPhase>b.phase){b.phase=nextPhase;notify('BOSS PHASE '+nextPhase,def.phases[nextPhase-1],nextPhase===3?'💀':'⚠️',4500);}
+            const retaliation=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-retaliation);
+            notify('Boss hit',el.name+' dealt '+dmg+' damage. '+def.name+' struck back for '+retaliation+'.','⚔️',2600);
+            updateBossUI();save();
+            if(b.playerHp<=0){finishBossFight(false);return true;}
+            return false;
+        }
+        function bossMissedCraft(){
+            const b=bossData();if(!b)return false;
+            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
+            const dmg=([0,8,11,14][b.phase]||14)+Math.floor(Math.random()*3);
+            b.playerHp=Math.max(0,b.playerHp-dmg);b.crafts=(b.crafts||0)+1;
+            notify('The Unmaker retaliates','The failed fusion cost '+dmg+' Resolve.','👹',2200);updateBossUI();save();
+            if(b.playerHp<=0){finishBossFight(false);return true;}return false;
+        }
+        function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
+        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');loadNamedSave(false);renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();}
+        function awardBossDefeat(def){
+            let trophy=elements.find(e=>e.isBossDefeat&&e.bossId===def.id);
+            const n=(trophy?.amountOfBossDefeat||0)+1;
+            const name=`Boss ${def.name} Defeated ${n} ${n===1?'time':'times'}`;
+            if(trophy){trophy.amountOfBossDefeat=n;trophy.name=name;trophy.description=`You defeated ${def.name} ${n} ${n===1?'time':'times'}.`;}
+            else elements.push({name,emoji:'🏆',description:`You defeated ${def.name} 1 time.`,isBossDefeat:true,bossId:def.id,bossName:def.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});
+        }
+        function finishBossFight(won){
+            const b=bossData();if(!b)return;
+            const def=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker;
+            const progress=Math.max(0,Math.min(1,1-b.hp/def.maxHp));
+            const reward=won?def.winCoins:Math.floor(def.lossMaxCoins*progress*progress);
+            clearBossSave();restoreMainGame();
+            gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;
+            if(won)awardBossDefeat(def);
+            save();renderEls();updateCount();updateCoinDisplay();
+            notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${def.name} fell. +${reward.toLocaleString()} coins and your Boss Defeat trophy was updated.`:`You pushed ${def.name} to ${Math.round(progress*100)}%. +${reward.toLocaleString()} consolation coins.`,won?'🏆':'💀',7000);
+        }
+        function startBossFight(id='unmaker'){
+            if(bossMode)return;
+            const def=BOSS_DEFS[id]||BOSS_DEFS.unmaker;
+            if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}
+            save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;
+            elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();
+            gs.bossRun={id:def.id,hp:def.maxHp,playerHp:def.playerMaxHp,phase:1,crafts:0,startedAt:Date.now()};
+            currentSort='original';document.body.classList.add('boss-mode');
+            renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');
+            notify('BOSS CHALLENGE',`${def.name} has sealed your collection. Rebuild from the four starters and fight back.`,'👹',6000);
+        }
+        function surrenderBossFight(){if(!bossMode)return;finishBossFight(false);}
+
 
         // ─── COIN SYSTEM (fixed fractional accumulation) ───
         function calcCoinsPerMin() {
@@ -3549,6 +4068,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 
         // ─── SHOP SYSTEM ───
         function refreshShop() {
+            if(bossMode)return;
             gs.shopRefresh=Date.now(); gs.shopStock={};
             Object.keys(SHOP_PACKS).forEach(id=>{
                 const p=SHOP_PACKS[id];
@@ -3581,6 +4101,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         }
 
         function updateShopTimer() {
+            if(bossMode)return;
             const left=Math.max(0, shopRestockMs()-(Date.now()-gs.shopRefresh));
             if(left<=0){refreshShop();return;}
             const m=Math.floor(left/60000), s=Math.floor((left%60000)/1000);
@@ -3608,7 +4129,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 
         function openPackAnim(packId,elInfo) {
             $('flipPackName').textContent=SHOP_PACKS[packId].name;
-            const colors={common:'#78909C',uncommon:'#4CAF50',rare:'#3F51B5',legendary:'#FF9800',war:'#EF4444',mythical:'#9C27B0'};
+            const colors={common:'#78909C',uncommon:'#4CAF50',rare:'#3F51B5',legendary:'#FF9800',war:'#EF4444',mythical:'#9C27B0',civilization:'#b45309',mindscape:'#7c3aed',mythicRelics:'#a16207',deepSpace:'#1d4ed8',fracturedReality:'#6d28d9'};
             $('flipFront').style.background=colors[packId]||'var(--gold)';
             $('flipEmoji').textContent=elInfo.emoji;
             $('flipName').textContent=elInfo.name;
@@ -3620,7 +4141,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(!gs.shopUnlocked)return;
                 $('packOpenModal').style.display='none';
                 $('flipCard').classList.remove('flipped');
-                const newEl={name:elInfo.name,emoji:elInfo.emoji,description:elInfo.description,color:elInfo.color||randColor()};
+                const newEl={...elInfo,color:elInfo.color||randColor()};delete newEl.weight;
                 if(!elements.find(e=>e.name===newEl.name)){
                     elements.push(newEl); updateCount(); renderEls(); save();
                     notify('New Element!','Found '+newEl.name+' in the pack!','✨');
@@ -3641,6 +4162,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             else renderShop();
             openModal('shopModal');
         });
+        $('bossBtn').addEventListener('click',()=>{
+            if(bossMode)return;
+            if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}
+            openModal('bossModal');
+        });
+        $('bossStartBtn').addEventListener('click',()=>startBossFight('unmaker'));
+        $('bossSurrenderBtn').addEventListener('click',()=>surrenderBossFight());
 
         // Keys live in the canonical collection. Save imports are snapshots: duplicate
         // key rows use the largest amount instead of multiplying keys on repeated imports.
@@ -3989,6 +4517,14 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             toggle.setAttribute('aria-label',panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage');
             toggle.title=panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage';
         });
+        $('seasonalToggle').addEventListener('click',()=>{
+            const panel=$('seasonalStorage'),toggle=$('seasonalToggle');
+            const show=toggle.getAttribute('aria-expanded')!=='true';
+            panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
+            toggle.setAttribute('aria-expanded',String(show));
+            toggle.setAttribute('aria-label',show?'Hide Seasonal Vault':'Show Seasonal Vault');
+            toggle.title=show?'Hide Seasonal Vault':'Show Seasonal Vault';
+        });
         $('aprilFoolsToggle').addEventListener('click',()=>{
             const panel=$('aprilFoolsStorage'),toggle=$('aprilFoolsToggle');
             const show=toggle.getAttribute('aria-expanded')!=='true';
@@ -4015,17 +4551,77 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 for(const k of active.filter(k=>k!==primary).slice(0,3)){const dot=document.createElement('i');dot.style.color='hsl('+MODIFIER_STYLES[k].hue+' 80% 78%)';dot.textContent=MODIFIER_STYLES[k].sigil;accents.appendChild(dot);}card.appendChild(accents);}
         }
 
+        const SEASONAL_CARD_FX={
+            newyear:{cls:'fx-confetti',glyphs:['✦','✧','◆','🎊']},
+            valentine:{cls:'fx-hearts',glyphs:['♥','♡','❤','✦']},
+            spring:{cls:'fx-petals',glyphs:['❀','✿','🌸','·']},
+            earthweek:{cls:'fx-planet',glyphs:['◉','●','✦','◌']},
+            mayfestival:{cls:'fx-ribbons',glyphs:['╱','╲','✿','◆']},
+            oceanweek:{cls:'fx-bubbles',glyphs:['○','◌','≋','·']},
+            midsummer:{cls:'fx-sunrays',glyphs:['☼','✦','•','✧']},
+            fireworks:{cls:'fx-fireworks',glyphs:['✺','✦','✧','•']},
+            beachweek:{cls:'fx-waves',glyphs:['≈','☀','○','◌']},
+            meteorweek:{cls:'fx-meteors',glyphs:['☄','✦','·','✧']},
+            school:{cls:'fx-school',glyphs:['✎','□','▱','•']},
+            harvest:{cls:'fx-harvest',glyphs:['❋','•','✦','⋮']},
+            autumn:{cls:'fx-autumn',glyphs:['◆','◇','🍂','·']},
+            halloween:{cls:'fx-halloween',glyphs:['☾','◆','🦇','✦']},
+            bonfire:{cls:'fx-embers',glyphs:['•','✦','▲','·']},
+            wishweek:{cls:'fx-wishes',glyphs:['☆','✧','✦','⋆']},
+            winterlights:{cls:'fx-lights',glyphs:['●','◆','✦','•']},
+            snowweek:{cls:'fx-snow',glyphs:['❄','❅','✧','•']},
+            christmas:{cls:'fx-christmas-snow',glyphs:['❄','❅','✦','❆']},
+            yearend:{cls:'fx-yearend',glyphs:['◷','✦','·','◴']}
+        };
+        function buildSeasonalFx(ev,idx){
+            const cfg=SEASONAL_CARD_FX[ev.id]||{cls:'fx-wishes',glyphs:[ev.sigil||'✦']};
+            const fx=document.createElement('span');fx.className='seasonal-fx '+cfg.cls;fx.setAttribute('aria-hidden','true');
+            const count=ev.id==='christmas'||ev.id==='snowweek'?7:ev.id==='fireworks'?6:5;
+            for(let i=0;i<count;i++){
+                const p=document.createElement('i');p.textContent=cfg.glyphs[(idx+i)%cfg.glyphs.length];
+                p.style.setProperty('--x',((11+i*19+idx*7)%91)+'%');
+                p.style.setProperty('--y',((13+i*23+idx*5)%74)+'%');
+                p.style.setProperty('--delay',(-((i*0.71)+(idx%5)*0.19)).toFixed(2)+'s');
+                p.style.setProperty('--dur',(3.4+((i+idx)%5)*0.72).toFixed(2)+'s');
+                p.style.setProperty('--drift',((-12+((i*9+idx)%25)))+'px');
+                p.style.setProperty('--size',(7+((i+idx)%4)*2)+'px');
+                fx.appendChild(p);
+            }
+            return fx;
+        }
+
+        function sculptSeasonalCard(card,el){
+            normalizeSeasonalElement(el);
+            const ev=seasonalEventFromElement(el)||{id:'seasonal',flag:'isSeasonal',name:'Seasonal',icon:'🎉',sigil:'✦'};
+            const idx=Math.max(0,Math.min(99,Number(el.seasonalIndex)||0));
+            const flagClass='season-flag-'+ev.flag.slice(2).replace(/([a-z])([A-Z])/g,'$1-$2').toLowerCase();
+            card.classList.add('sculpted-card','seasonal-showpiece','season-'+ev.id,flagClass);
+            card.dataset.seasonFlag=ev.flag;
+            card.dataset.tier=ev.name.toUpperCase();card.dataset.seasonSigil=ev.sigil;
+            card.style.setProperty('--season-shift',(idx%9)*3+'%');
+            const backdrop=document.createElement('span');backdrop.className='seasonal-backdrop';backdrop.setAttribute('aria-hidden','true');
+            const fx=buildSeasonalFx(ev,idx);
+            const ribbon=document.createElement('div');ribbon.className='seasonal-ribbon';ribbon.textContent=ev.icon+' '+ev.name;
+            const stage=document.createElement('div');stage.className='seasonal-stage';
+            const emoji=card.querySelector('.el-emoji');if(emoji)stage.appendChild(emoji);
+            const footer=document.createElement('div');footer.className='seasonal-footer';footer.setAttribute('aria-hidden','true');footer.innerHTML='<span>'+ev.sigil+'</span><i></i><span>ARCHIVE EDITION</span><i></i><span>'+ev.sigil+'</span>';
+            card.prepend(backdrop,fx,ribbon,stage);card.append(footer);
+            card.title=(el.description||'')+' · '+ev.name+' seasonal element';
+        }
+
         function sculptElementCard(card,el){
+            if(isSeasonalElement(el)){sculptSeasonalCard(card,el);return;}
             let hash=0;for(const ch of el.name)hash=(hash*31+ch.charCodeAt(0))>>>0;
-            const hue=el.isExclusive?275:el.isEverything?165:el.isFinal?43:el.isLegendary?285:el.isDivine?48:el.isFrozen?195:el.isHot?18:hash%360;
+            const hue=el.isBossDefeat?8:el.isExclusive?275:el.isEverything?165:el.isFinal?43:el.isLegendary?285:el.isDivine?48:el.isFrozen?195:el.isHot?18:hash%360;
             card.classList.add('sculpted-card');
             if(el.isSecret)card.classList.add('secret-showpiece');
             if(checkIsEverything(el))card.classList.add('everything-showpiece');
             if(el.isPrestige)card.classList.add('prestige-showpiece');
+            if(el.isBossDefeat)card.classList.add('boss-defeat-showpiece');
             if(Array.from(el.emoji||'').length>3)card.classList.add('multi-icon-card');
             card.style.setProperty('--card-hue',hue);
-            const realType=checkIsEverything(el)?'Everything':el.isExclusive?'Exclusive':el.isAprilFools?'April Fools':el.isFinal?'Final':el.isLegendary?'Legendary':el.isSecret?'Secret':el.isKey?'Key':getElType(el);
-            const originalTier=el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isAprilFools?'🤡 WHOOPS':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
+            const realType=el.isBossDefeat?'Boss Defeat':checkIsEverything(el)?'Everything':el.isExclusive?'Exclusive':el.isAprilFools?'April Fools':el.isFinal?'Final':el.isLegendary?'Legendary':el.isSecret?'Secret':el.isKey?'Key':getElType(el);
+            const originalTier=el.isBossDefeat?'BOSS DEFEAT ×'+(el.amountOfBossDefeat||1):el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isAprilFools?'🤡 WHOOPS':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
             const tier=OldAllCreate?(el.isPrestige?'🏆 RESET FLEX ×'+el.amountOfPrestige:goofyTypeLabel(realType)):originalTier;
             card.dataset.tier=tier;
             const ribbon=document.createElement('div');ribbon.className='card-ribbon';ribbon.textContent=tier+(el.isKey?' · ×'+keyAmount(el):'');
@@ -4092,6 +4688,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             // Both views reference the canonical elements array and original selection indices.
             const exclusiveGrid=$('exclusiveGrid');exclusiveGrid.innerHTML='';
             const aprilFoolsGrid=$('aprilFoolsGrid');aprilFoolsGrid.innerHTML='';
+            const seasonalGrid=$('seasonalGrid');seasonalGrid.innerHTML='';
+            const archivedSeasonal=elements.filter(e=>isSeasonalElement(e)&&!isSeasonActive((seasonalEventFromElement(e)||{}).id));
+            $('seasonalCount').textContent=archivedSeasonal.length+' archived';
+            const activeNames=getActiveSeasonalEvents().map(e=>e.icon+' '+e.name);
+            $('seasonalStatus').textContent=activeNames.length?'Live now: '+activeNames.join(' · ')+' — active seasonal discoveries appear in Your Elements.':'Off-season discoveries rest here until their event returns.';
+            $('seasonalToggle').hidden=!elements.some(e=>isSeasonalElement(e));
+            if(!archivedSeasonal.length){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='No off-season discoveries are archived right now.';seasonalGrid.appendChild(empty);}
             const count=elements.filter(e=>e.isExclusive).length;
             $('exclusiveCount').textContent=count;
             if(!count){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='A little space for rare discoveries.';exclusiveGrid.appendChild(empty);}
@@ -4103,6 +4706,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             const sorted = getSortedElements();
             let lastType = null;
             sorted.forEach(({el,origIdx})=>{
+                if(isSeasonalElement(el)&&!isSeasonActive((seasonalEventFromElement(el)||{}).id)){
+                    const w=document.createElement('div');w.className='el-wrapper';
+                    const d=document.createElement('div');d.className=`el-card ${getElClasses(el)}`;
+                    d.setAttribute('data-idx',origIdx);d.setAttribute('data-name',el.name);d.setAttribute('data-desc',el.description||'');
+                    d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
+                    sculptElementCard(d,el);w.appendChild(d);seasonalGrid.appendChild(w);return;
+                }
                 if(el.isAprilFools&&!OldAllCreate){
                     const w=document.createElement('div');w.className='el-wrapper';
                     const d=document.createElement('div');d.className=`el-card ${getElClasses(el)}`;
@@ -4304,8 +4914,13 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             // End game
             if(n1==='The End'&&n2==='The End')return{name:'The End Game',emoji:'🎬',description:'Game completed!',color:'bg-amber-500',isFinal:true,isEndGameTrigger:true};
 
+            if((isSeasonalElement(p1)&&!isSeasonActive((seasonalEventFromElement(p1)||{}).id))||(isSeasonalElement(p2)&&!isSeasonActive((seasonalEventFromElement(p2)||{}).id))){
+                const locked=isSeasonalElement(p1)&&!isSeasonActive((seasonalEventFromElement(p1)||{}).id)?p1:p2;
+                const ev=seasonalEventById(locked.seasonalEvent);
+                return{seasonalBlock:true,eventName:ev?ev.name:'this seasonal event',eventIcon:ev?ev.icon:'🎉'};
+            }
             const key1=n1+'+'+n2, key2=n2+'+'+n1;
-            let result=recipes[key1]||recipes[key2];
+            let result=seasonalRecipeFor(n1,n2)||recipes[key1]||recipes[key2];
             if(!result){
                 if(OldAllCreate)return generateAprilFoolsElement(n1,n2);
                 return{invalid:true,name:'Invalid Combination',emoji:'❌',description:'These elements cannot be combined.',color:'bg-gray-500'};
@@ -4548,6 +5163,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 }
             }
 
+            if(result.seasonalBlock){showSpecialOutcome('Seasonal Vault',result.eventName+' is not active right now. This element is archived until the event returns.',{name:result.eventName,emoji:result.eventIcon||'🎉',isSeasonal:true,seasonalEvent:'locked',seasonalIndex:0});resetDZs();return;}
             if(result.frozen){showSpecialOutcome('Frozen!','Use a hot element to thaw it.',{name:'Frozen',emoji:'❄️',isFrozen:true});resetDZs();return;}
             if(result.permafrostBlock){showSpecialOutcome('Permafrost','This eternal ice cannot be thawed.',{name:'Permafrost',emoji:'🔒',isPermafrost:true});resetDZs();return;}
             if(result.voidAbsorb){showSpecialOutcome('Absorbed','The Void consumed '+result.consumed+'.',{name:'Void',emoji:'🕳️',isVoid:true});resetDZs();return;}
@@ -4561,6 +5177,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(result.invalid){
                 resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>◇</span></div><h3>No fusion found</h3><p></p><small>Try a different pairing</small></div>';
                 resultArea.querySelector('p').textContent=result.description||'These elements do not resonate together yet.';
+                if(bossMode)bossMissedCraft();
                 resetDZs();return;
             }
 
@@ -4583,7 +5200,9 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(found){found.isKey=true;found.amountOfKey=Math.min(999999,keyAmount(found)+keyAmount(newEl));}
                 else elements.push({...newEl,amountOfKey:keyAmount(newEl)});
                 normalizeKeyStacks();renderEls();updateCount();save();
-                notify('Key found!','You gained a key. Use it for recipe clues or Key Services.','🔑');return;
+                notify('Key found!','You gained a key. Use it for recipe clues or Key Services.','🔑');
+                if(bossMode&&bossAfterCraft(newEl,!found))return;
+                return;
             }
             // If element qualifies as Everything, strip all mods and set isEverything only
             if(checkIsEverything(newEl)){stripToEverything(newEl);}
@@ -4603,7 +5222,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             } else {
                 elements.push(newEl);
                 showResult(newEl,true);
-                combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{})});
+                combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{}),...(newEl.isSeasonal?{isSeasonal:true,seasonalEvent:newEl.seasonalEvent}:{})});
                 addComboEntry(sel1,sel2,newEl);
                 const d=document.createElement('div');d.className='el-wrapper';
                 const card=document.createElement('div');
@@ -4614,7 +5233,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(newEl.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width='0%';card.appendChild(mb);}
                 if(newEl.hasLink)card.addEventListener('click',()=>window.open(newEl.link,'_blank'));
                 d.appendChild(card);elGrid.appendChild(d);
-                if(newEl.isExclusive||newEl.isAprilFools)renderEls();
+                if(newEl.isExclusive||newEl.isAprilFools||newEl.isSeasonal)renderEls();
                 updateCount();save();checkStarForgeUnlock();
                 // Notifications for special types
                 if(newEl.generatorStroke){notify('SYSTEM MESSAGE','Oh no... the generator seems to have had a bad day...','🤕',6500);}
@@ -4630,6 +5249,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 else if(newEl.isHot)notify('Hot Element!',newEl.name+' created!','🔥');
                 else if(newEl.isQuestion)notify('Mysterious!',newEl.name+' discovered!','❓');
             }
+            if(bossMode&&bossAfterCraft(exists!==-1?elements[exists]:newEl,exists===-1))return;
             resetDZs();
         }
 
@@ -4692,6 +5312,9 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             $('hintsComplete').hidden=remaining!==0;
         }
         function updateProgressionUI(){
+            if(bossMode){
+                $('bossBtn').hidden=true;updateBossUI();return;
+            }
             updateCraftGuide();
             updatePrestigeUI();
             updateCraftHints();
@@ -4703,6 +5326,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 $(id).hidden=!visible;
             }
             $('shopBtn').textContent=gs.shopUnlocked?'🛒 Shop':'🔒 Shop & Coins';
+            $('bossBtn').hidden=!gs.shopUnlocked;
             const forge=$('starForgeBtn'),upgrade=$('upgradeForgeBtn');
             forge.classList.toggle('sf-locked',!gs.sfUnlocked);
             forge.style.pointerEvents=gs.sfUnlocked?'':'none';
@@ -4722,7 +5346,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfCooldownEnd>Date.now())return;
             // Prestige trophies cannot receive Forge modifiers.
-            const eligible=elements.filter(e=>!e.isPrestige&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
+            const eligible=elements.filter(e=>!e.isPrestige&&!e.isExclusive&&!isSeasonalElement(e)&&!e.isAprilFools&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
             sfAnimating=true;$('starForgeEffect').hidden=false;
             tickCyIncome();
@@ -4749,7 +5373,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             
             // UPGRADED STAR FORGE: Add 2 extra elements with isCyMoney
             if(gs.sfUpgraded){
-                const extraEligible = elements.filter(e=>!e.isPrestige&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
+                const extraEligible = elements.filter(e=>!e.isPrestige&&!e.isExclusive&&!isSeasonalElement(e)&&!e.isAprilFools&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
                 if(extraEligible.length >= 1){
                     const extraChosen = extraEligible.sort(()=>Math.random()-0.5).slice(0,2+cyLevel('infusion'));
                     extraChosen.forEach(target=>{
@@ -5085,6 +5709,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         applySiteFooter();
         applyAprilFoolsMode();
         load();
+        syncSeasonalEvents(true);
         loadSortPref();
         renderEls();
         updateCount();
@@ -5095,18 +5720,19 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         checkStarForgeUnlock();
         sfLoadCooldown();
         if(gs.hasShownEnding)$('viewRankBtn').classList.remove('hidden');
-        if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();
-        else renderShop();
+        if(!bossMode){if(!gs.shopStock||!Object.keys(gs.shopStock).length)refreshShop();else renderShop();}
+        updateBossUI();
 
         // Seed older saves before enabling celebrations; existing ownership is not a new discovery.
         save();
         keyLockNotificationsReady=true;awakeningReady=true;
         // One independent roll per active second; no offline key catch-up.
-        setInterval(()=>{if(!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))*(1+.15*cyLevel('luck'))/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
+        setInterval(()=>{if(!bossMode&&!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))*(1+.15*cyLevel('luck'))/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
         setInterval(tickCyIncome,1000);
         document.addEventListener('visibilitychange',()=>{cyLastTick=Date.now();});
         setInterval(tickCoins,3000);
         setInterval(updateShopTimer,1000);
+        setInterval(()=>syncSeasonalEvents(true),60000);
         updateShopTimer();
 
         // Show changelog on first visit
