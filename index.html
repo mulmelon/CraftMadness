@@ -1710,97 +1710,6 @@ html.reduced-motion *{scroll-behavior:auto!important}
     .settings-select{width:100%;max-width:none;flex-basis:auto}
 }
 
-/* ─── ACTIVE SEASON WALLPAPERS ───
-   Intentionally calmer than April Fools: atmosphere, not a UI takeover. */
-.seasonal-backdrop{
-    position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;
-    opacity:0;transition:opacity .7s ease,background .7s ease;
-    background:
-        radial-gradient(circle at 12% 8%,var(--season-a,#ffffff00),transparent 34%),
-        radial-gradient(circle at 88% 22%,var(--season-b,#ffffff00),transparent 38%),
-        linear-gradient(155deg,var(--season-c,#0000),transparent 62%);
-}
-body.season-active .seasonal-backdrop{opacity:1}
-body.april-fools-mode .seasonal-backdrop{display:none!important}
-
-.seasonal-backdrop::before,
-.seasonal-backdrop::after{
-    content:'';position:absolute;inset:0;pointer-events:none;
-}
-.seasonal-backdrop::before{
-    opacity:.28;
-    background:
-        radial-gradient(circle at 14% 78%,var(--season-accent,#fff) 0 2px,transparent 3px),
-        radial-gradient(circle at 68% 18%,var(--season-accent,#fff) 0 1.5px,transparent 2.5px),
-        radial-gradient(circle at 84% 70%,var(--season-accent,#fff) 0 2px,transparent 3px);
-    background-size:160px 160px,210px 210px,260px 260px;
-}
-.seasonal-backdrop::after{
-    opacity:.17;
-    background:linear-gradient(115deg,transparent 0 46%,var(--season-accent,#fff) 48% 49%,transparent 51% 100%);
-    background-size:240px 240px;
-}
-.season-particle{
-    position:absolute;top:-12vh;left:var(--x);font-size:var(--size);
-    opacity:var(--op);filter:drop-shadow(0 2px 4px #0002);
-    animation:seasonDrift var(--dur) linear infinite;
-    animation-delay:var(--delay);transform:translate3d(0,-12vh,0) rotate(var(--rot));
-    will-change:transform;
-}
-@keyframes seasonDrift{
-    0%{transform:translate3d(0,-12vh,0) rotate(var(--rot))}
-    50%{transform:translate3d(var(--sway),52vh,0) rotate(calc(var(--rot) + 120deg))}
-    100%{transform:translate3d(calc(var(--sway) * -.45),116vh,0) rotate(calc(var(--rot) + 260deg))}
-}
-
-/* Event palettes — subtle enough to preserve readability. */
-body.season-newyear{--season-a:#facc1530;--season-b:#60a5fa22;--season-c:#a855f716;--season-accent:#fde68a}
-body.season-valentine{--season-a:#fb71852a;--season-b:#f9a8d422;--season-c:#be185d12;--season-accent:#fda4af}
-body.season-spring{--season-a:#f9a8d42d;--season-b:#86efac20;--season-c:#fde68a12;--season-accent:#fbcfe8}
-body.season-earthweek{--season-a:#22c55e20;--season-b:#38bdf81c;--season-c:#15803d12;--season-accent:#86efac}
-body.season-mayfestival{--season-a:#f472b625;--season-b:#facc1520;--season-c:#60a5fa10;--season-accent:#f9a8d4}
-body.season-oceanweek{--season-a:#22d3ee25;--season-b:#2563eb20;--season-c:#0f766e12;--season-accent:#a5f3fc}
-body.season-midsummer{--season-a:#fde0472c;--season-b:#fb923c1e;--season-c:#f59e0b10;--season-accent:#fef08a}
-body.season-fireworks{--season-a:#a855f726;--season-b:#ef444420;--season-c:#2563eb14;--season-accent:#fef08a}
-body.season-beachweek{--season-a:#fde68a28;--season-b:#67e8f922;--season-c:#fb923c10;--season-accent:#fef3c7}
-body.season-meteorweek{--season-a:#6366f125;--season-b:#c084fc1e;--season-c:#0f172a18;--season-accent:#ddd6fe}
-body.season-school{--season-a:#60a5fa20;--season-b:#facc151b;--season-c:#47556910;--season-accent:#bfdbfe}
-body.season-harvest{--season-a:#f59e0b28;--season-b:#a1620720;--season-c:#84cc1610;--season-accent:#fde68a}
-body.season-autumn{--season-a:#ea580c27;--season-b:#b91c1c1d;--season-c:#854d0e12;--season-accent:#fdba74}
-body.season-halloween{--season-a:#f9731627;--season-b:#7c3aed22;--season-c:#1118271c;--season-accent:#fdba74}
-body.season-bonfire{--season-a:#f9731629;--season-b:#dc26261d;--season-c:#451a0314;--season-accent:#fed7aa}
-body.season-wishweek{--season-a:#818cf827;--season-b:#f0abfc1c;--season-c:#312e8112;--season-accent:#e0e7ff}
-body.season-winterlights{--season-a:#fde04720;--season-b:#67e8f91c;--season-c:#a78bfa14;--season-accent:#fef9c3}
-body.season-snowweek{--season-a:#dbeafe31;--season-b:#bae6fd25;--season-c:#e0f2fe18;--season-accent:#ffffff}
-body.season-christmas{
-    --season-a:#16a34a25;--season-b:#dc262622;--season-c:#facc1510;--season-accent:#ffffff;
-}
-body.season-christmas .seasonal-backdrop{
-    background:
-        radial-gradient(circle at 8% 12%,#dc26262b,transparent 28%),
-        radial-gradient(circle at 92% 18%,#16a34a2d,transparent 30%),
-        linear-gradient(120deg,#16653410 0 18%,transparent 18% 82%,#b91c1c10 82%),
-        radial-gradient(circle at 50% 0%,#ffffff18,transparent 55%);
-}
-body.season-christmas .seasonal-backdrop::after{
-    opacity:.28;
-    background:
-        radial-gradient(circle,#ef4444 0 3px,transparent 4px) 0 0/120px 120px,
-        radial-gradient(circle,#22c55e 0 3px,transparent 4px) 60px 45px/140px 140px;
-}
-body.season-yearend{--season-a:#facc1526;--season-b:#94a3b820;--season-c:#33415512;--season-accent:#fde68a}
-
-/* Let seasonal atmosphere lightly tint the big panels without replacing their design. */
-body.season-active:not(.april-fools-mode) header,
-body.season-active:not(.april-fools-mode) .workshop-panel,
-body.season-active:not(.april-fools-mode) .collection-panel,
-body.season-active:not(.april-fools-mode) .history-panel{
-    box-shadow:inset 0 1px #ffffff25,0 5px 0 #00000008,0 0 34px var(--season-a,#0000);
-}
-
-html.reduced-motion .season-particle{animation:none!important;opacity:.16!important}
-@media(prefers-reduced-motion:reduce){.season-particle{animation:none!important;opacity:.14!important}}
-
 /* ─── SEASONAL ELEMENT CARD ATMOSPHERE ───
    Keep the normal sculpted-card architecture; season changes are accents, not redesigns. */
 .seasonal-el.sculpted-card{
@@ -1885,11 +1794,84 @@ html.element-theme-light .seasonal-el .el-name{
     text-shadow:0 1px 0 #ffffffa8!important;
 }
 html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48% 22%)!important}
+
+/* ─── VIEWPORT PORTAL FIX ───
+   Fixed UI is moved outside transformed/animated game containers.
+   This prevents mobile browsers from treating "fixed" as half-page absolute UI. */
+html.cm-viewport-locked{overflow-x:hidden}
+#cmViewportPortal{
+    position:static!important;
+    width:0!important;height:0!important;
+    margin:0!important;padding:0!important;
+}
+#cmViewportPortal>#changelogBtn{
+    position:fixed!important;
+    right:max(14px,env(safe-area-inset-right))!important;
+    bottom:max(14px,env(safe-area-inset-bottom))!important;
+    left:auto!important;top:auto!important;
+    transform:none;
+    z-index:2147483000!important;
+}
+#cmViewportPortal>#notifContainer{
+    position:fixed!important;
+    right:max(14px,env(safe-area-inset-right))!important;
+    bottom:calc(max(14px,env(safe-area-inset-bottom)) + 56px)!important;
+    left:auto!important;top:auto!important;
+    width:min(320px,calc(100vw - 28px))!important;
+    z-index:2147482999!important;
+}
+#cmViewportPortal>.modal-overlay,
+#cmViewportPortal>#loader,
+#cmViewportPortal>#bossFxLayer,
+#cmViewportPortal>#starForgeEffect,
+#cmViewportPortal>#ascensionOverlay{
+    position:fixed!important;
+    inset:0!important;
+    width:100vw!important;
+    height:100dvh!important;
+    max-width:none!important;
+    transform:none!important;
+}
+#cmViewportPortal>.modal-overlay{
+    overflow:auto!important;
+    overscroll-behavior:contain;
+}
+#cmViewportPortal>.modal-overlay>.modal-box{
+    transform:none;
+}
+@supports not (height:100dvh){
+    #cmViewportPortal>.modal-overlay,
+    #cmViewportPortal>#loader,
+    #cmViewportPortal>#bossFxLayer,
+    #cmViewportPortal>#starForgeEffect,
+    #cmViewportPortal>#ascensionOverlay{height:100vh!important}
+}
+
+/* Card size preference */
+html.card-size-compact #elGrid{grid-template-columns:repeat(auto-fill,minmax(82px,1fr))!important}
+html.card-size-compact #elGrid .sculpted-card{min-height:132px!important;padding:7px 6px 9px!important}
+html.card-size-compact #elGrid .card-stage{width:58px!important;height:58px!important}
+html.card-size-compact #elGrid .el-emoji{font-size:1.55rem!important}
+
+html.card-size-large #elGrid{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))!important}
+html.card-size-large #elGrid .sculpted-card{min-height:184px!important;padding:11px 9px 14px!important}
+html.card-size-large #elGrid .card-stage{width:82px!important;height:82px!important}
+html.card-size-large #elGrid .el-emoji{font-size:2.25rem!important}
+
+/* Optional hover motion */
+html.card-hover-off .el-card:hover,
+html.card-hover-off .sculpted-card:hover{
+    transform:none!important;
+}
+
+/* Never let fixed HUD inherit game defeat/animation transforms. */
+#cmViewportPortal,#cmViewportPortal *{
+    -webkit-transform-style:flat;
+}
 </style>
 
 </head>
 <body>
-    <div id="seasonalBackdrop" class="seasonal-backdrop" aria-hidden="true"></div>
 
     <script>
         (function(){
@@ -2185,7 +2167,43 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
             </select>
         </div>
 
-        <button id="creditsBtn" class="settings-wide-btn">🎬 Credits</button>
+        
+        <div class="settings-row">
+            <div>
+                <strong>Element card size</strong>
+                <small>Change collection card size without changing the card design.</small>
+            </div>
+            <select id="cardSizeSetting" class="settings-select" aria-label="Element card size">
+                <option value="compact">Compact</option>
+                <option value="normal">Normal</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+
+        <div class="settings-row">
+            <div>
+                <strong>Card hover motion</strong>
+                <small>Turn off the lift/tilt effect when hovering or tapping cards.</small>
+            </div>
+            <select id="cardHoverSetting" class="settings-select" aria-label="Card hover motion">
+                <option value="on">On</option>
+                <option value="off">Off</option>
+            </select>
+        </div>
+
+        <div class="settings-row">
+            <div>
+                <strong>System message time</strong>
+                <small>Choose how long normal system notifications stay visible.</small>
+            </div>
+            <select id="notificationTimeSetting" class="settings-select" aria-label="System message time">
+                <option value="short">Short</option>
+                <option value="normal">Normal</option>
+                <option value="long">Long</option>
+            </select>
+        </div>
+
+<button id="creditsBtn" class="settings-wide-btn">🎬 Credits</button>
     </div></div>
 
     <!-- Credits Modal -->
@@ -2655,8 +2673,10 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
         <div class="changelog-version">
             <h3>v3.1 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
             <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
+                <li><span class="changelog-tag tag-fix">FIX</span> Rebuilt fixed-screen UI through a viewport portal so modals, system messages and the changelog button stay attached to the actual screen instead of jumping to a transformed half-page area on mobile.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Added element card size, card hover motion and system-message duration settings.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Seasonal elements now inherit restrained event-specific card accents while keeping the normal Craft Madness card structure.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Active seasonal events now give the whole game a subtle event wallpaper with themed ambient particles. Christmas adds gentle snow with red/green holiday accents; April Fools still overrides seasonal themes.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Seasonal full-page wallpapers were removed; seasonal identity now stays on the element cards so the main game background remains clean.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Settings menu with System/Light/Dark website themes, independent Light/Dark element card appearance, reduced animations, and Credits.</li>
 
                 <li><span class="changelog-tag tag-new">NEW</span> Boss Coins: boss wins award large BC payouts and losses still award a smaller amount based on progress.</li>
@@ -4386,60 +4406,11 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
         }
 
 
-        const SEASON_WALLPAPERS={
-            newyear:{particles:['✦','🎆','✧','•']},
-            valentine:{particles:['♥','♡','💗','✦']},
-            spring:{particles:['🌸','❀','·','🌿']},
-            earthweek:{particles:['🍃','•','🌱','◉']},
-            mayfestival:{particles:['🎀','✿','•','◇']},
-            oceanweek:{particles:['○','◌','🌊','•']},
-            midsummer:{particles:['☀','✦','·','✺']},
-            fireworks:{particles:['✺','✦','🎇','·']},
-            beachweek:{particles:['☀','○','🐚','·']},
-            meteorweek:{particles:['☄','✧','✦','·']},
-            school:{particles:['✎','📄','•','✦']},
-            harvest:{particles:['🌾','🍂','✦','·']},
-            autumn:{particles:['🍁','🍂','◆','·']},
-            halloween:{particles:['🦇','🎃','☾','·']},
-            bonfire:{particles:['✦','🔥','·','•']},
-            wishweek:{particles:['☆','✦','🌠','·']},
-            winterlights:{particles:['✦','✨','•','◇']},
-            snowweek:{particles:['❄','❅','·','✧']},
-            christmas:{particles:['❄','❅','✦','•','🎄']},
-            yearend:{particles:['◷','✦','·','🕛']}
-        };
-        function clearSeasonWallpaper(){
-            const layer=$('seasonalBackdrop');
-            if(layer)layer.replaceChildren();
+        function syncSeasonalWallpaper(){
+            // Full-page seasonal wallpapers were intentionally removed.
             document.body.classList.remove('season-active');
             for(const ev of SEASONAL_EVENTS)document.body.classList.remove('season-'+ev.id);
             delete document.body.dataset.season;
-        }
-        function syncSeasonalWallpaper(){
-            clearSeasonWallpaper();
-            if(bossMode||OldAllCreate)return;
-            const active=getActiveSeasonalEvents();
-            const ev=active[0];
-            if(!ev)return;
-            const layer=$('seasonalBackdrop');
-            const def=SEASON_WALLPAPERS[ev.id]||{particles:[ev.icon||'✦','·']};
-            document.body.classList.add('season-active','season-'+ev.id);
-            document.body.dataset.season=ev.id;
-            if(!layer)return;
-            const count=ev.id==='christmas'?24:(ev.id==='snowweek'?20:14);
-            for(let i=0;i<count;i++){
-                const p=document.createElement('span');
-                p.className='season-particle';
-                p.textContent=def.particles[i%def.particles.length];
-                p.style.setProperty('--x',((i*37+11)%97)+'%');
-                p.style.setProperty('--size',(0.58+((i*13)%10)/10*0.7)+'rem');
-                p.style.setProperty('--op',(0.11+((i*17)%10)/100).toFixed(2));
-                p.style.setProperty('--dur',(15+((i*7)%13))+'s');
-                p.style.setProperty('--delay',(-((i*11)%25))+'s');
-                p.style.setProperty('--rot',(((i*29)%80)-40)+'deg');
-                p.style.setProperty('--sway',(((i*19)%90)-45)+'px');
-                layer.appendChild(p);
-            }
         }
 
         function syncSeasonalEvents(announce=false){renderUpcomingSeasonalEvent();
@@ -4483,6 +4454,7 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
 
         // ─── HELPERS ───
         function notify(title, msg, icon='ℹ️', duration=4000) {
+            duration=notificationDuration(duration);
             const n = document.createElement('div');
             n.className='notif';
             n.innerHTML=`<div class="flex items-center gap-2 mb-1"><span>${icon}</span><strong class="text-sm">${title}</strong></div><div class="text-xs" style="color:var(--text-secondary)">${msg}</div><div class="notif-bar"></div>`;
@@ -4495,7 +4467,10 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
 
         const SETTINGS_KEYS={
             elementTheme:'cm_element_theme',
-            motion:'cm_motion_mode'
+            motion:'cm_motion_mode',
+            cardSize:'cm_card_size',
+            cardHover:'cm_card_hover',
+            notificationTime:'cm_notification_time'
         };
         function getLocalSetting(key,fallback){
             try{return localStorage.getItem(key)||fallback;}catch(e){return fallback;}
@@ -4518,10 +4493,30 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
             document.documentElement.classList.toggle('reduced-motion',mode==='reduced');
             document.documentElement.dataset.motion=mode;
         }
+        function applyCardSize(mode=getLocalSetting(SETTINGS_KEYS.cardSize,'normal')){
+            if(!['compact','normal','large'].includes(mode))mode='normal';
+            document.documentElement.classList.remove('card-size-compact','card-size-large');
+            if(mode!=='normal')document.documentElement.classList.add('card-size-'+mode);
+            document.documentElement.dataset.cardSize=mode;
+        }
+        function applyCardHover(mode=getLocalSetting(SETTINGS_KEYS.cardHover,'on')){
+            if(!['on','off'].includes(mode))mode='on';
+            document.documentElement.classList.toggle('card-hover-off',mode==='off');
+        }
+        function notificationDuration(base){
+            const mode=getLocalSetting(SETTINGS_KEYS.notificationTime,'normal');
+            if(mode==='short')return Math.min(base,2200);
+            if(mode==='long')return Math.max(base,7000);
+            return base;
+        }
+
         function syncSettingsControls(){
             if($('themeModeSetting'))$('themeModeSetting').value=window.__cmGetThemeMode?window.__cmGetThemeMode():'system';
             if($('elementThemeSetting'))$('elementThemeSetting').value=getLocalSetting(SETTINGS_KEYS.elementTheme,'auto');
             if($('motionSetting'))$('motionSetting').value=getLocalSetting(SETTINGS_KEYS.motion,'full');
+            if($('cardSizeSetting'))$('cardSizeSetting').value=getLocalSetting(SETTINGS_KEYS.cardSize,'normal');
+            if($('cardHoverSetting'))$('cardHoverSetting').value=getLocalSetting(SETTINGS_KEYS.cardHover,'on');
+            if($('notificationTimeSetting'))$('notificationTimeSetting').value=getLocalSetting(SETTINGS_KEYS.notificationTime,'normal');
         }
         function openSettings(){
             syncSettingsControls();
@@ -4534,6 +4529,8 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
         }
         applyElementTheme();
         applyMotionSetting();
+        applyCardSize();
+        applyCardHover();
         window.addEventListener('cm-theme-change',()=>{
             if(getLocalSetting(SETTINGS_KEYS.elementTheme,'auto')==='auto')applyElementTheme('auto');
         });
@@ -4993,7 +4990,7 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
                 layer=document.createElement('div');
                 layer.id='bossFxLayer';
                 layer.setAttribute('aria-hidden','true');
-                document.body.appendChild(layer);
+                (document.getElementById('cmViewportPortal')||document.documentElement).appendChild(layer);
             }
             return layer;
         }
@@ -6837,12 +6834,41 @@ html.element-theme-light .seasonal-el .card-ribbon{color:hsl(var(--card-hue) 48%
             setLocalSetting(SETTINGS_KEYS.motion,e.target.value);
             applyMotionSetting(e.target.value);
         });
+        $('cardSizeSetting').addEventListener('change',e=>{
+            setLocalSetting(SETTINGS_KEYS.cardSize,e.target.value);
+            applyCardSize(e.target.value);
+        });
+        $('cardHoverSetting').addEventListener('change',e=>{
+            setLocalSetting(SETTINGS_KEYS.cardHover,e.target.value);
+            applyCardHover(e.target.value);
+        });
+        $('notificationTimeSetting').addEventListener('change',e=>{
+            setLocalSetting(SETTINGS_KEYS.notificationTime,e.target.value);
+        });
         $('creditsBtn').addEventListener('click',openCredits);
         $('creditsSkipBtn').addEventListener('click',()=>closeModal('creditsModal'));
 
 
         // ─── KEYBOARD SHORTCUTS ───
         window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none');});
+
+
+        function installViewportPortal(){
+            let portal=document.getElementById('cmViewportPortal');
+            if(!portal){
+                portal=document.createElement('div');
+                portal.id='cmViewportPortal';
+                // Direct child of <html>, deliberately outside animated/transformed <body>.
+                document.documentElement.appendChild(portal);
+            }
+            const ids=['changelogBtn','notifContainer','loader','bossFxLayer','starForgeEffect','ascensionOverlay'];
+            ids.forEach(id=>{const el=$(id);if(el&&el.parentNode!==portal)portal.appendChild(el);});
+            document.querySelectorAll('.modal-overlay').forEach(el=>{
+                if(el.parentNode!==portal)portal.appendChild(el);
+            });
+            document.documentElement.classList.add('cm-viewport-locked');
+        }
+        installViewportPortal();
 
         // ─── INIT ───
         function applySiteFooter(){
