@@ -790,6 +790,11 @@ body.boss-player-defeated #bossGameHeading{animation:bossPlayerDefeated .82s eas
 }
 .seasonal-upcoming strong{color:var(--text-primary)}
 .seasonal-upcoming .season-next-icon{font-size:1rem;margin-right:4px}
+
+body.boss-mode.boss-mm-starforge #starForgeBtn,
+body.boss-mode.boss-mm-starforge #sfBtn{
+    opacity:1!important;filter:none!important;cursor:pointer!important;
+}
 </style>
 <style>/* Craft Madness: observatory interface */
 body {background:var(--bg-primary);background-image:radial-gradient(ellipse at 15% 0%,rgba(99,102,241,.14),transparent 50%),radial-gradient(ellipse at 90% 40%,rgba(20,184,166,.09),transparent 45%);}
@@ -1847,7 +1852,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
     <div id="bossModal" class="modal-overlay"><div class="modal-box" style="max-width:560px">
         <button class="modal-close" data-close="bossModal">&times;</button>
         <h2 class="font-display text-xl mb-2">👹 Boss Challenge</h2>
-        <div id="bossStartInfo">Enter a sealed challenge save with only the four starter elements. Wins give coins, Boss Coins and a permanent Boss Defeat trophy. Losses still give consolation coins and a few Boss Coins.</div>
+        <div id="bossStartInfo">Enter a sealed challenge save with only the four starter elements. Any new elements you discover here are added to your normal collection after the fight — including The End Game — but boss-only mutations stay inside Boss Mode. Wins give coins, Boss Coins and a permanent Boss Defeat trophy. Losses still give consolation coins and a few Boss Coins.</div>
         <div class="mt-3 flex items-center justify-between gap-2 flex-wrap"><label class="text-xs font-bold" for="bossSelect">Choose boss</label><span id="bossCoinModal" class="boss-coin-pill">🪙 0 Boss Coins</span></div>
         <select id="bossSelect" class="w-full mt-2 p-2 rounded-xl text-sm" style="background:var(--ui-button);border:1px solid var(--border);color:var(--text-primary)"></select>
         <div id="bossUpgradeGrid" class="boss-upgrade-grid"></div>
@@ -2249,7 +2254,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 <li><span class="changelog-tag tag-new">NEW</span> The Unmaker can skip an attack and lock one discovered element for 3 crafts.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Boss challenges now lock Storage, Guide, Hints, Import/Export, Shop and Star Forge. Prestige no longer resets any upgrade levels; Prestige Shop upgrades are permanent. Trying to use them shows “The boss has locked some of your powers...”</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Boss combat now has quick craft-projectile attacks, boss counterattacks and win/loss defeat animations.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Crafting Shop or Star Forge during a boss challenge no longer activates their powers. A newly discovered Star Forge is carried back to the normal save and awakens when the fight ends.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Crafting Shop or Star Forge during a boss challenge normally does not activate their powers. Mutation Memory now restores Star Forge access during boss fights when Star Forge already exists in the normal save. New elements discovered during Boss Mode now carry into the normal save after the fight, including The End Game; boss mutations do not carry over. A newly discovered Star Forge is carried back to the normal save and awakens when the fight ends.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Added first-discovery tutorials for Shop and Star Forge. Seasonal Vault now shows the next upcoming event and its start date.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Boss lobby now shows Boss Coins, boss selection, unlock requirements and permanent upgrades.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> 20 automatic seasonal events with 100 rank-excluded discoveries each, event-specific animated cards and the Seasonal Vault.</li>
@@ -3837,7 +3842,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             recovery:{name:'Second Wind',emoji:'💚',max:5,base:10,step:7,desc:'Chance to heal Resolve after a successful craft.'},
             insight:{name:'Discovery Strike',emoji:'💡',max:5,base:8,step:6,desc:'New discoveries deal extra boss damage.'},
             mutation:{name:'Mutation Engine',emoji:'🧬',max:5,base:12,step:9,desc:'Children may gain random mutations; higher levels allow more at once.'},
-            mutationMemory:{name:'Mutation Memory',emoji:'💾',max:1,base:250,step:0,requires:'mutation',desc:'Remember boss-earned mutations for each element across future boss challenges.'}
+            mutationMemory:{name:'Mutation Memory',emoji:'💾',max:1,base:250,step:0,requires:'mutation',desc:'Remember boss-earned mutations for each element across future boss challenges. Also restores Star Forge access during boss fights if Star Forge is unlocked in your normal game.'}
         };
         const BOSS_MUTATIONS=['isHot','isSuperHot','isElectric','isMagnetic','isCrystalline','isGolden','isChromatic','isEthereal','isPhantom','isLegendary','isAncient','isHoly','isBlessed','isDivine','isCelestial','isTemporal','isAbyssal','isTsunami','isPurified','isRadioactive','isUnstable'];
         let bossMode=false;
@@ -4382,9 +4387,57 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             }catch(e){}
         }
 
+        function bossHasMutationMemoryStarForge(){
+            if(!bossMode)return false;
+            const b=bossData();
+            if(!b||!(b.upgrades?.mutationMemory>0))return false;
+            try{
+                const rawEls=_getItem('fc_el');
+                if(rawEls){
+                    const mainEls=JSON.parse(rawEls);
+                    if(Array.isArray(mainEls)&&mainEls.some(e=>String(e?.name||'').trim().toLowerCase()==='star forge'))return true;
+                }
+                const rawGs=_getItem('fc_gs');
+                if(rawGs){
+                    const mainGs=JSON.parse(rawGs);
+                    if(mainGs?.sfUnlocked)return true;
+                }
+            }catch(e){}
+            return false;
+        }
         function bossPowerLocked(){return !!bossMode;}
         function notifyBossPowerLock(){notify('POWER LOCKED','The boss has locked some of your powers...','🔒',2600);}
         function bossData(){return bossMode&&gs.bossRun?gs.bossRun:null;}
+        function queueBossMainUnlock(el){
+            const b=bossData();if(!b||!el?.name)return;
+            b.mainUnlocks=b.mainUnlocks||{};
+            const key=String(el.name).toLowerCase();
+            if(!b.mainUnlocks[key]){
+                // Capture the clean recipe result BEFORE boss-only mutations are applied.
+                const clean={...el};
+                delete clean._bossMutationFlags;
+                b.mainUnlocks[key]=clean;
+            }
+        }
+        function transferBossDiscoveriesToMain(run){
+            const unlocked=[];
+            let unlockedEnding=false;
+            if(!run||!run.mainUnlocks)return {unlocked,unlockedEnding};
+            for(const clean of Object.values(run.mainUnlocks)){
+                if(!clean?.name)continue;
+                const exists=elements.some(e=>String(e?.name||'').toLowerCase()===String(clean.name).toLowerCase());
+                if(exists)continue;
+                // Use the clean pre-mutation snapshot. Boss mutations NEVER enter the normal save.
+                const copy={...clean};
+                delete copy._bossMutationFlags;
+                elements.push(copy);
+                unlocked.push(copy.name);
+                if(copy.name==='Shop')gs.shopUnlocked=true;
+                if(copy.name==='Star Forge')gs.sfUnlocked=true;
+                if(copy.isEndGameTrigger||copy.name==='The End Game')unlockedEnding=true;
+            }
+            return {unlocked,unlockedEnding};
+        }
         function grantStarForgeToMainFromBoss(){
             try{
                 let mainEls=STARTERS.map(e=>({...e}));
@@ -4467,7 +4520,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function bossAfterCraft(el,isNew){const b=bossData();if(!b||b.ending)return !!b?.ending;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();const hit=bossDamageFromElement(el,isNew);animateBossPlayerAttack(el,hit);b.hp=Math.max(0,b.hp-hit);if(b.hp<=0){updateBossUI();save();finishBossFight(true);return true;}const r=b.hp/d.maxHp,np=r<=.33?3:r<=.66?2:1;if(np>b.phase){b.phase=np;notify('BOSS PHASE '+np,d.phases[np-1],np===3?'💀':'⚠️',4500);}if(!maybeBossLockInsteadOfAttack()){const back=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-back);setTimeout(animateBossCounterAttack,240);notify('Boss hit',`${el.name} dealt ${hit} damage. ${d.name} struck back for ${back}.`,'⚔️',2600);}else notify('Boss hit',`${el.name} dealt ${hit} damage. The Unmaker sealed an element instead of attacking.`,'⚔️',2600);maybeBossRecovery();updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function bossMissedCraft(){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);animateBossCounterAttack();notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
-        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');document.title='Craft Madness';if($('bossGameHeading'))$('bossGameHeading').hidden=true;loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
+        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');document.body.classList.remove('boss-mm-starforge');document.title='Craft Madness';if($('bossGameHeading'))$('bossGameHeading').hidden=true;loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
         function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else elements.push({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
         function finishBossFight(won){
             const b=bossData();if(!b||b.ending)return;
@@ -4477,15 +4530,18 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function finishBossFightNow(won,b){
             const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));
             clearBossSave();restoreMainGame();document.body.classList.remove('boss-player-defeated');const panel=$('bossPanel');if(panel)panel.classList.remove('boss-defeated');
+            const carry=transferBossDiscoveriesToMain(b);
             const m=bossMeta();m.coins+=bc;if(b.upgrades?.mutationMemory&&b.mutationMemory)m.mutationMemory={...(m.mutationMemory||{}),...b.mutationMemory};gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;
             if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}
             const pendingForge=!!gs.pendingStarForgeBossGrant;if(pendingForge){delete gs.pendingStarForgeBossGrant;gs.sfUnlocked=true;}
-            save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();
+            updateProgressionUI();save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();
+            if(carry.unlocked.length)notify('BOSS DISCOVERIES SAVED',`${carry.unlocked.length} new element${carry.unlocked.length===1?'':'s'} carried into your normal collection. Boss mutations were not transferred.`,'📦',5600);
             if(pendingForge){notify('STAR FORGE AWAKENED',"The fight is over. The Star Forge's power is now available.",'🌟',5200);if(!starForgeTutShown){starForgeTutShown=true;setTimeout(()=>openModal('starForgeTutModal'),500);}}
+            if(carry.unlockedEnding)setTimeout(showEnding,1100);
             const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';
             notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);
         }
-        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{})};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;
+        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{}),mainUnlocks:{}};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;document.body.classList.toggle('boss-mm-starforge',bossHasMutationMemoryStarForge());
             ['shopModal','starForgeModal','exportModal','importModal'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
             ['storagePanel','exclusiveStorage','seasonalStorage','aprilFoolsStorage','hintPanel','craftGuide'].forEach(id=>{const el=$(id);if(el){el.hidden=true;el.style.display='none';}});
             renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');notify('BOSS CHALLENGE',`${d.name} has sealed your collection. Rebuild from the four starters and fight back.`,d.emoji,6000);}
@@ -5712,10 +5768,16 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             }
 
             const newEl={...result,color:result.color||randColor()};
+            if(bossMode)queueBossMainUnlock(newEl);
             if(bossMode)applyBossMutations(newEl);
             if(newEl.isFrozen&&!newEl.meltProgress){newEl.meltProgress=0;newEl.meltGoal=10;}
 
-            if(newEl.isEndGameTrigger){addElement(newEl);setTimeout(showEnding,800);return;}
+            if(newEl.isEndGameTrigger){
+                addElement(newEl);
+                if(!bossMode)setTimeout(showEnding,800);
+                else notify('ENDING SECURED','The ending has been earned. It will carry back to your normal save when the boss fight ends.','🎬',5000);
+                return;
+            }
             addElement(newEl);
         }
 
@@ -6108,6 +6170,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             if(!bossPowerLocked())return;
             const locked=e.target.closest('#storageToggle,#exclusiveToggle,#seasonalToggle,#aprilFoolsToggle,#hintToggle,#guideToggle,#exportBtn,#importBtn,#shopBtn,#starForgeBtn,#openShop,#sfBtn,#exportOpen,#importOpen,[data-open="shopModal"],[data-open="starForgeModal"],[data-open="exportModal"],[data-open="importModal"]');
             if(!locked)return;
+            if(bossHasMutationMemoryStarForge()&&(locked.matches('#starForgeBtn,#sfBtn,[data-open="starForgeModal"]')||locked.closest('#starForgeBtn,#sfBtn,[data-open="starForgeModal"]')))return;
             e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
             notifyBossPowerLock();
         },true);
@@ -6247,7 +6310,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             let adIndex=0;setInterval(()=>{const ads=adRack.querySelectorAll('.april-fake-ad');if(!ads.length)return;ads[adIndex].classList.remove('april-ad-visible');adIndex=(adIndex+1)%ads.length;ads[adIndex].classList.add('april-ad-visible');},4200);
             const header=document.querySelector('header');if(header)header.after(adRack);else banner.after(adRack);
             const splash=document.createElement('div');splash.className='april-fools-splash';
-            splash.textContent='🤡 APRIL FOOOOOOOOOOOOOOOOOOOLSS!!!!! 🤡';
+            splash.textContent='🤡 APRIL FOOOOOOOOOOOOOOOOOOLS!!!!! 🤡';
             document.body.appendChild(splash);setTimeout(()=>splash.remove(),3000);
             const stickerEmoji=['🤡','🗿','💀','🫘','🦆','🧀','🍉','🪿','🚽','🥔'];
             const stickerSpots=[[2,16],[91,20],[3,72],[92,68],[12,88],[82,87]];
