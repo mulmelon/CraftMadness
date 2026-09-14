@@ -686,6 +686,110 @@ body.boss-mode #bossGameHeading::after{
     background:linear-gradient(90deg,transparent,#ef4444,transparent);
     box-shadow:0 0 12px rgba(239,68,68,.35);
 }
+
+/* Boss combat motion — intentionally quick so crafting still feels snappy */
+.boss-attack-projectile{
+    position:fixed;z-index:9998;pointer-events:none;
+    min-width:64px;max-width:150px;padding:7px 10px;border-radius:14px;
+    text-align:center;font-family:'Lexend',system-ui,sans-serif;font-weight:900;
+    background:linear-gradient(145deg,rgba(20,184,166,.96),rgba(79,70,229,.96));
+    color:white;border:1px solid rgba(255,255,255,.5);
+    box-shadow:0 10px 30px rgba(0,0,0,.28),0 0 22px rgba(45,212,191,.45);
+    transform:translate(-50%,-50%);
+}
+.boss-attack-projectile .fx-emoji{display:block;font-size:1.55rem;line-height:1}
+.boss-attack-projectile .fx-name{display:block;font-size:.58rem;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bossPanel.boss-hit-flash{animation:bossHitFlash .34s ease-out}
+#bossPanel.boss-counter-lunge .boss-title{animation:bossCounterLunge .42s ease-in-out}
+#bossPlayerHpFill.player-hit{animation:bossPlayerHit .4s ease-out}
+#bossPanel.boss-defeated{animation:bossDefeated .82s cubic-bezier(.3,.7,.2,1) forwards;transform-origin:50% 60%}
+body.boss-player-defeated .workshop-panel{animation:bossPlayerDefeated .82s ease forwards}
+body.boss-player-defeated #bossGameHeading{animation:bossPlayerDefeated .82s ease forwards}
+.boss-fight-end-banner{
+    position:fixed;z-index:10020;left:50%;top:44%;transform:translate(-50%,-50%) scale(.72);
+    padding:15px 25px;border-radius:18px;text-align:center;pointer-events:none;
+    font-family:'Righteous','Arial Black',sans-serif;font-size:clamp(1.45rem,6vw,2.6rem);
+    letter-spacing:.05em;color:#fff;background:rgba(8,10,22,.9);
+    border:2px solid currentColor;box-shadow:0 18px 55px rgba(0,0,0,.4);
+    opacity:0;animation:bossEndBanner .82s ease forwards;
+}
+.boss-fight-end-banner.win{color:#fbbf24;text-shadow:0 0 18px rgba(251,191,36,.55)}
+.boss-fight-end-banner.lose{color:#ef4444;text-shadow:0 0 18px rgba(239,68,68,.5)}
+@keyframes bossHitFlash{
+    0%{transform:translateX(0);filter:none}
+    24%{transform:translateX(7px);filter:brightness(1.7)}
+    48%{transform:translateX(-5px);filter:brightness(1.25)}
+    100%{transform:translateX(0);filter:none}
+}
+@keyframes bossCounterLunge{
+    0%,100%{transform:translate(0,0) scale(1)}
+    38%{transform:translate(-7px,8px) scale(1.06)}
+    62%{transform:translate(5px,-2px) scale(1.03)}
+}
+@keyframes bossPlayerHit{
+    0%{filter:brightness(1);transform:scaleY(1)}
+    35%{filter:brightness(2);transform:scaleY(1.28)}
+    100%{filter:brightness(1);transform:scaleY(1)}
+}
+@keyframes bossDefeated{
+    0%{opacity:1;transform:translateY(0) rotate(0) scale(1);filter:none}
+    30%{transform:translateY(-7px) rotate(-2deg) scale(1.03);filter:brightness(1.8)}
+    100%{opacity:0;transform:translateY(85px) rotate(7deg) scale(.72);filter:blur(4px)}
+}
+@keyframes bossPlayerDefeated{
+    0%{opacity:1;transform:translateY(0);filter:none}
+    35%{transform:translateX(-5px);filter:grayscale(.3)}
+    55%{transform:translateX(5px);filter:grayscale(.65)}
+    100%{opacity:.18;transform:translateY(14px);filter:grayscale(1) blur(1px)}
+}
+@keyframes bossEndBanner{
+    0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}
+    22%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
+    72%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    100%{opacity:0;transform:translate(-50%,-58%) scale(.96)}
+}
+
+/* Shop / Star Forge tutorial demo */
+.progression-tut-demo{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    margin:18px 0;padding:16px;border-radius:18px;
+    background:var(--bg-primary);border:1px solid var(--border)
+}
+.progression-tut-card{
+    width:120px;min-height:116px;border-radius:18px;padding:13px 10px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+    border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 24px rgba(0,0,0,.14)
+}
+.progression-tut-card .pt-emoji{font-size:2.2rem}
+.progression-tut-card .pt-name{font-size:.76rem;font-weight:900}
+.progression-tut-card.shop-demo{background:linear-gradient(145deg,rgba(13,148,136,.2),rgba(20,184,166,.08));border-color:#14b8a6}
+.progression-tut-card.forge-demo{background:radial-gradient(circle at 50% 20%,rgba(251,191,36,.26),transparent 42%),linear-gradient(145deg,#17142c,#282050);border-color:#a855f7;color:#fff}
+.progression-tut-arrow{font-size:1.7rem;color:var(--gold);font-weight:900}
+
+/* Five-page new-player tutorial */
+#newPlayerTutModal .modal-box{max-width:500px;overflow:hidden;border-color:#8b5cf6;background:radial-gradient(circle at 15% 0%,rgba(59,130,246,.13),transparent 32%),radial-gradient(circle at 90% 15%,rgba(168,85,247,.13),transparent 30%),var(--bg-secondary)}
+.new-player-tut-eyebrow{font-size:.62rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:#a78bfa;margin-bottom:5px}
+.new-player-tut-title{font-family:'Righteous',system-ui,sans-serif;font-size:1.45rem;line-height:1.05;color:var(--text-primary)}
+.new-player-tut-pages{position:relative;min-height:310px}.new-player-tut-page{display:none;animation:newTutPageIn .24s ease}.new-player-tut-page.active{display:block}
+.new-player-tut-hero{width:88px;height:88px;margin:12px auto 14px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(145deg,rgba(59,130,246,.18),rgba(168,85,247,.2));border:1px solid rgba(167,139,250,.42);box-shadow:0 12px 32px rgba(0,0,0,.16)}
+.new-player-tut-page p{font-size:.84rem;line-height:1.55;color:var(--text-secondary)}
+.new-player-tut-craft{display:flex;align-items:center;justify-content:center;gap:8px;margin:22px auto;flex-wrap:wrap}
+.new-player-tut-mini{min-width:78px;padding:10px 8px;border-radius:14px;text-align:center;background:var(--bg-primary);border:1px solid var(--border);font-size:.7rem;font-weight:800}.new-player-tut-mini .emoji{display:block;font-size:1.7rem;margin-bottom:4px}
+.new-player-tut-plus,.new-player-tut-arrow{font-weight:900;color:#a78bfa;font-size:1.25rem}
+.new-player-mut-row{display:flex;gap:10px;justify-content:center;margin:22px 0}.new-player-mut{flex:1;max-width:180px;padding:13px 10px;border-radius:16px;background:var(--bg-primary);border:1px solid var(--border);text-align:center}.new-player-mut strong{display:block;margin:5px 0;font-size:.8rem}.new-player-mut small{font-size:.67rem;color:var(--text-secondary);line-height:1.35;display:block}
+.new-player-count{font-family:'Righteous',system-ui,sans-serif;font-size:3.6rem;line-height:1;margin:25px 0 10px;background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.new-player-tut-footer{margin-top:14px}.new-player-tut-dots{display:flex;justify-content:center;gap:6px;margin-bottom:12px}.new-player-tut-dot{width:7px;height:7px;border-radius:999px;background:var(--border);transition:.2s}.new-player-tut-dot.active{width:22px;background:#8b5cf6}
+.new-player-tut-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}.new-player-tut-btn{min-width:92px;border-radius:999px;padding:9px 15px;font-size:.76rem;font-weight:900;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-primary)}.new-player-tut-btn.primary{border-color:transparent;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;box-shadow:0 7px 20px rgba(99,102,241,.24)}.new-player-tut-btn:disabled{opacity:.28;cursor:default}
+@keyframes newTutPageIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+
+.seasonal-upcoming{
+    margin:8px 0 12px;padding:10px 12px;border-radius:13px;
+    background:linear-gradient(135deg,rgba(56,189,248,.09),rgba(168,85,247,.1));
+    border:1px solid rgba(125,211,252,.2);
+    color:var(--text-secondary);font-size:.72rem;line-height:1.45
+}
+.seasonal-upcoming strong{color:var(--text-primary)}
+.seasonal-upcoming .season-next-icon{font-size:1rem;margin-right:4px}
 </style>
 <style>/* Craft Madness: observatory interface */
 body {background:var(--bg-primary);background-image:radial-gradient(ellipse at 15% 0%,rgba(99,102,241,.14),transparent 50%),radial-gradient(ellipse at 90% 40%,rgba(20,184,166,.09),transparent 45%);}
@@ -1518,6 +1622,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                         <span id="seasonalCount"></span>
                     </div>
                     <p id="seasonalStatus">Off-season discoveries rest here until their event returns.</p>
+          <div id="seasonalUpcoming" class="seasonal-upcoming"></div>
                     <div id="seasonalGrid"></div>
                 </aside>
 
@@ -1595,7 +1700,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             <p id="prestigeRequirements" class="text-sm mb-3" style="line-height:1.7"></p>
             <p class="text-xs mb-3">Open the 📖 guide beside hints to see your missing elements and their recipe steps.</p>
             <p class="text-sm mb-3" style="color:var(--text-secondary)">Requires Shop and Star Forge unlocked. Collect 100 ranked elements for your first Prestige, then 25 more per completed Prestige (100, 125, 150…). These are fixed counts, independent of the total number of elements. Keys start at 25 and coins at 100,000; each Prestige adds 6.25 keys (rounded up) and 25,000 coins, capped at 250 keys and 1,000,000 coins. Any ranked elements count. Rank-excluded and exclusive elements are not required.</p>
-            <p class="text-sm mb-4" style="color:#eab308">Confirming spends the displayed key requirement and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ALL upgrade levels. Exclusive elements, CyMoney and prestige totals are kept. ALL upgrade levels reset, including Prestige Shop purchases. You receive 1 prestige coin, Shop, an unupgraded Star Forge, a Prestige counter element and one additional starting basic element.</p>
+            <p class="text-sm mb-4" style="color:#eab308">Confirming spends the displayed key requirement and resets normal elements, all normal coins, remaining non-exclusive keys, crafting history, recipe locks and ALL upgrade levels. Exclusive elements, CyMoney and prestige totals are kept. Upgrade levels are kept, including Prestige Shop purchases. You receive 1 prestige coin, Shop, an unupgraded Star Forge, a Prestige counter element and one additional starting basic element.</p>
             <button id="confirmPrestige" class="text-sm px-4 py-2 rounded-lg disabled:opacity-40" style="background:var(--gold);color:#1a1a2e" disabled>Confirm Prestige · Earn 1 coin</button>
         </div></div>
         <div id="prestigeShopModal" class="modal-overlay"><div class="modal-box" style="max-width:650px">
@@ -1782,6 +1887,88 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             </div>
         </div>
     </div>
+
+
+
+    <!-- New Player Tutorial -->
+    <div id="newPlayerTutModal" class="modal-overlay"><div class="modal-box text-center">
+      <div class="new-player-tut-eyebrow">NEW CRAFTER GUIDE · <span id="newPlayerTutPageNum">1 / 6</span></div>
+      <div class="new-player-tut-title" id="newPlayerTutTitle">Welcome to Craft Madness</div>
+      <div class="new-player-tut-pages">
+        <section class="new-player-tut-page active" data-tut-page="0" data-title="Welcome to Craft Madness">
+          <div class="new-player-tut-hero">🧪</div>
+          <p>You begin with only <strong>Water, Fire, Earth, and Air</strong>. From those four elements, your collection can grow into something completely ridiculous.</p>
+          <p class="mt-3">Experiment, remember useful combinations, and see where the crafting tree takes you.</p>
+        </section>
+        <section class="new-player-tut-page" data-tut-page="1" data-title="How to Craft">
+          <div class="new-player-tut-craft"><div class="new-player-tut-mini"><span class="emoji">🔥</span>Element 1</div><span class="new-player-tut-plus">+</span><div class="new-player-tut-mini"><span class="emoji">🌎</span>Element 2</div><span class="new-player-tut-arrow">→</span><div class="new-player-tut-mini"><span class="emoji">❓</span>Result</div></div>
+          <p><strong>Every forge uses exactly two elements.</strong> Put one card into each crafting slot, then combine them.</p>
+          <p class="mt-3">Some pairs create something new. Some don't. Failed combinations are part of experimenting.</p>
+        </section>
+        <section class="new-player-tut-page" data-tut-page="2" data-title="Mutations">
+          <div class="new-player-mut-row"><div class="new-player-mut"><div style="font-size:2rem">🔥</div><strong>Hot</strong><small>A special trait that can affect how an element behaves.</small></div><div class="new-player-mut"><div style="font-size:2rem">✦</div><strong>Basic</strong><small>A trait found on certain important crafting elements.</small></div></div>
+          <p>Elements can have special traits called <strong>modifiers</strong>. For now, the only ones we'll spoil are <strong>Hot</strong> and <strong>Basic</strong>.</p>
+          <p class="mt-3">There are more. You'll figure them out as you craft. 👀</p>
+        </section>
+        <section class="new-player-tut-page" data-tut-page="3" data-title="How Many Elements?">
+          <div class="new-player-count">1000+</div>
+          <p>Craft Madness has <strong>over a thousand discoverable elements</strong>. You are absolutely not expected to find everything immediately.</p>
+          <p class="mt-3">Your collection is meant to grow as you explore more and more branches.</p>
+        </section>
+        <section class="new-player-tut-page" data-tut-page="4" data-title="Seasonal Events">
+          <div class="new-player-tut-hero">🎉</div>
+          <p>Craft Madness also has <strong>Seasonal Events</strong>. When one is active, special limited-time elements can appear and be crafted during that event.</p>
+          <p class="mt-3">Tap the <strong>🎉 party popper button</strong> in the storage controls to open the <strong>Seasonal Vault</strong>. That is where seasonal elements are archived and where you can check the current or upcoming event.</p>
+        </section>
+        <section class="new-player-tut-page" data-tut-page="5" data-title="Good Luck, Crafter">
+          <div class="new-player-tut-hero">🌌</div>
+          <p>Craft Madness starts simple on purpose. New mechanics, modifiers, progression systems, seasonal events, and stranger things will <strong>unravel as you craft</strong>.</p>
+          <p class="mt-3">Experiment. Follow weird branches. Try combinations that sound stupid. Sometimes those are the useful ones.</p>
+          <p class="mt-4 font-semibold" style="color:var(--text-primary)">Good luck. ✨</p>
+        </section>
+      </div>
+      <div class="new-player-tut-footer">
+        <div class="new-player-tut-dots" id="newPlayerTutDots"><span class="new-player-tut-dot active"></span><span class="new-player-tut-dot"></span><span class="new-player-tut-dot"></span><span class="new-player-tut-dot"></span><span class="new-player-tut-dot"></span><span class="new-player-tut-dot"></span></div>
+        <div class="new-player-tut-actions"><button id="newPlayerTutBack" class="new-player-tut-btn" disabled>Back</button><button id="newPlayerTutSkip" class="new-player-tut-btn">Skip</button><button id="newPlayerTutNext" class="new-player-tut-btn primary">Next</button></div>
+      </div>
+    </div></div>
+
+    <!-- Shop Tutorial Modal -->
+    <div id="shopTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:470px;border-color:#14b8a6">
+        <button class="modal-close" data-close="shopTutModal">&times;</button>
+        <h2 class="font-display text-xl mb-2" style="color:#14b8a6">🛒 Shop Unlocked!</h2>
+        <p class="text-sm mb-2" style="color:var(--text-secondary)">You crafted <strong style="color:#14b8a6">Shop</strong>. Your collection can now earn coins, and the Shop lets you spend them on element packs.</p>
+        <div class="progression-tut-demo">
+            <div class="progression-tut-card shop-demo"><span class="pt-emoji">🛒</span><span class="pt-name">Shop</span><small>Earn + spend coins</small></div>
+            <div class="progression-tut-arrow">→</div>
+            <div class="progression-tut-card"><span class="pt-emoji">📦</span><span class="pt-name">Element Packs</span><small>Expand your crafting roots</small></div>
+        </div>
+        <div class="rounded-xl p-3 mb-4 text-left text-xs space-y-2" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-secondary)">
+            <p>💰 <strong style="color:var(--text-primary)">Coins are now active</strong> — discovered elements generate coins over time.</p>
+            <p>📦 <strong style="color:var(--text-primary)">Buy packs</strong> — packs can reveal useful crafting roots and new branches.</p>
+            <p>🔄 <strong style="color:var(--text-primary)">Stock refreshes</strong> — the Shop periodically restocks.</p>
+        </div>
+        <button class="font-semibold text-sm py-2.5 px-8 rounded-full" style="background:#14b8a6;color:#042f2e" data-close="shopTutModal">Got it!</button>
+    </div></div>
+
+    <!-- Star Forge Tutorial Modal -->
+    <div id="starForgeTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:470px;border-color:#a855f7">
+        <button class="modal-close" data-close="starForgeTutModal">&times;</button>
+        <h2 class="font-display text-xl mb-2" style="color:#c084fc">🌟 Star Forge Awakened!</h2>
+        <p class="text-sm mb-2" style="color:var(--text-secondary)">The <strong style="color:#c084fc">Star Forge</strong> can bless eligible elements with powerful modifiers.</p>
+        <div class="progression-tut-demo">
+            <div class="progression-tut-card"><span class="pt-emoji">🧪</span><span class="pt-name">Your Elements</span><small>Eligible cards</small></div>
+            <div class="progression-tut-arrow">→</div>
+            <div class="progression-tut-card forge-demo"><span class="pt-emoji">🌟</span><span class="pt-name">STAR FORGE</span><small>Bless + cleanse</small></div>
+        </div>
+        <div class="rounded-xl p-3 mb-4 text-left text-xs space-y-2" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-secondary)">
+            <p>✨ <strong style="color:var(--text-primary)">Bestow modifiers</strong> — several eligible elements are blessed each activation.</p>
+            <p>🧼 <strong style="color:var(--text-primary)">Cleanse penalties</strong> — the Forge can remove harmful modifiers from chosen elements.</p>
+            <p>⏱️ <strong style="color:var(--text-primary)">Cooldown</strong> — after use, the Forge needs time before it can activate again.</p>
+            <p>💎 <strong style="color:var(--text-primary)">Upgradeable</strong> — later upgrades can make the Forge even stronger.</p>
+        </div>
+        <button class="font-semibold text-sm py-2.5 px-8 rounded-full" style="background:linear-gradient(135deg,#a855f7,#fbbf24);color:#17142c" data-close="starForgeTutModal">Got it!</button>
+    </div></div>
 
     <!-- Frozen Tutorial Modal -->
     <div id="frozenTutModal" class="modal-overlay"><div class="modal-box text-center" style="max-width:460px;border-color:#60a5fa">
@@ -2060,7 +2247,10 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 <li><span class="changelog-tag tag-fix">FIX</span> Boss Coins, BC upgrades, mutation memory, boss unlocks and Boss Defeat trophies now survive Prestige resets.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Three sequential bosses: The Unmaker → The Chronophage → The Null Sovereign.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> The Unmaker can skip an attack and lock one discovered element for 3 crafts.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Boss challenges now lock Storage, Guide, Hints, Import/Export, Shop and Star Forge. Trying to use them shows “The boss has locked some of your powers...”</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Boss challenges now lock Storage, Guide, Hints, Import/Export, Shop and Star Forge. Prestige no longer resets any upgrade levels; Prestige Shop upgrades are permanent. Trying to use them shows “The boss has locked some of your powers...”</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Boss combat now has quick craft-projectile attacks, boss counterattacks and win/loss defeat animations.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Crafting Shop or Star Forge during a boss challenge no longer activates their powers. A newly discovered Star Forge is carried back to the normal save and awakens when the fight ends.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Added first-discovery tutorials for Shop and Star Forge. Seasonal Vault now shows the next upcoming event and its start date.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Boss lobby now shows Boss Coins, boss selection, unlock requirements and permanent upgrades.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> 20 automatic seasonal events with 100 rank-excluded discoveries each, event-specific animated cards and the Seasonal Vault.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Star Forge excludes Exclusive, Seasonal and April Fools elements and can finally cleanse penalty elements.</li>
@@ -2072,7 +2262,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections and notifications, with jewel-like exclusive cards.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Distinct modifier colors, patterns and sigils; CyMoney cards feature a cyan crystal design and CyMoney label. Star Forge has an animated activation and collectible-card results.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Each CyMoney element earns 1 CyMoney per minute in the active tab. The CyMoney Workshop offers 11 upgrade types; CyMoney is kept on Prestige, while upgrade levels reset.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys and 100,000 coins, with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. All upgrade levels reset.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys and 100,000 coins, with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. Upgrade levels are permanent.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Opening a lock now announces: “You hear a lock being broken...”</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Craft Shop to unlock shopping and coin earnings. Keys reveal its recipe but do not unlock Shop. Find the ending to see your rank.</li>
                 <li><span class="changelog-tag tag-ui">UI</span> Forge controls and CyMoney appear as you unlock them.</li>
@@ -3729,7 +3919,53 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             }
             return null;
         }
-        function syncSeasonalEvents(announce=false){
+        
+        function seasonalEventStartDate(ev,year){
+            // SEASONAL_EVENTS uses month/day ranges; support either startMonth/startDay or month/start/end shape.
+            const sm=ev.startMonth??ev.month??ev.m??1;
+            const sd=ev.startDay??ev.start??ev.dayStart??1;
+            return new Date(year,Math.max(0,sm-1),sd,0,0,0,0);
+        }
+        function seasonalEventEndDate(ev,year){
+            const em=ev.endMonth??ev.month??ev.m??1;
+            const ed=ev.endDay??ev.end??ev.dayEnd??ev.startDay??ev.start??1;
+            return new Date(year,Math.max(0,em-1),ed,23,59,59,999);
+        }
+        function getNextSeasonalEvent(now=new Date()){
+            if(!Array.isArray(SEASONAL_EVENTS)||!SEASONAL_EVENTS.length)return null;
+            const y=now.getFullYear();
+            const candidates=[];
+            for(const ev of SEASONAL_EVENTS){
+                for(const yr of [y,y+1]){
+                    const start=seasonalEventStartDate(ev,yr);
+                    if(start>now)candidates.push({ev,start});
+                }
+            }
+            candidates.sort((a,b)=>a.start-b.start);
+            return candidates[0]||null;
+        }
+        function formatSeasonalDate(d){
+            return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+        }
+        function renderUpcomingSeasonalEvent(){
+            const box=$('seasonalUpcoming');if(!box)return;
+            const now=new Date();
+            let active=null;
+            for(const ev of SEASONAL_EVENTS){
+                const s=seasonalEventStartDate(ev,now.getFullYear()),e=seasonalEventEndDate(ev,now.getFullYear());
+                if(now>=s&&now<=e){active={ev,start:s,end:e};break;}
+            }
+            const next=getNextSeasonalEvent(now);
+            if(active){
+                box.innerHTML=`<span class="season-next-icon">${active.ev.icon||'🎉'}</span><strong>${active.ev.name}</strong> is active now · ends ${formatSeasonalDate(active.end)}${next?`<br>Next: <strong>${next.ev.icon||'🎉'} ${next.ev.name}</strong> · ${formatSeasonalDate(next.start)}`:''}`;
+            }else if(next){
+                box.innerHTML=`Next event: <span class="season-next-icon">${next.ev.icon||'🎉'}</span><strong>${next.ev.name}</strong> · starts ${formatSeasonalDate(next.start)}`;
+            }else{
+                box.textContent='No upcoming seasonal event found.';
+            }
+        }
+
+        function syncSeasonalEvents(announce=false){renderUpcomingSeasonalEvent();
             elements.forEach(normalizeSeasonalElement);
             const before=[...activeSeasonalIds].sort().join('|');
             activeSeasonalIds=new Set(getActiveSeasonalEvents().map(e=>e.id));
@@ -3778,6 +4014,33 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
 
         function openModal(id) { $(id).style.display='block'; }
         function closeModal(id) { $(id).style.display='none'; }
+
+        let newPlayerTutPage=0;
+        function isBrandNewCrafter(){
+            if(bossMode||!Array.isArray(elements)||elements.length!==4)return false;
+            const names=elements.map(e=>String(e?.name||'').trim().toLowerCase()).sort();
+            return names.join('|')===['air','earth','fire','water'].sort().join('|');
+        }
+        function renderNewPlayerTutorial(){
+            const pages=[...document.querySelectorAll('#newPlayerTutModal [data-tut-page]')];if(!pages.length)return;
+            newPlayerTutPage=Math.max(0,Math.min(pages.length-1,newPlayerTutPage));
+            pages.forEach((p,i)=>p.classList.toggle('active',i===newPlayerTutPage));
+            $('newPlayerTutTitle').textContent=pages[newPlayerTutPage].dataset.title||'Craft Madness';
+            $('newPlayerTutPageNum').textContent=`${newPlayerTutPage+1} / ${pages.length}`;
+            [...$('newPlayerTutDots').children].forEach((d,i)=>d.classList.toggle('active',i===newPlayerTutPage));
+            $('newPlayerTutBack').disabled=newPlayerTutPage===0;
+            $('newPlayerTutNext').textContent=newPlayerTutPage===pages.length-1?'Start Crafting':'Next';
+            $('newPlayerTutSkip').style.visibility=newPlayerTutPage===pages.length-1?'hidden':'visible';
+        }
+        function finishNewPlayerTutorial(){closeModal('newPlayerTutModal');try{_setItem('cm_new_player_tutorial_seen','1');}catch(e){}}
+        function maybeShowNewPlayerTutorial(){
+            let seen=false;try{seen=_getItem('cm_new_player_tutorial_seen')==='1';}catch(e){}
+            if(seen||!isBrandNewCrafter())return;
+            newPlayerTutPage=0;renderNewPlayerTutorial();setTimeout(()=>openModal('newPlayerTutModal'),350);
+        }
+        $('newPlayerTutBack').addEventListener('click',()=>{if(newPlayerTutPage>0){newPlayerTutPage--;renderNewPlayerTutorial();}});
+        $('newPlayerTutNext').addEventListener('click',()=>{const total=document.querySelectorAll('#newPlayerTutModal [data-tut-page]').length;if(newPlayerTutPage>=total-1){finishNewPlayerTutorial();return;}newPlayerTutPage++;renderNewPlayerTutorial();});
+        $('newPlayerTutSkip').addEventListener('click',finishNewPlayerTutorial);
 
         document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
         document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.style.display='none'; }));
@@ -4122,6 +4385,72 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function bossPowerLocked(){return !!bossMode;}
         function notifyBossPowerLock(){notify('POWER LOCKED','The boss has locked some of your powers...','🔒',2600);}
         function bossData(){return bossMode&&gs.bossRun?gs.bossRun:null;}
+        function grantStarForgeToMainFromBoss(){
+            try{
+                let mainEls=STARTERS.map(e=>({...e}));
+                const rawEls=_getItem('fc_el');
+                if(rawEls){const parsed=JSON.parse(rawEls);if(Array.isArray(parsed))mainEls=parsed;}
+                const already=mainEls.some(e=>String(e.name).toLowerCase()==='star forge');
+                if(!already){
+                    mainEls.push({name:'Star Forge',emoji:'⭐',isLegendary:true,description:'A stellar forge whose power awakens after the boss challenge ends.'});
+                    _setItem('fc_el',JSON.stringify(mainEls));
+                    let mainGs=baseGameState();
+                    const rawGs=_getItem('fc_gs');
+                    if(rawGs){const parsed=JSON.parse(rawGs);if(parsed&&typeof parsed==='object')mainGs={...mainGs,...parsed};}
+                    mainGs.pendingStarForgeBossGrant=true;
+                    _setItem('fc_gs',JSON.stringify(mainGs));
+                    return true;
+                }
+            }catch(e){}
+            return false;
+        }
+        function bossProgressionCraftMessage(el){
+            if(!bossMode||!el?.name)return;
+            if(el.name==='Shop'){
+                notify('SYSTEM MESSAGE','The boss has locked some of your powers...','🔒',4300);
+            }else if(el.name==='Star Forge'){
+                const granted=grantStarForgeToMainFromBoss();
+                notify('SYSTEM MESSAGE',granted
+                    ? "The boss has locked some of your powers... The Star Forge's power will work after you or the boss is down."
+                    : "The boss has locked some of your powers... The Star Forge's power will return after you or the boss is down.",'🌟',6000);
+            }
+        }
+        function bossFxBanner(text,won){
+            const old=document.querySelector('.boss-fight-end-banner');if(old)old.remove();
+            const n=document.createElement('div');n.className='boss-fight-end-banner '+(won?'win':'lose');n.textContent=text;
+            document.body.appendChild(n);setTimeout(()=>n.remove(),900);
+        }
+        function animateBossPlayerAttack(el,hit){
+            if(!bossMode)return;
+            const target=$('bossEmoji')||$('bossPanel'),source=resultArea.querySelector('.el-card')||resultArea;
+            if(!target||!source)return;
+            const a=source.getBoundingClientRect(),b=target.getBoundingClientRect();
+            const fx=document.createElement('div');fx.className='boss-attack-projectile';
+            fx.innerHTML=`<span class="fx-emoji">${el?.emoji||'✦'}</span><span class="fx-name">${el?.name||'Craft'} · ${hit}</span>`;
+            fx.style.left=(a.left+a.width/2)+'px';fx.style.top=(a.top+a.height/2)+'px';document.body.appendChild(fx);
+            const dx=(b.left+b.width/2)-(a.left+a.width/2),dy=(b.top+b.height/2)-(a.top+a.height/2);
+            const anim=fx.animate([
+                {transform:'translate(-50%,-50%) scale(.82) rotate(-5deg)',opacity:.9},
+                {transform:`translate(calc(-50% + ${dx*.55}px),calc(-50% + ${dy*.55}px)) scale(1.04) rotate(3deg)`,opacity:1,offset:.58},
+                {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(.5) rotate(8deg)`,opacity:.15}
+            ],{duration:390,easing:'cubic-bezier(.22,.75,.2,1)'});
+            anim.onfinish=()=>{fx.remove();const p=$('bossPanel');if(p){p.classList.remove('boss-hit-flash');void p.offsetWidth;p.classList.add('boss-hit-flash');setTimeout(()=>p.classList.remove('boss-hit-flash'),380);}};
+        }
+        function animateBossCounterAttack(){
+            if(!bossMode)return;
+            const p=$('bossPanel'),hp=$('bossPlayerHpFill');
+            if(p){p.classList.remove('boss-counter-lunge');void p.offsetWidth;p.classList.add('boss-counter-lunge');setTimeout(()=>p.classList.remove('boss-counter-lunge'),450);}
+            setTimeout(()=>{if(hp){hp.classList.remove('player-hit');void hp.offsetWidth;hp.classList.add('player-hit');setTimeout(()=>hp.classList.remove('player-hit'),430);}},170);
+        }
+        function animateBossDefeat(won){
+            if(won){
+                const p=$('bossPanel');if(p)p.classList.add('boss-defeated');
+                bossFxBanner('BOSS DEFEATED',true);
+            }else{
+                document.body.classList.add('boss-player-defeated');
+                bossFxBanner('DEFEATED',false);
+            }
+        }
         function bossRunUpgrade(id){const b=bossData();return Math.max(0,Math.floor(Number(b?.upgrades?.[id])||0));}
         function bossLockedTurns(name){const b=bossData();return b?Math.max(0,Math.floor(Number(b.locks?.[name])||0)):0;}
         function tickBossLocks(){const b=bossData();if(!b)return;b.locks=b.locks||{};Object.keys(b.locks).forEach(n=>{b.locks[n]--;if(b.locks[n]<=0)delete b.locks[n];});}
@@ -4135,12 +4464,27 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         function rememberBossMutations(el){const mem=bossMutationMemory();if(!mem||!el?.name)return;const flags=BOSS_MUTATIONS.filter(k=>!!el[k]);if(el.isEverything)flags.push('isEverything');if(flags.length)mem[el.name]=[...new Set([...(mem[el.name]||[]),...flags])];}
         function restoreBossMutations(el){const mem=bossMutationMemory();if(!mem||!el||!mem[el.name])return el;mem[el.name].forEach(k=>el[k]=true);if(el.isEverything)stripToEverything(el);return el;}
         function applyBossMutations(el){const b=bossData(),lv=bossRunUpgrade('mutation');if(!b||!lv||!el||el.isFinal||el.isSeasonal||el.isAprilFools||el.isExclusive)return el;restoreBossMutations(el);if(Math.random()<.001){el.isEverything=true;stripToEverything(el);rememberBossMutations(el);notify('IMPOSSIBLE MUTATION','The child mutated directly into Everything. 0.1% chance.','🌈',6500);return el;}if(Math.random()>=bossMutationChance(lv)){rememberBossMutations(el);return el;}const max=bossMutationMax(lv),amt=1+Math.floor(Math.random()*max),pool=BOSS_MUTATIONS.filter(k=>!el[k]).sort(()=>Math.random()-.5),got=pool.slice(0,Math.min(amt,pool.length));got.forEach(k=>el[k]=true);rememberBossMutations(el);if(got.length)notify('Mutation!',`${el.name} gained ${got.length} random mutation${got.length===1?'':'s'}.`,'🧬',2400);return el;}
-        function bossAfterCraft(el,isNew){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();const hit=bossDamageFromElement(el,isNew);b.hp=Math.max(0,b.hp-hit);if(b.hp<=0){save();finishBossFight(true);return true;}const r=b.hp/d.maxHp,np=r<=.33?3:r<=.66?2:1;if(np>b.phase){b.phase=np;notify('BOSS PHASE '+np,d.phases[np-1],np===3?'💀':'⚠️',4500);}if(!maybeBossLockInsteadOfAttack()){const back=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-back);notify('Boss hit',`${el.name} dealt ${hit} damage. ${d.name} struck back for ${back}.`,'⚔️',2600);}else notify('Boss hit',`${el.name} dealt ${hit} damage. The Unmaker sealed an element instead of attacking.`,'⚔️',2600);maybeBossRecovery();updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
-        function bossMissedCraft(){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
+        function bossAfterCraft(el,isNew){const b=bossData();if(!b||b.ending)return !!b?.ending;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();const hit=bossDamageFromElement(el,isNew);animateBossPlayerAttack(el,hit);b.hp=Math.max(0,b.hp-hit);if(b.hp<=0){updateBossUI();save();finishBossFight(true);return true;}const r=b.hp/d.maxHp,np=r<=.33?3:r<=.66?2:1;if(np>b.phase){b.phase=np;notify('BOSS PHASE '+np,d.phases[np-1],np===3?'💀':'⚠️',4500);}if(!maybeBossLockInsteadOfAttack()){const back=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-back);setTimeout(animateBossCounterAttack,240);notify('Boss hit',`${el.name} dealt ${hit} damage. ${d.name} struck back for ${back}.`,'⚔️',2600);}else notify('Boss hit',`${el.name} dealt ${hit} damage. The Unmaker sealed an element instead of attacking.`,'⚔️',2600);maybeBossRecovery();updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
+        function bossMissedCraft(){const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);animateBossCounterAttack();notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
         function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');document.title='Craft Madness';if($('bossGameHeading'))$('bossGameHeading').hidden=true;loadNamedSave(false);bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
         function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else elements.push({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
-        function finishBossFight(won){const b=bossData();if(!b)return;const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));resetDZs();clearBossSave();restoreMainGame();const m=bossMeta();m.coins+=bc;if(b.upgrades?.mutationMemory&&b.mutationMemory)m.mutationMemory={...(m.mutationMemory||{}),...b.mutationMemory};gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);}
+        function finishBossFight(won){
+            const b=bossData();if(!b||b.ending)return;
+            b.ending=true;save();resetDZs();animateBossDefeat(won);
+            setTimeout(()=>finishBossFightNow(won,b),820);
+        }
+        function finishBossFightNow(won,b){
+            const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));
+            clearBossSave();restoreMainGame();document.body.classList.remove('boss-player-defeated');const panel=$('bossPanel');if(panel)panel.classList.remove('boss-defeated');
+            const m=bossMeta();m.coins+=bc;if(b.upgrades?.mutationMemory&&b.mutationMemory)m.mutationMemory={...(m.mutationMemory||{}),...b.mutationMemory};gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;
+            if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}
+            const pendingForge=!!gs.pendingStarForgeBossGrant;if(pendingForge){delete gs.pendingStarForgeBossGrant;gs.sfUnlocked=true;}
+            save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();
+            if(pendingForge){notify('STAR FORGE AWAKENED',"The fight is over. The Star Forge's power is now available.",'🌟',5200);if(!starForgeTutShown){starForgeTutShown=true;setTimeout(()=>openModal('starForgeTutModal'),500);}}
+            const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';
+            notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);
+        }
         function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{})};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;
             ['shopModal','starForgeModal','exportModal','importModal'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
             ['storagePanel','exclusiveStorage','seasonalStorage','aprilFoolsStorage','hintPanel','craftGuide'].forEach(id=>{const el=$(id);if(el){el.hidden=true;el.style.display='none';}});
@@ -4699,7 +5043,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             toggle.setAttribute('aria-label',panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage');
             toggle.title=panel.hidden?'Show Exclusive Storage':'Hide Exclusive Storage';
         });
-        $('seasonalToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
+        $('seasonalToggle').addEventListener('click',()=>{renderUpcomingSeasonalEvent();if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('seasonalStorage'),toggle=$('seasonalToggle');
             const show=toggle.getAttribute('aria-expanded')!=='true';
             panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
@@ -5019,6 +5363,8 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         let errorTutShown=false;
         let fatalErrorTutShown=false;
         let penaltyTutShown=false;
+        let shopTutShown=false;
+        let starForgeTutShown=false;
         function resetDZs(){clearDZ(dz1,dz1c,1);clearDZ(dz2,dz2c,2);isCombining=false;}
         function updateBtnState(){const ok=sel1&&sel2;combineBtn.disabled=!ok;combineBtnM.disabled=!ok;}
 
@@ -5421,7 +5767,15 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 if(newEl.isExclusive||newEl.isAprilFools||newEl.isSeasonal)renderEls();
                 updateCount();save();checkStarForgeUnlock();
                 // Notifications for special types
-                if(newEl.generatorStroke){notify('SYSTEM MESSAGE','Oh no... the generator seems to have had a bad day...','🤕',6500);}
+                if(!bossMode&&newEl.name==='Shop'){
+                    notify('SHOP UNLOCKED!','Coins and element packs are now available.','🛒',4200);
+                    if(!shopTutShown){shopTutShown=true;openModal('shopTutModal');}
+                }
+                else if(!bossMode&&newEl.name==='Star Forge'){
+                    notify('STAR FORGE AWAKENED!','Stellar blessings are now available.','🌟',4200);
+                    if(!starForgeTutShown){starForgeTutShown=true;openModal('starForgeTutModal');}
+                }
+                else if(newEl.generatorStroke){notify('SYSTEM MESSAGE','Oh no... the generator seems to have had a bad day...','🤕',6500);}
                 else if(newEl.isFatalError){notify('FATAL ERROR!',newEl.name+' — critically glitched!','💀');if(!fatalErrorTutShown){fatalErrorTutShown=true;openModal('fatalErrorTutModal');}}
                 else if(newEl.isError){notify('ERROR!',newEl.name+' — glitched element!','⚠️');if(!errorTutShown){errorTutShown=true;openModal('errorTutModal');}}
                 else if(hasPenaltyMod(newEl)){notify('⚠️ PENALTY!',newEl.name+' — debuffs your coin earn!','☠️');if(!penaltyTutShown){penaltyTutShown=true;openModal('penaltyTutModal');}}
@@ -5434,6 +5788,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
                 else if(newEl.isHot)notify('Hot Element!',newEl.name+' created!','🔥');
                 else if(newEl.isQuestion)notify('Mysterious!',newEl.name+' discovered!','❓');
             }
+            if(bossMode&&(['Shop','Star Forge'].includes(newEl.name)))bossProgressionCraftMessage(newEl);
             if(bossMode&&bossAfterCraft(exists!==-1?elements[exists]:newEl,exists===-1))return;
             resetDZs();
         }
@@ -5782,7 +6137,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
             const keptBossMeta=structuredClone(bossMeta());
             gs={everythingSeen:[],everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),bossMeta:keptBossMeta,coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,cyUpgrades:{},cyProgress:0,sfUpgraded:false,sfUnlocked:false};
             cyLastTick=Date.now();clearTimeout(sfPresentationTimer);sfAnimating=false;$('starForgeEffect').hidden=true;
-            if(prestigeReset)prestigeData().upgrades={};
+            
             if(prestigeData().times>0)grantPrestigeStart();
             // Reset Star Forge to locked
             sfCooldownEnd=0;gs.sfCooldownEnd=0;
@@ -5902,6 +6257,7 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
         applySiteFooter();
         applyAprilFoolsMode();
         load();
+        maybeShowNewPlayerTutorial();
         syncSeasonalEvents(true);
         loadSortPref();
         renderEls();
