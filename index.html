@@ -2710,7 +2710,7 @@ html.card-hover-off .sculpted-card:hover{
         <div class="changelog-version">
             <h3>v3.1 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
             <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-new">NEW</span> Restored the Developer Panel season override dropdown with all 20 events and a Use real date button.</li>
+
                 <li><span class="changelog-tag tag-fix">FIX</span> Removed Korean localization and its rendering hooks. Star Forge presentation was rebuilt with guaranteed cleanup and a fail-safe timeout.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Seasonal collection cards are centered and aligned with normal cards.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Rebuilt fixed-screen UI through a viewport portal so modals, system messages and the changelog button stay attached to the actual screen instead of jumping to a transformed half-page area on mobile.</li>
@@ -6789,15 +6789,20 @@ html.card-hover-off .sculpted-card:hover{
 
         function populateDeveloperSeasonSelect(){
             const sel=$('developerSeasonSelect');if(!sel)return;
-            const current=getDeveloperSeasonOverride()||'';
+            const current=getDeveloperSeasonOverride()||(OldAllCreate?'__april_fools__':'');
             sel.innerHTML='<option value="">Real date (automatic)</option>'+
-                SEASONAL_EVENTS.map(ev=>`<option value="${ev.id}">${ev.icon} ${ev.name}</option>`).join('');
+                SEASONAL_EVENTS.map(ev=>`<option value="${ev.id}">${ev.icon} ${ev.name}</option>`).join('')+
+                '<option value="__april_fools__">🤡 April Fools</option>';
             sel.value=current;
             updateDeveloperSeasonStatus();
         }
         function updateDeveloperSeasonStatus(){
             const box=$('developerSeasonStatus');if(!box)return;
             const forced=getDeveloperSeasonOverride();
+            if(OldAllCreate&&!forced){
+                box.textContent='Developer override: 🤡 April Fools mode. This is separate from the seasonal event system.';
+                return;
+            }
             if(!forced){
                 const active=getActiveSeasonalEvents();
                 box.textContent=active.length
@@ -6809,10 +6814,19 @@ html.card-hover-off .sculpted-card:hover{
             box.textContent=`Forced season: ${ev?.icon||'🎉'} ${ev?.name||forced}. Ignores the calendar until cleared.`;
         }
         function applyDeveloperSeasonOverride(id){
+            const april=id==='__april_fools__';
             try{
-                if(id&&SEASONAL_EVENTS.some(ev=>ev.id===id))localStorage.setItem('cm_dev_season_override',id);
+                // April Fools is intentionally NOT stored as a seasonal event.
+                if(!april&&id&&SEASONAL_EVENTS.some(ev=>ev.id===id))localStorage.setItem('cm_dev_season_override',id);
                 else localStorage.removeItem('cm_dev_season_override');
             }catch(e){}
+
+            if(april){
+                if(!OldAllCreate)toggleOldAllCreate();
+            }else if(OldAllCreate){
+                toggleOldAllCreate();
+            }
+
             syncSeasonalEvents(false);
             renderEls();updateCount();save();
             renderUpcomingSeasonalEvent();
@@ -6854,12 +6868,15 @@ html.card-hover-off .sculpted-card:hover{
             const id=$('developerSeasonSelect').value;
             applyDeveloperSeasonOverride(id);
             const ev=seasonalEventById(id);
-            notify('DEV SEASON',ev?`Forced ${ev.icon} ${ev.name}.`:'Returned to automatic date mode.','🛠',2600);
+            notify('DEV SEASON',
+                id==='__april_fools__'?'April Fools mode enabled.':
+                ev?`Forced ${ev.icon} ${ev.name}.`:'Returned to automatic date mode.',
+                id==='__april_fools__'?'🤡':'🛠',2600);
         });
         $('clearDeveloperSeason').addEventListener('click',()=>{
             $('developerSeasonSelect').value='';
             applyDeveloperSeasonOverride('');
-            notify('DEV SEASON','Season override cleared. Using the real date again.','🗓',2600);
+            notify('DEV SEASON','Developer override cleared. Using the real date again.','🗓',2600);
         });
         $('applyDeveloper').addEventListener('click',()=>{
             try{const data=JSON.parse($('developerJson').value);if(!Array.isArray(data.elements)||data.elements.some(e=>!e||typeof e.name!=='string'||typeof e.emoji!=='string'))throw Error('Elements must have names and emoji strings.');
