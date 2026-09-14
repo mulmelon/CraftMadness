@@ -1868,6 +1868,33 @@ html.card-hover-off .sculpted-card:hover{
 #cmViewportPortal,#cmViewportPortal *{
     -webkit-transform-style:flat;
 }
+
+html[lang="ko"] body,
+html[lang="ko"] button,
+html[lang="ko"] input,
+html[lang="ko"] select,
+html[lang="ko"] textarea{
+    font-family:'Lexend','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif!important;
+}
+html[lang="ko"] h1,
+html[lang="ko"] h2,
+html[lang="ko"] h3,
+html[lang="ko"] .font-display{
+    font-family:'Righteous','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif!important;
+    letter-spacing:-.02em;
+}
+
+.dev-season-control{
+    margin:10px 0 14px;padding:12px;border:1px solid var(--border);
+    border-radius:12px;background:var(--bg-card);
+}
+.dev-season-control label{display:block;margin-bottom:7px}
+.dev-season-control .settings-select{max-width:none;width:100%}
+.dev-season-control button{
+    padding:7px 10px;border:1px solid var(--ui-edge,var(--border));
+    border-radius:8px;background:var(--ui-button,var(--bg-card-hover));color:var(--text-primary);
+    cursor:pointer;font-size:.75rem;font-weight:700;
+}
 </style>
 
 </head>
@@ -1898,10 +1925,10 @@ html.card-hover-off .sculpted-card:hover{
     <div class="max-w-5xl mx-auto px-4 py-6">
         <!-- Header -->
         <header class="text-center mb-6">
-            <div class="workshop-label">✧ Discover · Forge · Collect ✧</div>
+            <div class="workshop-label" data-i18n="main.kicker">✧ Discover · Forge · Collect ✧</div>
             <div id="normalGameHeading">
-<h1 class="font-display text-4xl md:text-5xl mb-1" style="color:var(--gold)">Craft Madness</h1>
-            <p class="text-sm" style="color:var(--text-secondary)">Combine elements to discover new ones</p>
+<h1 class="font-display text-4xl md:text-5xl mb-1" style="color:var(--gold)" data-i18n="main.title">Craft Madness</h1>
+            <p class="text-sm" style="color:var(--text-secondary)" data-i18n="main.subtitle">Combine elements to discover new ones</p>
                 </div>
                 <div id="bossGameHeading" hidden aria-label="Boss Madness">
                     <div class="boss-game-kicker">COMBINE. FORGE. <span>FIGHT.</span></div>
@@ -2086,9 +2113,9 @@ html.card-hover-off .sculpted-card:hover{
         <!-- Elements Grid -->
         <section class="mt-6 collection-panel">
             <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
-                <h2 class="font-display text-lg" style="color:var(--text-secondary)">Your Elements</h2>
+                <h2 class="font-display text-lg" style="color:var(--text-secondary)" data-i18n="main.your_elements">Your Elements</h2>
                 <div class="relative flex-grow max-w-xs order-3 sm:order-2 w-full sm:w-auto mt-2 sm:mt-0">
-                    <input type="text" id="searchInput" placeholder="Search..." class="w-full px-4 py-2 pr-9 rounded-xl text-sm">
+                    <input type="text" id="searchInput" placeholder="Search..." data-i18n-placeholder="common.search" class="w-full px-4 py-2 pr-9 rounded-xl text-sm">
                     <svg class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2" style="color:var(--text-secondary)" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
                 <div class="flex gap-1.5 order-2 sm:order-3 items-center">
@@ -2110,7 +2137,7 @@ html.card-hover-off .sculpted-card:hover{
                 <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
                 <button id="settingsBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" title="Settings">⚙️ Settings</button>
             </div>
-            <div id="noResults" class="hidden text-center py-6 text-sm" style="color:var(--text-secondary)">No elements match your search</div>
+            <div id="noResults" class="hidden text-center py-6 text-sm" style="color:var(--text-secondary)"><span data-i18n="main.no_results">No elements match your search</span></div>
             <div id="elementStorageViews"><div id="elGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5"></div>
 
             </div>
@@ -2118,9 +2145,9 @@ html.card-hover-off .sculpted-card:hover{
 
         <!-- History -->
         <section class="mt-10 mb-8 history-panel">
-            <h2 class="font-display text-lg mb-3" style="color:var(--text-secondary)">Discovered Combinations</h2>
+            <h2 class="font-display text-lg mb-3" style="color:var(--text-secondary)" data-i18n="main.history">Discovered Combinations</h2>
             <div id="comboHistory" class="rounded-xl p-4 overflow-y-auto max-h-[260px]" style="background:var(--bg-card);border:1px solid var(--border)">
-                <p class="italic text-center text-sm" style="color:var(--text-secondary)">No combinations yet</p>
+                <p class="italic text-center text-sm" style="color:var(--text-secondary)"><span data-i18n="main.no_combos">No combinations yet</span></p>
             </div>
         </section>
     </div>
@@ -2129,13 +2156,24 @@ html.card-hover-off .sculpted-card:hover{
     <!-- Settings Modal -->
     <div id="settingsModal" class="modal-overlay"><div class="modal-box" style="max-width:540px">
         <button class="modal-close" data-close="settingsModal">&times;</button>
-        <h2 class="font-display text-xl mb-1">⚙️ Settings</h2>
-        <p class="text-xs mb-4" style="color:var(--text-secondary)">Display settings are saved on this device.</p>
+        <h2 class="font-display text-xl mb-1" data-i18n="settings.title">⚙️ Settings</h2>
+        <p class="text-xs mb-4" style="color:var(--text-secondary)"><span data-i18n="settings.saved">Display settings are saved on this device.</span></p>
 
         <div class="settings-row">
             <div>
-                <strong>Website color</strong>
-                <small>System follows your device. Light and Dark force the whole Craft Madness interface.</small>
+                <strong data-i18n="settings.language">Language</strong>
+                <small data-i18n="settings.language_desc">Choose the interface language. April Fools Korean intentionally becomes terrible.</small>
+            </div>
+            <select id="languageSetting" class="settings-select" aria-label="Language">
+                <option value="en">English</option>
+                <option value="ko">한국어</option>
+            </select>
+        </div>
+
+        <div class="settings-row">
+            <div>
+                <strong data-i18n="settings.website_color">Website color</strong>
+                <small><span data-i18n="settings.website_color_desc">System follows your device. Light and Dark force the whole Craft Madness interface.</span></small>
             </div>
             <select id="themeModeSetting" class="settings-select" aria-label="Website color">
                 <option value="system">System</option>
@@ -2146,8 +2184,8 @@ html.card-hover-off .sculpted-card:hover{
 
         <div class="settings-row">
             <div>
-                <strong>Element color</strong>
-                <small>Keep the same card design, but choose normal element cards in Dark or a brighter Light version.</small>
+                <strong data-i18n="settings.element_color">Element color</strong>
+                <small><span data-i18n="settings.element_color_desc">Keep the same card design, but choose normal element cards in Dark or a brighter Light version.</span></small>
             </div>
             <select id="elementThemeSetting" class="settings-select" aria-label="Element color">
                 <option value="auto">Match website</option>
@@ -2158,8 +2196,8 @@ html.card-hover-off .sculpted-card:hover{
 
         <div class="settings-row">
             <div>
-                <strong>Animations</strong>
-                <small>Reduced lowers card movement and combat motion without removing gameplay.</small>
+                <strong data-i18n="settings.animations">Animations</strong>
+                <small><span data-i18n="settings.animations_desc">Reduced lowers card movement and combat motion without removing gameplay.</span></small>
             </div>
             <select id="motionSetting" class="settings-select" aria-label="Animations">
                 <option value="full">Full</option>
@@ -2170,8 +2208,8 @@ html.card-hover-off .sculpted-card:hover{
         
         <div class="settings-row">
             <div>
-                <strong>Element card size</strong>
-                <small>Change collection card size without changing the card design.</small>
+                <strong data-i18n="settings.card_size">Element card size</strong>
+                <small><span data-i18n="settings.card_size_desc">Change collection card size without changing the card design.</span></small>
             </div>
             <select id="cardSizeSetting" class="settings-select" aria-label="Element card size">
                 <option value="compact">Compact</option>
@@ -2182,8 +2220,8 @@ html.card-hover-off .sculpted-card:hover{
 
         <div class="settings-row">
             <div>
-                <strong>Card hover motion</strong>
-                <small>Turn off the lift/tilt effect when hovering or tapping cards.</small>
+                <strong data-i18n="settings.card_hover">Card hover motion</strong>
+                <small><span data-i18n="settings.card_hover_desc">Turn off the lift/tilt effect when hovering or tapping cards.</span></small>
             </div>
             <select id="cardHoverSetting" class="settings-select" aria-label="Card hover motion">
                 <option value="on">On</option>
@@ -2193,8 +2231,8 @@ html.card-hover-off .sculpted-card:hover{
 
         <div class="settings-row">
             <div>
-                <strong>System message time</strong>
-                <small>Choose how long normal system notifications stay visible.</small>
+                <strong data-i18n="settings.message_time">System message time</strong>
+                <small><span data-i18n="settings.message_time_desc">Choose how long normal system notifications stay visible.</span></small>
             </div>
             <select id="notificationTimeSetting" class="settings-select" aria-label="System message time">
                 <option value="short">Short</option>
@@ -2203,17 +2241,17 @@ html.card-hover-off .sculpted-card:hover{
             </select>
         </div>
 
-<button id="creditsBtn" class="settings-wide-btn">🎬 Credits</button>
+<button id="creditsBtn" class="settings-wide-btn" data-i18n="credits.button">🎬 Credits</button>
     </div></div>
 
     <!-- Credits Modal -->
     <div id="creditsModal" class="modal-overlay"><div class="modal-box credits-box" style="max-width:540px">
         <button class="modal-close" data-close="creditsModal">&times;</button>
-        <h2 class="font-display text-xl mb-2">🎬 Credits</h2>
+        <h2 class="font-display text-xl mb-2" data-i18n="credits.title">🎬 Credits</h2>
         <div class="credits-stage">
-            <div id="creditsRoll" class="credits-roll"><strong>Main Developer and Coder: MulMelon</strong></div>
+            <div id="creditsRoll" class="credits-roll"><strong data-i18n="credits.main">Main Developer and Coder: MulMelon</strong></div>
         </div>
-        <button id="creditsSkipBtn" class="settings-wide-btn">Skip Credits</button>
+        <button id="creditsSkipBtn" class="settings-wide-btn" data-i18n="credits.skip">Skip Credits</button>
     </div></div>
 
     <!-- Export Modal -->
@@ -2673,6 +2711,8 @@ html.card-hover-off .sculpted-card:hover{
         <div class="changelog-version">
             <h3>v3.1 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
             <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
+                <li><span class="changelog-tag tag-new">NEW</span> Developer panel can force any seasonal event from a dropdown or return to automatic real-date season detection.</li>
+                <li><span class="changelog-tag tag-new">NEW</span> Added Korean localization from Settings. Core UI, settings, credits, seasonal labels and element names can display in Korean; April Fools Korean intentionally uses absurd bad translations.</li>
                 <li><span class="changelog-tag tag-fix">FIX</span> Rebuilt fixed-screen UI through a viewport portal so modals, system messages and the changelog button stay attached to the actual screen instead of jumping to a transformed half-page area on mobile.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Added element card size, card hover motion and system-message duration settings.</li>
                 <li><span class="changelog-tag tag-new">NEW</span> Seasonal elements now inherit restrained event-specific card accents while keeping the normal Craft Madness card structure.</li>
@@ -2753,7 +2793,17 @@ html.card-hover-off .sculpted-card:hover{
         </div>
     </div></div>
 
-<div id="developerModal" class="modal-overlay"><section class="modal-box"><button class="modal-close" data-close="developerModal">×</button><h2>🛠 Developer panel</h2><p class="text-xs my-3">Edit your save JSON. Apply merges it using the same validation as Import. Export a backup first.</p><textarea id="developerJson" spellcheck="false" style="width:100%;height:320px;font:12px monospace;background:var(--bg-primary);color:var(--text-primary);padding:12px"></textarea><p id="developerError" role="status"></p><button id="applyDeveloper">Apply JSON</button><button id="refreshDeveloper">Reload current save</button></section></div>
+<div id="developerModal" class="modal-overlay"><section class="modal-box"><button class="modal-close" data-close="developerModal">×</button><h2>🛠 Developer panel</h2><p class="text-xs my-3">Edit your save JSON. Apply merges it using the same validation as Import. Export a backup first.</p>
+<div class="dev-season-control">
+<label for="developerSeasonSelect"><strong>🗓 Season override</strong></label>
+<select id="developerSeasonSelect" class="settings-select" aria-label="Developer season override"></select>
+<div class="flex gap-2 mt-2 flex-wrap">
+<button id="applyDeveloperSeason" type="button">Apply season</button>
+<button id="clearDeveloperSeason" type="button">Use real date</button>
+</div>
+<p id="developerSeasonStatus" class="text-xs mt-2" style="color:var(--text-secondary)"></p>
+</div>
+<textarea id="developerJson" spellcheck="false" style="width:100%;height:320px;font:12px monospace;background:var(--bg-primary);color:var(--text-primary);padding:12px"></textarea><p id="developerError" role="status"></p><button id="applyDeveloper">Apply JSON</button><button id="refreshDeveloper">Reload current save</button></section></div>
     <!-- Notifications -->
     <div id="notifContainer"></div>
 
@@ -4320,6 +4370,14 @@ html.card-hover-off .sculpted-card:hover{
             {id:'christmas',flag:'isChristmas',name:'Christmas',icon:'🎄',sigil:'✶',start:[12,15],end:[12,25],a:['Merry','Tinsel','Jolly','Evergreen','Candy-Cane','Gift-Wrapped','Holly','Golden','Cozy','North-Pole'],n:['Tree','Present','Stocking','Bell','Ornament','Sleigh','Cookie','Wreath','Star','Christmas']},
             {id:'yearend',flag:'isYearsEnd',name:"Year's End",icon:'🕛',sigil:'◷',start:[12,26],end:[12,31],a:['Final','Last','Silver','Midnight','Reflective','Closing','Countdown','Old-Year','Clockwork','Farewell'],n:['Hour','Page','Clock','Memory','Calendar','Countdown','Firework','Chapter','Moment','Year']}
         ];
+        const SEASON_NAME_KO={
+            newyear:'새해',valentine:'발렌타인',spring:'봄꽃',earthweek:'지구 주간',mayfestival:'5월 축제',
+            oceanweek:'바다 주간',midsummer:'한여름',fireworks:'불꽃놀이 축제',beachweek:'해변 주간',
+            meteorweek:'유성 주간',school:'개학',harvest:'수확 축제',autumn:'가을 축제',halloween:'할로윈',
+            bonfire:'모닥불 주간',wishweek:'소원 주간',winterlights:'겨울 불빛',snowweek:'눈 주간',
+            christmas:'크리스마스',yearend:'연말'
+        };
+
         const SEASONAL_FLAG_KEYS=SEASONAL_EVENTS.map(e=>e.flag);
         let activeSeasonalIds=new Set();
         function seasonalEventById(id){return SEASONAL_EVENTS.find(e=>e.id===id)||null;}
@@ -4342,7 +4400,18 @@ html.card-hover-off .sculpted-card:hover{
             const m=date.getMonth()+1,d=date.getDate(),v=m*100+d,s=ev.start[0]*100+ev.start[1],e=ev.end[0]*100+ev.end[1];
             return s<=e?(v>=s&&v<=e):(v>=s||v<=e);
         }
-        function getActiveSeasonalEvents(date=new Date()){return bossMode?[]:SEASONAL_EVENTS.filter(ev=>seasonalDateInRange(ev,date));}
+        function getDeveloperSeasonOverride(){
+            try{
+                const id=localStorage.getItem('cm_dev_season_override');
+                return id&&SEASONAL_EVENTS.some(ev=>ev.id===id)?id:null;
+            }catch(e){return null;}
+        }
+        function getActiveSeasonalEvents(date=new Date()){
+            if(bossMode)return [];
+            const forced=getDeveloperSeasonOverride();
+            if(forced)return SEASONAL_EVENTS.filter(ev=>ev.id===forced);
+            return SEASONAL_EVENTS.filter(ev=>seasonalDateInRange(ev,date));
+        }
         function isSeasonActive(id){return activeSeasonalIds.has(id);}
         function seasonalName(ev,i){return ev.a[Math.floor(i/10)]+' '+ev.n[i%10];}
         const SEASON_GLYPHS=['✦','✧','◆','◇','❖','✺','❋','☆','☼','◈'];
@@ -4470,7 +4539,8 @@ html.card-hover-off .sculpted-card:hover{
             motion:'cm_motion_mode',
             cardSize:'cm_card_size',
             cardHover:'cm_card_hover',
-            notificationTime:'cm_notification_time'
+            notificationTime:'cm_notification_time',
+            language:'cm_language'
         };
         function getLocalSetting(key,fallback){
             try{return localStorage.getItem(key)||fallback;}catch(e){return fallback;}
@@ -4478,6 +4548,147 @@ html.card-hover-off .sculpted-card:hover{
         function setLocalSetting(key,value){
             try{localStorage.setItem(key,value);}catch(e){}
         }
+        const I18N={
+            en:{
+                'settings.language':'Language',
+                'settings.language_desc':'Choose the interface language. April Fools Korean intentionally becomes terrible.',
+                'settings.title':'⚙️ Settings',
+                'settings.saved':'Display settings are saved on this device.',
+                'settings.website_color':'Website color',
+                'settings.website_color_desc':'System follows your device. Light and Dark force the whole Craft Madness interface.',
+                'settings.element_color':'Element color',
+                'settings.element_color_desc':'Keep the same card design, but choose normal element cards in Dark or a brighter Light version.',
+                'settings.animations':'Animations',
+                'settings.animations_desc':'Reduced lowers card movement and combat motion without removing gameplay.',
+                'settings.card_size':'Element card size',
+                'settings.card_size_desc':'Change collection card size without changing the card design.',
+                'settings.card_hover':'Card hover motion',
+                'settings.card_hover_desc':'Turn off the lift/tilt effect when hovering or tapping cards.',
+                'settings.message_time':'System message time',
+                'settings.message_time_desc':'Choose how long normal system notifications stay visible.',
+                'credits.button':'🎬 Credits',
+                'credits.title':'🎬 Credits',
+                'credits.main':'Main Developer and Coder: MulMelon',
+                'credits.skip':'Skip Credits',
+                'main.title':'Craft Madness',
+                'main.subtitle':'Combine elements to discover new ones',
+                'main.kicker':'✧ Discover · Forge · Collect ✧',
+                'main.your_elements':'Your Elements',
+                'main.history':'Discovered Combinations',
+                'main.no_combos':'No combinations yet',
+                'main.no_results':'No elements match your search',
+                'common.search':'Search...'
+            },
+            ko:{
+                'settings.language':'언어',
+                'settings.language_desc':'인터페이스 언어를 선택합니다. 만우절 한국어는 일부러 아주 엉망으로 번역됩니다.',
+                'settings.title':'⚙️ 설정',
+                'settings.saved':'표시 설정은 이 기기에 저장됩니다.',
+                'settings.website_color':'웹사이트 색상',
+                'settings.website_color_desc':'시스템은 기기 테마를 따릅니다. 밝게/어둡게는 Craft Madness 전체 화면 테마를 고정합니다.',
+                'settings.element_color':'원소 카드 색상',
+                'settings.element_color_desc':'카드 디자인은 그대로 유지하고 일반 원소 카드를 밝게 또는 어둡게 표시합니다.',
+                'settings.animations':'애니메이션',
+                'settings.animations_desc':'줄이기를 선택하면 게임 플레이는 유지하면서 카드 및 전투 움직임이 줄어듭니다.',
+                'settings.card_size':'원소 카드 크기',
+                'settings.card_size_desc':'카드 디자인은 그대로 두고 컬렉션 카드 크기만 변경합니다.',
+                'settings.card_hover':'카드 호버 움직임',
+                'settings.card_hover_desc':'카드를 가리키거나 탭할 때 뜨고 기울어지는 효과를 끕니다.',
+                'settings.message_time':'시스템 메시지 시간',
+                'settings.message_time_desc':'일반 시스템 알림이 화면에 남는 시간을 선택합니다.',
+                'credits.button':'🎬 제작진',
+                'credits.title':'🎬 제작진',
+                'credits.main':'메인 개발자 및 코더: MulMelon',
+                'credits.skip':'제작진 건너뛰기',
+                'main.title':'Craft Madness',
+                'main.subtitle':'원소를 조합해 새로운 원소를 발견하세요',
+                'main.kicker':'✧ 발견 · 제작 · 수집 ✧',
+                'main.your_elements':'내 원소',
+                'main.history':'발견한 조합',
+                'main.no_combos':'아직 발견한 조합이 없습니다',
+                'main.no_results':'검색과 일치하는 원소가 없습니다',
+                'common.search':'검색...'
+            }
+        };
+
+        const ELEMENT_KO={
+            'Water':'물','Fire':'불','Earth':'땅','Air':'공기','Ocean':'바다','Steam':'증기','Mud':'진흙','Cloud':'구름',
+            'Inferno':'화염','Lava':'용암','Energy':'에너지','Life':'생명','Plant':'식물','Tree':'나무','Forest':'숲',
+            'Sun':'태양','Moon':'달','Time':'시간','Day':'낮','Night':'밤','Smoke':'연기','Lightning':'번개',
+            'Metal':'금속','Stone':'돌','Rock':'바위','Sand':'모래','Glass':'유리','Electricity':'전기',
+            'Human':'인간','House':'집','Brick':'벽돌','Tool':'도구','Factory':'공장','Star':'별','Galaxy':'은하',
+            'Universe':'우주','Void':'공허','Null':'널','Paradox':'역설','Philosophy':'철학','Balance':'균형',
+            'The End':'끝','The End Game':'엔딩','Star Forge':'스타 포지','Shop':'상점','Everything':'모든 것',
+            'Error':'오류','Fatal Error':'치명적 오류','Blank':'공백','Valid Combination':'유효한 조합',
+            'Invalid Combination':'잘못된 조합','Invalid Combination??':'잘못된 조합??','Prestige':'프레스티지',
+            'Frozen':'얼어붙음','Permafrost':'영구동토','Tsunami':'쓰나미','Abyssal':'심연','Celestial':'천상',
+            'Blessed':'축복받음','Holy':'성스러움','Golden':'황금','Temporal':'시간성','Hot':'뜨거움'
+        };
+
+        const TYPE_KO={
+            'NORMAL':'일반','BASIC':'기본','FINAL':'최종','LEGENDARY':'전설','SECRET':'비밀','KEY':'열쇠',
+            'EXCLUSIVE':'독점','EVERYTHING':'모든 것','BOSS DEFEAT':'보스 처치','Prestige':'프레스티지',
+            'Blessed':'축복','Holy':'성스러움','Hot':'뜨거움','Temporal':'시간성','Golden':'황금'
+        };
+
+        function currentLanguage(){
+            const v=getLocalSetting(SETTINGS_KEYS.language,'en');
+            return v==='ko'?'ko':'en';
+        }
+        function aprilFoolsBadKorean(s){
+            const swaps=[
+                ['Hello','안녕하신가!'],['Good','힘쎄고 좋은'],['morning','아침'],['Water','물질'],['Fire','불질'],
+                ['Element','원소놈'],['Craft','제작질'],['Shop','가게상점'],['Settings','설정들'],['Everything','모든것임'],
+                ['Error','에라'],['Boss','보쓰'],['Coin','돈전'],['Star','별별'],['Forge','대장간질']
+            ];
+            let out=String(s);
+            for(const [a,b] of swaps)out=out.replaceAll(a,b);
+            return out;
+        }
+        function tr(key,fallback=''){
+            const lang=currentLanguage();
+            let v=I18N[lang]?.[key]??I18N.en[key]??fallback??key;
+            if(lang==='ko'&&OldAllCreate)v=aprilFoolsBadKorean(v);
+            return v;
+        }
+        function translateElementName(name){
+            if(currentLanguage()!=='ko')return name;
+            let out=ELEMENT_KO[name]||name;
+            if(OldAllCreate){
+                if(name==='Waldo')return '안녕하신가! 힘쎄고 좋은아침. 만약 물어본다면 나는 왈도.';
+                out=aprilFoolsBadKorean(out);
+            }
+            return out;
+        }
+        function translateTierLabel(label){
+            if(currentLanguage()!=='ko')return label;
+            const exact=TYPE_KO[label];
+            if(exact)return exact;
+            for(const [en,ko] of Object.entries(TYPE_KO)){
+                if(label.startsWith(en+' '))return ko+label.slice(en.length);
+            }
+            return label;
+        }
+        function applyLanguage(){
+            const lang=currentLanguage();
+            document.documentElement.lang=lang==='ko'?'ko':'en';
+            document.documentElement.dataset.language=lang;
+            document.querySelectorAll('[data-i18n]').forEach(el=>{
+                const key=el.dataset.i18n;
+                el.textContent=tr(key,el.textContent);
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+                el.placeholder=tr(el.dataset.i18nPlaceholder,el.placeholder);
+            });
+            if($('languageSetting'))$('languageSetting').value=lang;
+            if(typeof renderEls==='function'&&Array.isArray(window.elements||elements)){
+                try{renderEls();}catch(e){}
+            }
+            if(typeof renderSeasonalStorage==='function'){try{renderSeasonalStorage();}catch(e){}}
+            if(typeof renderBossLobby==='function'){try{renderBossLobby();}catch(e){}}
+            if(typeof updateProgressionUI==='function'){try{updateProgressionUI();}catch(e){}}
+        }
+
         function effectiveWebsiteIsDark(){
             return document.documentElement.classList.contains('dark');
         }
@@ -4517,6 +4728,7 @@ html.card-hover-off .sculpted-card:hover{
             if($('cardSizeSetting'))$('cardSizeSetting').value=getLocalSetting(SETTINGS_KEYS.cardSize,'normal');
             if($('cardHoverSetting'))$('cardHoverSetting').value=getLocalSetting(SETTINGS_KEYS.cardHover,'on');
             if($('notificationTimeSetting'))$('notificationTimeSetting').value=getLocalSetting(SETTINGS_KEYS.notificationTime,'normal');
+            if($('languageSetting'))$('languageSetting').value=currentLanguage();
         }
         function openSettings(){
             syncSettingsControls();
@@ -4531,6 +4743,7 @@ html.card-hover-off .sculpted-card:hover{
         applyMotionSetting();
         applyCardSize();
         applyCardHover();
+        applyLanguage();
         window.addEventListener('cm-theme-change',()=>{
             if(getLocalSetting(SETTINGS_KEYS.elementTheme,'auto')==='auto')applyElementTheme('auto');
         });
@@ -5729,12 +5942,13 @@ html.card-hover-off .sculpted-card:hover{
             card.style.setProperty('--season-shift',(idx%9)*3+'%');
             const backdrop=document.createElement('span');backdrop.className='seasonal-backdrop';backdrop.setAttribute('aria-hidden','true');
             const fx=buildSeasonalFx(ev,idx);
-            const ribbon=document.createElement('div');ribbon.className='seasonal-ribbon';ribbon.textContent=ev.icon+' '+ev.name;
+            const ribbon=document.createElement('div');ribbon.className='seasonal-ribbon';ribbon.textContent=ev.icon+' '+(currentLanguage()==='ko'?(SEASON_NAME_KO[ev.id]||ev.name):ev.name);
             const stage=document.createElement('div');stage.className='seasonal-stage';
             const emoji=card.querySelector('.el-emoji');if(emoji)stage.appendChild(emoji);
             const footer=document.createElement('div');footer.className='seasonal-footer';footer.setAttribute('aria-hidden','true');footer.innerHTML='<span>'+ev.sigil+'</span><i></i><span>ARCHIVE EDITION</span><i></i><span>'+ev.sigil+'</span>';
             card.prepend(backdrop,fx,ribbon,stage);card.append(footer);
-            card.title=(el.description||'')+' · '+ev.name+' seasonal element';
+            const seasonNameEl=card.querySelector('.el-name');if(seasonNameEl)seasonNameEl.textContent=translateElementName(el.name);
+            card.title=(currentLanguage()==='ko'?translateElementName(el.name):el.description||'')+' · '+(currentLanguage()==='ko'?(SEASON_NAME_KO[ev.id]||ev.name):ev.name);
         }
 
         function sculptElementCard(card,el){
@@ -5752,7 +5966,7 @@ html.card-hover-off .sculpted-card:hover{
             const originalTier=el.isBossDefeat?'BOSS DEFEAT ×'+(el.amountOfBossDefeat||1):el.isPrestige?el.amountOfPrestige+' Prestige':checkIsEverything(el)?'EVERYTHING':el.isExclusive?'EXCLUSIVE':el.isAprilFools?'🤡 WHOOPS':el.isFinal?'FINAL':el.isLegendary?'LEGENDARY':el.isSecret?'SECRET':el.isKey?'KEY':getElType(el).toUpperCase();
             const tier=OldAllCreate?(el.isPrestige?'🏆 RESET FLEX ×'+el.amountOfPrestige:goofyTypeLabel(realType)):originalTier;
             card.dataset.tier=tier;
-            const ribbon=document.createElement('div');ribbon.className='card-ribbon';ribbon.textContent=tier+(el.isKey?' · ×'+keyAmount(el):'');
+            const ribbon=document.createElement('div');ribbon.className='card-ribbon';ribbon.textContent=translateTierLabel(tier)+(el.isKey?' · ×'+keyAmount(el):'');
             const stage=document.createElement('div');stage.className='card-stage';
             const orbit=document.createElement('span');orbit.className='card-orbit';orbit.setAttribute('aria-hidden','true');stage.appendChild(orbit);
             const emoji=card.querySelector('.el-emoji');if(emoji)stage.appendChild(emoji);
@@ -5882,6 +6096,7 @@ html.card-hover-off .sculpted-card:hover{
                 (el.isExclusive&&!el.isPrestige?exclusiveGrid:elGrid).appendChild(w);
             });
             if(bossMode)refreshBossLockedCards();
+            const localizedName=card.querySelector('.el-name');if(localizedName)localizedName.textContent=translateElementName(el.name);
         }
 
         function updateCount(){elCount.textContent=elements.length+' Discovered';}
@@ -6703,7 +6918,40 @@ html.card-hover-off .sculpted-card:hover{
             }
         });
 
-        function refreshDeveloper(){ $('developerJson').value=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'3.0'},null,2);$('developerError').textContent=''; }
+
+        function populateDeveloperSeasonSelect(){
+            const sel=$('developerSeasonSelect');if(!sel)return;
+            const current=getDeveloperSeasonOverride()||'';
+            sel.innerHTML='<option value="">Real date (automatic)</option>'+
+                SEASONAL_EVENTS.map(ev=>`<option value="${ev.id}">${ev.icon} ${ev.name}</option>`).join('');
+            sel.value=current;
+            updateDeveloperSeasonStatus();
+        }
+        function updateDeveloperSeasonStatus(){
+            const box=$('developerSeasonStatus');if(!box)return;
+            const forced=getDeveloperSeasonOverride();
+            if(!forced){
+                const active=getActiveSeasonalEvents();
+                box.textContent=active.length
+                    ? `Automatic date mode · active: ${active.map(ev=>ev.icon+' '+ev.name).join(', ')}`
+                    : 'Automatic date mode · no seasonal event is active right now.';
+                return;
+            }
+            const ev=seasonalEventById(forced);
+            box.textContent=`Forced season: ${ev?.icon||'🎉'} ${ev?.name||forced}. This is developer-only and ignores the calendar until cleared.`;
+        }
+        function applyDeveloperSeasonOverride(id){
+            try{
+                if(id&&SEASONAL_EVENTS.some(ev=>ev.id===id))localStorage.setItem('cm_dev_season_override',id);
+                else localStorage.removeItem('cm_dev_season_override');
+            }catch(e){}
+            syncSeasonalEvents(false);
+            renderEls();updateCount();save();
+            renderUpcomingSeasonalEvent();
+            populateDeveloperSeasonSelect();
+        }
+
+        function refreshDeveloper(){ $('developerJson').value=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'3.0'},null,2);$('developerError').textContent='';populateDeveloperSeasonSelect(); }
         // Keep the developer gesture usable without storing its password in plaintext.
         const DEVELOPER_SECRET_HASH='e4460a20cba16e969662218a8c066921803b228e03de270a5390275e921ca64d';
         const DEVELOPER_SECRET_LENGTH=9;
@@ -6730,6 +6978,16 @@ html.card-hover-off .sculpted-card:hover{
             if(developerTyped.length===DEVELOPER_SECRET_LENGTH&&await developerSecretMatches(developerTyped)){developerArmed=false;developerTyped='';refreshDeveloper();closeModal('exportModal');openModal('developerModal');}
         });
         $('refreshDeveloper').addEventListener('click',refreshDeveloper);
+        $('applyDeveloperSeason').addEventListener('click',()=>{
+            applyDeveloperSeasonOverride($('developerSeasonSelect').value);
+            const ev=seasonalEventById($('developerSeasonSelect').value);
+            notify('DEV SEASON',ev?`Forced ${ev.icon} ${ev.name}.`:'Returned to automatic date mode.','🛠',2600);
+        });
+        $('clearDeveloperSeason').addEventListener('click',()=>{
+            $('developerSeasonSelect').value='';
+            applyDeveloperSeasonOverride('');
+            notify('DEV SEASON','Season override cleared. Using the real date again.','🗓',2600);
+        });
         $('applyDeveloper').addEventListener('click',()=>{
             try{const data=JSON.parse($('developerJson').value);if(!Array.isArray(data.elements)||data.elements.some(e=>!e||typeof e.name!=='string'||typeof e.emoji!=='string'))throw Error('Elements must have names and emoji strings.');
             if(data.combos&&!Array.isArray(data.combos))throw Error('Combos must be an array.');
@@ -6755,7 +7013,7 @@ html.card-hover-off .sculpted-card:hover{
             sfTimer.textContent='';
             starForgeBtn.classList.remove('sf-cooldown');
             starForgeBtn.classList.add('sf-locked');starForgeBtn.style.pointerEvents='none';
-            comboHistory.innerHTML='<p class="italic text-center text-sm" style="color:var(--text-secondary)">No combinations yet</p>';
+            comboHistory.innerHTML='<p class="italic text-center text-sm" style="color:var(--text-secondary)"><span data-i18n="main.no_combos">No combinations yet</span></p>';
             if(combos.length)rebuildHistory();
             resultArea.innerHTML='';searchInput.value='';
             currentSort='original';applySortBtnUI();saveSortPref();
@@ -6845,6 +7103,10 @@ html.card-hover-off .sculpted-card:hover{
         $('notificationTimeSetting').addEventListener('change',e=>{
             setLocalSetting(SETTINGS_KEYS.notificationTime,e.target.value);
         });
+        $('languageSetting').addEventListener('change',e=>{
+            setLocalSetting(SETTINGS_KEYS.language,e.target.value);
+            applyLanguage();
+        });
         $('creditsBtn').addEventListener('click',openCredits);
         $('creditsSkipBtn').addEventListener('click',()=>closeModal('creditsModal'));
 
@@ -6879,6 +7141,12 @@ html.card-hover-off .sculpted-card:hover{
         function applyAprilFoolsMode(){
             document.body.classList.toggle('april-fools-mode',OldAllCreate);syncSeasonalWallpaper();
             if(!OldAllCreate)return;
+            if(currentLanguage()==='ko'){
+                const waldo=document.createElement('div');
+                waldo.className='april-permanent-banner';
+                waldo.textContent='안녕하신가! 힘쎄고 좋은아침. 만약 물어본다면 나는 왈도.';
+                document.body.prepend(waldo);
+            }
             const banner=document.createElement('div');banner.className='april-permanent-banner';banner.textContent='THIS IS A VERY SERIOUS CRAFTING WEBSITE';document.body.prepend(banner);
             const banners=[
                 ['april-banner-mid','⚠️ WARNING: ELEMENTS MAY CONTAIN ELEMENTS ⚠️'],
