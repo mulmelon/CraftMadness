@@ -2152,22 +2152,6 @@ html[data-special-season] body{background:transparent!important}
 @supports not (height:100dvh){#cmSeasonWallpaper{height:100vh!important}}
 
 
-/* ─── PERMANENT MILESTONES ─── */
-.milestone-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
-.milestone-stat{padding:9px;border:1px solid var(--border-color);border-radius:11px;background:var(--bg-secondary);text-align:center}
-.milestone-stat strong{display:block;font-size:1rem}.milestone-stat small{font-size:.61rem;color:var(--text-secondary)}
-.milestone-card{border:1px solid var(--border-color);background:var(--bg-secondary);border-radius:13px;padding:11px;margin:8px 0}
-.milestone-card.done{box-shadow:inset 0 0 0 1px rgba(34,197,94,.35)}
-.milestone-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.milestone-title{font-size:.78rem;font-weight:900}.milestone-reward{font-size:.66rem;color:var(--text-secondary);margin-top:4px}
-.milestone-bar{height:7px;background:var(--bg-tertiary);border-radius:999px;overflow:hidden;margin-top:8px}
-.milestone-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#22c55e);border-radius:999px}
-.milestone-claim{border:0;border-radius:8px;padding:6px 9px;font-size:.66rem;font-weight:900;background:#7c3aed;color:#fff}
-.milestone-claim:disabled{opacity:.55}
-.milestone-perks{font-size:.68rem;line-height:1.55;color:var(--text-secondary)}
-@media(max-width:520px){.milestone-summary{grid-template-columns:1fr}}
-
-
 #masteryBtn{margin-left:0}
 
 /* ─── SPEEDRUN MODE ─── */
@@ -2309,9 +2293,179 @@ background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
 .vault-medal{position:absolute;top:7px;right:7px;padding:4px 6px;border-radius:999px;background:rgba(0,0,0,.5);border:1px solid currentColor;font:1000 .4rem/1 ui-monospace,monospace;letter-spacing:.04em}.vault-medal.DIAMOND{color:#a5f3fc;box-shadow:0 0 13px rgba(165,243,252,.25)}.vault-medal.GOLD{color:#fde68a}.vault-medal.SILVER{color:#e2e8f0}.vault-medal.BRONZE{color:#fdba74}
 .trophy-empty{grid-column:1/-1;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px dashed rgba(250,204,21,.25);border-radius:18px;background:radial-gradient(circle,rgba(250,204,21,.06),transparent 60%)}.trophy-empty b{font-size:.8rem;color:#fde68a}.trophy-empty span{margin-top:7px;font-size:.55rem;color:var(--text-secondary)}
 @media(prefers-reduced-motion:reduce){#trophyRoomModal .modal-box:before,.trophy-vault-element .vault-glow{animation:none}}
+
+/* ─── MELON STUDIOS BOOT SCREEN — TOP PRIORITY ─── */
+#cmBootLoader{
+  position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+  z-index:2147483647!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;isolation:isolate!important;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(132,204,22,.16),transparent 28%),
+    radial-gradient(circle at 20% 90%,rgba(34,211,238,.08),transparent 30%),
+    linear-gradient(145deg,#030504 0%,#07100a 52%,#020303 100%)!important;
+  opacity:1;visibility:visible;pointer-events:all!important;transform:none!important;
+  transition:opacity .48s ease,visibility .48s ease!important;
+}
+#cmBootLoader.cm-boot-done{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+#cmBootLoader:before{content:"";position:absolute;inset:-30%;background:repeating-linear-gradient(115deg,transparent 0 42px,rgba(163,230,53,.018) 43px 44px);animation:cmBootSweep 9s linear infinite}
+#cmBootLoader:after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 140px #000;pointer-events:none}
+.cm-boot-noise{position:absolute;inset:0;opacity:.12;background-image:radial-gradient(rgba(255,255,255,.4) .55px,transparent .55px);background-size:5px 5px;mask-image:linear-gradient(to bottom,transparent,#000 20%,#000 80%,transparent)}
+.cm-boot-core{position:relative;z-index:2;width:min(88vw,720px);text-align:center;padding:32px 20px}
+.cm-boot-mark{font-size:clamp(3.2rem,12vw,6rem);line-height:1;filter:drop-shadow(0 0 25px rgba(163,230,53,.28));animation:cmBootFloat 1.8s ease-in-out infinite}
+.cm-boot-kicker{margin-top:16px;font:900 clamp(.48rem,1.5vw,.62rem)/1 ui-monospace,monospace;letter-spacing:.52em;color:#a3e635;text-indent:.52em;opacity:.72}
+.cm-boot-studio{margin-top:9px;font:1000 clamp(2.3rem,10vw,5.8rem)/.88 Impact,'Arial Black',sans-serif;letter-spacing:-.035em;color:#f7fee7;text-shadow:0 0 34px rgba(163,230,53,.12)}
+.cm-boot-studio span{color:#a3e635}
+.cm-boot-game{margin-top:13px;font:900 clamp(.72rem,2.8vw,1.15rem)/1 ui-monospace,monospace;letter-spacing:.38em;text-indent:.38em;color:#d9f99d;opacity:.7}
+.cm-boot-track{position:relative;width:min(420px,78vw);height:5px;margin:34px auto 0;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.07);box-shadow:0 0 0 1px rgba(163,230,53,.08)}
+.cm-boot-track i{display:block;width:38%;height:100%;border-radius:inherit;background:linear-gradient(90deg,transparent,#84cc16,#bef264,#84cc16,transparent);animation:cmBootBar 1.15s ease-in-out infinite}
+.cm-boot-text{margin-top:13px;font:800 .56rem/1 ui-monospace,monospace;letter-spacing:.18em;color:#94a3b8}
+@keyframes cmBootFloat{50%{transform:translateY(-7px) scale(1.035)}}
+@keyframes cmBootBar{0%{transform:translateX(-110%)}100%{transform:translateX(270%)}}
+@keyframes cmBootSweep{to{transform:translate3d(18%,0,0)}}
+@media(prefers-reduced-motion:reduce){#cmBootLoader:before,.cm-boot-mark,.cm-boot-track i{animation:none}.cm-boot-track i{width:100%;background:#84cc16}}
+
+body.april-fools-mode #trophyRoomBtn{transform:rotate(-7deg) skewX(-8deg)!important;background:#fde047!important;color:#7c2d12!important;border:4px double #7c3aed!important;border-radius:3px 18px 5px 24px!important;box-shadow:5px 4px 0 #22d3ee!important}
+body.april-fools-mode #masteryBtn{transform:rotate(6deg) translateY(3px)!important;background:#f9a8d4!important;color:#111!important;border:3px dashed #16a34a!important;border-radius:50% 8px 45% 6px!important;box-shadow:-4px 5px 0 #f97316!important}
+body.april-fools-mode #speedrunBtn{transform:rotate(-4deg) skewY(4deg)!important;background:repeating-linear-gradient(45deg,#86efac 0 8px,#67e8f9 8px 16px)!important;color:#111!important;border:4px dotted #ef4444!important;border-radius:20px 3px 17px 5px!important;box-shadow:6px -3px 0 #a855f7!important}
+body.april-fools-mode #prestigeBtn{transform:rotate(3deg) scale(.94,1.08)!important;border-radius:4px 24px 6px 19px!important}
+body.april-fools-mode #trophyRoomBtn:hover{transform:rotate(8deg) scale(1.08)!important}
+body.april-fools-mode #masteryBtn:hover{transform:rotate(-8deg) translateY(-2px)!important}
+body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) scale(1.05)!important}
+
+.speedrun-status-card{border:1px solid var(--border-color);background:var(--bg-secondary);border-radius:13px;padding:11px;margin:8px 0}
+.speedrun-action-btn{border:0;border-radius:8px;padding:6px 9px;font-size:.66rem;font-weight:900;background:#7c3aed;color:#fff}.speedrun-action-btn:disabled{opacity:.55}
+#speedrunHud{transition:border-color .18s,box-shadow .18s,background .18s}
+#speedrunHud .speedrun-time{transition:color .18s,text-shadow .18s}
+#speedrunHud.medal-DIAMOND{border-color:#67e8f9!important;background:rgba(6,182,212,.12)!important;box-shadow:0 0 25px rgba(103,232,249,.34)!important}
+#speedrunHud.medal-DIAMOND .speedrun-time{color:#a5f3fc!important;text-shadow:0 0 13px rgba(103,232,249,.7)}
+#speedrunHud.medal-GOLD{border-color:#facc15!important;background:rgba(250,204,21,.11)!important;box-shadow:0 0 25px rgba(250,204,21,.3)!important}
+#speedrunHud.medal-GOLD .speedrun-time{color:#fde68a!important;text-shadow:0 0 13px rgba(250,204,21,.6)}
+#speedrunHud.medal-SILVER{border-color:#cbd5e1!important;background:rgba(203,213,225,.1)!important;box-shadow:0 0 22px rgba(203,213,225,.24)!important}
+#speedrunHud.medal-SILVER .speedrun-time{color:#e2e8f0!important;text-shadow:0 0 11px rgba(226,232,240,.48)}
+#speedrunHud.medal-BRONZE{border-color:#fb923c!important;background:rgba(251,146,60,.1)!important;box-shadow:0 0 22px rgba(251,146,60,.24)!important}
+#speedrunHud.medal-BRONZE .speedrun-time{color:#fdba74!important;text-shadow:0 0 11px rgba(251,146,60,.5)}
+#speedrunHud.medal-FINISHER{border-color:#64748b!important;background:rgba(100,116,139,.09)!important}
+#speedrunHud.medal-FINISHER .speedrun-time{color:#94a3b8!important}
+
+/* ─── CHRONO / TROPHY / MASTERY EXPANSION ─── */
+.speedrun-medal-progress{height:4px;margin-top:5px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}.speedrun-medal-progress i{display:block;height:100%;width:100%;background:currentColor;transition:width .12s linear}
+#speedrunHud.medal-drop{animation:medalDowngrade .75s cubic-bezier(.2,.8,.2,1)}
+#speedrunHud.medal-drop:after{content:"MEDAL DOWNGRADE";position:absolute;left:50%;top:calc(100% + 7px);transform:translateX(-50%);white-space:nowrap;font:1000 .48rem/1 ui-monospace,monospace;letter-spacing:.16em;color:#fca5a5;text-shadow:0 0 12px #ef4444}
+@keyframes medalDowngrade{0%{transform:translateX(-50%) scale(1)}20%{transform:translateX(-50%) rotate(-2deg) scale(1.09);filter:brightness(2)}45%{transform:translateX(-50%) rotate(2deg) scale(.96)}100%{transform:translateX(-50%) scale(1)}}
+.speedrun-split.gold-split{animation:goldSplit .8s ease;border-radius:5px;background:rgba(250,204,21,.11);color:#fde68a}.speedrun-split .gold{color:#fde68a;text-shadow:0 0 8px rgba(250,204,21,.6)}
+@keyframes goldSplit{50%{box-shadow:0 0 18px rgba(250,204,21,.32);transform:scale(1.02)}}
+.history-box{background:radial-gradient(circle at 50% 0,rgba(34,211,238,.11),transparent 35%),var(--bg-secondary)!important}.history-head{text-align:center;border-bottom:1px solid rgba(34,211,238,.16);padding-bottom:12px}.history-head small{font:900 .48rem/1 ui-monospace,monospace;letter-spacing:.28em;color:#67e8f9}.history-head h2{font:italic 1000 2rem/1 Impact,sans-serif;margin:7px}.history-head p{font-size:.58rem;color:var(--text-secondary)}
+.speedrun-history-list{display:grid;gap:8px;margin-top:12px;max-height:60vh;overflow:auto}.history-run{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:rgba(255,255,255,.025)}.history-run .medal{font-size:1.4rem}.history-run strong{display:block;font-size:.68rem}.history-run small{font-size:.5rem;color:var(--text-secondary)}.history-run .time{font:900 .7rem/1 ui-monospace,monospace}.history-pb{color:#fde68a}
+.trophy-vault-element{position:relative;min-height:155px!important;transform-style:preserve-3d}.trophy-vault-element:after{content:"";position:absolute;left:12%;right:12%;bottom:-7px;height:15px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.18),transparent 68%);filter:blur(3px);z-index:-1}.trophy-vault-element:nth-child(3n+1){transform:translateY(2px) rotate(-.35deg)}.trophy-vault-element:nth-child(3n+2){transform:translateY(-2px) rotate(.35deg)}
+.vault-pedestal{height:15px;margin:8px 8% -3px;border-radius:50% 50% 8px 8px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 18px rgba(0,0,0,.32),inset 0 2px rgba(255,255,255,.08)}
+.trophy-inspect-box{background:radial-gradient(circle at 50% 0,rgba(250,204,21,.12),transparent 36%),var(--bg-secondary)!important}.inspect-hero{text-align:center}.inspect-emoji{font-size:4rem;filter:drop-shadow(0 0 22px rgba(250,204,21,.3))}.inspect-hero h2{font:1000 1.55rem/1.1 Impact,sans-serif;margin:6px}.inspect-type{font:900 .5rem/1 ui-monospace,monospace;letter-spacing:.16em;color:#fde68a}.inspect-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:14px}.inspect-grid div{padding:9px;border:1px solid var(--border);border-radius:10px}.inspect-grid strong{display:block;font-size:.66rem}.inspect-grid small{font-size:.48rem;color:var(--text-secondary)}
+.mastery-card{position:relative}.mastery-pin-btn{position:absolute;right:9px;bottom:8px;border:1px solid rgba(250,204,21,.2);border-radius:999px;background:rgba(250,204,21,.07);color:#fde68a;padding:3px 7px;font-size:.46rem;font-weight:900}.mastery-pin-btn.pinned{background:#facc15;color:#111}.mastery-pin-help{font-size:.5rem;color:var(--text-secondary);text-align:center;margin:-2px 0 10px}
+.mastery-pinned-hud{position:fixed;right:10px;top:76px;z-index:2147482000;width:min(245px,42vw);display:grid;gap:5px}.mastery-pinned-hud[hidden]{display:none!important}.pinned-mastery{padding:7px 9px;border-radius:10px;border:1px solid rgba(192,132,252,.22);background:rgba(10,8,18,.88);backdrop-filter:blur(10px);box-shadow:0 8px 22px rgba(0,0,0,.25);font-size:.5rem}.pinned-mastery strong{display:flex;justify-content:space-between;gap:6px}.pinned-mastery .mini{height:3px;margin-top:5px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}.pinned-mastery .mini i{display:block;height:100%;background:linear-gradient(90deg,#c084fc,#fde68a)}
+.mastery-celebration{position:fixed!important;inset:0!important;z-index:2147483646!important;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(126,34,206,.25),rgba(0,0,0,.88) 58%);pointer-events:none}.mastery-celebration[hidden]{display:none!important}.mastery-celebration-inner{text-align:center;animation:masteryPop 2.2s ease both}.mastery-celebration-inner small{font:1000 .6rem/1 ui-monospace,monospace;letter-spacing:.32em;color:#fde68a}.mastery-celebration-inner div{font-size:5rem;margin:12px}.mastery-celebration-inner h2{font:italic 1000 clamp(2rem,8vw,4rem)/1 Impact,sans-serif;color:#f5d0fe;text-shadow:0 0 25px #a855f7}.mastery-celebration-inner p{font-size:.7rem;color:#e9d5ff;margin-top:8px}.mastery-celebration-ring{position:absolute;width:220px;height:220px;border:2px solid #fde68a;border-radius:50%;animation:masteryRing 1.6s ease-out infinite}
+@keyframes masteryPop{0%{opacity:0;transform:scale(.6)}18%{opacity:1;transform:scale(1.08)}28%,78%{transform:scale(1)}100%{opacity:0;transform:scale(1.12)}}@keyframes masteryRing{from{transform:scale(.4);opacity:1}to{transform:scale(2.4);opacity:0}}
+@media(max-width:560px){.mastery-pinned-hud{top:auto;bottom:10px;right:8px;width:calc(100vw - 16px)}}
+
+/* ─── PLAYER PROFILE / ROUTES / VAULT WINGS / FAMILY TREE ─── */
+#playerStatsBtn{margin-left:0!important;transform:none!important;min-width:0!important;width:auto!important;height:auto!important;font-size:.72rem!important;line-height:1rem!important}
+.player-stats-box{background:radial-gradient(circle at 50% -10%,rgba(14,165,233,.18),transparent 38%),var(--bg-secondary)!important}
+.profile-banner{position:relative;overflow:hidden;padding:20px;border-radius:16px;border:1px solid rgba(125,211,252,.22);background:linear-gradient(125deg,rgba(14,165,233,.16),rgba(139,92,246,.13),rgba(250,204,21,.08));margin-bottom:12px}
+.profile-banner:after{content:"CRAFT MADNESS";position:absolute;right:-8px;bottom:-12px;font:1000 2.5rem/1 Impact,sans-serif;opacity:.045;transform:rotate(-4deg)}
+.profile-banner h2{font:italic 1000 1.8rem/1 Impact,sans-serif;margin:4px 0}.profile-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.profile-badges span{font-size:.48rem;font-weight:900;padding:5px 8px;border-radius:99px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1)}
+.player-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat-tile{padding:12px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.025)}.stat-tile small{display:block;font-size:.47rem;color:var(--text-secondary);letter-spacing:.08em}.stat-tile strong{display:block;margin-top:4px;font:900 .82rem/1 ui-monospace,monospace}
+.route-selects{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.route-selects select{background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border);padding:8px;border-radius:8px}.route-row{display:grid;grid-template-columns:1.3fr .8fr .8fr .8fr;gap:7px;padding:7px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.55rem}.route-gain{color:#86efac}.route-loss{color:#fca5a5}
+.ghost-finish-race{height:7px;margin-top:6px;border-radius:99px;background:rgba(255,255,255,.08);position:relative;overflow:visible}.ghost-finish-race i{position:absolute;top:50%;transform:translate(-50%,-50%);font-style:normal;font-size:.72rem;transition:left .1s linear}.ghost-finish-race .you{z-index:2}.ghost-finish-race .ghost{opacity:.75}
+.trophy-wing-tabs{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin:8px 0 14px}.trophy-wing-tabs button{font-size:.48rem;font-weight:900;padding:5px 8px;border-radius:99px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text-secondary)}.trophy-wing-tabs button.active{color:#fde68a;border-color:rgba(250,204,21,.4);background:rgba(250,204,21,.09)}
+.favorite-trophy-display{margin:8px auto 16px;max-width:390px;text-align:center}.favorite-pedestal{padding:16px 12px 8px;border-radius:20px 20px 8px 8px;background:radial-gradient(circle at 50% 15%,rgba(250,204,21,.16),transparent 35%),linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.12));border:1px solid rgba(250,204,21,.22);box-shadow:0 18px 32px rgba(0,0,0,.28)}.favorite-pedestal .big{font-size:3.2rem;filter:drop-shadow(0 0 18px rgba(250,204,21,.35))}.favorite-pedestal small{display:block;font-size:.45rem;letter-spacing:.15em;color:#fde68a}.favorite-pedestal strong{display:block;font-size:.75rem;margin:5px}
+.favorite-btn{margin-top:9px;border:1px solid rgba(250,204,21,.25);border-radius:99px;background:rgba(250,204,21,.08);color:#fde68a;font-size:.48rem;font-weight:900;padding:5px 8px}
+.trophy-vault-element.evolved-DIAMOND{box-shadow:0 0 24px rgba(103,232,249,.25)!important;border-color:#67e8f9!important}.trophy-vault-element.evolved-GOLD{box-shadow:0 0 20px rgba(250,204,21,.22)!important;border-color:#facc15!important}.trophy-vault-element.evolved-SILVER{border-color:#cbd5e1!important}.trophy-vault-element.evolved-BRONZE{border-color:#fb923c!important}
+.pinned-mastery.near-complete{animation:pinNear 1.2s ease-in-out infinite;border-color:#fde68a;box-shadow:0 0 16px rgba(250,204,21,.2)}@keyframes pinNear{50%{transform:scale(1.025);filter:brightness(1.2)}}
+.recipe-tree-head{text-align:center}.recipe-tree-head .emoji{font-size:3rem}.recipe-tree-level{margin:12px 0;padding-left:12px;border-left:2px solid rgba(192,132,252,.2)}.recipe-tree-node{margin:5px 0;padding:7px 9px;border-radius:9px;background:rgba(255,255,255,.035);border:1px solid var(--border);font-size:.55rem}.recipe-tree-node b{color:#e9d5ff}
+.element-card .family-tree-btn{position:absolute;left:7px;bottom:6px;opacity:0;transition:opacity .15s;font-size:.42rem;padding:3px 5px;border-radius:7px;border:1px solid rgba(192,132,252,.25);background:rgba(15,10,25,.88);color:#e9d5ff}.element-card:hover .family-tree-btn{opacity:1}
+.patch-notes-box{background:radial-gradient(circle at 50% 0,rgba(163,230,53,.1),transparent 34%),var(--bg-secondary)!important}.patch-hero{text-align:center;padding-bottom:12px;border-bottom:1px solid rgba(163,230,53,.16)}.patch-hero small{font-size:.47rem;letter-spacing:.18em;color:#bef264}.patch-entry{padding:12px 3px;border-bottom:1px solid rgba(255,255,255,.07)}.patch-entry h3{font-size:.72rem;margin-bottom:4px}.patch-entry p{font-size:.53rem;color:var(--text-secondary);line-height:1.6}
+@media(max-width:600px){.player-stats-grid{grid-template-columns:repeat(2,1fr)}.route-row{grid-template-columns:1.2fr .8fr .8fr}.route-row span:nth-child(4){display:none}}
+
+/* ─── ARCHIVE / VAULT EVOLUTION / BACKUPS ─── */
+#discoveryJournalBtn,#backupBtn{margin-left:0!important;transform:none!important;min-width:0!important;width:auto!important;height:auto!important;white-space:nowrap!important}
+#discoveryJournalBtn{font-size:.72rem!important;line-height:1rem!important;background:rgba(245,158,11,.11);color:#fcd34d}
+#backupBtn{font-size:.72rem!important;line-height:1rem!important}
+.patch-new-dot{display:inline-block;font:1000 .42rem/1 ui-monospace,monospace;padding:2px 4px;border-radius:99px;background:#ef4444;color:white;vertical-align:middle;animation:patchPulse 1.4s ease-in-out infinite}.patch-new-dot[hidden]{display:none!important}@keyframes patchPulse{50%{box-shadow:0 0 10px #ef4444}}
+.journal-box{background:radial-gradient(circle at 50% 0,rgba(245,158,11,.12),transparent 35%),var(--bg-secondary)!important}.journal-head{text-align:center}.journal-head small,.backup-head small{font-size:.47rem;letter-spacing:.2em;color:#fcd34d}.journal-head h2,.backup-head h2{font:italic 1000 1.8rem/1 Impact,sans-serif;margin:6px}.journal-head p,.backup-head p{font-size:.53rem;color:var(--text-secondary)}.journal-search{width:100%;margin:12px 0;padding:9px 11px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.18);color:var(--text-primary);font-size:.6rem}.journal-list{display:grid;gap:6px;max-height:58vh;overflow:auto}.journal-entry{display:grid;grid-template-columns:42px 1fr auto;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025)}.journal-entry .num{font:900 .55rem/1 ui-monospace,monospace;color:#fcd34d}.journal-entry strong{font-size:.62rem}.journal-entry small{display:block;font-size:.46rem;color:var(--text-secondary)}.journal-entry .emoji{font-size:1.35rem}
+.profile-customize{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:-4px 0 12px}.profile-customize label{font-size:.48rem;color:var(--text-secondary)}.profile-customize select{margin-left:5px;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border);border-radius:7px;padding:4px;font-size:.5rem}.profile-banner.theme-diamond{background:linear-gradient(125deg,rgba(34,211,238,.2),rgba(59,130,246,.15),rgba(255,255,255,.07))}.profile-banner.theme-boss{background:linear-gradient(125deg,rgba(239,68,68,.18),rgba(88,28,135,.18),rgba(0,0,0,.2))}.profile-banner.theme-mastery{background:linear-gradient(125deg,rgba(168,85,247,.2),rgba(250,204,21,.11),rgba(0,0,0,.16))}.profile-banner.theme-seasonal{background:linear-gradient(125deg,rgba(34,197,94,.16),rgba(14,165,233,.15),rgba(245,158,11,.12))}.profile-banner.theme-everything{background:linear-gradient(110deg,rgba(244,63,94,.13),rgba(250,204,21,.13),rgba(34,211,238,.13),rgba(168,85,247,.13))}
+.first-records-head{font-size:.52rem;font-weight:900;letter-spacing:.12em;color:#fde68a;margin:12px 0 6px}.first-records-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:12px}.first-record{padding:8px;border:1px solid var(--border);border-radius:9px;font-size:.5rem}.first-record b{display:block;font-size:.58rem}.first-record span{color:var(--text-secondary)}
+.vault-level-label{text-align:center;font:900 .5rem/1 ui-monospace,monospace;letter-spacing:.14em;margin:5px 0 10px;color:#fde68a}.trophy-vault-level-2 .trophy-vault-element{box-shadow:0 10px 20px rgba(0,0,0,.24)}.trophy-vault-level-3 .trophy-vault-element{background-image:radial-gradient(circle at 50% 15%,rgba(250,204,21,.07),transparent 32%)}.trophy-vault-level-4 #trophyRoomGrid{filter:drop-shadow(0 0 8px rgba(192,132,252,.08))}.trophy-vault-level-5 .favorite-pedestal{box-shadow:0 0 35px rgba(250,204,21,.15),0 20px 35px rgba(0,0,0,.35)}
+.trophy-set-board{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:8px 0 12px}.trophy-set{padding:8px;border:1px solid var(--border);border-radius:9px;font-size:.48rem;background:rgba(255,255,255,.025)}.trophy-set.complete{border-color:rgba(250,204,21,.45);box-shadow:0 0 14px rgba(250,204,21,.09)}.trophy-set strong{display:flex;justify-content:space-between;font-size:.55rem}.trophy-set i{display:block;height:3px;margin-top:5px;border-radius:99px;background:#fde68a}
+.pedestal-plaque{margin:8px auto 0;padding:7px 12px;max-width:280px;border:1px solid rgba(250,204,21,.24);border-radius:4px;background:linear-gradient(#5b451c,#2c210d);color:#fde68a;font:700 .5rem/1.35 Georgia,serif;box-shadow:inset 0 1px rgba(255,255,255,.12)}.plaque-editor{text-align:center;margin:-8px 0 12px}.plaque-editor input{width:min(300px,90%);padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.18);color:var(--text-primary);font-size:.5rem}
+.trophy-vault-element.ultra-rare .emoji{animation:ultraFloat 2.3s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(250,204,21,.45))}.trophy-vault-element.ultra-rare .vault-glow{opacity:.8!important;animation:ultraGlow 2s ease-in-out infinite}.trophy-vault-element.ultra-rare:before{content:"✦";position:absolute;right:9px;top:28px;color:#fde68a;animation:ultraSpark 1.7s ease-in-out infinite}@keyframes ultraFloat{50%{transform:translateY(-4px) scale(1.04)}}@keyframes ultraGlow{50%{filter:brightness(1.7)}}@keyframes ultraSpark{50%{opacity:.25;transform:scale(.7) rotate(45deg)}}
+.mastery-card.capstone{border-color:rgba(250,204,21,.3);background:linear-gradient(135deg,rgba(250,204,21,.06),rgba(168,85,247,.05))}.mastery-card.capstone .mastery-tier:after{content:" · CAPSTONE";color:#fde68a}
+.backup-box{background:radial-gradient(circle at 50% 0,rgba(34,197,94,.12),transparent 35%),var(--bg-secondary)!important}.backup-head{text-align:center}.backup-list{display:grid;gap:7px;margin-top:10px}.backup-entry{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px;border:1px solid var(--border);border-radius:10px}.backup-entry strong{display:block;font-size:.6rem}.backup-entry small{font-size:.46rem;color:var(--text-secondary)}.backup-entry button{font-size:.48rem;padding:5px 8px;border-radius:8px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.08);color:#86efac}
+.split-streak{font:1000 .5rem/1 ui-monospace,monospace;color:#fde68a;text-align:center;margin-top:5px;letter-spacing:.08em}.history-pb-crown{filter:drop-shadow(0 0 7px #facc15)}
+@media(max-width:600px){.first-records-grid,.trophy-set-board{grid-template-columns:1fr}}
+
+#cmBootLoader.cm-boot-diamond .cm-boot-mark{filter:drop-shadow(0 0 28px #67e8f9)}#cmBootLoader.cm-boot-diamond .cm-boot-track i{background:linear-gradient(90deg,#22d3ee,#fff,#38bdf8)}
+#cmBootLoader.cm-boot-mastery .cm-boot-mark{filter:drop-shadow(0 0 28px #c084fc)}#cmBootLoader.cm-boot-mastery .cm-boot-track i{background:linear-gradient(90deg,#a855f7,#fde68a)}
+#cmBootLoader.cm-boot-everything .cm-boot-mark{animation-duration:1.4s;filter:drop-shadow(0 0 24px #facc15)}#cmBootLoader.cm-boot-everything .cm-boot-track i{background:linear-gradient(90deg,#fb7185,#facc15,#22d3ee,#c084fc)}
 </style>
 
 </head>
+
+<div id="cmBootLoader" role="status" aria-live="polite" aria-label="Craft Madness loading">
+  <div class="cm-boot-noise"></div>
+  <div class="cm-boot-core">
+    <div class="cm-boot-mark">🍉</div>
+    <div class="cm-boot-kicker">PRESENTS</div>
+    <div class="cm-boot-studio">MELON <span>STUDIOS</span></div>
+    <div class="cm-boot-game">CRAFT MADNESS</div>
+    <div class="cm-boot-track"><i></i></div>
+    <div id="cmBootText" class="cm-boot-text">LOADING THE MADNESS...</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const loader=document.getElementById('cmBootLoader');
+  const text=document.getElementById('cmBootText');
+  if(!loader)return;
+  const born=performance.now(), minimum=900;
+  const normalMessages=['LOADING THE MADNESS...','FORGING ELEMENTS...','CALIBRATING STAR FORGE...','OPENING THE VAULT...'];
+  const secretMessages=['PLEASE DO NOT COMBINE LIFE + EARTH.','CHECKING FOR RECIPE CRIMES...','VOID IS BEHAVING. PROBABLY.','POLISHING TROPHY PEDESTALS...','COUNTING 8,000+ LINES...','MELON STUDIOS HAS ENTERED THE FORGE.','INVALID COMBINATION IS A FEATURE.','DO NOT FEED THE STAR FORGE AFTER MIDNIGHT.'];
+  const messages=[...normalMessages];
+  try{
+    const be=JSON.parse(localStorage.getItem('fc_el')||'[]'),bh=JSON.parse(localStorage.getItem('cm_speedrun_history_v1')||'[]'),bm=JSON.parse(localStorage.getItem('cm_objective_mastery_v1')||'{}');
+    if(bh.some(r=>r.medal==='DIAMOND'))loader.classList.add('cm-boot-diamond');
+    else if(Object.keys(bm.completed||{}).length>=20)loader.classList.add('cm-boot-mastery');
+    else if(be.some(e=>e.name==='Everything'))loader.classList.add('cm-boot-everything');
+  }catch(e){}
+
+  try{
+    const el=JSON.parse(localStorage.getItem('fc_el')||'[]'),mh=JSON.parse(localStorage.getItem('cm_speedrun_history_v1')||'[]'),ms=JSON.parse(localStorage.getItem('cm_objective_mastery_v1')||'{}');
+    const earned=[];
+    if(mh.some(r=>r.medal==='DIAMOND'))earned.push('DIAMOND RECORD DETECTED.');
+    const mc=Object.keys(ms.completed||{}).length;if(mc>=10)earned.push(`${mc} MASTERIES VERIFIED.`);
+    if(el.length>=1000)earned.push('FOUR-DIGIT ARCHIVE ONLINE.');
+    if(earned.length&&Math.random()<.55)messages.splice(1,0,earned[Math.floor(Math.random()*earned.length)]);
+  }catch(e){}
+  if(Math.random()<.38)messages.splice(1+Math.floor(Math.random()*messages.length),0,secretMessages[Math.floor(Math.random()*secretMessages.length)]);
+  let mi=0;
+  const ticker=setInterval(()=>{if(text)text.textContent=messages[++mi%messages.length]},420);
+  function dismiss(){
+    const wait=Math.max(0,minimum-(performance.now()-born));
+    setTimeout(()=>{
+      clearInterval(ticker);
+      if(text)text.textContent='READY.';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        loader.classList.add('cm-boot-done');
+        setTimeout(()=>loader.remove(),560);
+      }));
+    },wait);
+  }
+  // Wait for the full page load, not merely DOMContentLoaded.
+  // Safety fallback prevents a failed external font/CDN request from trapping the player.
+  if(document.readyState==='complete') dismiss();
+  else window.addEventListener('load',dismiss,{once:true});
+  setTimeout(dismiss,7000);
+})();
+</script>
+
 <body>
 
     <script>
@@ -2354,7 +2508,7 @@ background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
                 </div>
             <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
                 <span id="elCount" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:var(--gold-glow);color:var(--gold)">4 Discovered</span>
-                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button><button id="trophyRoomBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(250,204,21,.10);color:#facc15">🏛️ Trophies</button><button id="masteryBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(139,92,246,.14);color:#c4b5fd">🌟 Mastery</button><button id="speedrunBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(34,197,94,.12);color:#22c55e">⏱️ Speedrun</button>
+                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button><button id="trophyRoomBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(250,204,21,.10);color:#facc15">🏛️ Trophies</button><button id="masteryBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(139,92,246,.14);color:#c4b5fd">🌟 Mastery</button><button id="playerStatsBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(14,165,233,.12);color:#7dd3fc">📊 Stats</button><button id="discoveryJournalBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" title="Discovery Journal">📖 Journal</button><button id="speedrunBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(34,197,94,.12);color:#22c55e">⏱️ Speedrun</button>
                 <button id="prestigeShopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(168,85,247,.12);color:#a78bfa">🏆 Prestige Shop</button>
                 <button id="viewRankBtn" class="hidden text-xs font-semibold px-3 py-1 rounded-full transition-colors" style="background:rgba(234,179,8,0.12);color:#eab308">View Rank</button>
                 <div id="coinDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(234,179,8,0.12);color:#eab308">
@@ -2560,7 +2714,7 @@ background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
                 <button type="button" id="guideToggle" aria-controls="craftGuide" aria-expanded="false" aria-label="Show crafting guide" title="Crafting guide">📖</button>
                 <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
                 <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
-                <button id="settingsBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" title="Settings">⚙️ Settings</button>
+                <button id="patchNotesBtn" class="settings-wide-btn"><span id="patchNewDot" class="patch-new-dot">NEW</span> 📰 Patch Notes</button><button id="settingsBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" title="Settings">⚙️ Settings</button><button id="backupBtn" type="button" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" title="Automatic Save Backups">💾 Backup</button>
             </div>
             <div id="noResults" class="hidden text-center py-6 text-sm" style="color:var(--text-secondary)">No elements match your search</div>
             <div id="elementStorageViews"><div id="elGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5"></div>
@@ -2655,20 +2809,12 @@ background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
             </select>
         </div>
 
-<button id="milestonesBtn" class="settings-wide-btn">🏆 Milestones</button>
+
 <button id="creditsBtn" class="settings-wide-btn">🎬 Credits</button>
     </div></div>
 
 
     <!-- Milestones Modal -->
-    <div id="milestonesModal" class="modal-overlay"><div class="modal-box" style="max-width:650px">
-        <button class="modal-close" data-close="milestonesModal">&times;</button>
-        <h2 class="font-display text-xl mb-1">🏆 Permanent Milestones</h2>
-        <p class="text-xs" style="color:var(--text-secondary)">Big account-wide goals. Claimed upgrades survive Prestige.</p>
-        <div id="milestoneSummary" class="milestone-summary"></div>
-        <div id="milestonePerks" class="milestone-card milestone-perks"></div>
-        <div id="milestoneList"></div>
-    </div></div>
     <!-- Credits Modal -->
     <div id="creditsModal" class="modal-overlay"><div class="modal-box credits-box" style="max-width:540px">
         <button class="modal-close" data-close="creditsModal">&times;</button>
@@ -3277,101 +3423,12 @@ background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
         };
 
 
-        // ─── PERMANENT MILESTONES ───
-        const CM_MILESTONE_KEY='cm_permanent_milestones_v1';
-        let milestoneData={claimed:[],bestElements:0,bestModified:0,bestBosses:0,bestCoins:0,bestKeys:0,bestPrestige:0,bestEverything:0,bestSeasonComplete:0};
-        const MILESTONES=[
-{id:'el50',type:'elements',need:50,title:'Pocket Collection',icon:'📗',reward:'+3% coin income',perk:{coinPct:3}},
-{id:'el100',type:'elements',need:100,title:'Collector I',icon:'📚',reward:'+5% coin income',perk:{coinPct:5}},
-{id:'el250',type:'elements',need:250,title:'Collector II',icon:'🗂️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'el500',type:'elements',need:500,title:'Collector III',icon:'🗃️',reward:'+10% coin income',perk:{coinPct:10}},
-{id:'el750',type:'elements',need:750,title:'Grand Archive',icon:'🏛️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'el1000',type:'elements',need:1000,title:'Collector IV',icon:'🌐',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'el1500',type:'elements',need:1500,title:'Collector V',icon:'🌌',reward:'+15% coin income',perk:{coinPct:15}},
-{id:'mod10',type:'modified',need:10,title:'Mutation Curious',icon:'🧪',reward:'+3% coin income',perk:{coinPct:3}},
-{id:'mod25',type:'modified',need:25,title:'Mutation Apprentice',icon:'✨',reward:'+5% coin income',perk:{coinPct:5}},
-{id:'mod75',type:'modified',need:75,title:'Mutation Hunter',icon:'💫',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'mod150',type:'modified',need:150,title:'Mutation Master',icon:'🌟',reward:'+10% coin income',perk:{coinPct:10}},
-{id:'mod300',type:'modified',need:300,title:'Mutation Legend',icon:'🔮',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
-{id:'mod500',type:'modified',need:500,title:'Mutation Overlord',icon:'🧬',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'boss1',type:'bosses',need:1,title:'Boss Breaker',icon:'⚔️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'boss3',type:'bosses',need:3,title:'Boss Hunter',icon:'👑',reward:'+10% coin income',perk:{coinPct:10}},
-{id:'boss10',type:'bosses',need:10,title:'Boss Veteran',icon:'🏆',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
-{id:'boss25',type:'bosses',need:25,title:'Boss Slayer',icon:'💥',reward:'+10% coin income',perk:{coinPct:10}},
-{id:'boss50',type:'bosses',need:50,title:'Boss Legend',icon:'👹',reward:'+15% Boss damage',perk:{bossDamagePct:15}},
-{id:'boss100',type:'bosses',need:100,title:'Boss Annihilator',icon:'💀',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
-{id:'coin100k',type:'coins',need:100000,title:'First Fortune',icon:'🪙',reward:'+3% coin income',perk:{coinPct:3}},
-{id:'coin1m',type:'coins',need:1000000,title:'Millionaire',icon:'💰',reward:'+5% coin income',perk:{coinPct:5}},
-{id:'coin10m',type:'coins',need:10000000,title:'Coin Tycoon',icon:'🏦',reward:'+8% coin income',perk:{coinPct:8}},
-{id:'coin100m',type:'coins',need:100000000,title:'Coin Empire',icon:'👑',reward:'+12% coin income',perk:{coinPct:12}},
-{id:'key10',type:'keys',need:10,title:'Keyring',icon:'🔑',reward:'+3% key luck',perk:{keyLuckPct:3}},
-{id:'key50',type:'keys',need:50,title:'Key Collector',icon:'🗝️',reward:'+5% key luck',perk:{keyLuckPct:5}},
-{id:'key150',type:'keys',need:150,title:'Keymaster',icon:'🔐',reward:'+8% key luck',perk:{keyLuckPct:8}},
-{id:'p1',type:'prestige',need:1,title:'Fresh Start',icon:'🏅',reward:'+5% coin income',perk:{coinPct:5}},
-{id:'p3',type:'prestige',need:3,title:'Prestige Adept',icon:'🎖️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'p5',type:'prestige',need:5,title:'Prestige Master',icon:'🏆',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'p10',type:'prestige',need:10,title:'Prestige Legend',icon:'💠',reward:'+10% coin income',perk:{coinPct:10}},
-{id:'everything1',type:'everything',need:1,title:'Everything Awakened',icon:'🌈',reward:'+10% coin income',perk:{coinPct:10}},
-{id:'everything5',type:'everything',need:5,title:'Everything Collector',icon:'🌠',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
-{id:'everything20',type:'everything',need:20,title:'Everything Everywhere',icon:'♾️',reward:'+5% coin income',perk:{coinPct:5}},
-{id:'season1',type:'seasons',need:1,title:'Season Finisher',icon:'🎊',reward:'+5% coin income',perk:{coinPct:5}},
-{id:'season5',type:'seasons',need:5,title:'Season Veteran',icon:'🎆',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'season10',type:'seasons',need:10,title:'Season Master',icon:'🏵️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
-{id:'season20',type:'seasons',need:20,title:'Calendar Conqueror',icon:'📅',reward:'+10% coin income + 5% Boss damage',perk:{coinPct:10,bossDamagePct:5}}
-];
-        function loadMilestones(){try{const x=JSON.parse(localStorage.getItem(CM_MILESTONE_KEY)||'{}');milestoneData={...milestoneData,...x};if(!Array.isArray(milestoneData.claimed))milestoneData.claimed=[];}catch(e){}}
-        function saveMilestones(){try{localStorage.setItem(CM_MILESTONE_KEY,JSON.stringify(milestoneData));}catch(e){}}
-        function isModifiedMilestoneElement(e){
-          if(!e||e.isRankExcluded||e.excludeFromRank||e.isExclusive||e.isSeasonal||e.isAprilFools||e.isBossDefeat||e.isPrestige||e.isEverything)return false;
-          return !!(e.isHot||e.isSuperHot||e.isBasic||e.isRadioactive||e.isBlessed||e.isUnstable||e.isPhantom||e.isGolden||e.isCrystalline||e.isHoly||e.isEthereal||e.isLegendary||e.isChromatic||e.isAncient||e.isDivine||e.isAntimatter||e.isMagnetic||e.isTemporal||e.isAbyssal||e.isCelestial||e.isElectric||e.isPurified||e.isTsunami||e.isInfernal||e.isToxic||e.isViral||e.isParasitic||e.isCorrupted||e.isCursed||e.isVoid);
-        }
-        function milestoneCounts(){
-const ranked=(elements||[]).filter(e=>!e.isRankExcluded&&!e.excludeFromRank&&!e.isExclusive&&!e.isSeasonal&&!e.isAprilFools&&!e.isBossDefeat&&!e.isPrestige).length;
-const modified=(elements||[]).filter(isModifiedMilestoneElement).length;
-let bosses=0,everything=0,seasons=0,keys=0,prestige=0,coins=0;
-try{bosses=(elements||[]).filter(e=>e.isBossDefeat).reduce((n,e)=>n+Math.max(1,Number(e.defeatCount||e.count||1)),0);}catch(e){}
-try{everything=(elements||[]).filter(e=>checkIsEverything(e)||e.isEverything).length;}catch(e){}
-try{seasons=SEASONAL_EVENTS.filter(ev=>(elements||[]).filter(e=>isSeasonalElement(e)&&(seasonalEventFromElement(e)||{}).id===ev.id&&!e.isChristmasExclusive&&!e.isNewYearReward).length>=100).length;}catch(e){}
-try{keys=totalKeys();}catch(e){}
-try{const t=(elements||[]).find(e=>e.isPrestige);prestige=Number(t?.amountOfPrestige||0);}catch(e){}
-try{coins=Number(gs?.totalCoins||0);}catch(e){}
-milestoneData.bestElements=Math.max(+milestoneData.bestElements||0,ranked);
-milestoneData.bestModified=Math.max(+milestoneData.bestModified||0,modified);
-milestoneData.bestBosses=Math.max(+milestoneData.bestBosses||0,bosses);
-milestoneData.bestCoins=Math.max(+milestoneData.bestCoins||0,coins);
-milestoneData.bestKeys=Math.max(+milestoneData.bestKeys||0,keys);
-milestoneData.bestPrestige=Math.max(+milestoneData.bestPrestige||0,prestige);
-milestoneData.bestEverything=Math.max(+milestoneData.bestEverything||0,everything);
-milestoneData.bestSeasonComplete=Math.max(+milestoneData.bestSeasonComplete||0,seasons);
-saveMilestones();
-return{elements:milestoneData.bestElements,modified:milestoneData.bestModified,bosses:milestoneData.bestBosses,coins:milestoneData.bestCoins,keys:milestoneData.bestKeys,prestige:milestoneData.bestPrestige,everything:milestoneData.bestEverything,seasons:milestoneData.bestSeasonComplete};
-}
-function milestonePerks(){
-          const p={coinPct:0,bossDamagePct:0,bossDefensePct:0,mutationPct:0,keyLuckPct:0};
-          MILESTONES.forEach(m=>{if(!milestoneData.claimed.includes(m.id))return;Object.entries(m.perk||{}).forEach(([k,v])=>p[k]=(p[k]||0)+v);});
-          return p;
-        }
-        function milestoneCoinMultiplier(){return 1+milestonePerks().coinPct/100;}
-        function milestoneBossDamageMultiplier(){return 1+milestonePerks().bossDamagePct/100;}
-function milestoneBossDefenseMultiplier(){return Math.max(.5,1-milestonePerks().bossDefensePct/100);}
-function milestoneMutationBonus(){return milestonePerks().mutationPct/100;}
-function milestoneKeyLuckMultiplier(){return 1+milestonePerks().keyLuckPct/100;}
-        function claimMilestone(id){
-          const m=MILESTONES.find(x=>x.id===id);if(!m||milestoneData.claimed.includes(id))return;
-          const c=milestoneCounts();if((c[m.type]||0)<m.need)return;
-          milestoneData.claimed.push(id);saveMilestones();renderMilestones();
-          notify('Permanent upgrade unlocked',`${m.icon} ${m.title}: ${m.reward}`,'🏆',5000);
-        }
-        function renderMilestones(){
-const c=milestoneCounts(),p=milestonePerks(),sum=$('milestoneSummary');if(!sum)return;
-sum.innerHTML=`<div class="milestone-stat"><strong>${c.elements}</strong><small>Best elements</small></div><div class="milestone-stat"><strong>${c.modified}</strong><small>Best modified</small></div><div class="milestone-stat"><strong>${c.bosses}</strong><small>Boss defeats</small></div>`;
-$('milestonePerks').innerHTML=`<strong>Permanent upgrade total</strong><br>🪙 +${p.coinPct}% income · ⚔️ +${p.bossDamagePct}% boss damage · 🔑 +${p.keyLuckPct}% key luck<br><small>Best records and claimed upgrades survive Prestige.</small>`;
-const labels={elements:'📚 ELEMENT COLLECTION',modified:'🧬 MODIFIED ELEMENTS',bosses:'⚔️ BOSSES',coins:'🪙 LIFETIME COINS',keys:'🔑 KEYS',prestige:'🏅 PRESTIGE',everything:'🌈 EVERYTHING',seasons:'🎊 SEASON COMPLETION'};
-let html='';
-Object.keys(labels).forEach(type=>{const list=MILESTONES.filter(m=>m.type===type);if(!list.length)return;html+=`<h3 style="font-size:.72rem;font-weight:900;margin:16px 2px 6px;color:var(--text-secondary)">${labels[type]}</h3>`;html+=list.map(m=>{const v=c[type]||0,done=v>=m.need,claimed=milestoneData.claimed.includes(m.id),pct=Math.min(100,v/m.need*100),shown=type==='coins'?Math.floor(Math.min(v,m.need)).toLocaleString():Math.min(v,m.need);return `<div class="milestone-card ${claimed?'done':''}"><div class="milestone-top"><div><div class="milestone-title">${m.icon} ${m.title} — ${shown}/${m.need.toLocaleString()}</div><div class="milestone-reward">${m.reward}</div></div><button class="milestone-claim" data-milestone="${m.id}" ${!done||claimed?'disabled':''}>${claimed?'✓ Permanent':done?'Claim':'Locked'}</button></div><div class="milestone-bar"><div class="milestone-fill" style="width:${pct}%"></div></div></div>`}).join('');});
-$('milestoneList').innerHTML=html;
-}
-loadMilestones();
+        // Milestones removed — Mastery is the permanent progression system.
+        function milestoneCoinMultiplier(){return 1}
+        function milestoneBossDamageMultiplier(){return 1}
+        function milestoneBossDefenseMultiplier(){return 1}
+        function milestoneMutationBonus(){return 0}
+        function milestoneKeyLuckMultiplier(){return 1}
 
         // ─── RECIPES ───
         const recipes = {
@@ -3500,7 +3557,7 @@ loadMilestones();
             'Boulder+Opposite':{name:'Pebble',emoji:'🪨',description:'A very not large rock'},
             'Boulder+Mountain':{name:'Avalanche',emoji:'❄️',description:'Mass of snow and rock falling'},
             'Wind+Fire':{name:'Wildfire',emoji:'🔥',description:'Uncontrolled fire',isHot:true},
-            'Water+Glass':{name:'Aquarium',emoji:'🐠',description:'Container for aquatic life'},
+            'Ocean+Glass':{name:'Aquarium',emoji:'🐠',description:'Container for aquatic life'},
             'A+1':{name:'A1 Sauce',emoji:'🍖',description:'A tangy condiment'},
             '0+0':{name:'00',emoji:'0️⃣0️⃣',description:'Double zero'},
             '0+1':{name:'Binary',emoji:'🖥️',description:'Language of computers'},
@@ -3514,8 +3571,6 @@ loadMilestones();
             'Philosophy+Fear':{name:'Existential Dread',emoji:'🧠',description:'Deep anxiety about life',color:'bg-purple-700'},
             'Error+Philosophy':{name:'Blank',emoji:'💭',description:'A void between elements',isBlank:true,color:'bg-gray-300'},
             'Error+Blank':{name:'Something Went Wrong',emoji:'💭❓',description:'Something happened.',isFinal:true,isBlank:true,color:'bg-gray-300'},
-            'A+Blank':{name:'a ',emoji:'🔤',description:'Letter a with a space',color:'bg-purple-500'},
-            'Blank+A':{name:' a',emoji:'🔤',description:'Space before letter a',color:'bg-purple-500'},
             'Blank+Blank':{name:'  ',emoji:'💭',description:'Double space',isBlank:true,color:'bg-gray-300'},
             '1+Blank':{name:'1 ',emoji:'1️⃣',description:'Number 1 with a space',color:'bg-orange-500'},
             'Cloud+Time':{name:'Weather',emoji:'🌦️',color:'bg-green-600',isBasic:true,description:'Atmospheric conditions'},
@@ -3641,7 +3696,7 @@ loadMilestones();
             'Farm+Farm':{name:'Agriculture',emoji:'🌾',description:'Science of farming',isBasic:true},
             'Wheat+Fire':{name:'Cereal',emoji:'🥣',description:'Breakfast staple'},
             'Dough+Fruit':{name:'Pie',emoji:'🥧',description:'Baked pastry with filling'},
-            'Bread+Cooked Meat':{name:'Burger',emoji:'🍔',description:'American classic'},
+            'Sandwich+Fire':{name:'Burger',emoji:'🍔',description:'American classic'},
             'Cooked Meat+Cooked Meat':{name:'BBQ',emoji:'🍖',description:'Smoky grilled perfection'},
             'Farm+Water':{name:'Irrigation',emoji:'💧',description:'Watering the crops'},
 
@@ -3726,7 +3781,7 @@ loadMilestones();
             // ─── EMOTION CHAIN ───
             'Fear+Fear':{name:'Terror',emoji:'😱',description:'Overwhelming dread'},
             'Fun+Fun':{name:'Joy',emoji:'😄',description:'Pure happiness'},
-            'Fun+Human':{name:'Happiness',emoji:'😊',description:'State of well-being'},
+            'Human+Joy':{name:'Happiness',emoji:'😊',description:'State of well-being'},
             'Fear+Dark':{name:'Nightmare',emoji:'👹',description:'Terrifying dream'},
             'Nightmare+Human':{name:'Insomnia',emoji:'😫',description:'Cannot sleep'},
             'Joy+Music':{name:'Dance',emoji:'💃',description:'Movement to rhythm'},
@@ -4485,7 +4540,7 @@ loadMilestones();
             'Radioactive+Radioactive':{name:'Chernobyl',emoji:'☢️',color:'bg-green-950',description:'Catastrophic meltdown site',isRadioactive:true,isFinal:true},
 
             // ═══════════ CURSED — Dark magic, chance to ruin combos ═══════════
-            'Dark+Magic':{name:'Dark Magic',emoji:'🌑',color:'bg-purple-900',description:'Forbidden sorcery',isCursed:true},
+            'Magic+Shadow':{name:'Dark Magic',emoji:'🌑',color:'bg-purple-900',description:'Forbidden sorcery',isCursed:true},
             'Shadow+Spell':{name:'Hex',emoji:'🔮',color:'bg-purple-800',description:'A malicious enchantment',isCursed:true},
             'Necromancy+Curse Word':{name:'Death Curse',emoji:'💀',color:'bg-purple-950',description:'Lethal magical affliction',isCursed:true},
             'Cursed Artifact+Magic':{name:'Cursed Relic',emoji:'🏺',color:'bg-purple-900',description:'An artifact dripping with malice',isCursed:true},
@@ -4717,7 +4772,7 @@ loadMilestones();
             'Motor+Wheel':{name:'Vehicle',emoji:'🚙',description:'A powered machine made for travel'},
             'Vehicle+Air':{name:'Hovercraft',emoji:'🛸',description:'A vehicle riding on a cushion of air'},
             'Power Station+Vehicle':{name:'Electric Transport',emoji:'🚈',description:'Transportation powered by a large electric network'},
-            'Plant+Water':{name:'Sapling',emoji:'🌱',description:'A young plant beginning to grow'},
+            'Seed+Earth':{name:'Sapling',emoji:'🌱',description:'A young plant beginning to grow'},
             'Sapling+Time':{name:'Ancient Tree',emoji:'🌳',description:'A tree that has stood for generations'},
             'Ancient Tree+Water':{name:'Rainforest',emoji:'🌴',description:'A dense forest fed by constant rain'},
             'Ancient Tree+Air':{name:'Whispering Grove',emoji:'🍃',description:'A grove whose leaves sing in the wind'},
@@ -4729,7 +4784,7 @@ loadMilestones();
             'Elderwood+Tool':{name:'Carved Totem',emoji:'🗿',description:'A carefully carved monument of old wood'},
             'Cloud Forest+Mycelial Grove':{name:'Living Biome',emoji:'🌎',description:'A deeply interconnected ecosystem'},
             'Living Biome+Time':{name:'Primeval Wilds',emoji:'🌲',description:'A wilderness untouched across ages'},
-            'Ocean+Earth':{name:'Seabed',emoji:'🌊',description:'The ground beneath the ocean'},
+            'Ocean+Stone':{name:'Seabed',emoji:'🌊',description:'The ground beneath the ocean'},
             'Seabed+Fire':{name:'Hydrothermal Vent',emoji:'♨️',description:'A superheated opening on the ocean floor'},
             'Seabed+Life':{name:'Deep Coral',emoji:'🪸',description:'Coral adapted to the dark depths'},
             'Ocean+Air':{name:'Ocean Current',emoji:'🌊',description:'A huge stream of moving seawater'},
@@ -4755,7 +4810,7 @@ loadMilestones();
             'Tempest+Climate Cycle':{name:'Atmospheric Engine',emoji:'🌐',description:'A planet-scale engine of wind, water, and heat'},
 
             // ─── SPACE EXPANSION ───
-            'Sky+Night':{name:'Outer Space',emoji:'🌌',description:'The vast region beyond the atmosphere'},
+            'Night+Star':{name:'Outer Space',emoji:'🌌',description:'The vast region beyond the atmosphere'},
             'Outer Space+Earth':{name:'Planetary Orbit',emoji:'🛰️',description:'A path around a planet'},
             'Outer Space+Stone':{name:'Asteroid',emoji:'☄️',description:'A rocky body traveling through space'},
             'Asteroid+Fire':{name:'Meteor',emoji:'🌠',description:'A space rock burning through an atmosphere'},
@@ -4765,7 +4820,7 @@ loadMilestones();
             'Star System+Life':{name:'Living Planet',emoji:'🌎',description:'A planet supporting a biosphere'},
             'Star System+Star System':{name:'Binary Star',emoji:'🌟',description:'Two stars orbiting one another'},
             'Star System+Time':{name:'Stellar Remnant',emoji:'✨',description:'What remains after a star changes beyond its main life'},
-            'Galaxy+Galaxy':{name:'Galaxy Cluster',emoji:'🌀',description:'A huge gathering of galaxies'},
+            'Galaxy+Star':{name:'Galaxy Cluster',emoji:'🌀',description:'A huge gathering of galaxies'},
             'Cosmic Web+Time':{name:'Deep Cosmos',emoji:'🌌',description:'The universe viewed across immense scales'},
 
             // ─── CIVILIZATION EXPANSION ───
@@ -4785,7 +4840,7 @@ loadMilestones();
             // ─── BIOLOGY EXPANSION ───
             'Life+Water':{name:'Microbe',emoji:'🦠',description:'A tiny living organism'},
             'Microbe+Time':{name:'Microbial Colony',emoji:'🧫',description:'A growing community of microorganisms'},
-            'Life+Earth':{name:'Organism',emoji:'🧬',description:'An individual living system'},
+            'Life+Energy':{name:'Organism',emoji:'🧬',description:'An individual living system'},
             'Organism+Time':{name:'Adaptation',emoji:'🧬',description:'A trait shaped by survival across generations'},
             'Evolution+Plant':{name:'Flora',emoji:'🌿',description:'The plant life of a region'},
             'Evolution+Animal':{name:'Fauna',emoji:'🦌',description:'The animal life of a region'},
@@ -4826,7 +4881,7 @@ loadMilestones();
             'Alchemy+Advanced Science':{name:'Modern Alchemy',emoji:'🧪',description:'Old transformation ideas viewed through advanced science'},
 
             // ─── ERAS EXPANSION ───
-            'Human+Stone':{name:'Stone Age',emoji:'🪨',description:'An era defined by widespread stone tools'},
+            'Caveman+Time':{name:'Stone Age',emoji:'🪨',description:'An era defined by widespread stone tools'},
             'Stone Age+Metal':{name:'Metal Age',emoji:'⚒️',description:'An era increasingly shaped by metalworking'},
             'Metal Age+Industry':{name:'Industrial Age',emoji:'🏭',description:'An era transformed by mechanized production'},
             'Industrial Age+Electricity':{name:'Electric Age',emoji:'💡',description:'An era reshaped by electrical power'},
@@ -4855,7 +4910,7 @@ loadMilestones();
             'Interstellar Ecology+Deep Cosmos':{name:'Cosmic Civilization',emoji:'🌠',description:'A civilization operating across immense cosmic distances'},
 
             // ─── GEOLOGY TREE ───
-            'Stone+Fire':{name:'Igneous Rock',emoji:'🌋',description:'Rock formed from cooled molten material'},
+            'Stone+Lava':{name:'Igneous Rock',emoji:'🌋',description:'Rock formed from cooled molten material'},
             'Igneous Rock+Time':{name:'Mineral Deposit',emoji:'💎',description:'Minerals concentrated through geological processes'},
             'Mineral Deposit+Tool':{name:'Mine',emoji:'⛏️',description:'A place where useful minerals are extracted'},
             'Mine+Industry':{name:'Mining Industry',emoji:'🏭',description:'Large-scale extraction of geological resources'},
@@ -4867,7 +4922,7 @@ loadMilestones();
             'Circuit+Metal':{name:'Electronic Circuit',emoji:'🖥️',description:'A compact circuit built from electronic components'},
             'Electronic Circuit+Knowledge':{name:'Processor',emoji:'💻',description:'A device that performs programmed operations'},
             'Processor+Processor':{name:'Parallel Computer',emoji:'🖥️',description:'A computer using many processors together'},
-            'Internet+Knowledge':{name:'Search Engine',emoji:'🔎',description:'A system for finding information across networks'},
+            'Internet+Tool':{name:'Search Engine',emoji:'🔎',description:'A system for finding information across networks'},
             'Internet+Commerce':{name:'E-Commerce',emoji:'🛒',description:'Trade performed through computer networks'},
             'Computer+Advanced Science':{name:'Supercomputer',emoji:'🖥️',description:'A computer designed for enormous calculations'},
             'Supercomputer+Climate System':{name:'Climate Model',emoji:'🌍',description:'A computational simulation of climate'},
@@ -4882,7 +4937,7 @@ loadMilestones();
             'Music+Knowledge':{name:'Music Theory',emoji:'🎼',description:'The study of musical structure'},
 
             // ─── ARCHITECTURE TREE ───
-            'House+House':{name:'Neighborhood',emoji:'🏘️',description:'A group of nearby homes'},
+            'House+Village':{name:'Neighborhood',emoji:'🏘️',description:'A group of nearby homes'},
             'Stone+Knowledge':{name:'Architecture',emoji:'📐',description:'The art and science of designing buildings'},
             'Architecture+House':{name:'Designed Home',emoji:'🏡',description:'A deliberately planned living space'},
             'Architecture+City':{name:'Urban Design',emoji:'🏙️',description:'Design applied to the structure of cities'},
@@ -5778,14 +5833,59 @@ loadMilestones();
         function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Browser storage is blocked or full. Export your save before closing.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
         function baseGameState(){return {prestige:{coins:0,times:0,upgrades:{}},bossMeta:{coins:0,upgrades:{},defeats:{}},coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,sfUnlocked:false,cyMoney:0,sfUpgraded:false};}
+        const CM_BACKUPS='cm_auto_backups_v1',CM_JOURNAL='cm_discovery_journal_v1',CM_FIRST_RECORDS='cm_first_records_v1',CM_PROFILE_PREFS='cm_profile_prefs_v1',CM_PLAQUES='cm_trophy_plaques_v1';
+        function cmJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch(e){return fallback}}
+        function cmSetJSON(key,v){try{localStorage.setItem(key,JSON.stringify(v))}catch(e){}}
+        let cmLastBackupAt=0;
+        function createAutoBackup(force=false){
+          if(bossMode||window.speedrunSaveMode)return false;
+          const now=Date.now();if(!force&&now-cmLastBackupAt<5*60*1000)return false;
+          const el=_getItem('fc_el'),co=_getItem('fc_co'),gst=_getItem('fc_gs');if(!el||!gst)return false;
+          const snap={date:now,el,co:co||'[]',gs:gst,mastery:_getItem('cm_objective_mastery_v1')||'',history:localStorage.getItem('cm_speedrun_history_v1')||'[]'};
+          const list=cmJSON(CM_BACKUPS,[]);list.unshift(snap);cmSetJSON(CM_BACKUPS,list.slice(0,5));cmLastBackupAt=now;return true;
+        }
+        function restoreBackup(i){
+          const b=cmJSON(CM_BACKUPS,[])[i];if(!b)return;
+          if(bossMode||window.speedrunSaveMode){notify('BACKUP LOCKED','Return to your normal save before restoring.','🔒',3000);return}
+          _setItem('fc_el',b.el);_setItem('fc_co',b.co);_setItem('fc_gs',b.gs);if(b.mastery)_setItem('cm_objective_mastery_v1',b.mastery);try{localStorage.setItem('cm_speedrun_history_v1',b.history||'[]')}catch(e){}
+          loadNamedSave(false);renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();renderBackupList();notify('BACKUP RESTORED','The selected snapshot is now active.','💾',3500);
+        }
+        function renderBackupList(){
+          const list=cmJSON(CM_BACKUPS,[]),box=$('backupList'),status=$('backupStatus');if(!box)return;
+          if(status)status.innerHTML=`<div class="stat-tile"><small>ROTATING SNAPSHOTS</small><strong>${list.length}/5</strong></div>`;
+          box.innerHTML=list.length?list.map((b,i)=>`<div class="backup-entry"><div><strong>Backup ${i+1}</strong><small>${new Date(b.date).toLocaleString()}</small></div><button data-restore="${i}">RESTORE</button></div>`).join(''):'<div class="trophy-empty"><b>NO BACKUPS YET</b><span>Press Backup now or keep playing; automatic snapshots rotate every few minutes when saving.</span></div>';
+          box.querySelectorAll('[data-restore]').forEach(b=>b.onclick=()=>restoreBackup(Number(b.dataset.restore)));
+        }
+        function journalEntries(){return cmJSON(CM_JOURNAL,[])}
+        function recordJournalElement(el){
+          if(!el||el.isKey||bossMode||window.speedrunSaveMode)return;
+          const j=journalEntries();if(j.some(x=>x.name===el.name))return;
+          j.push({name:el.name,emoji:el.emoji||'❔',date:Date.now(),description:el.description||'',seasonal:!!el.isSeasonal,exclusive:!!el.isExclusive});cmSetJSON(CM_JOURNAL,j);
+        }
+        function firstRecords(){return cmJSON(CM_FIRST_RECORDS,{})}
+        function setFirstRecord(id,label,emoji){
+          const r=firstRecords();if(r[id])return;r[id]={label,emoji,date:Date.now()};cmSetJSON(CM_FIRST_RECORDS,r);
+        }
+        function syncFirstRecords(){
+          if(elements.some(e=>e.name==='Everything'))setFirstRecord('everything','First Everything','🌈');
+          if(Number(prestigeData()?.times||0)>0)setFirstRecord('prestige','First Prestige','🏆');
+          if(Object.keys(masteryState?.completed||{}).length)setFirstRecord('mastery','First Mastery','🌟');
+          if(Object.values(bossMeta()?.defeats||{}).some(v=>Number(v)>0))setFirstRecord('boss','First Boss Victory','⚔️');
+          if(speedrunHistory().some(r=>r.medal==='DIAMOND'))setFirstRecord('diamond','First Diamond Run','💎');
+          if(typeof masterySeasonCompletions==='function'&&masterySeasonCompletions()>0)setFirstRecord('season','First Season Complete','🗓️');
+        }
+        function profilePrefs(){return {...{title:'Crafter',theme:'default'},...cmJSON(CM_PROFILE_PREFS,{})}}
+        function saveProfilePrefs(p){cmSetJSON(CM_PROFILE_PREFS,p)}
+        function trophyPlaques(){return cmJSON(CM_PLAQUES,{})}
+        function setTrophyPlaque(name,text){const p=trophyPlaques();p[name]=String(text||'').slice(0,42);cmSetJSON(CM_PLAQUES,p);renderTrophyRoom()}
         function save(){
-            try{milestoneCounts();}catch(e){}
             normalizeKeyStacks();normalizeEverything();updateProgressionUI();
             try{
                 const pre=bossMode?'fc_boss_':(window.speedrunSaveMode?'fc_speedrun_':'fc_');
                 _setItem(pre+'el',JSON.stringify(elements));_setItem(pre+'co',JSON.stringify(combos));_setItem(pre+'gs',JSON.stringify(gs));
                 if(bossMode)_setItem('fc_boss_active','1');
                 if(window.speedrunSaveMode)_setItem('fc_speedrun_active','1');
+                if(!bossMode&&!window.speedrunSaveMode)setTimeout(()=>createAutoBackup(false),0);
             }catch(e){}
         }
         function loadNamedSave(isBoss,isSpeedrun=false){
@@ -7394,7 +7494,7 @@ loadMilestones();
             } else {
                 elements.push(newEl);
                 if(speedrunState?.active&&speedrunState.runStats)speedrunState.runStats.discoveries++;
-                recordMasteryDiscovery(newEl);
+                recordMasteryDiscovery(newEl);recordJournalElement(newEl);syncFirstRecords();
                 showResult(newEl,true);
                 combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{}),...(newEl.isSeasonal?{isSeasonal:true,seasonalEvent:newEl.seasonalEvent}:{})});
                 addComboEntry(sel1,sel2,newEl);
@@ -7762,20 +7862,15 @@ loadMilestones();
 
         function populateDeveloperSeasonSelect(){
             const sel=$('developerSeasonSelect');if(!sel)return;
-            const current=getDeveloperSeasonOverride()||(OldAllCreate?'__april_fools__':'');
+            const current=getDeveloperSeasonOverride()||'';
             sel.innerHTML='<option value="">Real date (automatic)</option>'+
-                SEASONAL_EVENTS.map(ev=>`<option value="${ev.id}">${ev.icon} ${ev.name}</option>`).join('')+
-                '<option value="__april_fools__">🤡 April Fools</option>';
+                SEASONAL_EVENTS.map(ev=>`<option value="${ev.id}">${ev.icon} ${ev.name}</option>`).join('');
             sel.value=current;
             updateDeveloperSeasonStatus();
         }
         function updateDeveloperSeasonStatus(){
             const box=$('developerSeasonStatus');if(!box)return;
             const forced=getDeveloperSeasonOverride();
-            if(OldAllCreate&&!forced){
-                box.textContent='Developer override: 🤡 April Fools mode. This is separate from the seasonal event system.';
-                return;
-            }
             if(!forced){
                 const active=getActiveSeasonalEvents();
                 box.textContent=active.length
@@ -7787,36 +7882,22 @@ loadMilestones();
             box.textContent=`Forced season: ${ev?.icon||'🎉'} ${ev?.name||forced}. Ignores the calendar until cleared.`;
         }
         function applyDeveloperSeasonOverride(id){
-            const april=id==='__april_fools__';
             try{
-                if(!april&&id&&SEASONAL_EVENTS.some(ev=>ev.id===id))localStorage.setItem('cm_dev_season_override',id);
+                if(id&&SEASONAL_EVENTS.some(ev=>ev.id===id))localStorage.setItem('cm_dev_season_override',id);
                 else localStorage.removeItem('cm_dev_season_override');
             }catch(e){}
-            OldAllCreate=april;
-            try{
-                if(april)localStorage.setItem('cm_dev_april_fools_override','1');
-                else localStorage.removeItem('cm_dev_april_fools_override');
-            }catch(e){}
-            document.querySelectorAll('.april-permanent-banner,.april-extra-banner,.april-ad-rack,.april-chaos-sticker,.april-corner-note,.april-fools-splash').forEach(el=>el.remove());
-            document.body.classList.toggle('april-fools-mode',OldAllCreate);
-
             const devActiveEvents=getActiveSeasonalEvents();
             activeSeasonalIds=new Set(devActiveEvents.map(e=>e.id));
             if(!gs.seasonalSeen||!Array.isArray(gs.seasonalSeen))gs.seasonalSeen=[];
-            if(!april&&id){
+            if(id){
                 const ev=SEASONAL_EVENTS.find(x=>x.id===id);
                 if(ev){
-                    if(!elements.some(el=>el.isSeasonal&&el.seasonalEvent===ev.id&&el.seasonalIndex===0)){
-                        elements.push(makeSeasonalElement(ev,0));
-                    }
+                    if(!elements.some(el=>el.isSeasonal&&el.seasonalEvent===ev.id&&el.seasonalIndex===0))elements.push(makeSeasonalElement(ev,0));
                     if(!gs.seasonalSeen.includes(ev.id))gs.seasonalSeen.push(ev.id);
                 }
             }
-
-            syncSeasonalWallpaper();
-            renderEls();updateCount();save();
-            renderUpcomingSeasonalEvent();
-            populateDeveloperSeasonSelect();
+            syncSeasonalWallpaper();renderEls();updateCount();save();
+            renderUpcomingSeasonalEvent();populateDeveloperSeasonSelect();
             if(typeof renderBossLobby==='function'&&$('bossModal')?.classList.contains('show'))renderBossLobby();
         }
 
@@ -7856,9 +7937,8 @@ loadMilestones();
             applyDeveloperSeasonOverride(id);
             const ev=seasonalEventById(id);
             notify('DEV SEASON',
-                id==='__april_fools__'?'April Fools mode enabled.':
                 ev?`Forced ${ev.icon} ${ev.name}.`:'Returned to automatic date mode.',
-                id==='__april_fools__'?'🤡':'🛠',2600);
+                '🛠',2600);
         });
         function runSelectedCountdown(start=true){
             const id=$('developerCountdownSelect')?.value,status=$('developerRuntimeStatus');
@@ -7972,14 +8052,36 @@ loadMilestones();
           elements.push({...r,isMasteryExclusive:true,masteryRewardId:id,isExclusive:true,excludeFromRank:true,discoveredAt:Date.now()});
           notify('MASTERY EXCLUSIVE!',`${r.emoji} ${r.name} was added to your permanent collection.`,'🌟',5200);
         }
+        const CM_MASTERY_PINS='cm_mastery_pins_v1';
+        function masteryPins(){try{return JSON.parse(localStorage.getItem(CM_MASTERY_PINS)||'[]').filter(id=>MASTERY_OBJECTIVES.some(o=>o.id===id)).slice(0,3)}catch(e){return[]}}
+        function saveMasteryPins(p){try{localStorage.setItem(CM_MASTERY_PINS,JSON.stringify(p.slice(0,3)))}catch(e){}renderPinnedMasteries()}
+        function toggleMasteryPin(id){let p=masteryPins();if(p.includes(id))p=p.filter(x=>x!==id);else if(p.length<3)p.push(id);else{notify('PIN LIMIT','You can pin up to 3 Masteries.','📌',2600);return}saveMasteryPins(p);renderMastery()}
+        function renderPinnedMasteries(){
+          const hud=$('masteryPinnedHud');if(!hud)return;const pins=masteryPins(),st=masteryState.stats;
+          hud.hidden=!pins.length;hud.innerHTML=pins.map(id=>{const o=MASTERY_OBJECTIVES.find(x=>x.id===id);if(!o)return'';const v=Number(st[o.stat]||0),pct=Math.min(100,v/o.goal*100);return `<div class="pinned-mastery${pct>=90&&pct<100?' near-complete':''}"><strong><span>${o.icon} ${o.name}</span><span>${Math.min(v,o.goal)}/${o.goal}</span></strong><div class="mini"><i style="width:${pct}%"></i></div></div>`}).join('');
+        }
+        let masteryCelebrationQueue=[],masteryCelebrating=false;
+        function queueMasteryCelebration(o){
+          if(!o)return;masteryCelebrationQueue.push(o);if(masteryCelebrating)return;masteryCelebrating=true;
+          const next=()=>{const x=masteryCelebrationQueue.shift();if(!x){masteryCelebrating=false;return}const box=$('masteryCelebration');$('masteryCelebrationIcon').textContent=x.icon;$('masteryCelebrationName').textContent=x.name;$('masteryCelebrationDesc').textContent=x.desc;box.hidden=false;setTimeout(()=>{box.hidden=true;setTimeout(next,120)},2200)};next();
+        }
+        const CM_MASTERY_NEAR='cm_mastery_near_toasts_v1';
+        function checkMasteryNearToasts(){
+          const seen=cmJSON(CM_MASTERY_NEAR,{}),pins=masteryPins(),st=masteryState.stats;
+          for(const o of MASTERY_OBJECTIVES){if(masteryState.completed[o.id])continue;const v=Number(st[o.stat]||0),pct=v/o.goal;if(pct<.9)continue;
+            const mark=pct>=.99?'99':'90',key=o.id+':'+mark;if(seen[key])continue;
+            if(mark==='90'&&seen[o.id+':99'])continue;seen[key]=Date.now();cmSetJSON(CM_MASTERY_NEAR,seen);
+            notify(pins.includes(o.id)?'📌 PINNED MASTERY NEARLY DONE':'MASTERY NEARLY DONE',`${o.name} · ${Math.min(v,o.goal).toLocaleString()} / ${o.goal.toLocaleString()}`,o.icon,3200);break;
+          }
+        }
         function syncMasteryStats(){
           const st=masteryState.stats;
           st.prestiges=Math.max(st.prestiges,Number(prestigeData().times||0));
-          st.bosses=Math.max(st.bosses,Number(bossMeta().defeats||0));
+          st.bosses=Math.max(st.bosses,Object.values(bossMeta().defeats||{}).reduce((a,v)=>a+Number(v||0),0));
           st.modifiedBest=Math.max(st.modifiedBest,masteryModifiedCount());
           st.seasonsComplete=Math.max(st.seasonsComplete,masterySeasonCompletions());
           let newly=0;
-          MASTERY_OBJECTIVES.forEach(o=>{if(!masteryState.completed[o.id]&&Number(st[o.stat]||0)>=o.goal){masteryState.completed[o.id]=Date.now();grantMasteryExclusive(o.id);newly++;}});
+          MASTERY_OBJECTIVES.forEach(o=>{if(!masteryState.completed[o.id]&&Number(st[o.stat]||0)>=o.goal){masteryState.completed[o.id]=Date.now();grantMasteryExclusive(o.id);queueMasteryCelebration(o);newly++;}});
           if(newly){
             saveMastery();notify('MASTERY COMPLETE!',`${newly} new Mastery objective${newly===1?'':'s'} completed.`,'🌟',4200);
             if(typeof speedrunState!=='undefined'&&speedrunState.active&&speedrunState.category==='firstMastery'){
@@ -7987,7 +8089,7 @@ loadMilestones();
               if(nowDone>Number(speedrunState.masteryBaseline||0))finishSpeedrun(speedrunCategoryDef('firstMastery'));
             }
           } else saveMastery();
-          return newly;
+          renderPinnedMasteries();checkMasteryNearToasts();return newly;
         }
         function recordMasteryDiscovery(el){
           if(!el||el.excludeFromRank||el.isExclusive||el.isSpeedrun||el.isAprilFools||el.isKey||el.isPrestige)return;
@@ -7999,7 +8101,7 @@ loadMilestones();
           const done=MASTERY_OBJECTIVES.filter(o=>masteryState.completed[o.id]).length,total=MASTERY_OBJECTIVES.length,st=masteryState.stats;
           $('masteryOverview').innerHTML=`<div><strong>${done}/${total}</strong><small>MASTERIES</small></div><div><strong>${st.discoveries.toLocaleString()}</strong><small>LIFETIME FINDS</small></div><div><strong>${st.everything.toLocaleString()}</strong><small>EVERYTHING FORGED</small></div>`;
           const grid=$('masteryObjectiveGrid');grid.replaceChildren();
-          MASTERY_OBJECTIVES.forEach((o,i)=>{const val=Number(st[o.stat]||0),complete=!!masteryState.completed[o.id],pct=Math.min(100,val/o.goal*100),card=document.createElement('div');card.className='mastery-card'+(complete?' done':'');card.innerHTML=`<div class="mastery-card-top"><strong>${o.icon} ${o.name}</strong><span class="mastery-tier">${o.group.toUpperCase()}</span></div><p>${o.desc}</p><div class="mastery-bar"><i style="width:${pct}%"></i></div><div class="mastery-progress"><span>${Math.min(val,o.goal).toLocaleString()} / ${o.goal.toLocaleString()}</span><span>${complete?'MASTERED ✓':Math.floor(pct)+'%'}</span></div><div class="mastery-reward-line">${complete?'⭐ Permanent Mastery earned':'✦ Permanent objective'}</div>`;grid.appendChild(card);});
+          MASTERY_OBJECTIVES.forEach((o,i)=>{const val=Number(st[o.stat]||0),complete=!!masteryState.completed[o.id],pct=Math.min(100,val/o.goal*100),card=document.createElement('div');card.className='mastery-card'+(complete?' done':'')+(["discover1500", "everything25", "prestige20", "boss50", "bossMaster10", "modified200", "season20"].includes(o.id)?' capstone':'');card.innerHTML=`<div class="mastery-card-top"><strong>${o.icon} ${o.name}</strong><span class="mastery-tier">${o.group.toUpperCase()}</span></div><p>${o.desc}</p><div class="mastery-bar"><i style="width:${pct}%"></i></div><div class="mastery-progress"><span>${Math.min(val,o.goal).toLocaleString()} / ${o.goal.toLocaleString()}</span><span>${complete?'MASTERED ✓':Math.floor(pct)+'%'}</span></div><div class="mastery-reward-line">${complete?'⭐ Permanent Mastery earned':'✦ Permanent objective'}</div>`;const pin=document.createElement('button');pin.className='mastery-pin-btn'+(masteryPins().includes(o.id)?' pinned':'');pin.textContent=masteryPins().includes(o.id)?'📌 PINNED':'📌 PIN';pin.addEventListener('click',ev=>{ev.stopPropagation();toggleMasteryPin(o.id)});card.appendChild(pin);grid.appendChild(card);});
           if($('masteryBtn'))$('masteryBtn').textContent=`🌟 Mastery ${done}/${total}`;
         }
 
@@ -8027,6 +8129,13 @@ loadMilestones();
           });
         }
 
+        const CM_SPEEDRUN_HISTORY='cm_speedrun_history_v1';
+        function speedrunHistory(){try{return JSON.parse(localStorage.getItem(CM_SPEEDRUN_HISTORY)||'[]')}catch(e){return[]}}
+        function saveSpeedrunHistoryEntry(entry){try{const h=speedrunHistory();h.unshift(entry);localStorage.setItem(CM_SPEEDRUN_HISTORY,JSON.stringify(h.slice(0,20)))}catch(e){}}
+        function bestSplitRecords(category,season=''){
+          const out={};for(const r of speedrunHistory().filter(x=>x.category===category&&(category!=='season100'||!season||x.season===season))){for(const [id,ms] of Object.entries(r.splits||{})){if(out[id]==null||ms<out[id])out[id]=ms}}return out;
+        }
+        function medalIcon(m){return m==='DIAMOND'?'💎':m==='GOLD'?'🥇':m==='SILVER'?'🥈':m==='BRONZE'?'🥉':'🏁'}
         const SPEEDRUN_SPLITS=[
           {id:'elements25',label:'25 Elements',test:()=>speedrunRankProgress().counted>=25},
           {id:'shop',label:'Shop',test:()=>!!gs.shopUnlocked||elements.some(e=>e.name==='Shop')},
@@ -8044,6 +8153,18 @@ loadMilestones();
           season100:[10*60e3,20*60e3,35*60e3,60*60e3]
         };
         function speedrunMedal(category,ms){const t=SPEEDRUN_MEDALS[category]||SPEEDRUN_MEDALS.rankP;return ms<=t[0]?'DIAMOND':ms<=t[1]?'GOLD':ms<=t[2]?'SILVER':ms<=t[3]?'BRONZE':'FINISHER';}
+        function updateSpeedrunTimerMedal(hud,def){
+          if(!hud||!speedrunState.active)return;
+          const elapsed=speedrunMs(),medal=speedrunMedal(def.id,elapsed),tiers=['DIAMOND','GOLD','SILVER','BRONZE','FINISHER'];
+          const prev=hud.dataset.medal||medal;
+          tiers.forEach(x=>hud.classList.toggle('medal-'+x,x===medal));
+          if(prev!==medal&&tiers.indexOf(medal)>tiers.indexOf(prev)){hud.classList.remove('medal-drop');void hud.offsetWidth;hud.classList.add('medal-drop');setTimeout(()=>hud.classList.remove('medal-drop'),800)}
+          hud.dataset.medal=medal;
+          const limits=SPEEDRUN_MEDALS[def.id]||SPEEDRUN_MEDALS.rankP,idx=tiers.indexOf(medal),limit=idx<4?limits[idx]:null,remain=limit==null?null:Math.max(0,limit-elapsed);
+          const goal=hud.querySelector('.speedrun-goal');if(goal)goal.textContent=`→ ${def.label} · ${medal}${remain!=null?' · '+formatSpeedrun(remain)+' LEFT':''}`;
+          let bar=hud.querySelector('.speedrun-medal-progress');if(!bar){bar=document.createElement('div');bar.className='speedrun-medal-progress';bar.innerHTML='<i></i>';hud.appendChild(bar)}
+          bar.hidden=remain==null;if(limit!=null)bar.querySelector('i').style.width=Math.max(0,Math.min(100,remain/limit*100))+'%';
+        }
         function speedrunPBRelic(){const d=speedrunCategoryDef();return elements.find(e=>e.isSpeedrun&&e.speedrunCategory===d.id&&(d.id!=='season100'||!d.seasonName||e.speedrunSeason===d.seasonName));}
         function updateSpeedrunSplits(){
           if(!speedrunState.active)return;
@@ -8051,11 +8172,16 @@ loadMilestones();
           for(const sp of SPEEDRUN_SPLITS){if(speedrunState.splits[sp.id]==null&&sp.test()){speedrunState.splits[sp.id]=speedrunMs();saveSpeedrun();}}
         }
         function speedrunSplitHTML(){
-          const relic=speedrunPBRelic(),pb=relic?.speedrunBestSplits||{},cur=speedrunState.splits||{};
-          const rows=SPEEDRUN_SPLITS.filter(sp=>cur[sp.id]!=null||pb[sp.id]!=null).map(sp=>{const c=cur[sp.id],b=pb[sp.id],delta=c!=null&&b!=null?c-b:null;return `<div class="speedrun-split"><span>${sp.label}</span><span>${c!=null?formatSpeedrun(c):'—'}</span><span class="${delta==null?'':delta<=0?'ahead':'behind'}">${delta==null?'':(delta<=0?'−':'+')+formatSpeedrun(Math.abs(delta))}</span></div>`}).join('');
-          let ghost='No PB ghost yet — finish this category once.';
-          if(relic?.speedrunBestTime){const elapsed=speedrunMs(),diff=elapsed-relic.speedrunBestTime;ghost=`👻 PB Ghost · ${formatSpeedrun(relic.speedrunBestTime)} finish · current ${diff<=0?formatSpeedrun(-diff)+' ahead':formatSpeedrun(diff)+' behind'}`;}
-          return `<div class="speedrun-splits">${rows||'<div class="speedrun-split"><span>Splits appear automatically</span><span>—</span><span></span></div>'}</div><div class="speedrun-ghost">${ghost}</div>`;
+          const relic=speedrunPBRelic(),pb=relic?.speedrunBestSplits||{},cur=speedrunState.splits||{},def=speedrunCategoryDef(),gold=bestSplitRecords(def.id,def.seasonName||'');
+          let streak=0,bestStreak=0;
+          const rows=SPEEDRUN_SPLITS.filter(sp=>cur[sp.id]!=null||pb[sp.id]!=null).map(sp=>{const c=cur[sp.id],b=pb[sp.id],g=gold[sp.id],delta=c!=null&&b!=null?c-b:null,isGold=c!=null&&(g==null||c<=g);if(isGold){streak++;bestStreak=Math.max(bestStreak,streak)}else if(c!=null)streak=0;return `<div class="speedrun-split${isGold?' gold-split':''}"><span>${isGold?'✨ ':''}${sp.label}</span><span>${c!=null?formatSpeedrun(c):'—'}</span><span class="${isGold?'gold':delta==null?'':delta<=0?'ahead':'behind'}">${isGold?'GOLD SPLIT':delta==null?'':(delta<=0?'−':'+')+formatSpeedrun(Math.abs(delta))}</span></div>`}).join('');
+          let ghost='👻 No PB ghost yet — finish this category once.';
+          if(relic?.speedrunBestTime){
+            const elapsed=speedrunMs(),next=SPEEDRUN_SPLITS.find(sp=>cur[sp.id]==null&&pb[sp.id]!=null);
+            if(next){const d=elapsed-pb[next.id];ghost=d<0?`👻 PB Ghost reaches ${next.label} in ${formatSpeedrun(-d)}.`:`👻 PB reached ${next.label} ${formatSpeedrun(d)} ago — chase it!`;}
+            else{const diff=elapsed-relic.speedrunBestTime;ghost=`👻 Finish Ghost · ${diff<=0?formatSpeedrun(-diff)+' ahead of PB':formatSpeedrun(diff)+' behind PB'} · PB ${formatSpeedrun(relic.speedrunBestTime)}`;}
+          }
+          return `<div class="speedrun-splits">${rows||'<div class="speedrun-split"><span>Splits appear automatically</span><span>—</span><span></span></div>'}</div>${bestStreak>=2?`<div class="split-streak">✨ GOLD SPLIT STREAK ×${bestStreak}</div>`:''}<div class="speedrun-ghost">${ghost}</div>`;
         }
         function showRunSummary(data){
           const box=$('runSummaryBody');if(!box)return;
@@ -8074,7 +8200,7 @@ loadMilestones();
         }
         function renderSpeedrun(){
           applySpeedrunLocks();
-          const speedTitleOn=!!(speedrunState.active||speedrunState.finished);
+          const speedTitleOn=!!speedrunState.active;
           if($('normalGameHeading'))$('normalGameHeading').hidden=speedTitleOn||!!bossMode;
           if($('speedrunGameHeading'))$('speedrunGameHeading').hidden=!speedTitleOn||!!bossMode;
           if($('bossGameHeading')&&bossMode)$('speedrunGameHeading').hidden=true;
@@ -8087,10 +8213,11 @@ loadMilestones();
             select.value=speedrunState.category||'rankP';select.disabled=!!speedrunState.active;
           }
           if(hud){
-            hud.hidden=!(speedrunState.active||speedrunState.finished);
+            hud.hidden=!speedrunState.active;
             hud.classList.toggle('finished',!!speedrunState.finished);
             hud.querySelector('.speedrun-time').textContent=formatSpeedrun(speedrunMs());
-            const goal=hud.querySelector('.speedrun-goal');if(goal)goal.textContent='→ '+def.label;
+            updateSpeedrunTimerMedal(hud,def);
+            updateGhostFinishRace(hud,def);
           }
           if(btn)btn.classList.toggle('speedrun-active',!!speedrunState.active);
           if(st)st.innerHTML=`<strong>${speedrunState.active?'🟢 RUNNING':speedrunState.finished?'🏆 FINISHED':'⚪ READY'}</strong><br>Category: <b>${def.label}</b><br>Time: <b>${formatSpeedrun(speedrunMs())}</b><br>${def.id==='rankP'?`Ranked completion: ${p.counted}/${p.total} (${p.pct}%)<br>`:''}Goal: <b>${def.goal}</b><br>Reward: <b>${def.reward}</b>`;
@@ -8126,7 +8253,8 @@ loadMilestones();
         function finishSpeedrun(def){
           if(!speedrunState.active)return;
           speedrunState.active=false;speedrunState.finished=true;speedrunState.end=Date.now();
-          const ms=speedrunMs(),summary={...(speedrunState.runStats||{}),time:ms,splits:structuredClone(speedrunState.splits||{}),medal:speedrunMedal(def.id,ms)},carry=speedrunCarrySnapshot();saveSpeedrun();const reward=grantSpeedrunReward(def,ms),rewardCopy=structuredClone(reward);
+          const ms=speedrunMs(),oldRelic=speedrunPBRelic(),oldBest=Number(oldRelic?.speedrunBestTime||Infinity),summary={...(speedrunState.runStats||{}),time:ms,splits:structuredClone(speedrunState.splits||{}),medal:speedrunMedal(def.id,ms)},carry=speedrunCarrySnapshot();
+          saveSpeedrunHistoryEntry({date:Date.now(),category:def.id,label:def.label,season:def.seasonName||'',time:ms,medal:summary.medal,pb:ms<oldBest,splits:structuredClone(speedrunState.splits||{}),crafts:summary.crafts||0,failed:summary.failed??summary.invalid??0,discoveries:summary.discoveries||0});saveSpeedrun();const reward=grantSpeedrunReward(def,ms),rewardCopy=structuredClone(reward);
           transferSpeedrunProgressToMain(carry,rewardCopy);renderSpeedrun();
           const best=Number(rewardCopy.speedrunBestTime||ms),clears=Number(rewardCopy.speedrunClears||rewardCopy.isSpeedrun||1);
           notify('SPEEDRUN COMPLETE!',`${def.label} · Run ${formatSpeedrun(ms)} · BEST ${formatSpeedrun(best)} · ×${clears}`,def.emoji,10000);
@@ -8314,12 +8442,134 @@ loadMilestones();
         $('changelogBtn').addEventListener('click',()=>openModal('changelogModal'));
 
 
-        $('milestonesBtn').addEventListener('click',()=>{renderMilestones();openModal('milestonesModal');});
-        $('milestoneList').addEventListener('click',e=>{const b=e.target.closest('[data-milestone]');if(b)claimMilestone(b.dataset.milestone);});
+        const CM_FAVORITE_TROPHY='cm_favorite_trophy_v1';
+        let trophyWing='all';
+        function cmFavoriteTrophy(){try{return localStorage.getItem(CM_FAVORITE_TROPHY)||''}catch(e){return''}}
+        function setFavoriteTrophy(name){try{localStorage.setItem(CM_FAVORITE_TROPHY,name)}catch(e){}renderTrophyRoom();notify('FEATURED TROPHY',name,'🏆',2200)}
+        function trophyWingFor(el){return el.isSpeedrun?'speedrun':el.isBossDefeat||el.isBossMasteryTrophy?'boss':el.isMasteryExclusive?'mastery':el.isSeasonalCompletion?'seasonal':el.isPrestige?'prestige':'other'}
+        function renderTrophyWings(){
+          const tabs=$('trophyWingTabs');if(!tabs)return;const wings=[['all','🏛️ All'],['speedrun','🏁 Speedrun'],['boss','👑 Boss'],['mastery','🌟 Mastery'],['seasonal','🗓️ Seasonal'],['prestige','✨ Prestige']];
+          tabs.innerHTML=wings.map(([id,n])=>`<button data-wing="${id}" class="${trophyWing===id?'active':''}">${n}</button>`).join('');
+          tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{trophyWing=b.dataset.wing;renderTrophyRoom()});
+          const all=trophyRoomElements(),fav=elements.find(e=>e.name===cmFavoriteTrophy()&&all.includes(e)),box=$('favoriteTrophyDisplay'),plaques=trophyPlaques();
+          const n=all.length,level=n>=40?5:n>=25?4:n>=15?3:n>=7?2:1,room=$('trophyRoomModal');if(room){for(let i=1;i<=5;i++)room.classList.toggle('trophy-vault-level-'+i,i===level)}
+          const levelNames=['','STARTER STORAGE','POLISHED GALLERY','RELIC HALL','GRAND VAULT','MELON MUSEUM'];
+          if(box)box.innerHTML=`<div class="vault-level-label">VAULT LEVEL ${level} · ${levelNames[level]}</div>`+(fav?`<div class="favorite-pedestal"><small>FEATURED RELIC</small><div class="big">${fav.emoji||'🏆'}</div><strong>${fav.name}</strong><span style="font-size:.48rem;color:var(--text-secondary)">${fav.description||''}</span>${plaques[fav.name]?`<div class="pedestal-plaque">${plaques[fav.name]}</div>`:''}</div>`:'<div class="favorite-pedestal"><small>FEATURED RELIC</small><div class="big">◇</div><strong>No favorite selected</strong><span style="font-size:.48rem;color:var(--text-secondary)">Inspect a trophy and feature it here.</span></div>');
+          const ed=$('pedestalPlaqueEditor');if(ed)ed.innerHTML=fav?`<input id="plaqueInput" maxlength="42" value="${(plaques[fav.name]||'').replace(/"/g,'&quot;')}" placeholder="Engrave pedestal plaque...">`:'';
+          if($('plaqueInput'))$('plaqueInput').onchange=e=>setTrophyPlaque(fav.name,e.target.value);
+          const sets=[
+            ['Speedrun Collection',all.filter(e=>e.isSpeedrun).length,4],
+            ['Boss Collection',all.filter(e=>e.isBossDefeat||e.isBossMasteryTrophy).length,8],
+            ['Mastery Relics',all.filter(e=>e.isMasteryExclusive).length,Object.keys(MASTERY_EXCLUSIVE_REWARDS).length],
+            ['Seasonal Trophies',all.filter(e=>e.isSeasonalCompletion||e.isSeasonalReward).length,20]
+          ];
+          if(tabs){let board=$('trophySetBoard');if(!board){board=document.createElement('div');board.id='trophySetBoard';board.className='trophy-set-board';tabs.after(board)}
+            board.innerHTML=sets.map(([name,got,total])=>`<div class="trophy-set ${got>=total?'complete':''}"><strong><span>${got>=total?'🏆':'◇'} ${name}</span><span>${Math.min(got,total)}/${total}</span></strong><i style="width:${Math.min(100,got/total*100)}%"></i></div>`).join('');
+          }
+        }
+
+
+        function installFamilyTreeButtons(){
+          document.querySelectorAll('.element-card').forEach(card=>{
+            if(card.querySelector('.family-tree-btn'))return;
+            const name=card.dataset?.name||card.querySelector('.font-bold,.element-name')?.textContent?.trim();
+            if(!name||!elements.some(e=>e.name===name))return;
+            const b=document.createElement('button');b.className='family-tree-btn';b.textContent='🧬 ORIGIN';b.onclick=e=>{e.stopPropagation();openRecipeFamily(name)};card.style.position='relative';card.appendChild(b);
+          });
+        }
+        function renderDiscoveryJournal(){
+          const q=($('journalSearch')?.value||'').trim().toLowerCase(),j=journalEntries(),box=$('discoveryJournalList');if(!box)return;
+          const rows=j.filter(x=>!q||x.name.toLowerCase().includes(q)||(x.description||'').toLowerCase().includes(q));
+          box.innerHTML=rows.length?rows.map((x,i)=>`<div class="journal-entry"><div class="num">#${j.indexOf(x)+1}</div><div><strong>${x.name}</strong><small>${x.description||'Discovery'} · ${new Date(x.date).toLocaleString()}</small></div><div class="emoji">${x.emoji}</div></div>`).join(''):'<div class="trophy-empty"><b>NO MATCHES</b><span>Your future discoveries will appear here automatically.</span></div>';
+        }
+        function unlockedProfileTitles(){
+          const h=speedrunHistory(),done=Object.keys(masteryState.completed||{}).length,bosses=Object.values(bossMeta().defeats||{}).reduce((a,v)=>a+Number(v||0),0),out=['Crafter'];
+          if(elements.length>=250)out.push('The Archivist');if(bosses>=10)out.push('Boss Breaker');if(h.some(r=>r.medal==='DIAMOND'))out.push('Diamond Crafter');if(masterySeasonCompletions()>=5)out.push('Season Keeper');if((masteryState.stats.everything||0)>=10)out.push('Master of Everything');if(done>=20)out.push('Master Crafter');return out;
+        }
+        function unlockedProfileThemes(){
+          const h=speedrunHistory(),out=[['default','Default']];if(h.some(r=>r.medal==='DIAMOND'))out.push(['diamond','Diamond']);if(Object.values(bossMeta().defeats||{}).some(v=>Number(v)>0))out.push(['boss','Boss']);if(Object.keys(masteryState.completed||{}).length>=5)out.push(['mastery','Mastery']);if(masterySeasonCompletions()>0)out.push(['seasonal','Seasonal']);if((masteryState.stats.everything||0)>0)out.push(['everything','Everything']);return out;
+        }
+        function renderPlayerStats(){
+          syncFirstRecords();const prefs=profilePrefs(),hist=speedrunHistory(),bosses=Object.values(bossMeta().defeats||{}).reduce((a,v)=>a+Number(v||0),0),mastered=Object.keys(masteryState.completed||{}).length;
+          const best=hist.length?Math.min(...hist.map(r=>Number(r.time||Infinity))):null;
+          const failed=hist.reduce((a,r)=>a+Number(r.failed||0),0),crafts=hist.reduce((a,r)=>a+Number(r.crafts||0),0);
+          const trophies=trophyRoomElements().length,p=prestigeData(),rank=typeof getRank==='function'?getRank():null;
+          const bestMedal=['DIAMOND','GOLD','SILVER','BRONZE','FINISHER'].find(m=>hist.some(r=>r.medal===m))||'—';
+          $('profileBanner').innerHTML=`<small style="font-size:.48rem;letter-spacing:.16em;color:#7dd3fc">MELON STUDIOS · PLAYER PROFILE</small><h2>${prefs.title.toUpperCase()}</h2><div style="font-size:.58rem;color:var(--text-secondary)">${elements.length} elements discovered · ${trophies} permanent relics</div><div class="profile-badges"><span>🌟 ${mastered} MASTERIES</span><span>✨ P${Number(p.times||0)}</span><span>${medalIcon(bestMedal)} ${bestMedal}</span><span>👑 ${bosses} BOSS WINS</span></div>`;
+          $('profileBanner').className='profile-banner'+(prefs.theme!=='default'?' theme-'+prefs.theme:'');
+          const titles=unlockedProfileTitles(),themes=unlockedProfileThemes(),ts=$('profileTitleSelect'),ths=$('profileThemeSelect');
+          ts.innerHTML=titles.map(x=>`<option ${x===prefs.title?'selected':''}>${x}</option>`).join('');ths.innerHTML=themes.map(([id,n])=>`<option value="${id}" ${id===prefs.theme?'selected':''}>${n}</option>`).join('');
+          ts.onchange=()=>{const p=profilePrefs();p.title=ts.value;saveProfilePrefs(p);renderPlayerStats()};ths.onchange=()=>{const p=profilePrefs();p.theme=ths.value;saveProfilePrefs(p);renderPlayerStats()};
+          const fr=firstRecords(),fg=$('firstRecordsGrid'),defs=[['everything','First Everything'],['prestige','First Prestige'],['mastery','First Mastery'],['boss','First Boss Victory'],['diamond','First Diamond'],['season','First Season Complete']];
+          fg.innerHTML=defs.map(([id,n])=>{const r=fr[id];return `<div class="first-record"><b>${r?.emoji||'◇'} ${n}</b><span>${r?new Date(r.date).toLocaleString():'Not recorded yet'}</span></div>`}).join('');
+          const stats=[['ELEMENTS',elements.length],['COMBINATIONS',combos.length],['MASTERIES',mastered],['BOSS WINS',bosses],['PRESTIGE',Number(p.times||0)],['TROPHIES',trophies],['SPEEDRUNS',hist.length],['BEST RUN',best?formatSpeedrun(best):'—'],['BEST MEDAL',bestMedal],['RECORDED CRAFTS',crafts],['RECORDED FAILED FUSIONS',failed],['EVERYTHING',elements.filter(e=>e.name==='Everything').length]];
+          $('playerStatsGrid').innerHTML=stats.map(([a,b])=>`<div class="stat-tile"><small>${a}</small><strong>${b}</strong></div>`).join('');
+        }
+
+        function renderRouteSelectors(){
+          const h=speedrunHistory(),a=$('routeRunA'),b=$('routeRunB');if(!a||!b)return;
+          const opts=h.map((r,i)=>`<option value="${i}">${r.label||r.category} · ${formatSpeedrun(r.time)}${r.pb?' ★':''}</option>`).join('');
+          a.innerHTML=opts;b.innerHTML=opts;if(h.length>1)b.value='1';renderRouteComparison();
+        }
+        function renderRouteComparison(){
+          const h=speedrunHistory(),ra=h[Number($('routeRunA')?.value||0)],rb=h[Number($('routeRunB')?.value||0)],box=$('routeCompareBody');if(!box)return;
+          if(!ra||!rb){box.innerHTML='<div class="trophy-empty">Complete at least two recorded runs to compare routes.</div>';return}
+          const ids=[...new Set([...Object.keys(ra.splits||{}),...Object.keys(rb.splits||{})])];
+          box.innerHTML=`<div class="route-row"><b>SPLIT</b><b>RUN A</b><b>RUN B</b><b>Δ B−A</b></div>`+ids.map(id=>{const sp=SPEEDRUN_SPLITS.find(x=>x.id===id),x=ra.splits?.[id],y=rb.splits?.[id],d=x!=null&&y!=null?y-x:null;return `<div class="route-row"><span>${sp?.label||id}</span><span>${x!=null?formatSpeedrun(x):'—'}</span><span>${y!=null?formatSpeedrun(y):'—'}</span><span class="${d==null?'':d<=0?'route-gain':'route-loss'}">${d==null?'—':(d<=0?'−':'+')+formatSpeedrun(Math.abs(d))}</span></div>`}).join('');
+        }
+
+        function recipeParentsFor(name){
+          const out=[];for(const [k,v] of Object.entries(recipes||{})){if(v?.name===name){const q=k.split('+');if(q.length===2)out.push(q)}}return out;
+        }
+        function recipeFamilyHTML(name,depth=0,seen=new Set()){
+          if(depth>5||seen.has(name))return `<div class="recipe-tree-node">↳ <b>${name}</b> <span style="opacity:.5">…</span></div>`;
+          const next=new Set(seen);next.add(name);const ps=recipeParentsFor(name);
+          if(!ps.length)return `<div class="recipe-tree-node">🌱 <b>${name}</b> <span style="opacity:.55">root / generated / exclusive</span></div>`;
+          return `<div class="recipe-tree-level"><div class="recipe-tree-node">🧪 <b>${name}</b></div>${ps.slice(0,4).map(([a,b])=>`<div class="recipe-tree-node">${a} + ${b}</div>${recipeFamilyHTML(a,depth+1,next)}${recipeFamilyHTML(b,depth+1,next)}`).join('')}</div>`;
+        }
+        function openRecipeFamily(name){
+          const el=elements.find(e=>e.name===name);$('recipeTreeBody').innerHTML=`<div class="recipe-tree-head"><div class="emoji">${el?.emoji||'🧬'}</div><h2>🧬 ${name} ANCESTRY</h2><p class="text-xs" style="color:var(--text-secondary)">Known static recipe ancestry, traced up to 5 generations.</p></div>${recipeFamilyHTML(name)}`;openModal('recipeTreeModal');
+        }
+
+        function updateGhostFinishRace(hud,def){
+          if(!hud||!speedrunState.active)return;const relic=speedrunPBRelic();let race=hud.querySelector('.ghost-finish-race');
+          if(!relic?.speedrunBestTime){if(race)race.remove();return}
+          if(!race){race=document.createElement('div');race.className='ghost-finish-race';race.innerHTML='<i class="you">🏃</i><i class="ghost">👻</i>';hud.appendChild(race)}
+          const elapsed=speedrunMs(),pb=Number(relic.speedrunBestTime),windowMs=Math.max(15000,pb*.15),delta=elapsed-pb;
+          const you=Math.max(3,Math.min(97,50+(delta/windowMs)*45));race.querySelector('.you').style.left=you+'%';race.querySelector('.ghost').style.left='50%';
+          race.hidden=Math.abs(delta)>windowMs&&elapsed<pb-windowMs;
+        }
+
+        const CM_PATCH_VERSION='vault_archive_2026_09',CM_PATCH_SEEN='cm_patch_seen_v1';
+        function updatePatchNewDot(){const d=$('patchNewDot');if(d)d.hidden=localStorage.getItem(CM_PATCH_SEEN)===CM_PATCH_VERSION}
+        function markPatchNotesSeen(){try{localStorage.setItem(CM_PATCH_SEEN,CM_PATCH_VERSION)}catch(e){}updatePatchNewDot()}
+        const CM_PATCH_NOTES=[
+          ['Vault & Archive Update','Split streaks, PB crowns, Trophy Sets, Vault levels, pedestal plaques, rare trophy effects, Discovery Journal, first records, profile titles/themes, Mastery capstones and near-completion alerts, Patch Notes NEW detection, intro variants, and rotating save backups.'],
+          ['Chrono & Vault Update','Split PBs, PB Ghost improvements, medal progress, Run History, Trophy inspection, Mastery pinning, and Trophy Vault displays.'],
+          ['Profile & Route Update','Route comparison, Ghost Finish Race, Trophy Vault wings, favorite pedestal, evolving Speedrun trophies, Recipe Family Trees, Player Statistics, profile banner, loading-screen evolution, and refreshed patch notes.'],
+          ['Challenge Expansion','Objective Mastery expansion, Boss Mastery challenges, Speedrun categories, run summaries, and permanent challenge trophies.'],
+          ['Seasonal Expansion','Seasonal Vault progression, seasonal bosses, twenty seasonal themes, holiday countdowns, and seasonal completion rewards.']
+        ];
+        function renderPatchNotes(){const b=$('patchNotesList');if(b)b.innerHTML=CM_PATCH_NOTES.map(([h,p],i)=>`<div class="patch-entry"><h3>${i===0?'🟢 ':''}${h}</h3><p>${p}</p></div>`).join('')}
+        function renderSpeedrunHistory(){
+          const box=$('speedrunHistoryList'),h=speedrunHistory();if(!box)return;
+          if(!h.length){box.innerHTML='<div class="trophy-empty"><b>📜 NO RUNS RECORDED</b><span>Finish a Speedrun and it will appear here.</span></div>';return}
+          const newestPB={};h.forEach((r,i)=>{if(r.pb&&newestPB[r.category]==null)newestPB[r.category]=i});
+          box.innerHTML=h.map((r,i)=>`<div class="history-run"><div class="medal">${r.pb&&newestPB[r.category]===i?'<span class="history-pb-crown">👑</span> ':''}${medalIcon(r.medal)}</div><div><strong>${r.label||r.category}${r.pb?(newestPB[r.category]===i?' <span class="history-pb">★ CURRENT PB</span>':' <span style="opacity:.55">FORMER PB</span>'):''}</strong><small>${new Date(r.date).toLocaleString()} · ${r.discoveries||0} finds · ${r.failed||0} failed · ${r.crafts||0} crafts</small></div><div class="time">${formatSpeedrun(r.time)}</div></div>`).join('');
+        }
         function trophyRoomElements(){
           return elements.filter(e=>e.isSpeedrun||e.isSpeedrunReward||e.isBossDefeat||e.isBossMasteryTrophy||e.isPrestige||e.isMasteryExclusive||e.isSeasonalCompletion||e.isSeasonalReward);
         }
+        function inspectTrophy(el){
+          const type=el.isSpeedrun?'SPEEDRUN RELIC':el.isBossMasteryTrophy?'BOSS MASTERY':el.isBossDefeat?'BOSS TROPHY':el.isMasteryExclusive?'MASTERY EXCLUSIVE':el.isPrestige?'PRESTIGE RELIC':'SEASONAL RELIC';
+          const rows=[['TYPE',type],['EARNED',el.discoveredAt?new Date(el.discoveredAt).toLocaleString():'Unknown']];
+          if(el.isSpeedrun){rows.push(['MEDAL',`${medalIcon(el.speedrunMedal)} ${el.speedrunMedal||'FINISHER'}`],['BEST TIME',formatSpeedrun(Number(el.speedrunBestTime||el.speedrunTime||0))],['CLEARS',Number(el.speedrunClears||el.isSpeedrun||1)],['CATEGORY',el.speedrunCategory||'—']);}
+          if(el.masteryRewardId){const o=MASTERY_OBJECTIVES.find(x=>x.id===el.masteryRewardId);if(o)rows.push(['MASTERY',o.name]);}
+          $('trophyInspectBody').innerHTML=`<div class="inspect-hero"><div class="inspect-type">${type}</div><div class="inspect-emoji">${el.emoji||'🏆'}</div><h2>${el.name}</h2><p class="text-xs" style="color:var(--text-secondary)">${el.description||'Permanent Craft Madness relic.'}</p></div><div class="inspect-grid">${rows.map(([a,b])=>`<div><small>${a}</small><strong>${b}</strong></div>`).join('')}</div>`;
+          const ib=$('trophyInspectBody');if(ib){const fb=document.createElement('button');fb.className='favorite-btn';fb.textContent=cmFavoriteTrophy()===el.name?'★ FEATURED TROPHY':'☆ FEATURE THIS TROPHY';fb.onclick=()=>setFavoriteTrophy(el.name);ib.appendChild(fb);} openModal('trophyInspectModal');
+        }
         function renderTrophyRoom(){
+          renderTrophyWings();
           const all=trophyRoomElements(),g=$('trophyRoomGrid');
           const speed=all.filter(e=>e.isSpeedrun).length,boss=all.filter(e=>e.isBossDefeat||e.isBossMasteryTrophy).length,master=all.filter(e=>e.isMasteryExclusive).length;
           $('trophyRoomStats').innerHTML=`<div><strong>${all.length}</strong><small>RELICS STORED</small></div><div><strong>${speed}</strong><small>SPEEDRUN</small></div><div><strong>${boss}</strong><small>BOSS</small></div><div><strong>${master}</strong><small>MASTERY</small></div>`;
@@ -8327,18 +8577,37 @@ loadMilestones();
           if(!all.length){g.innerHTML='<div class="trophy-empty"><b>🏛️ THE VAULT IS EMPTY</b><span>Your permanent relic elements will be stored here.</span></div>';return;}
           all.forEach(el=>{
             const w=document.createElement('div');
-            w.className='element trophy-vault-element '+(typeof elementClass==='function'?elementClass(el):'');
+            w.className='element trophy-vault-element '+(typeof elementClass==='function'?elementClass(el):'')+((el.speedrunMedal==='DIAMOND'||el.isBossMasteryTrophy||el.masteryRewardId==='season10'||el.masteryRewardId==='discover1000')?' ultra-rare':'');
             w.dataset.name=el.name;
             const medal=el.isSpeedrun?(el.speedrunMedal||'FINISHER'):'';
-            w.innerHTML=`${medal?`<span class="vault-medal ${medal}">${medal}</span>`:''}<div class="vault-glow"></div><div class="emoji">${el.emoji||'🏆'}</div><div class="name">${el.name}</div><div class="vault-type">${el.isSpeedrun?'⚡ SPEEDRUN RELIC':el.isBossMasteryTrophy?'👑 BOSS MASTERY':el.isBossDefeat?'⚔️ BOSS TROPHY':el.isMasteryExclusive?'🌟 MASTERY EXCLUSIVE':el.isPrestige?'🏆 PRESTIGE RELIC':'🎉 SEASONAL RELIC'}</div>${el.description?`<div class="vault-desc">${el.description}</div>`:''}`;
+            w.innerHTML=`${medal?`<span class="vault-medal ${medal}">${medal}</span>`:''}<div class="vault-glow"></div><div class="emoji">${el.emoji||'🏆'}</div><div class="name">${el.name}</div><div class="vault-type">${el.isSpeedrun?'⚡ SPEEDRUN RELIC':el.isBossMasteryTrophy?'👑 BOSS MASTERY':el.isBossDefeat?'⚔️ BOSS TROPHY':el.isMasteryExclusive?'🌟 MASTERY EXCLUSIVE':el.isPrestige?'🏆 PRESTIGE RELIC':'🎉 SEASONAL RELIC'}</div>${el.description?`<div class="vault-desc">${el.description}</div>`:''}<div class="vault-pedestal"></div>`;
             w.title=el.description||el.name;
-            w.addEventListener('click',()=>{if(typeof selectElement==='function')selectElement(el.name);});
+            w.addEventListener('click',()=>inspectTrophy(el));
             g.appendChild(w);
           });
         }
         $('trophyRoomBtn').addEventListener('click',()=>{renderTrophyRoom();openModal('trophyRoomModal');});
         $('masteryBtn').addEventListener('click',()=>{renderMastery();openModal('masteryModal');});
+
+        const cmElementObserver=new MutationObserver(()=>{clearTimeout(window.__cmFamilyTimer);window.__cmFamilyTimer=setTimeout(installFamilyTreeButtons,40)});
+        setTimeout(()=>{const g=$('elementsGrid')||document.querySelector('.elements-grid');if(g){cmElementObserver.observe(g,{childList:true,subtree:true});installFamilyTreeButtons()}},0);
+
+        setTimeout(renderPinnedMasteries,0);
+        setTimeout(()=>{try{if(!journalEntries().length){const now=Date.now();cmSetJSON(CM_JOURNAL,elements.filter(e=>!e.isKey).map((e,i)=>({name:e.name,emoji:e.emoji||'❔',date:e.discoveredAt||now+i,description:e.description||'',seasonal:!!e.isSeasonal,exclusive:!!e.isExclusive})))}syncFirstRecords();updatePatchNewDot();createAutoBackup(false)}catch(e){}},100);
+
         $('speedrunBtn').addEventListener('click',()=>{renderSpeedrun();openModal('speedrunModal');});
+        $('speedrunHistoryBtn').addEventListener('click',()=>{renderSpeedrunHistory();openModal('speedrunHistoryModal');});
+        $('patchNotesBtn').addEventListener('click',()=>{markPatchNotesSeen();renderPatchNotes();openModal('patchNotesModal')});
+
+        $('playerStatsBtn').addEventListener('click',()=>{renderPlayerStats();openModal('playerStatsModal')});
+        $('discoveryJournalBtn').addEventListener('click',()=>{renderDiscoveryJournal();openModal('discoveryJournalModal')});
+        $('journalSearch').addEventListener('input',renderDiscoveryJournal);
+        $('backupBtn').addEventListener('click',()=>{createAutoBackup(true);renderBackupList();openModal('backupModal')});
+        updatePatchNewDot();
+
+        $('routeCompareBtn').addEventListener('click',()=>{renderRouteSelectors();openModal('routeCompareModal')});
+        $('routeRunA').addEventListener('change',renderRouteComparison);$('routeRunB').addEventListener('change',renderRouteComparison);
+
         $('speedrunStart').addEventListener('click',startSpeedrun);
         $('speedrunStop').addEventListener('click',stopSpeedrun);
         $('speedrunCategory').addEventListener('change',e=>{if(!speedrunState.active){speedrunState.category=e.target.value;speedrunState.finished=false;saveSpeedrun();renderSpeedrun();}});
@@ -8755,10 +9024,10 @@ loadMilestones();
         <option value="firstMastery">1st Mastery</option>
         <option value="season100">100/100 Seasonal</option>
       </select>
-      <div id="speedrunStatus" class="milestone-card"></div>
+      <div id="speedrunStatus" class="speedrun-status-card"></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-        <button id="speedrunStart" class="milestone-claim">🏁 Start Fresh Run</button>
-        <button id="speedrunStop" class="milestone-claim" style="background:#dc2626">Stop Run</button>
+        <button id="speedrunStart" class="speedrun-action-btn">🏁 Start Fresh Run</button>
+        <button id="speedrunStop" class="speedrun-action-btn" style="background:#dc2626">Stop Run</button><button id="speedrunHistoryBtn" class="speedrun-action-btn" style="background:#0f766e">📜 Run History</button>
       </div>
       <p class="text-xs mt-3" style="color:var(--text-secondary)">Starting enters a separate fresh Speedrun save, like a Boss fight. When you return, new discoveries and progression unlocks are carried into your main save.</p>
     </div></div>
@@ -8772,6 +9041,53 @@ loadMilestones();
       <button class="modal-close" data-close="runSummaryModal">&times;</button>
       <h2 class="font-display text-xl mb-2">📊 Run Summary</h2><div id="runSummaryBody"></div>
     </div></div>
+
+    <div id="speedrunHistoryModal" class="modal-overlay"><div class="modal-box history-box" style="max-width:780px">
+      <button class="modal-close" data-close="speedrunHistoryModal">&times;</button>
+      <div class="history-head"><small>CHRONO ARCHIVE</small><h2>📜 RUN HISTORY</h2><p>Your latest Speedrun attempts, PBs, medals, splits, and mistakes.</p></div>
+      <div style="text-align:center;margin:9px"><button id="routeCompareBtn" class="speedrun-action-btn">⚖️ Compare Routes</button></div><div id="speedrunHistoryList" class="speedrun-history-list"></div>
+    </div></div>
+    <div id="trophyInspectModal" class="modal-overlay"><div class="modal-box trophy-inspect-box" style="max-width:620px">
+      <button class="modal-close" data-close="trophyInspectModal">&times;</button><div id="trophyInspectBody"></div>
+    </div></div>
+    <div id="masteryCelebration" class="mastery-celebration" hidden><div class="mastery-celebration-ring"></div><div class="mastery-celebration-inner"><small>MASTERY COMPLETE</small><div id="masteryCelebrationIcon">🌟</div><h2 id="masteryCelebrationName">MASTERED</h2><p id="masteryCelebrationDesc"></p></div></div>
+    <div id="masteryPinnedHud" class="mastery-pinned-hud" hidden></div>
+
+<div id="playerStatsModal" class="modal-overlay"><div class="modal-box player-stats-box" style="max-width:760px">
+  <button class="modal-close" data-close="playerStatsModal">&times;</button>
+  <div id="profileBanner" class="profile-banner"></div>
+<div class="profile-customize"><label>Title <select id="profileTitleSelect"></select></label><label>Banner <select id="profileThemeSelect"></select></label></div>
+<div class="first-records-head">🏅 FIRST DISCOVERY RECORDS</div><div id="firstRecordsGrid" class="first-records-grid"></div>
+  <div id="playerStatsGrid" class="player-stats-grid"></div>
+</div></div>
+
+<div id="routeCompareModal" class="modal-overlay"><div class="modal-box" style="max-width:780px">
+  <button class="modal-close" data-close="routeCompareModal">&times;</button>
+  <h2>🏁 ROUTE COMPARISON</h2><p class="text-xs" style="color:var(--text-secondary)">Compare two completed runs split-by-split.</p>
+  <div class="route-selects"><select id="routeRunA"></select><select id="routeRunB"></select></div>
+  <div id="routeCompareBody"></div>
+</div></div>
+
+<div id="recipeTreeModal" class="modal-overlay"><div class="modal-box" style="max-width:850px">
+  <button class="modal-close" data-close="recipeTreeModal">&times;</button>
+  <div id="recipeTreeBody"></div>
+</div></div>
+
+<div id="patchNotesModal" class="modal-overlay"><div class="modal-box patch-notes-box" style="max-width:760px">
+<button class="modal-close" data-close="patchNotesModal">&times;</button>
+<div class="patch-hero"><small>MELON STUDIOS · DEVELOPMENT ARCHIVE</small><h2>📰 CRAFT MADNESS PATCH NOTES</h2></div>
+<div id="patchNotesList"></div></div></div>
+
+<div id="discoveryJournalModal" class="modal-overlay"><div class="modal-box journal-box" style="max-width:820px">
+<button class="modal-close" data-close="discoveryJournalModal">&times;</button>
+<div class="journal-head"><small>PERMANENT ARCHIVE</small><h2>📖 DISCOVERY JOURNAL</h2><p>Your collection in discovery order.</p></div>
+<input id="journalSearch" class="journal-search" placeholder="Search discoveries...">
+<div id="discoveryJournalList" class="journal-list"></div></div></div>
+
+<div id="backupModal" class="modal-overlay"><div class="modal-box backup-box" style="max-width:720px">
+<button class="modal-close" data-close="backupModal">&times;</button>
+<div class="backup-head"><small>SAVE SAFETY</small><h2>💾 AUTOMATIC BACKUPS</h2><p>Craft Madness keeps rotating snapshots of your main save.</p></div>
+<div id="backupStatus"></div><div id="backupList" class="backup-list"></div></div></div>
     <!-- Mastery Modal -->
     <div id="masteryModal" class="modal-overlay">
       <div class="modal-box mastery-objective-box" style="max-width:760px">
@@ -8781,7 +9097,7 @@ loadMilestones();
           <h2>🌟 MASTERY</h2>
           <p>Huge long-term feats. No Mastery reset — progress and rewards survive Prestige.</p>
         </div>
-        <div id="masteryOverview" class="mastery-overview"></div>
+        <div id="masteryOverview" class="mastery-overview"></div><div class="mastery-pin-help">📌 Click PIN on up to 3 Masteries to track them while you play.</div>
         <div id="masteryObjectiveGrid" class="mastery-objective-grid"></div>
       </div>
     </div>
