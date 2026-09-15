@@ -2601,6 +2601,31 @@ body.april-fools-mode [class*="fake-ad"]{display:none!important}
 
 /* ONE Chrono Diamond badge. No pseudo badge duplicates. */
 .el-card.speedrun-showpiece.medal-DIAMOND::after{content:none!important;display:none!important}
+
+/* Challenge notifications: visible, but never in the player's way */
+body:has(#speedrunTimer:not([hidden])) .toast-container,
+body:has(#speedrunTimer:not([hidden])) #toastContainer,
+body.boss-mode .toast-container,
+body.boss-mode #toastContainer{
+  opacity:.5!important;pointer-events:none!important;
+}
+
+html.cm-challenge-active .toast-container,
+html.cm-challenge-active #toastContainer,
+html.cm-challenge-active .notification-container,
+html.cm-challenge-active #notificationContainer{
+  opacity:.5!important;pointer-events:none!important;
+}
+
+.cm-username-row{display:flex;align-items:center;gap:8px;margin:8px 0 12px}
+.cm-username-row label{font-size:.58rem;font-weight:1000;letter-spacing:.08em;color:var(--text-secondary)}
+.cm-username-row input{min-width:0;flex:1;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:var(--bg-secondary);color:var(--text-primary);font:800 .72rem/1.1 ui-monospace,monospace}
+
+/* Medal profile banners: progressively premium, static, isEverything-like */
+.profile-banner.banner-bronze,[data-banner="bronze"]{background:linear-gradient(135deg,#2a170d,#5b321b 55%,#251209)!important;border-color:#cd7f32!important}
+.profile-banner.banner-silver,[data-banner="silver"]{background:linear-gradient(135deg,#111827,#475569 50%,#e2e8f0)!important;border-color:#e2e8f0!important;box-shadow:inset 0 0 22px rgba(255,255,255,.10)!important}
+.profile-banner.banner-gold,[data-banner="gold"]{background:radial-gradient(circle at 20% 10%,rgba(255,248,180,.34),transparent 25%),linear-gradient(135deg,#1d1300,#6b4800 48%,#d4a500 100%)!important;border-color:#fde047!important;box-shadow:inset 0 0 28px rgba(255,240,130,.18),0 0 16px rgba(250,204,21,.24)!important}
+.profile-banner.banner-diamond,[data-banner="diamond"]{background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.32),transparent 18%),radial-gradient(circle at 85% 80%,rgba(192,132,252,.24),transparent 30%),linear-gradient(135deg,#031923,#075985 48%,#312e81)!important;border-color:#a5f3fc!important;box-shadow:inset 0 0 30px rgba(255,255,255,.12),0 0 18px rgba(103,232,249,.32),0 0 30px rgba(192,132,252,.15)!important}
 </style>
 
 </head>
@@ -5943,6 +5968,29 @@ body.april-fools-mode [class*="fake-ad"]{display:none!important}
         function _setItem(k,v){_store[k]=v;try{localStorage.setItem(k,v);return;}catch(e){if(!window._saveWarning){window._saveWarning=true;notify('Storage unavailable','Browser storage is blocked or full. Export your save before closing.','⚠️');}}try{document.cookie=encodeURIComponent(k)+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){}}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
         function baseGameState(){return {prestige:{coins:0,times:0,upgrades:{}},bossMeta:{coins:0,upgrades:{},defeats:{}},coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,sfUnlocked:false,cyMoney:0,sfUpgraded:false};}
+
+
+function cmBestSpeedrunMedal(){
+  const order={DIAMOND:4,GOLD:3,SILVER:2,BRONZE:1,FINISHER:0};
+  let best='FINISHER',score=0;
+  for(const e of elements){
+    if(!e.isSpeedrun)continue;
+    const m=String(e.speedrunMedal||'FINISHER').toUpperCase(),v=order[m]??0;
+    if(v>score){score=v;best=m;}
+  }
+  return best;
+}
+function cmMedalUnlocks(){
+  const m=cmBestSpeedrunMedal(),v={DIAMOND:4,GOLD:3,SILVER:2,BRONZE:1,FINISHER:0}[m]||0;
+  return {diamond:v>=4,gold:v>=3,silver:v>=2,bronze:v>=1};
+}
+const CM_USERNAME_KEY='cm_profile_username_v1';
+function cmUsername(){try{const direct=localStorage.getItem(CM_USERNAME_KEY);if(direct)return direct;const p=JSON.parse(localStorage.getItem('cm_profile_prefs_v1')||'{}');return p.username||'Crafter';}catch(e){return 'Crafter';}}
+function cmSetUsername(v){
+  const clean=String(v||'').trim().slice(0,24).replace(/[<>]/g,'');
+  try{localStorage.setItem(CM_USERNAME_KEY,clean||'Crafter');}catch(e){}
+  return clean||'Crafter';
+}
         const CM_BACKUPS='cm_auto_backups_v1',CM_JOURNAL='cm_discovery_journal_v1',CM_FIRST_RECORDS='cm_first_records_v1',CM_PROFILE_PREFS='cm_profile_prefs_v1',CM_PLAQUES='cm_trophy_plaques_v1';
         function cmJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch(e){return fallback}}
         function cmSetJSON(key,v){try{localStorage.setItem(key,JSON.stringify(v))}catch(e){}}
@@ -9093,6 +9141,48 @@ body.april-fools-mode [class*="fake-ad"]{display:none!important}
         setTimeout(()=>openModal('changelogModal'),600);
     });
     </script>
+<script>
+/* Challenge UI + profile persistence extension */
+(function(){
+  function cmChallengeUiSync(){
+    document.documentElement.classList.toggle('cm-challenge-active',
+      !!(window.speedrunState?.active || window.bossMode));
+  }
+  setInterval(cmChallengeUiSync,250);
+  document.addEventListener('DOMContentLoaded',cmChallengeUiSync);
+})();
+
+(function installUsernameEditor(){
+  function mount(){
+    const modal=document.getElementById('statsModal')||document.getElementById('playerStatsModal');
+    if(!modal||modal.querySelector('#cmUsernameInput'))return;
+    const box=modal.querySelector('.modal-box')||modal.firstElementChild;
+    if(!box)return;
+    const row=document.createElement('div');
+    row.className='cm-username-row';
+    row.innerHTML='<label for="cmUsernameInput">USERNAME</label><input id="cmUsernameInput" maxlength="24" autocomplete="off" spellcheck="false">';
+    const inp=row.querySelector('input'); inp.value=cmUsername();
+    inp.addEventListener('input',()=>{cmSetUsername(inp.value);document.querySelectorAll('.cm-profile-username').forEach(x=>x.textContent=cmUsername())});
+    const h=box.querySelector('h2,h3'); h?.insertAdjacentElement('afterend',row);
+  }
+  document.addEventListener('click',()=>setTimeout(mount,0));
+  document.addEventListener('DOMContentLoaded',mount);
+})();
+
+(function syncUsernameIntoProfilePrefs(){
+  const KEY='cm_profile_prefs_v1';
+  function sync(){
+    try{
+      const p=JSON.parse(localStorage.getItem(KEY)||'{}');
+      p.username=cmUsername();
+      localStorage.setItem(KEY,JSON.stringify(p));
+    }catch(e){}
+  }
+  document.addEventListener('input',e=>{if(e.target?.id==='cmUsernameInput')sync()});
+  document.addEventListener('DOMContentLoaded',sync);
+})();
+</script>
+
 
 <div id="christmasCountdown" class="xmas-countdown" hidden aria-live="polite">
 <div class="xmas-snow" aria-hidden="true"><i>❄</i><i>✦</i><i>❄</i><i>✧</i><i>❄</i><i>✦</i><i>❄</i><i>✧</i><i>❄</i><i>✦</i></div>
