@@ -2238,7 +2238,7 @@ background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
 #speedrunCount{flex:none;padding:5px 9px;border:1px solid rgba(134,239,172,.35);border-radius:999px;background:rgba(2,6,23,.65);font:900 .56rem/1 ui-monospace,monospace;color:#a7f3d0;box-shadow:0 0 12px rgba(34,197,94,.14)}
 .speedrun-vault-sub{margin:9px 0 12px;font-size:.62rem;color:#bae6fd;letter-spacing:.035em}
 #speedrunGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:12px}
-#speedrunGrid .el-card{min-height:145px!important}
+#speedrunGrid .el-card{min-height:0!important;height:auto!important;min-width:0!important;padding:8px 6px!important;font-size:.72rem!important}
 @keyframes speedVaultCore{to{transform:rotate(360deg)}}
 @keyframes speedVaultText{to{background-position:-260% 0}}
 @media(prefers-reduced-motion:reduce){#speedrunStorage::before,.speedrun-vault-head strong{animation:none!important}}
@@ -2404,6 +2404,30 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
 #cmBootLoader.cm-boot-diamond .cm-boot-mark{filter:drop-shadow(0 0 28px #67e8f9)}#cmBootLoader.cm-boot-diamond .cm-boot-track i{background:linear-gradient(90deg,#22d3ee,#fff,#38bdf8)}
 #cmBootLoader.cm-boot-mastery .cm-boot-mark{filter:drop-shadow(0 0 28px #c084fc)}#cmBootLoader.cm-boot-mastery .cm-boot-track i{background:linear-gradient(90deg,#a855f7,#fde68a)}
 #cmBootLoader.cm-boot-everything .cm-boot-mark{animation-duration:1.4s;filter:drop-shadow(0 0 24px #facc15)}#cmBootLoader.cm-boot-everything .cm-boot-track i{background:linear-gradient(90deg,#fb7185,#facc15,#22d3ee,#c084fc)}
+
+/* Chrono Archive relic cards: stay compact. Seriously. */
+#speedrunStorage #speedrunGrid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))!important;gap:8px!important}
+#speedrunStorage #speedrunGrid .el-card{
+  min-height:0!important;height:auto!important;max-height:none!important;
+  padding:8px 6px!important;margin:0!important;transform:none;
+}
+#speedrunStorage #speedrunGrid .el-card .el-emoji{font-size:1.45rem!important;margin-bottom:3px!important}
+#speedrunStorage #speedrunGrid .el-card .el-name{font-size:.58rem!important;line-height:1.1!important}
+
+/* TROPHY BOX — compact permanent trophy storage, separate from Chrono Archive */
+#trophyRoomModal .modal-box{max-width:900px!important;box-shadow:0 18px 45px rgba(0,0,0,.35)!important}
+#trophyRoomModal .modal-box:before{display:none!important}
+#trophyRoomGrid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(92px,1fr))!important;gap:8px!important;padding:4px!important}
+#trophyRoomGrid .trophy-vault-element,#trophyRoomGrid .el-card{
+ min-height:0!important;height:auto!important;max-height:none!important;padding:8px 6px!important;margin:0!important;
+ border-radius:10px!important;transform:none!important;box-shadow:none!important;overflow:hidden!important;
+ background:rgba(245,158,11,.035)!important;border:1px solid rgba(245,158,11,.16)!important;
+}
+#trophyRoomGrid .trophy-vault-element:hover,#trophyRoomGrid .el-card:hover{transform:none!important;border-color:rgba(245,158,11,.4)!important}
+#trophyRoomGrid .emoji,#trophyRoomGrid .el-emoji{font-size:1.45rem!important;margin-bottom:3px!important;filter:none!important;animation:none!important}
+#trophyRoomGrid .el-name,#trophyRoomGrid .name{font-size:.58rem!important;line-height:1.1!important}
+#trophyRoomGrid .vault-pedestal,#trophyRoomGrid .vault-glow,#trophyRoomGrid .pedestal,#trophyRoomGrid .trophy-pedestal{display:none!important}
+#trophyRoomGrid .ultra-rare:before{display:none!important}
 </style>
 
 </head>
@@ -7543,6 +7567,9 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
             const fx=$('starForgeEffect');
             if(fx){fx.hidden=true;fx.style.display='none';}
         }
+        function isChronoArchiveRelic(el){
+            return !!(el&&(el.isSpeedrun||el.isSpeedrunRelic||el.isChronoArchive||el.chronoArchive||el.speedrunCategory||el.speedrunBestTime!=null));
+        }
         function activateStarForge(){
             if(!gs.sfUnlocked){notify('Locked','Discover the ⭐ Star Forge element to unlock!','🔒');return;}
             if(sfAnimating){
@@ -7557,7 +7584,7 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
                 return;
             }
             // Prestige trophies cannot receive Forge modifiers.
-            const eligible=elements.filter(e=>!e.isPrestige&&!e.isExclusive&&!isSeasonalElement(e)&&!e.isAprilFools&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
+            const eligible=elements.filter(e=>!isChronoArchiveRelic(e)&&!e.isPrestige&&!e.isExclusive&&!isSeasonalElement(e)&&!e.isAprilFools&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!checkIsEverything(e)&&SF_BLESSINGS.some(k=>!e[k]));
             if(eligible.length<1){notify('Star Forge','No eligible elements to bless!','⚠️');return;}
             sfAnimating=true;
             const forgeFx=$('starForgeEffect');
@@ -7588,7 +7615,7 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
             
             // UPGRADED STAR FORGE: Add 2 extra elements with isCyMoney
             if(gs.sfUpgraded){
-                const extraEligible = elements.filter(e=>!e.isPrestige&&!e.isExclusive&&!isSeasonalElement(e)&&!e.isAprilFools&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
+                const extraEligible = elements.filter(e=>!isChronoArchiveRelic(e)&&!e.isPrestige&&!e.isExclusive&&!isSeasonalElement(e)&&!e.isAprilFools&&!e.isFinal&&!e.isFatalError&&!e.isError&&!e.isBlank&&!e.isPermafrost&&!hasPenaltyMod(e)&&!checkIsEverything(e)&&!checkIsCyMoney(e));
                 if(extraEligible.length >= 1){
                     const extraChosen = extraEligible.sort(()=>Math.random()-0.5).slice(0,2+cyLevel('infusion'));
                     extraChosen.forEach(target=>{
@@ -7879,10 +7906,12 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
             if(ascensionBusy&&!prestigeReset)return;
             // Permanent collections survive Prestige: Exclusives, Boss trophies, Seasonal discoveries and April Fools discoveries.
             const kept=elements.filter(e=>
-                e.isExclusive||e.isSpeedrun||e.isBossDefeat||e.isAprilFools||e.isSeasonal||
-                e.seasonalEvent||e.seasonId||e.eventId||
-                SEASONAL_EVENTS.some(ev=>!!e[ev.flag])
-            );
+ e.isExclusive||e.isSpeedrun||e.isBossDefeat||e.isBossMasteryTrophy||
+ e.isMasteryExclusive||e.isSeasonalCompletion||e.isSeasonalReward||
+ e.isPrestigeTrophy||e.isTrophy||e.isAprilFools||e.isSeasonal||
+ e.seasonalEvent||e.seasonId||e.eventId||
+ SEASONAL_EVENTS.some(ev=>!!e[ev.flag])
+ );
             const keptAprilCombos=combos.filter(c=>c.isAprilFools);
             elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];
             combos=keptAprilCombos;fractionalCoins=0;
@@ -8060,10 +8089,10 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
           {id:'mastery1',label:'Mastery 1',test:()=>Object.keys(masteryState.completed||{}).length>=1}
         ];
         const SPEEDRUN_MEDALS={
-          rankP:[12*60e3,20*60e3,35*60e3,60*60e3],
-          firstPrestige:[8*60e3,15*60e3,25*60e3,45*60e3],
-          firstMastery:[3*60e3,7*60e3,15*60e3,30*60e3],
-          season100:[10*60e3,20*60e3,35*60e3,60*60e3]
+          rankP:[45*60e3,60*60e3,90*60e3,120*60e3],
+          firstPrestige:[25*60e3,35*60e3,50*60e3,75*60e3],
+          firstMastery:[6.5*60e3,10*60e3,18*60e3,30*60e3],
+          season100:[35*60e3,50*60e3,75*60e3,105*60e3]
         };
         function speedrunMedal(category,ms){const t=SPEEDRUN_MEDALS[category]||SPEEDRUN_MEDALS.rankP;return ms<=t[0]?'DIAMOND':ms<=t[1]?'GOLD':ms<=t[2]?'SILVER':ms<=t[3]?'BRONZE':'FINISHER';}
         function updateSpeedrunTimerMedal(hud,def){
@@ -8359,24 +8388,8 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
         function setFavoriteTrophy(name){try{localStorage.setItem(CM_FAVORITE_TROPHY,name)}catch(e){}renderTrophyRoom();notify('FEATURED TROPHY',name,'🏆',2200)}
         function trophyWingFor(el){return el.isSpeedrun?'speedrun':el.isBossDefeat||el.isBossMasteryTrophy?'boss':el.isMasteryExclusive?'mastery':el.isSeasonalCompletion?'seasonal':el.isPrestige?'prestige':'other'}
         function renderTrophyWings(){
-          const tabs=$('trophyWingTabs');if(!tabs)return;const wings=[['all','🏛️ All'],['speedrun','🏁 Speedrun'],['boss','👑 Boss'],['mastery','🌟 Mastery'],['seasonal','🗓️ Seasonal'],['prestige','✨ Prestige']];
-          tabs.innerHTML=wings.map(([id,n])=>`<button data-wing="${id}" class="${trophyWing===id?'active':''}">${n}</button>`).join('');
-          tabs.querySelectorAll('button').forEach(b=>b.onclick=()=>{trophyWing=b.dataset.wing;renderTrophyRoom()});
-          const all=trophyRoomElements(),fav=elements.find(e=>e.name===cmFavoriteTrophy()&&all.includes(e)),box=$('favoriteTrophyDisplay'),plaques=trophyPlaques();
-          const n=all.length,level=n>=40?5:n>=25?4:n>=15?3:n>=7?2:1,room=$('trophyRoomModal');if(room){for(let i=1;i<=5;i++)room.classList.toggle('trophy-vault-level-'+i,i===level)}
-          const levelNames=['','STARTER STORAGE','POLISHED GALLERY','RELIC HALL','GRAND VAULT','MELON MUSEUM'];
-          if(box)box.innerHTML=`<div class="vault-level-label">VAULT LEVEL ${level} · ${levelNames[level]}</div>`+(fav?`<div class="favorite-pedestal"><small>FEATURED RELIC</small><div class="big">${fav.emoji||'🏆'}</div><strong>${fav.name}</strong><span style="font-size:.48rem;color:var(--text-secondary)">${fav.description||''}</span>${plaques[fav.name]?`<div class="pedestal-plaque">${plaques[fav.name]}</div>`:''}</div>`:'<div class="favorite-pedestal"><small>FEATURED RELIC</small><div class="big">◇</div><strong>No favorite selected</strong><span style="font-size:.48rem;color:var(--text-secondary)">Inspect a trophy and feature it here.</span></div>');
-          const ed=$('pedestalPlaqueEditor');if(ed)ed.innerHTML=fav?`<input id="plaqueInput" maxlength="42" value="${(plaques[fav.name]||'').replace(/"/g,'&quot;')}" placeholder="Engrave pedestal plaque...">`:'';
-          if($('plaqueInput'))$('plaqueInput').onchange=e=>setTrophyPlaque(fav.name,e.target.value);
-          const sets=[
-            ['Speedrun Collection',all.filter(e=>e.isSpeedrun).length,4],
-            ['Boss Collection',all.filter(e=>e.isBossDefeat||e.isBossMasteryTrophy).length,8],
-            ['Mastery Relics',all.filter(e=>e.isMasteryExclusive).length,Object.keys(MASTERY_EXCLUSIVE_REWARDS).length],
-            ['Seasonal Trophies',all.filter(e=>e.isSeasonalCompletion||e.isSeasonalReward).length,20]
-          ];
-          if(tabs){let board=$('trophySetBoard');if(!board){board=document.createElement('div');board.id='trophySetBoard';board.className='trophy-set-board';tabs.after(board)}
-            board.innerHTML=sets.map(([name,got,total])=>`<div class="trophy-set ${got>=total?'complete':''}"><strong><span>${got>=total?'🏆':'◇'} ${name}</span><span>${Math.min(got,total)}/${total}</span></strong><i style="width:${Math.min(100,got/total*100)}%"></i></div>`).join('');
-          }
+          ['favoriteTrophyDisplay','trophyWingTabs','pedestalPlaqueEditor','trophySetBoard'].forEach(id=>{const x=$(id);if(x)x.remove()});
+          const room=$('trophyRoomModal');if(room)for(let i=1;i<=5;i++)room.classList.remove('trophy-vault-level-'+i);
         }
 
 
@@ -8456,8 +8469,8 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
         function markPatchNotesSeen(){try{localStorage.setItem(CM_PATCH_SEEN,CM_PATCH_VERSION)}catch(e){}updatePatchNewDot()}
         const CM_PATCH_NOTES=[
           ['Vault & Archive Update','Split streaks, PB crowns, Trophy Sets, Vault levels, pedestal plaques, rare trophy effects, Discovery Journal, first records, profile titles/themes, Mastery capstones and near-completion alerts, Patch Notes NEW detection, intro variants, and rotating save backups.'],
-          ['Chrono & Vault Update','Split PBs, PB Ghost improvements, medal progress, Run History, Trophy inspection, Mastery pinning, and Trophy Vault displays.'],
-          ['Profile & Route Update','Route comparison, Ghost Finish Race, Trophy Vault wings, favorite pedestal, evolving Speedrun trophies, Recipe Family Trees, Player Statistics, profile banner, loading-screen evolution, and refreshed patch notes.'],
+          ['Chrono & Vault Update','Split PBs, PB Ghost improvements, medal progress, Run History, Trophy inspection, Mastery pinning, and Trophy Box displays.'],
+          ['Profile & Route Update','Route comparison, Ghost Finish Race, Trophy Box wings, favorite pedestal, evolving Speedrun trophies, Recipe Family Trees, Player Statistics, profile banner, loading-screen evolution, and refreshed patch notes.'],
           ['Challenge Expansion','Objective Mastery expansion, Boss Mastery challenges, Speedrun categories, run summaries, and permanent challenge trophies.'],
           ['Seasonal Expansion','Seasonal Vault progression, seasonal bosses, twenty seasonal themes, holiday countdowns, and seasonal completion rewards.']
         ];
@@ -8469,7 +8482,10 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
           box.innerHTML=h.map((r,i)=>`<div class="history-run"><div class="medal">${r.pb&&newestPB[r.category]===i?'<span class="history-pb-crown">👑</span> ':''}${medalIcon(r.medal)}</div><div><strong>${r.label||r.category}${r.pb?(newestPB[r.category]===i?' <span class="history-pb">★ CURRENT PB</span>':' <span style="opacity:.55">FORMER PB</span>'):''}</strong><small>${new Date(r.date).toLocaleString()} · ${r.discoveries||0} finds · ${r.failed||0} failed · ${r.crafts||0} crafts</small></div><div class="time">${formatSpeedrun(r.time)}</div></div>`).join('');
         }
         function trophyRoomElements(){
-          return elements.filter(e=>e.isSpeedrun||e.isSpeedrunReward||e.isBossDefeat||e.isBossMasteryTrophy||e.isPrestige||e.isMasteryExclusive||e.isSeasonalCompletion||e.isSeasonalReward);
+          return elements.filter(e=>!isChronoArchiveRelic(e)&&(
+            e.isBossDefeat||e.isBossMasteryTrophy||e.isMasteryExclusive||
+            e.isSeasonalCompletion||e.isSeasonalReward||e.isPrestigeTrophy||e.isTrophy
+          ));
         }
         function inspectTrophy(el){
           const type=el.isSpeedrun?'SPEEDRUN RELIC':el.isBossMasteryTrophy?'BOSS MASTERY':el.isBossDefeat?'BOSS TROPHY':el.isMasteryExclusive?'MASTERY EXCLUSIVE':el.isPrestige?'PRESTIGE RELIC':'SEASONAL RELIC';
@@ -8945,7 +8961,7 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
     <div id="speedrunHud" hidden><span class="speedrun-time">00:00.000</span><span class="speedrun-goal">→ Rank P</span></div>
     <div id="trophyRoomModal" class="modal-overlay"><div class="modal-box trophy-room-box" style="max-width:820px">
       <button class="modal-close" data-close="trophyRoomModal">&times;</button>
-      <div class="trophy-room-head"><span>CRAFT MADNESS ARCHIVE</span><h2>🏛️ TROPHY ROOM</h2><p>A permanent neon vault for the rarest elements you have earned. Every relic here is still a real element in your collection.</p></div>
+      <div class="trophy-room-head"><span>CRAFT MADNESS ARCHIVE</span><h2>📦 TROPHY BOX</h2><p>Permanent trophy storage. Speedrun records stay in the separate Chrono Archive, and trophies survive Prestige.</p></div>
       <div id="trophyRoomStats" class="trophy-room-stats"></div><div id="trophyRoomGrid" class="trophy-room-grid"></div>
     </div></div>
     <div id="runSummaryModal" class="modal-overlay"><div class="modal-box" style="max-width:700px">
