@@ -2685,6 +2685,11 @@ html.cm-challenge-active .toast,
 html.cm-challenge-active .notification{
   opacity:.5!important;
 }
+
+.profile-banner.theme-bronze{background:linear-gradient(135deg,#21140c,#6b3b1d 52%,#b87333)!important;border-color:#cd7f32!important}
+.profile-banner.theme-silver{background:radial-gradient(circle at 18% 10%,rgba(255,255,255,.20),transparent 22%),linear-gradient(135deg,#111827,#64748b 52%,#dbe4ee)!important;border-color:#e2e8f0!important}
+.profile-banner.theme-gold{background:radial-gradient(circle at 18% 8%,rgba(255,249,196,.38),transparent 23%),linear-gradient(135deg,#211500,#805600 52%,#e1b51a)!important;border-color:#fde047!important;box-shadow:inset 0 0 28px rgba(255,240,130,.18),0 0 16px rgba(250,204,21,.24)!important}
+.profile-banner.theme-diamond{background:radial-gradient(circle at 14% 12%,rgba(255,255,255,.34),transparent 18%),radial-gradient(circle at 88% 82%,rgba(192,132,252,.26),transparent 28%),linear-gradient(135deg,#031923,#075985 48%,#312e81)!important;border-color:#a5f3fc!important;box-shadow:inset 0 0 30px rgba(255,255,255,.13),0 0 18px rgba(103,232,249,.32),0 0 30px rgba(192,132,252,.16)!important}
 </style>
 
 </head>
@@ -6029,20 +6034,10 @@ html.cm-challenge-active .notification{
         function baseGameState(){return {prestige:{coins:0,times:0,upgrades:{}},bossMeta:{coins:0,upgrades:{},defeats:{}},coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,sfUnlocked:false,cyMoney:0,sfUpgraded:false};}
 
 
-function cmBestSpeedrunMedal(){
-  const order={DIAMOND:4,GOLD:3,SILVER:2,BRONZE:1,FINISHER:0};
-  let best='FINISHER',score=0;
-  for(const e of elements){
-    if(!e.isSpeedrun)continue;
-    const m=String(e.speedrunMedal||'FINISHER').toUpperCase(),v=order[m]??0;
-    if(v>score){score=v;best=m;}
-  }
-  return best;
-}
-function cmMedalUnlocks(){
-  const m=cmBestSpeedrunMedal(),v={DIAMOND:4,GOLD:3,SILVER:2,BRONZE:1,FINISHER:0}[m]||0;
-  return {diamond:v>=4,gold:v>=3,silver:v>=2,bronze:v>=1};
-}
+function cmBestSpeedrunMedal(){const order={DIAMOND:4,GOLD:3,SILVER:2,BRONZE:1,FINISHER:0};let best='FINISHER',score=0;for(const e of elements){if(!(e.isSpeedrun||e.isSpeedrunRelic||e.isChronoArchive||e.chronoArchive))continue;const m=String(e.speedrunMedal||'FINISHER').toUpperCase(),v=order[m]??0;if(v>score){score=v;best=m}}return best;}
+function cmMedalUnlocks(){const v={DIAMOND:4,GOLD:3,SILVER:2,BRONZE:1,FINISHER:0}[cmBestSpeedrunMedal()]||0;return {diamond:v>=4,gold:v>=3,silver:v>=2,bronze:v>=1};}
+function cmBossWinsFromTrophies(){let wins=0;for(const e of elements)if(e.isBossDefeat||e.isBossTrophy)wins+=Math.max(1,Number(e.amountOfBossDefeat||1));return wins;}
+function cmReconcileProfileFromRelics(){const m=bossMeta();m.defeats=m.defeats||{};for(const e of elements){if(!(e.isBossDefeat||e.isBossTrophy)||!e.bossId)continue;m.defeats[e.bossId]=Math.max(Number(m.defeats[e.bossId]||0),Math.max(1,Number(e.amountOfBossDefeat||1)));}const p=profilePrefs(),titles=unlockedProfileTitles(),themes=unlockedProfileThemes();if(!titles.includes(p.title))p.title='Crafter';if(!themes.some(([id])=>id===p.theme))p.theme='default';saveProfilePrefs(p);}
 const CM_USERNAME_KEY='cm_profile_username_v1';
 function cmUsername(){try{const direct=localStorage.getItem(CM_USERNAME_KEY);if(direct)return direct;const p=JSON.parse(localStorage.getItem('cm_profile_prefs_v1')||'{}');return p.username||'Crafter';}catch(e){return 'Crafter';}}
 function cmSetUsername(v){
@@ -6127,7 +6122,7 @@ try{
             if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
             if(c)combos=JSON.parse(c);
             if(st){const l=JSON.parse(st);gs={...gs,...l};}
-            normalizeKeyStacks();
+            normalizeKeyStacks();if(!isBoss&&!isSpeedrun)cmReconcileProfileFromRelics();
         }
         function load(){
             try{
@@ -8719,19 +8714,14 @@ save();checkStarForgeUnlock();
           const rows=j.filter(x=>!q||x.name.toLowerCase().includes(q)||(x.description||'').toLowerCase().includes(q));
           box.innerHTML=rows.length?rows.map((x,i)=>`<div class="journal-entry"><div class="num">#${j.indexOf(x)+1}</div><div><strong>${x.name}</strong><small>${x.description||'Discovery'} · ${new Date(x.date).toLocaleString()}</small></div><div class="emoji">${x.emoji}</div></div>`).join(''):'<div class="trophy-empty"><b>NO MATCHES</b><span>Your future discoveries will appear here automatically.</span></div>';
         }
-        function unlockedProfileTitles(){
-          const h=speedrunHistory(),done=Object.keys(masteryState.completed||{}).length,bosses=Object.values(bossMeta().defeats||{}).reduce((a,v)=>a+Number(v||0),0),out=['Crafter'];
-          if(elements.length>=250)out.push('The Archivist');if(bosses>=10)out.push('Boss Breaker');if(h.some(r=>r.medal==='DIAMOND'))out.push('Diamond Crafter');if(masterySeasonCompletions()>=5)out.push('Season Keeper');if((masteryState.stats.everything||0)>=10)out.push('Master of Everything');if(done>=20)out.push('Master Crafter');return out;
-        }
-        function unlockedProfileThemes(){
-          const h=speedrunHistory(),out=[['default','Default']];if(h.some(r=>r.medal==='DIAMOND'))out.push(['diamond','Diamond']);if(Object.values(bossMeta().defeats||{}).some(v=>Number(v)>0))out.push(['boss','Boss']);if(Object.keys(masteryState.completed||{}).length>=5)out.push(['mastery','Mastery']);if(masterySeasonCompletions()>0)out.push(['seasonal','Seasonal']);if((masteryState.stats.everything||0)>0)out.push(['everything','Everything']);return out;
-        }
+        function unlockedProfileTitles(){const done=Object.keys(masteryState.completed||{}).length,bosses=cmBossWinsFromTrophies(),u=cmMedalUnlocks(),out=['Crafter'];if(elements.length>=250)out.push('The Archivist');if(bosses>0)out.push('Boss Slayer');if(bosses>=10)out.push('Boss Breaker');if(u.bronze)out.push('Bronze Crafter');if(u.silver)out.push('Silver Crafter');if(u.gold)out.push('Gold Crafter');if(u.diamond)out.push('Diamond Crafter');if(masterySeasonCompletions()>=5)out.push('Season Keeper');if((masteryState.stats.everything||0)>=10)out.push('Master of Everything');if(done>=20)out.push('Master Crafter');return out;}
+        function unlockedProfileThemes(){const u=cmMedalUnlocks(),out=[['default','Default']];if(u.bronze)out.push(['bronze','Bronze']);if(u.silver)out.push(['silver','Silver']);if(u.gold)out.push(['gold','Gold']);if(u.diamond)out.push(['diamond','Diamond']);if(cmBossWinsFromTrophies()>0)out.push(['boss','Boss']);if(Object.keys(masteryState.completed||{}).length>=5)out.push(['mastery','Mastery']);if(masterySeasonCompletions()>0)out.push(['seasonal','Seasonal']);if((masteryState.stats.everything||0)>0)out.push(['everything','Everything']);return out;}
         function renderPlayerStats(){
-          syncFirstRecords();const prefs=profilePrefs(),hist=speedrunHistory(),bosses=Object.values(bossMeta().defeats||{}).reduce((a,v)=>a+Number(v||0),0),mastered=Object.keys(masteryState.completed||{}).length;
+          syncFirstRecords();const prefs=profilePrefs(),hist=speedrunHistory(),bosses=cmBossWinsFromTrophies(),mastered=Object.keys(masteryState.completed||{}).length;
           const best=hist.length?Math.min(...hist.map(r=>Number(r.time||Infinity))):null;
           const failed=hist.reduce((a,r)=>a+Number(r.failed||0),0),crafts=hist.reduce((a,r)=>a+Number(r.crafts||0),0);
           const trophies=trophyRoomElements().length,p=prestigeData(),rank=typeof getRank==='function'?getRank():null;
-          const bestMedal=['DIAMOND','GOLD','SILVER','BRONZE','FINISHER'].find(m=>hist.some(r=>r.medal===m))||'—';
+          const bestMedal=cmBestSpeedrunMedal()||'—';
           $('profileBanner').innerHTML=`<small style="font-size:.48rem;letter-spacing:.16em;color:#7dd3fc">MELON STUDIOS · PLAYER PROFILE</small><h2>${prefs.title.toUpperCase()}</h2><div style="font-size:.58rem;color:var(--text-secondary)">${elements.length} elements discovered · ${trophies} permanent relics</div><div class="profile-badges"><span>🌟 ${mastered} MASTERIES</span><span>✨ P${Number(p.times||0)}</span><span>${medalIcon(bestMedal)} ${bestMedal}</span><span>👑 ${bosses} BOSS WINS</span></div>`;
           $('profileBanner').className='profile-banner'+(prefs.theme!=='default'?' theme-'+prefs.theme:'');
           const titles=unlockedProfileTitles(),themes=unlockedProfileThemes(),ts=$('profileTitleSelect'),ths=$('profileThemeSelect');
