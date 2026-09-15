@@ -2060,7 +2060,6 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
 #cmSeasonWallpaper[data-season="christmas"]::after{inset:auto -5% -2%;height:31%;background:radial-gradient(circle at 18% 47%,rgba(250,204,21,.9) 0 2px,transparent 3px),radial-gradient(circle at 73% 39%,rgba(250,204,21,.85) 0 2px,transparent 3px),linear-gradient(165deg,transparent 0 23%,#eaf6ff 24% 45%,#d7efff 46% 100%)}
 @keyframes cmChristmasSnow{to{background-position:0 0,0 0,42px 84px}}
 html[data-special-season] body{background:transparent!important}
-html[data-special-season] body>*:not(#cmViewportPortal){position:relative;z-index:1}
 #cmViewportPortal{z-index:2147483000!important}
 @media(prefers-reduced-motion:reduce){#cmSeasonWallpaper,#cmSeasonWallpaper::before,#cmSeasonWallpaper::after{animation:none!important;transition:none!important}}
 
@@ -2108,6 +2107,10 @@ html[data-special-season] body>*:not(#cmViewportPortal){position:relative;z-inde
 @keyframes cmEmbers{to{background-position:0 -126px}}
 @keyframes cmLights{to{opacity:1;filter:brightness(1.25)}}
 @keyframes cmSnow{to{background-position:39px 117px}}
+
+
+html{isolation:isolate}
+#cmSeasonWallpaper{z-index:-1!important}
 
 </style>
 
@@ -7336,7 +7339,11 @@ html[data-special-season] body>*:not(#cmViewportPortal){position:relative;z-inde
                 document.documentElement.appendChild(portal);
             }
             let seasonWallpaper=document.getElementById('cmSeasonWallpaper');
-            if(!seasonWallpaper){seasonWallpaper=document.createElement('div');seasonWallpaper.id='cmSeasonWallpaper';document.documentElement.insertBefore(seasonWallpaper,document.body);}
+            if(!seasonWallpaper){
+                seasonWallpaper=document.createElement('div');
+                seasonWallpaper.id='cmSeasonWallpaper';
+                document.documentElement.insertBefore(seasonWallpaper,document.body);
+            }
             let animationLayer=document.getElementById('cmAnimationLayer');
             if(!animationLayer){
                 animationLayer=document.createElement('div');
