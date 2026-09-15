@@ -1860,11 +1860,12 @@ html.cm-viewport-locked{overflow-x:hidden}
 #cmViewportPortal>#cmAnimationLayer{
     pointer-events:none!important;
     overflow:hidden!important;
-    z-index:2147482998!important;
+    z-index:2147483646!important;
 }
 #cmAnimationLayer>.ny-countdown,
 #cmAnimationLayer>.xmas-countdown{
     position:absolute!important;
+    z-index:2147483647!important;
     inset:0!important;
     width:100%!important;
     height:100%!important;
@@ -7286,7 +7287,7 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
         const XMAS_REWARD_KEY_PREFIX='cm_christmas_countdown_reward_';
         let christmasTimer=null,christmasLastSecond=null;
         function christmasRealTarget(now=new Date()){let t=new Date(now.getFullYear(),11,25,0,0,0,0);if(now>=t)t=new Date(now.getFullYear()+1,11,25,0,0,0,0);return t.getTime();}
-        function christmasDevTarget(){try{const n=Number(localStorage.getItem(XMAS_DEV_KEY));return Number.isFinite(n)&&n>Date.now()?n:0}catch(e){return 0}}
+        function christmasDevTarget(){try{const n=Number(localStorage.getItem(XMAS_DEV_KEY));return Number.isFinite(n)&&n>0?n:0}catch(e){return 0}}
         function christmasTarget(){const d=christmasDevTarget();return d?{time:d,dev:true}:{time:christmasRealTarget(),dev:false};}
         function startDeveloperChristmasCountdown(){const end=Date.now()+60000;try{localStorage.setItem(XMAS_DEV_KEY,String(end))}catch(e){}showChristmasCountdown();}
         function stopDeveloperChristmasCountdown(){try{localStorage.removeItem(XMAS_DEV_KEY)}catch(e){}hideChristmasCountdown();}
@@ -7407,7 +7408,7 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
             return new Date(now.getFullYear()+1,0,1,0,0,0,0).getTime();
         }
         function nyDevTarget(){
-            try{const n=Number(localStorage.getItem(NY_DEV_KEY));return Number.isFinite(n)&&n>Date.now()?n:0}catch(e){return 0}
+            try{const n=Number(localStorage.getItem(NY_DEV_KEY));return Number.isFinite(n)&&n>0?n:0}catch(e){return 0}
         }
         function newYearTarget(){
             const dev=nyDevTarget();if(dev)return {time:dev,dev:true};
