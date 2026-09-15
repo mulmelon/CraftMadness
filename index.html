@@ -2568,6 +2568,39 @@ html[data-special-season],html[data-special-season] body,body{
 }
 #speedrunToggle::after{content:" CHRONO";font-weight:800;font-size:.62rem;letter-spacing:.04em}
 #trophyRoomBtn::after{content:" TROPHIES";font-weight:800;font-size:.62rem;letter-spacing:.04em}
+
+/* APRIL FOOLS = old "everything creates" gameplay ONLY. Normal GUI. */
+body.april-fools-mode,body.april-fools-mode *{
+  font-family:inherit!important;
+}
+body.april-fools-mode{
+  background:var(--bg-primary)!important;background-image:none!important;
+}
+body.april-fools-mode header,
+body.april-fools-mode main,
+body.april-fools-mode footer,
+body.april-fools-mode button,
+body.april-fools-mode .modal-box,
+body.april-fools-mode .el-card,
+body.april-fools-mode #trophyRoomBtn,
+body.april-fools-mode #masteryBtn,
+body.april-fools-mode #speedrunBtn,
+body.april-fools-mode #prestigeBtn{
+  transform:none!important;animation:none!important;
+}
+body.april-fools-mode .april-fools-banner,
+body.april-fools-mode .april-banner,
+body.april-fools-mode .fake-ad,
+body.april-fools-mode .april-ad,
+body.april-fools-mode [class*="fake-ad"]{display:none!important}
+
+/* Delete generated-element stroke treatment */
+.april-generated,.generated-element,.generated-result,[class*="generator-stroke"],[class*="generated-stroke"]{
+  -webkit-text-stroke:0!important;text-stroke:0!important;outline:none!important;box-shadow:none!important;
+}
+
+/* ONE Chrono Diamond badge. No pseudo badge duplicates. */
+.el-card.speedrun-showpiece.medal-DIAMOND::after{content:none!important;display:none!important}
 </style>
 
 </head>
@@ -7382,37 +7415,8 @@ html[data-special-season],html[data-special-season] body,body{
 
         function aprilHash(text){let h=2166136261;for(const ch of text){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
         function generateAprilFoolsElement(n1,n2){
-            const pair=aprilPairKey(n1,n2);
-            let seed=aprilHash(pair),pick=n=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed%n;};
-            const clean=s=>s.replace(/[^a-z0-9]/gi,'')||'Thing';
-            const readable=s=>s.length<=18?s:s.slice(0,10)+s.slice(-8);
-            const sourceElement=name=>elements.find(e=>e.name.toLowerCase()===String(name).toLowerCase());
-            const sourceCore=name=>{
-                const found=sourceElement(name);
-                return readable(clean(found&&found.isAprilFools&&found.aprilCore?found.aprilCore:name));
-            };
-            const ordered=[n1,n2].sort((a,b)=>String(a).toLowerCase().localeCompare(String(b).toLowerCase()));
-            const a=sourceCore(ordered[0]),b=sourceCore(ordered[1]);
-            const bothApril=!!sourceElement(n1)?.isAprilFools&&!!sourceElement(n2)?.isAprilFools;
-            const prefixes=['Ultra','Mega','Mini','Super','Hyper','Turbo','Quantum','Proto','Pseudo','Neo','Anti','Un','Re','De','Pre','Post','Sub','Over','Under','Inter','Extra','Cosmo','Astro','Cyber','Bio','Geo','Pyro','Hydro','Cryo','Electro','Mysti','Giga','Tera','Nano','Omega','Alpha','Lord','Sir','Doctor','Professor','Captain','Baby','Grandpa','Illegal','Suspicious','Budget','Discount','Offbrand','Unlicensed','Cursed','Wobbly','Soggy','Crunchy','Spicy','Sleepy','Angry','Confused','Haunted','Radioactive','Invisible','Extremely'];
-            const suffixes=['onium','inator','oid','er','ist','ness','core','ster','zilla','ification','nator','mancer','machine','monster','deluxe','premium','classic','pro','max','plus','lite','two','again','returns','revenge','awakening','finale','electricboogaloo','jr','senior','thethird','supreme','prime','ultimate','thing','creature','person','device','moment','incident','problem','mistake','disaster','sandwich','soup','nugget','goblin','gremlin','wizard','enjoyer','enthusiast','department','corporation','dotexe','fromwalmart','butworse','ofdoom','ofdestiny','fornoreason'];
-            const stroke=pick(100)===0;
-            let core,name;
-            if(stroke){
-                core=readable(pick(2)?a:b);name='';
-                const strokeBits=[...prefixes,...suffixes,'Dragon','Melon','Deep','Sea','fizzle','stoner','mun','noni','unio','pert','tist','glorp','womp','sploot','dingle','erp','izzle','on','oni','blob','snorf','bonk','zoop','plonk','scrunk','mlem','bork','yeet','boing','schlorp','gronk','floob','crump','dongle','pop','mush','nug','oodle','azzle','umbus','onk','ish','ulous','ifer','ator','ifier'];
-                const strokeLength=12+pick(25);
-                for(let i=0;i<strokeLength;i++)name+=strokeBits[pick(strokeBits.length)];
-            }else{
-                const useOne=bothApril||pick(100)<35;
-                core=useOne?(pick(2)?a:b):readable(a)+readable(b);
-                if(bothApril){name=pick(2)?prefixes[pick(prefixes.length)]+core:core+suffixes[pick(suffixes.length)];}
-                else{const affixMode=pick(3);name=affixMode===0?prefixes[pick(prefixes.length)]+core:affixMode===1?core+suffixes[pick(suffixes.length)]:core;}
-            }
-            name=name.charAt(0).toUpperCase()+name.slice(1);
-            if(!stroke)name=name.slice(0,100);
-            const emojis=['🤡','🗿','💀','☠️','👽','👾','🤖','👻','👹','👺','🧌','🫠','🥴','🤪','😵‍💫','🤯','😈','🙃','🫥','🫨','🦆','🪿','🐸','🐔','🐌','🦀','🦞','🦐','🐡','🦑','🐙','🦧','🦥','🦦','🦨','🦩','🐀','🪱','🪰','🪳','🦠','🫘','🍉','🍌','🍋','🥔','🧅','🧄','🥚','🧀','🍞','🥨','🍔','🌭','🍕','🧇','🍩','🍪','🎂','🍄','🧊','🫧','🪨','🧱','🛒','🚽','🪠','🧻','🪣','🧽','🧦','🩴','🎩','🪇','🪗','🎺','🛸','🚜','🛴','🗑️','📦','📎','✏️','🔨','🪤','🧯','💣','🧨','🪩','🎪','🌀','❓','⁉️','💥','💫','✨','🔥','🌚','🌝','🌵','🌪️','🫙','🛎️','🪥','🧲','🔮','🧪','🧬'];
-            return{name,emoji:emojis[pick(emojis.length)],description:n1+' + '+n2+' should not have worked, but here we are.',color:'bg-orange-300',isAprilFools:true,aprilCore:core,generatorStroke:stroke,excludeFromRank:true};
+          const left=String(n1||'Something'),right=String(n2||'Something');
+          return {name:left+' '+right,emoji:'✨',description:'Created from '+left+' + '+right,excludeFromRank:true,isAprilFools:true};
         }
 
         function processMelt(frozenEl,heatEl){
