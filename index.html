@@ -616,9 +616,9 @@
         ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
 
         /* Changelog */
-        .changelog-version { border-left:3px solid var(--gold); padding-left:16px; margin-bottom:20px; }
-        .changelog-version h3 { font-family:'Righteous',cursive; font-size:1.1rem; margin-bottom:4px; }
-        .changelog-tag { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:99px; margin-right:4px; }
+
+
+
         .tag-new { background:rgba(34,197,94,0.15); color:#16a34a; } .dark .tag-new { color:#4ade80; }
         .tag-fix { background:rgba(59,130,246,0.15); color:#2563eb; } .dark .tag-fix { color:#60a5fa; }
         .tag-ui { background:rgba(168,85,247,0.15); color:#7c3aed; } .dark .tag-ui { color:#c084fc; }
@@ -3274,95 +3274,8 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
     </div></div>
 
     <!-- Changelog Button & Modal -->
-<button id="changelogBtn" class="fixed bottom-5 right-5 w-11 h-11 rounded-full flex items-center justify-center text-lg shadow-lg z-50 transition-transform hover:scale-110" style="background:var(--gold);color:#1a1a2e">📋</button>
-    <div id="changelogModal" class="modal-overlay"><div class="modal-box">
-        <button class="modal-close" data-close="changelogModal">&times;</button>
-        <h2 class="font-display text-xl mb-5">Changelog</h2>
-        <div class="changelog-scroll" tabindex="0" role="region" aria-label="Version history">
-        <div class="changelog-version">
-            <h3>v3.1 <span class="text-xs font-normal" style="color:var(--text-secondary)">— Latest</span></h3>
-            <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
 
-                <li><span class="changelog-tag tag-fix">FIX</span> Removed Korean localization and its rendering hooks. Star Forge presentation was rebuilt with guaranteed cleanup and a fail-safe timeout.</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Seasonal collection cards are centered and aligned with normal cards.</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Rebuilt fixed-screen UI through a viewport portal so modals, system messages and the changelog button stay attached to the actual screen instead of jumping to a transformed half-page area on mobile.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Added element card size, card hover motion and system-message duration settings.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Seasonal elements now inherit restrained event-specific card accents while keeping the normal Craft Madness card structure.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Seasonal full-page wallpapers were removed; seasonal identity now stays on the element cards so the main game background remains clean.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Settings menu with System/Light/Dark website themes, independent Light/Dark element card appearance, reduced animations, and Credits.</li>
-
-                <li><span class="changelog-tag tag-new">NEW</span> Boss Coins: boss wins award large BC payouts and losses still award a smaller amount based on progress.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Six permanent Boss upgrades for damage, defense, Resolve, recovery, discovery damage and random child mutations.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Mutation Engine upgrades raise mutation chance and the number of simultaneous mutations. Everything is an ultra-rare 0.1% mutation while the engine is active.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Mutation Memory costs 250 BC after unlocking Mutation Engine and remembers boss-earned mutations across future challenges.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Boss Coin Exchange converts BC to normal coins at 1 BC = 500 coins. BC cannot be bought back with coins.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Prestige now requires 25 BC, increasing by 10 BC each Prestige. BC is checked but not spent.</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Boss Coins, BC upgrades, mutation memory, boss unlocks and Boss Defeat trophies now survive Prestige resets.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Three sequential bosses: The Unmaker → The Chronophage → The Null Sovereign.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> The Unmaker can skip an attack and lock one discovered element for 3 crafts.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Boss challenges now lock Storage, Guide, Hints, Import/Export, Shop and Star Forge. Prestige no longer resets any upgrade levels; Prestige Shop upgrades are permanent. Trying to use them shows “The boss has locked some of your powers...”</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Boss combat now has quick craft-projectile attacks, boss counterattacks and win/loss defeat animations.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Crafting Shop or Star Forge during a boss challenge normally does not activate their powers. Mutation Memory now restores Star Forge access during boss fights when Star Forge already exists in the normal save. New elements discovered during Boss Mode now carry into the normal save after the fight, including The End Game; boss mutations do not carry over. A newly discovered Star Forge is carried back to the normal save and awakens when the fight ends.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Added first-discovery tutorials for Shop and Star Forge. Seasonal Vault now shows the next upcoming event and its start date.</li>
-                <li><span class="changelog-tag tag-ui">UI</span> Boss lobby now shows Boss Coins, boss selection, unlock requirements and permanent upgrades.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> 20 automatic seasonal events with 100 rank-excluded discoveries each, event-specific animated cards and the Seasonal Vault.</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Star Forge excludes Exclusive, Seasonal and April Fools elements and can finally cleanse penalty elements.</li>
-            </ul>
-        </div>
-        <div class="changelog-version">
-            <h3>v3.0</h3>
-            <ul class="text-sm space-y-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-ui">UI</span> Redesigned crafting, collections and notifications, with jewel-like exclusive cards.</li>
-                <li><span class="changelog-tag tag-ui">UI</span> Distinct modifier colors, patterns and sigils; CyMoney cards feature a cyan crystal design and CyMoney label. Star Forge has an animated activation and collectible-card results.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Each CyMoney element earns 1 CyMoney per minute in the active tab. The CyMoney Workshop offers 11 upgrade types; CyMoney is kept on Prestige, while upgrade levels reset.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Prestige begins at 100 ranked elements, 25 keys and 100,000 coins, with Shop and Star Forge unlocked. Each Prestige requires 25 more elements, regardless of future recipe additions; key and coin requirements increase up to 250 keys and 1,000,000 coins. Earn 1 prestige coin, a new starting element and an animated Prestige trophy. Upgrade levels are permanent.</li>
-                <li><span class="changelog-tag tag-ui">UI</span> Opening a lock now announces: “You hear a lock being broken...”</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Craft Shop to unlock shopping and coin earnings. Keys reveal its recipe but do not unlock Shop. Find the ending to see your rank.</li>
-                <li><span class="changelog-tag tag-ui">UI</span> Forge controls and CyMoney appear as you unlock them.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Compact Exclusive Storage below Combine. Toggle the whole panel with 💎 beside A → Z.</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Exclusive elements survive reset and keep their exclusive status on import.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> 🔑 Crafting hints for Shop, the ending, A, 1, Philosophy and Null. Discovered clues hide automatically; show them again with “Show discovered clues”.</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Upgrade Forge becomes clickable again after reset or import when eligible.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Stackable keys: a 1-in-500 chance each active second. Spend one key to reveal a recipe; Forge recharge costs 10 keys and 1 CyMoney costs 100 keys; discovering an element unlocks its recipe for free.</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Automatic localStorage saves with cookie fallback. Export and import codes remain available.</li>
-            </ul>
-        </div>
-        <div class="changelog-version">
-            <h3>v2.1</h3>
-            <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-new">NEW</span> Much more variations of elements</li>
-                <li><span class="changelog-tag tag-new">NEW</span> New Tutorials</li>
-            </ul>
-        </div>
-        <div class="changelog-version">
-            <h3>v2.0</h3>
-            <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-new">NEW</span> Coin system — earn coins passively from elements</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Element Shop with 6 pack rarities</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Pack opening animation</li>
-                <li><span class="changelog-tag tag-fix">FIX</span> Coin calculation now works correctly</li>
-                <li><span class="changelog-tag tag-ui">UI</span> Complete visual overhaul</li>
-            </ul>
-        </div>
-        <div class="changelog-version">
-            <h3>v1.1</h3>
-            <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-new">NEW</span> Frozen & Hot element mechanics</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Ending screen & rank system</li>
-            </ul>
-        </div>
-        <div class="changelog-version">
-            <h3>v1.0</h3>
-            <ul class="text-sm space-y-1.5 mt-2" style="color:var(--text-secondary)">
-                <li><span class="changelog-tag tag-new">NEW</span> Base game with 4 starting elements</li>
-                <li><span class="changelog-tag tag-new">NEW</span> 250+ recipes to discover</li>
-                <li><span class="changelog-tag tag-new">NEW</span> Export & Import system</li>
-            </ul>
-        </div>
-        <div class="mt-4 pt-3 text-xs" style="border-top:1px solid var(--border);color:var(--text-secondary)">
-            Thanks to all players who keep combining! 🧪
-        </div>
-        </div>
+    
     </div></div>
 
 <div id="developerModal" class="modal-overlay"><section class="modal-box"><button class="modal-close" data-close="developerModal">×</button><h2>🛠 Developer panel</h2><p class="text-xs my-3">Edit your save JSON. Apply merges it using the same validation as Import. Export a backup first.</p>
@@ -8439,8 +8352,6 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
             }
         },1000);
         // ─── CHANGELOG ───
-        $('changelogBtn').addEventListener('click',()=>openModal('changelogModal'));
-
 
         const CM_FAVORITE_TROPHY='cm_favorite_trophy_v1';
         let trophyWing='all';
