@@ -2167,6 +2167,9 @@ html[data-special-season] body{background:transparent!important}
 .milestone-perks{font-size:.68rem;line-height:1.55;color:var(--text-secondary)}
 @media(max-width:520px){.milestone-summary{grid-template-columns:1fr}}
 
+
+#masteryBtn{margin-left:8px}
+@media(max-width:520px){#masteryBtn{margin-left:6px}}
 </style>
 
 </head>
@@ -2208,7 +2211,7 @@ html[data-special-season] body{background:transparent!important}
                 </div>
             <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
                 <span id="elCount" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:var(--gold-glow);color:var(--gold)">4 Discovered</span>
-                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button>
+                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button><button id="masteryBtn" type="button" class="btn btn-purple">🌟 Mastery</button>
                 <button id="prestigeShopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(168,85,247,.12);color:#a78bfa">🏆 Prestige Shop</button>
                 <button id="viewRankBtn" class="hidden text-xs font-semibold px-3 py-1 rounded-full transition-colors" style="background:rgba(234,179,8,0.12);color:#eab308">View Rank</button>
                 <div id="coinDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(234,179,8,0.12);color:#eab308">
@@ -7784,6 +7787,7 @@ loadMilestones();
         $('milestonesBtn').addEventListener('click',()=>{renderMilestones();openModal('milestonesModal');});
         $('milestoneList').addEventListener('click',e=>{const b=e.target.closest('[data-milestone]');if(b)claimMilestone(b.dataset.milestone);});
 
+        $('masteryBtn').addEventListener('click',()=>openModal('masteryModal'));
         $('settingsBtn').addEventListener('click',openSettings);
         $('themeModeSetting').addEventListener('change',e=>{
             if(window.__cmSetThemeMode)window.__cmSetThemeMode(e.target.value);
@@ -8170,5 +8174,18 @@ loadMilestones();
   </div>
 </div>
 
+
+    <!-- Mastery Modal -->
+    <div id="masteryModal" class="modal-overlay">
+      <div class="modal-box" style="max-width:620px">
+        <button class="modal-close" data-close="masteryModal">&times;</button>
+        <h2 class="font-display text-xl mb-2">🌟 Mastery</h2>
+        <p class="text-sm" style="color:var(--text-secondary)">Mastery is coming next. This will be the permanent progression layer beyond Prestige.</p>
+        <div class="milestone-card" style="margin-top:14px">
+          <strong>Mastery System</strong>
+          <div class="milestone-reward">The button is now in the main progression area beside Prestige and ready for the full system.</div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
