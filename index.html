@@ -2123,12 +2123,6 @@ body{overflow-x:hidden!important;overflow-y:visible!important}
     margin:0!important;padding:0!important;border:0!important;
     overflow:visible!important;pointer-events:none!important;
 }
-#cmViewportPortal>#cmSeasonWallpaper{
-    position:fixed!important;inset:0!important;
-    width:100vw!important;height:100dvh!important;
-    max-width:none!important;max-height:none!important;
-    pointer-events:none!important;
-}
 #cmViewportPortal>.modal-overlay,
 #cmViewportPortal>#changelogBtn,
 #cmViewportPortal>#notifContainer,
@@ -2137,8 +2131,25 @@ body{overflow-x:hidden!important;overflow-y:visible!important}
 #cmViewportPortal>#starForgeEffect,
 #cmViewportPortal>#ascensionOverlay{pointer-events:auto}
 @supports not (height:100dvh){
-    #cmViewportPortal>#cmSeasonWallpaper{height:100vh!important}
+    }
+
+
+/* Seasonal wallpaper is a TRUE background, separate from the high-z HUD portal. */
+html{isolation:isolate}
+#cmSeasonWallpaper{
+    position:fixed!important;
+    inset:0!important;
+    width:100vw!important;
+    height:100dvh!important;
+    max-width:none!important;
+    max-height:none!important;
+    z-index:-1!important;
+    pointer-events:none!important;
 }
+html[data-special-season]{background:transparent!important}
+html[data-special-season] body{background:transparent!important}
+#cmViewportPortal{z-index:2147483000!important}
+@supports not (height:100dvh){#cmSeasonWallpaper{height:100vh!important}}
 
 </style>
 
@@ -7371,7 +7382,8 @@ body{overflow-x:hidden!important;overflow-y:visible!important}
                 seasonWallpaper=document.createElement('div');
                 seasonWallpaper.id='cmSeasonWallpaper';
             }
-            if(seasonWallpaper.parentNode!==portal)portal.prepend(seasonWallpaper);
+            if(seasonWallpaper.parentNode!==document.documentElement)
+                document.documentElement.insertBefore(seasonWallpaper,document.body);
             let animationLayer=document.getElementById('cmAnimationLayer');
             if(!animationLayer){
                 animationLayer=document.createElement('div');
