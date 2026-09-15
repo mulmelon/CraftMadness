@@ -1427,6 +1427,18 @@ textarea::-webkit-scrollbar-track{margin-block:14px!important;}
     padding:6px 4px 10px;
     border-top:1px solid rgba(255,255,255,.06);
 }
+
+.season-vault-group{grid-column:1/-1;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:rgba(15,23,42,.28);overflow:hidden}
+.season-vault-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;cursor:pointer;list-style:none;font-size:.68rem;font-weight:900;color:#e2e8f0}
+.season-vault-summary::-webkit-details-marker{display:none}
+.season-vault-summary::after{content:"▾";font-size:.7rem;opacity:.65;transition:transform .18s ease}
+.season-vault-group:not([open])>.season-vault-summary::after{transform:rotate(-90deg)}
+.season-vault-summary-left{display:flex;align-items:center;gap:7px;min-width:0}
+.season-vault-progress{flex:none;padding:2px 7px;border-radius:999px;border:1px solid rgba(125,211,252,.24);background:rgba(2,6,23,.38);color:#bae6fd;font-size:.58rem;letter-spacing:.03em}
+.season-vault-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;padding:5px 8px 10px;border-top:1px solid rgba(255,255,255,.06)}
+.season-complete-trophy{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;min-height:72px;margin:7px;padding:12px;border:1px solid rgba(250,204,21,.3);border-radius:13px;background:linear-gradient(145deg,rgba(250,204,21,.10),rgba(167,139,250,.09));text-align:center;font-weight:950;font-size:.72rem;letter-spacing:.035em;color:#fef3c7;box-shadow:inset 0 0 18px rgba(250,204,21,.05)}
+.season-complete-trophy .season-trophy-icon{font-size:1.65rem;filter:drop-shadow(0 0 8px rgba(250,204,21,.35))}
+
 #seasonalGrid::-webkit-scrollbar{width:7px}
 #seasonalGrid::-webkit-scrollbar-thumb{background:linear-gradient(#38bdf8,#a78bfa);border-radius:999px}
 #seasonalGrid::-webkit-scrollbar-track{background:rgba(255,255,255,.03);border-radius:999px}
@@ -6049,12 +6061,40 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
             const exclusiveGrid=$('exclusiveGrid');exclusiveGrid.innerHTML='';
             const aprilFoolsGrid=$('aprilFoolsGrid');aprilFoolsGrid.innerHTML='';
             const seasonalGrid=$('seasonalGrid');seasonalGrid.innerHTML='';
-            const archivedSeasonal=elements.filter(e=>isSeasonalElement(e)&&!isSeasonActive((seasonalEventFromElement(e)||{}).id));
-            $('seasonalCount').textContent=archivedSeasonal.length+' archived';
+            const seasonalByEvent=new Map();
+            for(const ev of SEASONAL_EVENTS){
+                const found=elements.filter(e=>isSeasonalElement(e)&&(seasonalEventFromElement(e)||{}).id===ev.id);
+                if(found.length)seasonalByEvent.set(ev.id,found);
+            }
+            const seasonalTotal=[...seasonalByEvent.values()].reduce((n,a)=>n+a.length,0);
+            $('seasonalCount').textContent=seasonalTotal+' seasonal';
             const activeNames=getActiveSeasonalEvents().map(e=>e.icon+' '+e.name);
-            $('seasonalStatus').textContent=activeNames.length?'Live now: '+activeNames.join(' · ')+' — active seasonal discoveries appear in Your Elements.':'Off-season discoveries rest here until their event returns.';
-            $('seasonalToggle').hidden=!elements.some(e=>isSeasonalElement(e));
-            if(!archivedSeasonal.length){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='No off-season discoveries are archived right now.';seasonalGrid.appendChild(empty);}
+            $('seasonalStatus').textContent=activeNames.length?'Live now: '+activeNames.join(' · ')+' — progress is tracked below. Completed seasons stay in the Vault.':'Seasonal discoveries are grouped below. Off-season collections stay collapsed.';
+            $('seasonalToggle').hidden=!seasonalTotal;
+            const seasonHosts=new Map();
+            for(const ev of SEASONAL_EVENTS){
+                const found=seasonalByEvent.get(ev.id)||[];
+                const got=found.length;
+                if(!got)continue;
+                const complete=got>=100,active=isSeasonActive(ev.id);
+                const group=document.createElement('details');
+                group.className='season-vault-group';
+                // Current incomplete season opens automatically. Off-season and completed seasons stay collapsed.
+                group.open=active&&!complete;
+                const summary=document.createElement('summary');summary.className='season-vault-summary';
+                summary.innerHTML=`<span class="season-vault-summary-left"><span>${ev.icon}</span><span>${ev.name}</span></span><span class="season-vault-progress">${Math.min(got,100)}/100</span>`;
+                group.appendChild(summary);
+                if(complete){
+                    const trophy=document.createElement('div');trophy.className='season-complete-trophy';
+                    trophy.innerHTML=`<span class="season-trophy-icon">🏆</span><span>Season ${ev.name} COMPLETE!</span>`;
+                    group.appendChild(trophy);
+                }else{
+                    const host=document.createElement('div');host.className='season-vault-items';
+                    group.appendChild(host);seasonHosts.set(ev.id,host);
+                }
+                seasonalGrid.appendChild(group);
+            }
+            if(!seasonalTotal){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='No seasonal discoveries yet.';seasonalGrid.appendChild(empty);}
             const count=elements.filter(e=>e.isExclusive).length;
             $('exclusiveCount').textContent=count;
             if(!count){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='A little space for rare discoveries.';exclusiveGrid.appendChild(empty);}
@@ -6066,12 +6106,23 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
             const sorted = getSortedElements();
             let lastType = null;
             sorted.forEach(({el,origIdx})=>{
-                if(isSeasonalElement(el)&&!isSeasonActive((seasonalEventFromElement(el)||{}).id)){
-                    const w=document.createElement('div');w.className='el-wrapper';
-                    const d=document.createElement('div');d.className=`el-card ${getElClasses(el)}`;
-                    d.setAttribute('data-idx',origIdx);d.setAttribute('data-name',el.name);d.setAttribute('data-desc',el.description||'');
-                    d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
-                    sculptElementCard(d,el);w.appendChild(d);seasonalGrid.appendChild(w);return;
+                if(isSeasonalElement(el)){
+                    const ev=seasonalEventFromElement(el),host=ev?seasonHosts.get(ev.id):null;
+                    const seasonCount=ev?(seasonalByEvent.get(ev.id)||[]).length:0;
+                    // Every completed season lives only as its trophy in Seasonal Vault.
+                    // Incomplete active seasons still appear in Your Elements; incomplete off-season
+                    // discoveries live inside their collapsed Seasonal Vault group.
+                    if(seasonCount>=100)return;
+                    if(!ev||!isSeasonActive(ev.id)){
+                        if(host){
+                            const w=document.createElement('div');w.className='el-wrapper';
+                            const d=document.createElement('div');d.className=`el-card ${getElClasses(el)}`;
+                            d.setAttribute('data-idx',origIdx);d.setAttribute('data-name',el.name);d.setAttribute('data-desc',el.description||'');
+                            d.innerHTML=`<div class="el-emoji">${el.emoji}</div><div class="el-name">${el.name}</div>`;
+                            sculptElementCard(d,el);w.appendChild(d);host.appendChild(w);
+                        }
+                        return;
+                    }
                 }
                 if(el.isAprilFools&&!OldAllCreate){
                     const w=document.createElement('div');w.className='el-wrapper';
