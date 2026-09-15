@@ -2690,6 +2690,7 @@ html.cm-challenge-active .notification{
 .profile-banner.theme-silver{background:radial-gradient(circle at 18% 10%,rgba(255,255,255,.20),transparent 22%),linear-gradient(135deg,#111827,#64748b 52%,#dbe4ee)!important;border-color:#e2e8f0!important}
 .profile-banner.theme-gold{background:radial-gradient(circle at 18% 8%,rgba(255,249,196,.38),transparent 23%),linear-gradient(135deg,#211500,#805600 52%,#e1b51a)!important;border-color:#fde047!important;box-shadow:inset 0 0 28px rgba(255,240,130,.18),0 0 16px rgba(250,204,21,.24)!important}
 .profile-banner.theme-diamond{background:radial-gradient(circle at 14% 12%,rgba(255,255,255,.34),transparent 18%),radial-gradient(circle at 88% 82%,rgba(192,132,252,.26),transparent 28%),linear-gradient(135deg,#031923,#075985 48%,#312e81)!important;border-color:#a5f3fc!important;box-shadow:inset 0 0 30px rgba(255,255,255,.13),0 0 18px rgba(103,232,249,.32),0 0 30px rgba(192,132,252,.16)!important}
+#trophyRoomStats{display:none!important}
 </style>
 
 </head>
@@ -8840,9 +8841,7 @@ save();checkStarForgeUnlock();
         }
         function renderTrophyRoom(){
           renderTrophyWings();
-          const all=trophyRoomElements(),g=$('trophyRoomGrid');
-          const speed=all.filter(e=>e.isSpeedrun).length,boss=all.filter(e=>e.isBossDefeat||e.isBossMasteryTrophy).length,master=all.filter(e=>e.isMasteryExclusive).length;
-          $('trophyRoomStats').innerHTML=`<div><strong>${all.length}</strong><small>RELICS STORED</small></div><div><strong>${speed}</strong><small>SPEEDRUN</small></div><div><strong>${boss}</strong><small>BOSS</small></div><div><strong>${master}</strong><small>MASTERY</small></div>`;
+          const all=trophyRoomElements(),g=$('trophyRoomGrid');const stats=$('trophyRoomStats');if(stats){stats.replaceChildren();stats.hidden=true;}
           g.replaceChildren();
           if(!all.length){g.innerHTML='<div class="trophy-empty"><b>🏛️ THE VAULT IS EMPTY</b><span>Your permanent relic elements will be stored here.</span></div>';return;}
           all.forEach(el=>{
