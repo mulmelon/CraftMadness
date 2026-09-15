@@ -6030,13 +6030,28 @@ function cmSetUsername(v){
           if(bossMode||window.speedrunSaveMode)return false;
           const now=Date.now();if(!force&&now-cmLastBackupAt<5*60*1000)return false;
           const el=_getItem('fc_el'),co=_getItem('fc_co'),gst=_getItem('fc_gs');if(!el||!gst)return false;
-          const snap={date:now,el,co:co||'[]',gs:gst,mastery:_getItem('cm_objective_mastery_v1')||'',history:localStorage.getItem('cm_speedrun_history_v1')||'[]'};
+          const snap={date:now,el,co:co||'[]',gs:gst,
+mastery:_getItem('cm_objective_mastery_v1')||'',
+history:localStorage.getItem('cm_speedrun_history_v1')||'[]',
+journal:localStorage.getItem('cm_discovery_journal_v1')||'',
+firstRecords:localStorage.getItem('cm_first_records_v1')||'',
+profile:localStorage.getItem('cm_profile_prefs_v1')||'',
+username:localStorage.getItem('cm_profile_username_v1')||'',
+masteryPins:localStorage.getItem('cm_mastery_pins_v1')||''};
           const list=cmJSON(CM_BACKUPS,[]);list.unshift(snap);cmSetJSON(CM_BACKUPS,list.slice(0,5));cmLastBackupAt=now;return true;
         }
         function restoreBackup(i){
           const b=cmJSON(CM_BACKUPS,[])[i];if(!b)return;
           if(bossMode||window.speedrunSaveMode){notify('BACKUP LOCKED','Return to your normal save before restoring.','🔒',3000);return}
-          _setItem('fc_el',b.el);_setItem('fc_co',b.co);_setItem('fc_gs',b.gs);if(b.mastery)_setItem('cm_objective_mastery_v1',b.mastery);try{localStorage.setItem('cm_speedrun_history_v1',b.history||'[]')}catch(e){}
+          _setItem('fc_el',b.el);_setItem('fc_co',b.co);_setItem('fc_gs',b.gs);if(b.mastery)_setItem('cm_objective_mastery_v1',b.mastery);
+try{
+ localStorage.setItem('cm_speedrun_history_v1',b.history||'[]');
+ if(b.journal)localStorage.setItem('cm_discovery_journal_v1',b.journal);
+ if(b.firstRecords)localStorage.setItem('cm_first_records_v1',b.firstRecords);
+ if(b.profile)localStorage.setItem('cm_profile_prefs_v1',b.profile);
+ if(b.username)localStorage.setItem('cm_profile_username_v1',b.username);
+ if(b.masteryPins)localStorage.setItem('cm_mastery_pins_v1',b.masteryPins);
+}catch(e){}
           loadNamedSave(false);renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();renderBackupList();notify('BACKUP RESTORED','The selected snapshot is now active.','💾',3500);
         }
         function renderBackupList(){
@@ -7962,7 +7977,20 @@ function cmSetUsername(v){
             $('exportErr').classList.add('hidden');
             $('doExportBtn').disabled=true;$('doExportBtn').textContent='Encrypting...';
             try{
-                const data=JSON.stringify({elements,combos,gs,sortMode:currentSort,v:'2.1'});
+                const data=JSON.stringify({
+  elements,combos,gs,sortMode:currentSort,v:'3.0',
+  aux:{
+    mastery:localStorage.getItem('cm_objective_mastery_v1')||'',
+    masteryPins:localStorage.getItem('cm_mastery_pins_v1')||'',
+    masteryNear:localStorage.getItem('cm_mastery_near_toasts_v1')||'',
+    journal:localStorage.getItem('cm_discovery_journal_v1')||'',
+    firstRecords:localStorage.getItem('cm_first_records_v1')||'',
+    speedrunHistory:localStorage.getItem('cm_speedrun_history_v1')||'',
+    speedrunState:localStorage.getItem('cm_speedrun_state_v1')||'',
+    profile:localStorage.getItem('cm_profile_prefs_v1')||'',
+    username:localStorage.getItem('cm_profile_username_v1')||''
+  }
+});
                 const encrypted=await secureEncrypt(data,pw);
                 $('exportCode').value=encrypted;
                 developerArmed=await developerSecretMatches(pw);developerTyped='';
@@ -8014,9 +8042,38 @@ function cmSetUsername(v){
                     const everythingSeen=[...new Set([...(Array.isArray(gs.everythingSeen)?gs.everythingSeen:[]),...(Array.isArray(d.gs.everythingSeen)?d.gs.everythingSeen:[])])];
                     gs={...gs,...d.gs,unlockedRecipes,everythingSeen};
                 }
-                if(d.sortMode&&['original','type','alpha'].includes(d.sortMode)){currentSort=d.sortMode;applySortBtnUI();}
+                if(d.aux&&typeof d.aux==='object'){
+  const restoreAux=(k,v)=>{if(typeof v==='string'&&v.length)try{localStorage.setItem(k,v)}catch(e){}};
+  restoreAux('cm_objective_mastery_v1',d.aux.mastery);
+  restoreAux('cm_mastery_pins_v1',d.aux.masteryPins);
+  restoreAux('cm_mastery_near_toasts_v1',d.aux.masteryNear);
+  restoreAux('cm_discovery_journal_v1',d.aux.journal);
+  restoreAux('cm_first_records_v1',d.aux.firstRecords);
+  restoreAux('cm_speedrun_history_v1',d.aux.speedrunHistory);
+  restoreAux('cm_speedrun_state_v1',d.aux.speedrunState);
+  restoreAux('cm_profile_prefs_v1',d.aux.profile);
+  restoreAux('cm_profile_username_v1',d.aux.username);
+  // Keep the live Mastery object in sync with the imported permanent Mastery save.
+  try{
+    const importedMastery=JSON.parse(d.aux.mastery||'null');
+    if(importedMastery&&typeof importedMastery==='object'){
+      if(typeof masteryState!=='undefined')masteryState=importedMastery;
+    }
+  }catch(e){}
+} 
+if(d.aux?.profile&&!d.aux?.username){
+  try{
+    const pp=JSON.parse(d.aux.profile);
+    if(pp?.username)localStorage.setItem('cm_profile_username_v1',String(pp.username).slice(0,24));
+  }catch(e){}
+}
+if(d.sortMode&&['original','type','alpha'].includes(d.sortMode)){currentSort=d.sortMode;applySortBtnUI();}
                 const added=userOnly.length;
-                renderEls();rebuildHistory();updateCount();updateCoinDisplay();save();checkStarForgeUnlock();
+                renderEls();rebuildHistory();updateCount();updateCoinDisplay();
+try{renderSpeedrunHistory()}catch(e){}
+try{renderDiscoveryJournal()}catch(e){}
+try{renderMastery()}catch(e){}
+save();checkStarForgeUnlock();
                 closeModal('importModal');notify('Imported!',elements.length+' elements loaded'+(added?' ('+added+' of your elements kept)':''),'✅');
             }catch(e){
                 $('importErr').textContent=e.message.includes('tampered')||e.message.includes('Wrong password')?'❌ Wrong password or corrupted data':'Invalid code: '+e.message;
