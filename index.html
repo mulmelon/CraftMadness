@@ -908,7 +908,7 @@ button:disabled {cursor:not-allowed;}
 .boss-head{display:flex;gap:12px;align-items:center;justify-content:space-between;position:relative;z-index:1;flex-wrap:wrap}.boss-title{display:flex;align-items:center;gap:10px}.boss-emoji{font-size:2rem}.boss-name{font-family:'Righteous',sans-serif;font-size:1.15rem}.boss-phase{font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#ef4444}
 .boss-bars{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;position:relative;z-index:1}.boss-meter-label{display:flex;justify-content:space-between;gap:8px;font-size:.68rem;font-weight:700;margin-bottom:5px}.boss-track{height:12px;border-radius:999px;background:rgba(15,23,42,.16);overflow:hidden;border:1px solid var(--border)}.boss-fill{height:100%;width:100%;transition:width .35s ease}.boss-fill.enemy{background:linear-gradient(90deg,#7f1d1d,#ef4444)}.boss-fill.player{background:linear-gradient(90deg,#0f766e,#22c55e)}
 #bossRule{font-size:.72rem;color:var(--text-secondary);margin-top:10px;position:relative;z-index:1}.boss-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:1}.boss-actions button{font-size:.72rem;font-weight:700;padding:7px 12px;border-radius:999px;border:1px solid var(--border);background:var(--ui-button)}
-body.boss-mode #prestigeBtn,body.boss-mode #prestigeShopBtn,body.boss-mode #viewRankBtn,body.boss-mode #coinDisplay,body.boss-mode #shopBtn,body.boss-mode #cyShopBtn,body.boss-mode #cyMoneyDisplay,body.boss-mode #starForgeBtn,body.boss-mode #upgradeForgeBtn,body.boss-mode #bossBtn{display:none!important}
+body.boss-mode #speedrunBtn,body.boss-mode #prestigeBtn,body.boss-mode #prestigeShopBtn,body.boss-mode #viewRankBtn,body.boss-mode #coinDisplay,body.boss-mode #shopBtn,body.boss-mode #cyShopBtn,body.boss-mode #cyMoneyDisplay,body.boss-mode #starForgeBtn,body.boss-mode #upgradeForgeBtn,body.boss-mode #bossBtn{display:none!important}
 body.boss-mode #craftHints,body.boss-mode #craftGuide{display:none!important}
 #bossStartInfo{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--ui-button);font-size:.78rem;color:var(--text-secondary)}
 .boss-defeat-showpiece{--card-hue:8!important}.boss-defeat-showpiece .card-ribbon{background:linear-gradient(90deg,rgba(127,29,29,.88),rgba(180,83,9,.88));color:#fff7ed!important}.boss-defeat-showpiece::after{content:'⚔';position:absolute;right:8px;bottom:7px;font-size:.8rem;opacity:.5;pointer-events:none}
@@ -2170,6 +2170,127 @@ html[data-special-season] body{background:transparent!important}
 
 #masteryBtn{margin-left:8px}
 @media(max-width:520px){#masteryBtn{margin-left:6px}}
+
+/* ─── SPEEDRUN MODE ─── */
+#speedrunHud{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147482990;
+padding:7px 12px;border-radius:999px;border:1px solid rgba(34,197,94,.45);
+background:color-mix(in srgb,var(--bg-primary) 88%,transparent);backdrop-filter:blur(10px);
+font:900 .76rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;box-shadow:0 5px 20px #0003;pointer-events:none}
+#speedrunHud[hidden]{display:none!important}
+#speedrunHud.finished{border-color:#eab308;box-shadow:0 0 24px rgba(234,179,8,.28)}
+.speedrun-time{font-size:1rem}.speedrun-goal{font-size:.59rem;color:var(--text-secondary);margin-left:7px}
+#speedrunBtn.speedrun-active{background:rgba(34,197,94,.22)!important;box-shadow:0 0 0 1px rgba(34,197,94,.35),0 0 14px rgba(34,197,94,.18)}
+
+/* Speedrun Madness — parallel presentation to Boss Madness */
+#speedrunGameHeading{position:relative;margin:auto}
+.speedrun-game-kicker{font:900 .68rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.26em;color:#22c55e;margin-bottom:3px}
+.speedrun-game-kicker span{color:#67e8f9}
+.speedrun-game-logo{line-height:.88;white-space:nowrap}
+.speedrun-game-logo .speedrun-word{display:inline-block;font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;
+font-size:clamp(2rem,8vw,3.45rem);font-weight:900;font-style:italic;letter-spacing:-.035em;
+transform:skew(-8deg);background:linear-gradient(90deg,#22c55e,#67e8f9,#22c55e);background-size:220% 100%;
+-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 18px rgba(34,197,94,.18);
+animation:speedrunLogoRush 1.05s linear infinite}
+.speedrun-game-logo .madness-word{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.72rem,7vw,3rem);
+font-weight:900;font-style:italic;letter-spacing:-.045em;color:var(--text-primary)}
+#speedrunGameHeading::after{content:"";display:block;width:min(270px,65vw);height:2px;margin:8px auto 0;
+background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
+@keyframes speedrunLogoRush{to{background-position:-220% 0}}
+@media(prefers-reduced-motion:reduce){.speedrun-game-logo .speedrun-word{animation:none!important}}
+
+/* ─── SPEEDRUN RELICS: intentionally absurdly fancy ─── */
+.el-card.speedrun-showpiece{
+ isolation:isolate;overflow:hidden!important;border:2px solid transparent!important;
+ background:
+  radial-gradient(circle at 18% 14%,rgba(255,255,255,.34),transparent 13%),
+  radial-gradient(circle at 82% 78%,rgba(103,232,249,.25),transparent 22%),
+  linear-gradient(145deg,#071a18 0%,#07111f 43%,#1b1030 72%,#071a18 100%) padding-box!important;
+ background-clip:padding-box!important;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),inset 0 0 24px rgba(34,197,94,.14),
+  0 0 0 2px rgba(34,197,94,.38),0 0 16px rgba(34,197,94,.34),0 0 34px rgba(103,232,249,.18)!important;
+ transform-style:preserve-3d;
+}
+.el-card.speedrun-showpiece::before{
+ content:"";position:absolute;inset:-65%;z-index:0;pointer-events:none;
+ background:conic-gradient(from 0deg,transparent 0 18%,rgba(34,197,94,.34) 24%,transparent 31% 48%,rgba(103,232,249,.28) 55%,transparent 63% 79%,rgba(192,132,252,.28) 85%,transparent 92%);
+ animation:speedrunRelicOrbit 3.2s linear infinite;
+}
+.el-card.speedrun-showpiece::after{
+ content:"✦  SPEEDRUN RELIC  ✦";position:absolute;left:50%;bottom:4px;z-index:5;transform:translateX(-50%);
+ width:max-content;font:900 .43rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.18em;
+ color:#a7f3d0;text-shadow:0 0 7px #22c55e,0 0 12px #67e8f9;
+}
+.speedrun-showpiece .el-emoji,.speedrun-showpiece .el-name{position:relative;z-index:3}
+.speedrun-showpiece .el-emoji{filter:drop-shadow(0 0 6px #67e8f9) drop-shadow(0 0 12px #22c55e);
+ animation:speedrunEmojiTurbo .78s ease-in-out infinite alternate}
+.speedrun-showpiece .el-name{
+ font-weight:1000!important;letter-spacing:.02em;
+ background:linear-gradient(90deg,#fff,#86efac,#67e8f9,#c084fc,#fff);background-size:280% 100%;
+ -webkit-background-clip:text;background-clip:text;color:transparent!important;
+ filter:drop-shadow(0 1px 0 #000);animation:speedrunNameRush 1.35s linear infinite;
+}
+.speedrun-showpiece .speedrun-record-plaque{
+ position:relative;z-index:4;margin-top:5px;padding:3px 7px;border:1px solid rgba(103,232,249,.35);border-radius:999px;
+ background:rgba(2,6,23,.68);font:900 .48rem/1.15 ui-monospace,SFMono-Regular,Menlo,monospace;
+ color:#d9f99d;text-shadow:0 0 7px rgba(34,197,94,.7);white-space:nowrap
+}
+@keyframes speedrunRelicOrbit{to{transform:rotate(360deg)}}
+@keyframes speedrunEmojiTurbo{from{transform:translateY(0) scale(1)}to{transform:translateY(-2px) scale(1.08)}}
+@keyframes speedrunNameRush{to{background-position:-280% 0}}
+@media(prefers-reduced-motion:reduce){
+ .el-card.speedrun-showpiece::before,.speedrun-showpiece .el-emoji,.speedrun-showpiece .el-name{animation:none!important}
+}
+
+/* ─── SPEEDRUN STORAGE: maximum unnecessary velocity ─── */
+#speedrunStorage{position:relative;width:min(100%,650px);margin:0 auto 18px;padding:16px;box-sizing:border-box;overflow:hidden;
+ border:2px solid rgba(103,232,249,.72);border-radius:25px 11px 25px 11px;
+ background:radial-gradient(circle at 8% 0%,rgba(34,197,94,.22),transparent 30%),radial-gradient(circle at 92% 100%,rgba(192,132,252,.24),transparent 34%),linear-gradient(135deg,#020617,#061b24 44%,#140d2a);
+ box-shadow:0 0 0 1px rgba(255,255,255,.1),0 0 24px rgba(34,197,94,.24),0 18px 55px rgba(2,6,23,.55),inset 0 0 45px rgba(103,232,249,.06)}
+#speedrunStorage::before{content:"";position:absolute;inset:-120% -30%;pointer-events:none;background:conic-gradient(from 90deg,transparent,rgba(34,197,94,.12),transparent,rgba(103,232,249,.15),transparent,rgba(192,132,252,.12),transparent);animation:speedVaultCore 8s linear infinite}
+#speedrunStorage::after{content:"SPEED  •  SPEED  •  SPEED  •  SPEED";position:absolute;right:-24px;top:48%;transform:rotate(-90deg);font:1000 .42rem/1 ui-monospace,monospace;letter-spacing:.24em;color:rgba(103,232,249,.16);pointer-events:none}
+.speedrun-vault-head,.speedrun-vault-sub,#speedrunGrid{position:relative;z-index:2}
+.speedrun-vault-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid rgba(103,232,249,.18);padding-bottom:10px}
+.speedrun-vault-head strong{display:block;font:1000 clamp(.95rem,3vw,1.25rem)/1 Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;font-style:italic;letter-spacing:.055em;background:linear-gradient(90deg,#86efac,#67e8f9,#c084fc,#fff,#86efac);background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:speedVaultText 2s linear infinite}
+.speedrun-vault-overline{display:block;margin-bottom:4px;font:900 .48rem/1 ui-monospace,monospace;letter-spacing:.28em;color:#86efac;text-shadow:0 0 8px #22c55e}
+#speedrunCount{flex:none;padding:5px 9px;border:1px solid rgba(134,239,172,.35);border-radius:999px;background:rgba(2,6,23,.65);font:900 .56rem/1 ui-monospace,monospace;color:#a7f3d0;box-shadow:0 0 12px rgba(34,197,94,.14)}
+.speedrun-vault-sub{margin:9px 0 12px;font-size:.62rem;color:#bae6fd;letter-spacing:.035em}
+#speedrunGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:12px}
+#speedrunGrid .el-card{min-height:145px!important}
+@keyframes speedVaultCore{to{transform:rotate(360deg)}}
+@keyframes speedVaultText{to{background-position:-260% 0}}
+@media(prefers-reduced-motion:reduce){#speedrunStorage::before,.speedrun-vault-head strong{animation:none!important}}
+
+/* ─── OBJECTIVE MASTERY ─── */
+.mastery-objective-box{border:1px solid rgba(192,132,252,.45)!important;background:radial-gradient(circle at 15% 0%,rgba(103,232,249,.11),transparent 31%),radial-gradient(circle at 90% 8%,rgba(250,204,21,.1),transparent 30%),var(--bg-secondary)!important}
+.mastery-objective-head{text-align:center;padding:4px 8px 14px;border-bottom:1px solid rgba(192,132,252,.16)}
+.mastery-objective-head>span{font:900 .5rem/1 ui-monospace,monospace;letter-spacing:.28em;color:#67e8f9}
+.mastery-objective-head h2{margin:6px 0 3px;font:italic 1000 clamp(1.8rem,7vw,2.8rem)/1 Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;letter-spacing:.04em;background:linear-gradient(90deg,#67e8f9,#c084fc,#fde68a,#67e8f9);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:masteryObjGlow 5s linear infinite}
+.mastery-objective-head p{font-size:.65rem;color:var(--text-secondary)}
+.mastery-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:13px 0}
+.mastery-overview>div{text-align:center;padding:9px 5px;border:1px solid rgba(192,132,252,.16);border-radius:12px;background:rgba(124,58,237,.05)}
+.mastery-overview strong{display:block;color:#e9d5ff;font-size:1rem}.mastery-overview small{font-size:.5rem;color:var(--text-secondary)}
+.mastery-objective-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;max-height:54vh;overflow:auto;padding:2px}
+.mastery-card{position:relative;overflow:hidden;padding:11px;border:1px solid rgba(103,232,249,.15);border-radius:14px;background:linear-gradient(145deg,rgba(8,47,73,.10),rgba(88,28,135,.08))}
+.mastery-card.done{border-color:rgba(250,204,21,.38);box-shadow:inset 0 0 20px rgba(250,204,21,.04)}
+.mastery-card-top{display:flex;justify-content:space-between;gap:8px}.mastery-card strong{font-size:.68rem;color:var(--text-primary)}.mastery-tier{font:900 .5rem/1 ui-monospace,monospace;color:#c4b5fd;white-space:nowrap}
+.mastery-card p{font-size:.57rem;color:var(--text-secondary);margin:5px 0 8px;min-height:2.5em}
+.mastery-bar{height:7px;border-radius:999px;background:rgba(148,163,184,.12);overflow:hidden}.mastery-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#22d3ee,#a78bfa,#facc15)}
+.mastery-progress{display:flex;justify-content:space-between;margin-top:5px;font:800 .52rem/1 ui-monospace,monospace;color:#bae6fd}
+.mastery-reward-line{margin-top:8px;font-size:.54rem;color:#fde68a}
+@keyframes masteryObjGlow{to{background-position:-240% 0}}
+@media(prefers-reduced-motion:reduce){.mastery-objective-head h2{animation:none!important}}
+
+/* ─── CHALLENGE MEGA UPDATE ─── */
+.boss-mastery-toggle{display:block;margin-top:9px;padding:10px;border:1px solid rgba(250,204,21,.25);border-radius:12px;background:rgba(250,204,21,.05);font-size:.66rem}.boss-mastery-toggle span{font-weight:900;color:#fde68a}.boss-mastery-toggle small{display:block;margin:4px 0 0 21px;color:var(--text-secondary);font-size:.54rem}
+.trophy-room-box{background:radial-gradient(circle at 50% -10%,rgba(250,204,21,.13),transparent 35%),radial-gradient(circle at 5% 20%,rgba(34,211,238,.08),transparent 30%),var(--bg-secondary)!important}
+.trophy-room-head{text-align:center;border-bottom:1px solid rgba(250,204,21,.16);padding-bottom:12px}.trophy-room-head>span{font:900 .48rem/1 ui-monospace,monospace;letter-spacing:.28em;color:#fde68a}.trophy-room-head h2{font:italic 1000 clamp(1.7rem,6vw,2.7rem)/1 Impact,sans-serif;margin:6px 0;background:linear-gradient(90deg,#fde68a,#c084fc,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}.trophy-room-head p{font-size:.6rem;color:var(--text-secondary)}
+.trophy-room-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:12px 0}.trophy-room-stats div{text-align:center;padding:8px;border:1px solid rgba(255,255,255,.08);border-radius:11px}.trophy-room-stats strong{display:block}.trophy-room-stats small{font-size:.48rem;color:var(--text-secondary)}
+.trophy-room-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;max-height:55vh;overflow:auto}.trophy-card{padding:10px;border-radius:13px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.025)}.trophy-card strong{display:block;font-size:.65rem}.trophy-card small{font-size:.52rem;color:var(--text-secondary)}.trophy-card.speed{box-shadow:inset 0 0 20px rgba(34,211,238,.06);border-color:rgba(34,211,238,.25)}.trophy-card.master{border-color:rgba(192,132,252,.25)}.trophy-card.boss{border-color:rgba(239,68,68,.25)}
+.speedrun-splits{margin-top:9px;border-top:1px solid rgba(34,197,94,.15);padding-top:7px}.speedrun-split{display:grid;grid-template-columns:1fr auto auto;gap:8px;font:800 .52rem/1.6 ui-monospace,monospace}.speedrun-split .ahead{color:#86efac}.speedrun-split .behind{color:#fca5a5}.speedrun-ghost{margin-top:7px;padding:7px 9px;border-radius:10px;background:rgba(103,232,249,.07);border:1px solid rgba(103,232,249,.16);font-size:.55rem;color:#bae6fd}
+.speedrun-medal{position:absolute;top:7px;left:7px;padding:3px 6px;border-radius:999px;font:1000 .47rem/1 ui-monospace,monospace;background:rgba(0,0,0,.55);border:1px solid currentColor}.speedrun-medal.DIAMOND{color:#a5f3fc}.speedrun-medal.GOLD{color:#fde68a}.speedrun-medal.SILVER{color:#e2e8f0}.speedrun-medal.BRONZE{color:#fdba74}
+.run-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0}.run-summary-stat{padding:10px;border:1px solid var(--border);border-radius:12px;text-align:center}.run-summary-stat strong{display:block;font-size:1rem}.run-summary-stat small{font-size:.5rem;color:var(--text-secondary)}
+.mastery-exclusive{border-color:rgba(250,204,21,.35)!important;box-shadow:0 0 18px rgba(192,132,252,.12)!important}
+@media(max-width:520px){.trophy-room-stats{grid-template-columns:repeat(2,1fr)}}
 </style>
 
 </head>
@@ -2209,9 +2330,13 @@ html[data-special-season] body{background:transparent!important}
                     <div class="boss-game-kicker">COMBINE. FORGE. <span>FIGHT.</span></div>
                     <div class="boss-game-logo"><span class="boss-word">BOSS</span> <span class="madness-word">MADNESS</span></div>
                 </div>
+                <div id="speedrunGameHeading" hidden aria-label="Speedrun Madness">
+                    <div class="speedrun-game-kicker">SPEED <span>SPEED</span> SPEED</div>
+                    <div class="speedrun-game-logo"><span class="speedrun-word">SPEEDRUN</span> <span class="madness-word">MADNESS</span></div>
+                </div>
             <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
                 <span id="elCount" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:var(--gold-glow);color:var(--gold)">4 Discovered</span>
-                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button><button id="masteryBtn" type="button" class="btn btn-purple">🌟 Mastery</button>
+                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button><button id="trophyRoomBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(250,204,21,.10);color:#facc15">🏛️ Trophies</button><button id="masteryBtn" type="button" class="btn btn-purple">🌟 Mastery</button><button id="speedrunBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(34,197,94,.12);color:#22c55e">⏱️ Speedrun</button>
                 <button id="prestigeShopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(168,85,247,.12);color:#a78bfa">🏆 Prestige Shop</button>
                 <button id="viewRankBtn" class="hidden text-xs font-semibold px-3 py-1 rounded-full transition-colors" style="background:rgba(234,179,8,0.12);color:#eab308">View Rank</button>
                 <div id="coinDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(234,179,8,0.12);color:#eab308">
@@ -2255,6 +2380,12 @@ html[data-special-season] body{background:transparent!important}
             </div>
             <div id="resultArea" class="mt-5 flex justify-center items-center min-h-[80px]"></div>
         </section>
+
+                <aside id="speedrunStorage" hidden style="display:none!important" aria-label="Speedrun Storage">
+                    <div class="speedrun-vault-head"><div><span class="speedrun-vault-overline">⚡ CHRONO ARCHIVE ⚡</span><strong>🏁 SPEEDRUN STORAGE</strong></div><span id="speedrunCount">0 relics</span></div>
+                    <p class="speedrun-vault-sub">Personal bests forged into permanent relics.</p>
+                    <div id="speedrunGrid"></div>
+                </aside>
 
                 <aside id="exclusiveStorage" hidden style="display:none!important" aria-label="Exclusive Storage">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><strong style="font-size:.8rem;color:#a78bfa">Exclusive Storage</strong><span id="exclusiveCount" style="font-size:.65rem;color:var(--text-secondary)"></span></div>
@@ -2403,6 +2534,7 @@ html[data-special-season] body{background:transparent!important}
                 <button id="sortOriginal" class="sort-btn sort-active text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="original">Discovery ↕</button>
                 <button id="sortType" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="type">Type</button>
                 <button id="sortAlpha" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="alpha">A → Z</button>
+                <button type="button" id="speedrunToggle" aria-controls="speedrunStorage" aria-expanded="false" aria-label="Show Speedrun Storage" title="Show Speedrun Storage">⚡</button>
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
                 <button type="button" id="seasonalToggle" aria-controls="seasonalStorage" aria-expanded="false" aria-label="Show Seasonal Vault" title="Show Seasonal Vault">🎉</button>
                 <button type="button" id="aprilFoolsToggle" aria-controls="aprilFoolsStorage" aria-expanded="false" aria-label="Show April Fools Storer" title="Show April Fools Storer">🤡</button>
@@ -2597,7 +2729,7 @@ html[data-special-season] body{background:transparent!important}
         <h2 class="font-display text-xl mb-2">👹 Boss Challenge</h2>
         <div id="bossStartInfo">Enter a sealed challenge save with only the four starter elements. Any new elements you discover here are added to your normal collection after the fight — including The End Game — but boss-only mutations stay inside Boss Mode. Wins give coins, Boss Coins and a permanent Boss Defeat trophy. Losses still give consolation coins and a few Boss Coins.</div>
         <div class="mt-3 flex items-center justify-between gap-2 flex-wrap"><label class="text-xs font-bold" for="bossSelect">Choose boss</label><span id="bossCoinModal" class="boss-coin-pill">🪙 0 Boss Coins</span></div>
-        <select id="bossSelect" class="w-full mt-2 p-2 rounded-xl text-sm" style="background:var(--ui-button);border:1px solid var(--border);color:var(--text-primary)"></select>
+        <select id="bossSelect" class="w-full mt-2 p-2 rounded-xl text-sm" style="background:var(--ui-button);border:1px solid var(--border);color:var(--text-primary)"></select><label class="boss-mastery-toggle"><input id="bossMasteryMode" type="checkbox"> <span>👑 Boss Mastery Challenge</span><small>Unlocked after defeating the selected boss once. Stronger boss, lower Resolve, permanent Mastery trophy.</small></label>
         <div id="bossUpgradeGrid" class="boss-upgrade-grid"></div>
         <div id="bossExchange" class="boss-upgrade" style="margin-top:10px"><strong>💱 Boss Coin Exchange</strong><small>1 BC = 500 coins. One-way exchange.</small><div style="display:flex;gap:6px;margin-top:7px"><button type="button" data-bc-exchange="1">1 BC</button><button type="button" data-bc-exchange="10">10 BC</button><button type="button" data-bc-exchange="all">All BC</button></div></div>
         <button id="bossStartBtn" class="w-full mt-4 font-semibold py-2.5 rounded-xl" style="background:#ef4444;color:white">Start challenge</button>
@@ -5483,6 +5615,7 @@ loadMilestones();
             }
         }
         function getElClasses(el) {
+            if(el.isSpeedrun)return 'speedrun-el speedrun-showpiece exclusive-el';
             if(el.isSeasonal)return 'seasonal-el seasonal-showpiece season-'+el.seasonalEvent;
             if(el.isExclusive)return 'exclusive-el exclusive-showpiece';
             if(el.isAprilFools)return 'april-fools-el';
@@ -5628,13 +5761,14 @@ loadMilestones();
             try{milestoneCounts();}catch(e){}
             normalizeKeyStacks();normalizeEverything();updateProgressionUI();
             try{
-                const pre=bossMode?'fc_boss_':'fc_';
+                const pre=bossMode?'fc_boss_':(window.speedrunSaveMode?'fc_speedrun_':'fc_');
                 _setItem(pre+'el',JSON.stringify(elements));_setItem(pre+'co',JSON.stringify(combos));_setItem(pre+'gs',JSON.stringify(gs));
                 if(bossMode)_setItem('fc_boss_active','1');
+                if(window.speedrunSaveMode)_setItem('fc_speedrun_active','1');
             }catch(e){}
         }
-        function loadNamedSave(isBoss){
-            const pre=isBoss?'fc_boss_':'fc_';
+        function loadNamedSave(isBoss,isSpeedrun=false){
+            const pre=isBoss?'fc_boss_':(isSpeedrun?'fc_speedrun_':'fc_');
             elements=[...STARTERS.map(e=>({...e}))];combos=[];gs=baseGameState();
             const e=_getItem(pre+'el'),c=_getItem(pre+'co'),st=_getItem(pre+'gs');
             if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
@@ -5645,7 +5779,8 @@ loadMilestones();
         function load(){
             try{
                 bossMode=_getItem('fc_boss_active')==='1';
-                loadNamedSave(bossMode);
+                window.speedrunSaveMode=!bossMode&&_getItem('fc_speedrun_active')==='1';
+                loadNamedSave(bossMode,window.speedrunSaveMode);
                 document.body.classList.toggle('boss-mode',bossMode);
                 updateCyMoneyDisplay();checkStarForgeUnlock();
                 if(bossMode)updateBossUI();
@@ -5818,26 +5953,28 @@ loadMilestones();
             setTimeout(()=>finishBossFightNow(won,b),820);
         }
         function finishBossFightNow(won,b){
-            const d=BOSS_DEFS[b.id],p=Math.max(0,Math.min(1,1-b.hp/d.maxHp)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));
+            const d=BOSS_DEFS[b.id],fightMax=b.masteryMode?Math.ceil(d.maxHp*1.75):d.maxHp,p=Math.max(0,Math.min(1,1-b.hp/fightMax)),reward=won?d.winCoins:Math.floor(d.lossMaxCoins*p*p),bc=won?d.winBC:Math.max(1,Math.floor(d.lossBC*(.25+.75*p)));
             clearBossSave();restoreMainGame();document.body.classList.remove('boss-player-defeated');const panel=$('bossPanel');if(panel)panel.classList.remove('boss-defeated');
             const carry=transferBossDiscoveriesToMain(b);
             const m=bossMeta();m.coins+=bc;if(b.upgrades?.mutationMemory&&b.mutationMemory)m.mutationMemory={...(m.mutationMemory||{}),...b.mutationMemory};gs.coins=(gs.coins||0)+reward;gs.totalCoins=(gs.totalCoins||0)+reward;
-            if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);}
+            if(won){m.defeats[d.id]=(m.defeats[d.id]||0)+1;awardBossDefeat(d);
+              if(b.masteryMode){masteryState.stats.bossMasteries=Math.max(0,Number(masteryState.stats.bossMasteries||0))+1;syncMasteryStats();const tn=`Boss Mastery · ${d.name}`;if(!elements.some(e=>e.name===tn))elements.push({name:tn,emoji:'👑',description:`Mastered ${d.name} in its enhanced challenge.`,isBossMasteryTrophy:true,isExclusive:true,excludeFromRank:true,bossId:d.id});}
+            }
             const pendingForge=!!gs.pendingStarForgeBossGrant;if(pendingForge){delete gs.pendingStarForgeBossGrant;gs.sfUnlocked=true;}
             updateProgressionUI();save();renderEls();updateCount();updateCoinDisplay();renderBossLobby();
             if(carry.unlocked.length)notify('BOSS DISCOVERIES SAVED',`${carry.unlocked.length} new element${carry.unlocked.length===1?'':'s'} carried into your normal collection. Boss mutations were not transferred.`,'📦',5600);
             if(pendingForge){notify('STAR FORGE AWAKENED',"The fight is over. The Star Forge's power is now available.",'🌟',5200);if(!starForgeTutShown){starForgeTutShown=true;setTimeout(()=>openModal('starForgeTutModal'),500);}}
             if(carry.unlockedEnding)setTimeout(showEnding,1100);
             const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';
-            notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);
+            notify(won?(b.masteryMode?'BOSS MASTERED!':'BOSS DEFEATED!'):'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);
         }
-        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.seasonExclusive?'This boss only appears during its seasonal event.':d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{}),mainUnlocks:{}};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;document.body.classList.toggle('boss-mm-starforge',bossHasMutationMemoryStarForge());
+        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.seasonExclusive?'This boss only appears during its seasonal event.':d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());const masteryMode=!!$('bossMasteryMode')?.checked;if(masteryMode&&!(meta.defeats?.[id]>0)){notify('Boss Mastery locked','Defeat this boss normally first.','🔒',3000);return;}save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:masteryMode?Math.ceil(d.maxHp*1.75):d.maxHp,playerHp:masteryMode?Math.max(25,Math.floor(max*.72)):max,phase:1,crafts:0,startedAt:Date.now(),masteryMode,upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{}),mainUnlocks:{}};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;document.body.classList.toggle('boss-mm-starforge',bossHasMutationMemoryStarForge());
             ['shopModal','starForgeModal','exportModal','importModal'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
             ['storagePanel','exclusiveStorage','seasonalStorage','aprilFoolsStorage','hintPanel','craftGuide'].forEach(id=>{const el=$(id);if(el){el.hidden=true;el.style.display='none';}});
             renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');notify('BOSS CHALLENGE',`${d.name} has sealed your collection. Rebuild from the four starters and fight back.`,d.emoji,6000);}
         function surrenderBossFight(){if(!bossMode)return;finishBossFight(false);}
         function buyBossUpgrade(id){if(bossMode)return;const d=BOSS_UPGRADE_DEFS[id];if(!d)return;const m=bossMeta(),lv=bossUpgradeLevel(id,m);if(d.requires&&bossUpgradeLevel(d.requires,m)<=0){notify('Upgrade locked',`Buy ${BOSS_UPGRADE_DEFS[d.requires].name} first.`,'🔒');return;}if(lv>=d.max)return;const c=bossUpgradeCost(id);if(m.coins<c){notify('Not enough Boss Coins',`Need ${c} BC.`,'🪙');return;}m.coins-=c;m.upgrades[id]=lv+1;save();renderBossLobby();notify('Boss upgrade',`${d.name} is now level ${lv+1}.`,d.emoji,2200);}
-        function exchangeBossCoins(amount){if(bossMode)return;const m=bossMeta();let n=amount==='all'?m.coins:Math.max(0,Math.floor(Number(amount)||0));n=Math.min(n,m.coins);if(n<1){notify('No Boss Coins','There are no Boss Coins to exchange.','🪙');return;}const req=25+10*prestigeData().times,after=m.coins-n;if(after<req&&m.coins>=req&&!confirm(`This leaves ${after} BC, below the ${req} BC requirement for your next Prestige. Exchange anyway?`))return;m.coins-=n;const gain=n*500;gs.coins=(gs.coins||0)+gain;gs.totalCoins=(gs.totalCoins||0)+gain;save();updateCoinDisplay();renderBossLobby();updatePrestigeUI();notify('Boss Coins exchanged',`${n} BC → ${gain.toLocaleString()} coins.`,'💱',2600);}
+        function exchangeBossCoins(amount){if(bossMode)return;const m=bossMeta();let n=amount==='all'?m.coins:Math.max(0,Math.floor(Number(amount)||0));n=Math.min(n,m.coins);if(n<1){notify('No Boss Coins','There are no Boss Coins to exchange.','🪙');return;}m.coins-=n;const gain=n*500;gs.coins=(gs.coins||0)+gain;gs.totalCoins=(gs.totalCoins||0)+gain;save();updateCoinDisplay();renderBossLobby();updatePrestigeUI();notify('Boss Coins exchanged',`${n} BC → ${gain.toLocaleString()} coins.`,'💱',2600);}
         function renderBossLobby(){if(bossMode)return;const m=bossMeta(),s=$('bossSelect'),g=$('bossUpgradeGrid');$('bossCoinModal').textContent=`🪙 ${m.coins} Boss Coins`;$('bossBtn').textContent=`👹 Boss Challenge · 🪙 ${m.coins}`;s.innerHTML='';Object.values(BOSS_DEFS).forEach(d=>{if(d.seasonExclusive&&!bossUnlocked(d.id))return;const o=document.createElement('option'),u=bossUnlocked(d.id);o.value=d.id;o.disabled=!u;o.textContent=`${d.emoji} ${d.name}${d.seasonExclusive?' · SEASON EXCLUSIVE':''}${u?'':' 🔒'}`;s.appendChild(o);});g.innerHTML='';Object.entries(BOSS_UPGRADE_DEFS).forEach(([id,d])=>{const lv=bossUpgradeLevel(id,m),c=bossUpgradeCost(id),box=document.createElement('div');box.className='boss-upgrade';const extra=id==='mutation'&&lv?` · ${Math.round(bossMutationChance(lv)*100)}% chance · up to ${bossMutationMax(lv)} mutation${bossMutationMax(lv)===1?'':'s'}`:'';const reqLocked=d.requires&&bossUpgradeLevel(d.requires,m)<=0;box.innerHTML=`<strong>${d.emoji} ${d.name} · Lv ${lv}/${d.max}</strong><small>${d.desc}${extra}${reqLocked?` · 🔒 Requires ${BOSS_UPGRADE_DEFS[d.requires].name}`:''}</small><button type="button" ${lv>=d.max||reqLocked?'disabled':''}>${lv>=d.max?'MAX':reqLocked?'LOCKED':`Upgrade · ${c} BC`}</button>`;box.querySelector('button').addEventListener('click',()=>buyBossUpgrade(id));g.appendChild(box);});}
 
 
@@ -6360,9 +6497,8 @@ loadMilestones();
             // Keys and coins retain their capped progression in quarter-percent units.
             const percentUnits=Math.min(400,40+10*prestigeData().times);
             const requiredKeys=Math.ceil(250*percentUnits/400),requiredCoins=Math.ceil(1000000*percentUnits/400),requiredElements=100+25*prestigeData().times;
-            const requiredBC=25+10*prestigeData().times,bossCoins=bossMeta().coins;
-            return {all,missing,percent:percentUnits/4,requiredKeys,requiredCoins,requiredElements,requiredBC,bossCoins,keys:totalKeys(),coins:gs.coins,
-                ready:!!gs.shopUnlocked&&!!gs.sfUnlocked&&all.length-missing.length>=requiredElements&&totalKeys()>=requiredKeys&&gs.coins>=requiredCoins&&bossCoins>=requiredBC};
+            return {all,missing,percent:percentUnits/4,requiredKeys,requiredCoins,requiredElements,keys:totalKeys(),coins:gs.coins,
+                ready:!!gs.shopUnlocked&&!!gs.sfUnlocked&&all.length-missing.length>=requiredElements&&totalKeys()>=requiredKeys&&gs.coins>=requiredCoins};
         }
         function updatePrestigeUI(){
             const p=prestigeData();
@@ -6372,7 +6508,7 @@ loadMilestones();
         }
         function renderPrestige(){
             const r=prestigeRequirements();
-            $('prestigeRequirements').textContent=`Prestige ${prestigeData().times+1} · Keys: ${r.keys} / ${r.requiredKeys} · Coins: ${Math.floor(r.coins).toLocaleString()} / ${r.requiredCoins.toLocaleString()} · Boss Coins: ${r.bossCoins} / ${r.requiredBC} (not spent) · Ranked elements: ${r.all.length-r.missing.length} / ${r.requiredElements} required (${r.all.length} total) · Shop: ${gs.shopUnlocked?'✓':'locked'} · Star Forge: ${gs.sfUnlocked?'✓':'locked'}`;
+            $('prestigeRequirements').textContent=`Prestige ${prestigeData().times+1} · Keys: ${r.keys} / ${r.requiredKeys} · Coins: ${Math.floor(r.coins).toLocaleString()} / ${r.requiredCoins.toLocaleString()} · Ranked elements: ${r.all.length-r.missing.length} / ${r.requiredElements} required (${r.all.length} total) · Shop: ${gs.shopUnlocked?'✓':'locked'} · Star Forge: ${gs.sfUnlocked?'✓':'locked'}`;
 
             $('confirmPrestige').disabled=!r.ready||prestigeInFlight;
             $('prestigeCount').textContent=prestigeData().times+' prestiges · '+prestigeData().coins+' prestige coins';
@@ -6403,12 +6539,13 @@ loadMilestones();
             const next=prestigeData().times+1;
             const basic=elements.filter(e=>e.isBasic&&!['water','fire','earth','air'].includes(e.name.toLowerCase()));
             const requirement=prestigeRequirements();
-            const tokens=['🔑 ×'+requirement.requiredKeys,'🪙 '+requirement.requiredCoins.toLocaleString(),'👹 '+requirement.requiredBC+' BC',...['Philosophy','1','A','Null'],...basic.map(e=>e.emoji+' '+e.name).slice(0,12)];
+            const tokens=['🔑 ×'+requirement.requiredKeys,'🪙 '+requirement.requiredCoins.toLocaleString(),...['Philosophy','1','A','Null'],...basic.map(e=>e.emoji+' '+e.name).slice(0,12)];
             try{
                 await playAscension(tokens,{name:'Prestige',emoji:'🏆',isPrestige:true,amountOfPrestige:next},'Prestige '+next+'!');
                 if(!prestigeRequirements().ready)return;
                 let spend=requirement.requiredKeys;for(const e of elements){if(e.isKey&&spend){const n=Math.min(keyAmount(e),spend);e.amountOfKey=keyAmount(e)-n;spend-=n;}}
-                normalizeKeyStacks();const state=prestigeData();state.coins++;state.times++;
+                normalizeKeyStacks();const state=prestigeData();const speedrunPrestigeBefore=state.times;state.coins++;state.times++;
+                checkFirstPrestigeSpeedrun(speedrunPrestigeBefore,state.times);
                 prestigeReset=true;try{resetForPrestige();}finally{prestigeReset=false;}
                 save();notify('Prestige '+state.times+'!','Shop, an unupgraded Star Forge and your expanded starting collection await.','🏆');
                 renderPrestigeShop();openModal('prestigeShopModal');
@@ -6435,6 +6572,11 @@ loadMilestones();
             toggle.setAttribute('aria-expanded',String(show));
             toggle.setAttribute('aria-label',show?'Hide crafting hints':'Show crafting hints');
             toggle.title=show?'Hide crafting hints':'Show crafting hints';
+        });
+        $('speedrunToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
+            const panel=$('speedrunStorage'),toggle=$('speedrunToggle'),show=toggle.getAttribute('aria-expanded')!=='true';
+            panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
+            toggle.setAttribute('aria-expanded',String(show));toggle.setAttribute('aria-label',show?'Hide Speedrun Storage':'Show Speedrun Storage');toggle.title=show?'Hide Speedrun Storage':'Show Speedrun Storage';
         });
         $('exclusiveToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('exclusiveStorage'),toggle=$('exclusiveToggle');
@@ -6545,6 +6687,17 @@ loadMilestones();
         }
 
         function sculptElementCard(card,el){
+            if(el&&el.isSpeedrun){
+  const medal=document.createElement('span');medal.className='speedrun-medal '+(el.speedrunMedal||'FINISHER');medal.textContent=el.speedrunMedal||'FINISHER';card.appendChild(medal);
+                card.classList.add('speedrun-showpiece');
+                const old=card.querySelector('.speedrun-record-plaque');if(old)old.remove();
+                const plaque=document.createElement('div');plaque.className='speedrun-record-plaque';
+                const clears=Math.max(1,Number(el.speedrunClears||el.isSpeedrun||1));
+                const best=Number(el.speedrunBestTime||el.speedrunTime||0);
+                plaque.textContent=`⚡ BEST ${best?formatSpeedrun(best):'--:--.---'} · ×${clears}`;
+                card.appendChild(plaque);
+            }
+
             if(isSeasonalElement(el)){sculptSeasonalCard(card,el);return;}
             let hash=0;for(const ch of el.name)hash=(hash*31+ch.charCodeAt(0))>>>0;
             const hue=el.isBossDefeat?8:el.isExclusive?275:el.isEverything?165:el.isFinal?43:el.isLegendary?285:el.isDivine?48:el.isFrozen?195:el.isHot?18:hash%360;
@@ -6623,6 +6776,7 @@ loadMilestones();
             elGrid.innerHTML='';
             // Both views reference the canonical elements array and original selection indices.
             const exclusiveGrid=$('exclusiveGrid');exclusiveGrid.innerHTML='';
+            const speedrunGrid=$('speedrunGrid');speedrunGrid.innerHTML='';
             const aprilFoolsGrid=$('aprilFoolsGrid');aprilFoolsGrid.innerHTML='';
             const seasonalGrid=$('seasonalGrid');seasonalGrid.innerHTML='';
             const seasonalByEvent=new Map();
@@ -6659,6 +6813,10 @@ loadMilestones();
                 seasonalGrid.appendChild(group);
             }
             if(!seasonalTotal){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='No seasonal discoveries yet.';seasonalGrid.appendChild(empty);}
+            const speedrunRelics=elements.filter(e=>e.isSpeedrun);
+            $('speedrunCount').textContent=speedrunRelics.length+' relic'+(speedrunRelics.length===1?'':'s');
+            $('speedrunToggle').hidden=!speedrunRelics.length;
+            if(!speedrunRelics.length){$('speedrunStorage').hidden=true;$('speedrunStorage').style.setProperty('display','none','important');$('speedrunToggle').setAttribute('aria-expanded','false');}
             const count=elements.filter(e=>e.isExclusive).length;
             $('exclusiveCount').textContent=count;
             if(!count){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='A little space for rare discoveries.';exclusiveGrid.appendChild(empty);}
@@ -6726,12 +6884,15 @@ loadMilestones();
                 if(el.isFrozen){const mb=document.createElement('div');mb.className='melt-bar';mb.style.width=`${((el.meltProgress||0)/(el.meltGoal||10))*100}%`;d.appendChild(mb);}
                 if(el.hasLink) d.addEventListener('click',e=>{if(!e.defaultPrevented)window.open(el.link,'_blank');});
                 w.appendChild(d);
-                (el.isExclusive&&!el.isPrestige?exclusiveGrid:elGrid).appendChild(w);
+                (el.isSpeedrun?speedrunGrid:(el.isExclusive&&!el.isPrestige?exclusiveGrid:elGrid)).appendChild(w);
             });
             if(bossMode)refreshBossLockedCards();
         }
 
-        function updateCount(){elCount.textContent=elements.length+' Discovered';}
+        function updateCount(){
+            setTimeout(()=>{try{checkSpeedrunFinish();}catch(e){}},0);elCount.textContent=elements.length+' Discovered';
+            if(typeof syncMasteryStats==='function'){syncMasteryStats();const d=MASTERY_OBJECTIVES.filter(o=>masteryState.completed[o.id]).length;if($('masteryBtn'))$('masteryBtn').textContent=`🌟 Mastery ${d}/${MASTERY_OBJECTIVES.length}`;}
+        }
 
         // ─── SORT CONTROLS ───
         document.querySelectorAll('.sort-btn').forEach(btn=>{
@@ -7071,6 +7232,7 @@ loadMilestones();
             if(!sel1||!sel2||isCombining)return;
             if(bossMode&&(bossLockedTurns(sel1.name)>0||bossLockedTurns(sel2.name)>0)){const locked=bossLockedTurns(sel1.name)>0?sel1:sel2;notify('Element locked',`${locked.name} cannot be used for ${bossLockedTurns(locked.name)} more crafts.`,'🔒',2600);resetDZs();return;}
             isCombining=true;
+            if(speedrunState?.active&&speedrunState.runStats)speedrunState.runStats.crafts++;
             if(!OldAllCreate&&(sel1.isAprilFools||sel2.isAprilFools)){
                 resultArea.innerHTML='<div class="fusion-rejected" role="status"><div class="fusion-rejected-icon" aria-hidden="true"><span>🤡</span></div><h3>Archived nonsense</h3><p>Turn OldAllCreate on before crafting with April Fools elements.</p></div>';
                 resetDZs();return;
@@ -7194,6 +7356,7 @@ loadMilestones();
             }
             // If element qualifies as Everything, strip all mods and set isEverything only
             if(checkIsEverything(newEl)){stripToEverything(newEl);}
+            if(speedrunState?.active&&speedrunState.runStats&&newEl.invalid)speedrunState.runStats.invalid++;
             const exists=elements.findIndex(e=>e.name.toLowerCase()===newEl.name.toLowerCase());
             if(exists!==-1){
                 if(newEl.isAprilFools){
@@ -7203,12 +7366,14 @@ loadMilestones();
                         addComboEntry(sel1,sel2,elements[exists]);save();
                     }
                 }
-                if(newEl.isEverything){stripToEverything(elements[exists]);save();renderEls();}
+                if(newEl.isEverything){stripToEverything(elements[exists]);recordMasteryEverything();save();renderEls();}
                 // Re-check existing element in case it now qualifies after Star Forge etc.
                 if(checkIsEverything(elements[exists])){stripToEverything(elements[exists]);}
                 showResult(elements[exists],false);
             } else {
                 elements.push(newEl);
+                if(speedrunState?.active&&speedrunState.runStats)speedrunState.runStats.discoveries++;
+                recordMasteryDiscovery(newEl);
                 showResult(newEl,true);
                 combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{}),...(newEl.isSeasonal?{isSeasonal:true,seasonalEvent:newEl.seasonalEvent}:{})});
                 addComboEntry(sel1,sel2,newEl);
@@ -7699,7 +7864,7 @@ loadMilestones();
             if(ascensionBusy&&!prestigeReset)return;
             // Permanent collections survive Prestige: Exclusives, Boss trophies, Seasonal discoveries and April Fools discoveries.
             const kept=elements.filter(e=>
-                e.isExclusive||e.isBossDefeat||e.isAprilFools||e.isSeasonal||
+                e.isExclusive||e.isSpeedrun||e.isBossDefeat||e.isAprilFools||e.isSeasonal||
                 e.seasonalEvent||e.seasonId||e.eventId||
                 SEASONAL_EVENTS.some(ev=>!!e[ev.flag])
             );
@@ -7724,6 +7889,349 @@ loadMilestones();
             resetDZs();renderEls();updateCount();updateCoinDisplay();save();updateCyMoneyDisplay();
             if($('viewRankBtn'))$('viewRankBtn').classList.add('hidden');
         }
+
+        
+        // ─── OBJECTIVE MASTERY ───
+        const CM_MASTERY_KEY='cm_objective_mastery_v1';
+        const MASTERY_OBJECTIVES=[
+          {id:'discover50',group:'Discovery',icon:'🧪',name:'Curious Crafter',desc:'Find 50 new elements across your runs.',stat:'discoveries',goal:50},
+          {id:'discover100',group:'Discovery',icon:'🧪',name:'Element Seeker',desc:'Find 100 new elements across your runs.',stat:'discoveries',goal:100},
+          {id:'discover250',group:'Discovery',icon:'📚',name:'Element Researcher',desc:'Find 250 new elements across your runs.',stat:'discoveries',goal:250},
+          {id:'discover500',group:'Discovery',icon:'🗃️',name:'Element Archivist',desc:'Find 500 new elements across your runs.',stat:'discoveries',goal:500},
+          {id:'discover750',group:'Discovery',icon:'🔭',name:'Deep Catalog',desc:'Find 750 new elements across your runs.',stat:'discoveries',goal:750},
+          {id:'discover1000',group:'Discovery',icon:'🌌',name:'One Thousand Discoveries',desc:'Find 1,000 new elements across your runs.',stat:'discoveries',goal:1000},
+          {id:'discover1500',group:'Discovery',icon:'♾️',name:'Infinite Curiosity',desc:'Find 1,500 new elements across your runs.',stat:'discoveries',goal:1500},
+          {id:'everything1',group:'Everything',icon:'✨',name:'Everything Begins',desc:'Forge 1 Everything element.',stat:'everything',goal:1},
+          {id:'everything3',group:'Everything',icon:'🌈',name:'Everything Again',desc:'Forge 3 Everything elements.',stat:'everything',goal:3},
+          {id:'everything5',group:'Everything',icon:'💠',name:'Everything Collector',desc:'Forge 5 Everything elements.',stat:'everything',goal:5},
+          {id:'everything10',group:'Everything',icon:'👑',name:'Master of Everything',desc:'Forge 10 Everything elements.',stat:'everything',goal:10},
+          {id:'everything25',group:'Everything',icon:'🌠',name:'Everything Beyond',desc:'Forge 25 Everything elements.',stat:'everything',goal:25},
+          {id:'prestige1',group:'Prestige',icon:'🏆',name:'First Ascension',desc:'Complete 1 Prestige.',stat:'prestiges',goal:1},
+          {id:'prestige3',group:'Prestige',icon:'🏆',name:'Triple Ascension',desc:'Complete 3 Prestiges.',stat:'prestiges',goal:3},
+          {id:'prestige5',group:'Prestige',icon:'💫',name:'Prestige Veteran',desc:'Complete 5 Prestiges.',stat:'prestiges',goal:5},
+          {id:'prestige10',group:'Prestige',icon:'🌟',name:'Prestige Master',desc:'Complete 10 Prestiges.',stat:'prestiges',goal:10},
+          {id:'prestige20',group:'Prestige',icon:'🌌',name:'Prestige Legend',desc:'Complete 20 Prestiges.',stat:'prestiges',goal:20},
+          {id:'boss1',group:'Boss',icon:'⚔️',name:'Boss Breaker',desc:'Defeat your first boss.',stat:'bosses',goal:1},
+          {id:'boss5',group:'Boss',icon:'🗡️',name:'Boss Brawler',desc:'Defeat 5 bosses.',stat:'bosses',goal:5},
+          {id:'boss10',group:'Boss',icon:'👹',name:'Boss Hunter',desc:'Defeat 10 bosses.',stat:'bosses',goal:10},
+          {id:'boss25',group:'Boss',icon:'💀',name:'Boss Master',desc:'Defeat 25 bosses.',stat:'bosses',goal:25},
+          {id:'boss50',group:'Boss',icon:'👑',name:'Boss Annihilator',desc:'Defeat 50 bosses.',stat:'bosses',goal:50},
+          {id:'bossMaster1',group:'Boss Mastery',icon:'🔥',name:'Master Challenger',desc:'Win 1 Boss Mastery Challenge.',stat:'bossMasteries',goal:1},
+          {id:'bossMaster5',group:'Boss Mastery',icon:'🔥',name:'Master Hunter',desc:'Win 5 Boss Mastery Challenges.',stat:'bossMasteries',goal:5},
+          {id:'bossMaster10',group:'Boss Mastery',icon:'👑',name:'Master Slayer',desc:'Win 10 Boss Mastery Challenges.',stat:'bossMasteries',goal:10},
+          {id:'modified10',group:'Forge',icon:'⭐',name:'Forge Initiate',desc:'Own 10 modified elements at once.',stat:'modifiedBest',goal:10},
+          {id:'modified25',group:'Forge',icon:'🌟',name:'Forge Student',desc:'Own 25 modified elements at once.',stat:'modifiedBest',goal:25},
+          {id:'modified50',group:'Forge',icon:'☄️',name:'Forge Adept',desc:'Own 50 modified elements at once.',stat:'modifiedBest',goal:50},
+          {id:'modified100',group:'Forge',icon:'🌠',name:'Forge Master',desc:'Own 100 modified elements at once.',stat:'modifiedBest',goal:100},
+          {id:'modified200',group:'Forge',icon:'🌌',name:'Forge Legend',desc:'Own 200 modified elements at once.',stat:'modifiedBest',goal:200},
+          {id:'season1',group:'Seasonal',icon:'🎉',name:'Season Master',desc:'Complete any seasonal collection at 100/100.',stat:'seasonsComplete',goal:1},
+          {id:'season3',group:'Seasonal',icon:'🎊',name:'Season Veteran',desc:'Complete 3 different seasonal collections.',stat:'seasonsComplete',goal:3},
+          {id:'season5',group:'Seasonal',icon:'🗓️',name:'Season Keeper',desc:'Complete 5 different seasonal collections.',stat:'seasonsComplete',goal:5},
+          {id:'season10',group:'Seasonal',icon:'🌍',name:'Season Legend',desc:'Complete 10 different seasonal collections.',stat:'seasonsComplete',goal:10},
+          {id:'season20',group:'Seasonal',icon:'👑',name:'Calendar Conqueror',desc:'Complete all 20 seasonal collections.',stat:'seasonsComplete',goal:20}
+        ];
+        let masteryState={stats:{discoveries:0,everything:0,prestiges:0,bosses:0,modifiedBest:0,seasonsComplete:0,bossMasteries:0},completed:{}};
+        try{masteryState={...masteryState,...JSON.parse(localStorage.getItem(CM_MASTERY_KEY)||'{}')};masteryState.stats={discoveries:0,everything:0,prestiges:0,bosses:0,modifiedBest:0,seasonsComplete:0,bossMasteries:0,...masteryState.stats};masteryState.completed=masteryState.completed||{}}catch(e){}
+        function saveMastery(){try{localStorage.setItem(window.speedrunSaveMode?'cm_objective_mastery_speedrun_v1':CM_MASTERY_KEY,JSON.stringify(masteryState));}catch(e){}}
+        function masteryModifiedCount(){return elements.filter(e=>['isRadioactive','isBlessed','isUnstable','isPhantom','isGolden','isCrystalline','isHoly','isEthereal','isLegendary','isChromatic','isAncient','isDivine','isAntimatter','isMagnetic','isTemporal','isAbyssal','isCelestial','isElectric','isPurified','isTsunami','isInfernal'].some(k=>e[k])).length;}
+        function masterySeasonCompletions(){return SEASONAL_EVENTS.filter(ev=>elements.filter(e=>isSeasonalElement(e)&&(seasonalEventFromElement(e)||{}).id===ev.id&&!e.isChristmasExclusive&&!e.isNewYearReward).length>=100).length;}
+        const MASTERY_EXCLUSIVE_REWARDS={
+          discover100:{name:'Archive Spark',emoji:'📚',description:'Mastery Exclusive · awarded for Element Seeker.'},
+          discover500:{name:'Catalog Core',emoji:'💠',description:'Mastery Exclusive · awarded for Element Archivist.'},
+          discover1000:{name:'Millennium Element',emoji:'🌌',description:'Mastery Exclusive · awarded for One Thousand Discoveries.'},
+          everything1:{name:'Omni Shard',emoji:'✨',description:'Mastery Exclusive · awarded for Everything Begins.'},
+          everything10:{name:'Omni Crown',emoji:'👑',description:'Mastery Exclusive · awarded for Master of Everything.'},
+          prestige10:{name:'Ascension Star',emoji:'🌠',description:'Mastery Exclusive · awarded for Prestige Master.'},
+          bossMaster1:{name:'Conqueror Sigil',emoji:'🔥',description:'Mastery Exclusive · awarded for a Boss Mastery victory.'},
+          season10:{name:'Calendar Prism',emoji:'🗓️',description:'Mastery Exclusive · awarded for Season Legend.'}
+        };
+        function grantMasteryExclusive(id){
+          const r=MASTERY_EXCLUSIVE_REWARDS[id];if(!r||elements.some(e=>e.masteryRewardId===id||e.name===r.name))return;
+          elements.push({...r,isMasteryExclusive:true,masteryRewardId:id,isExclusive:true,excludeFromRank:true,discoveredAt:Date.now()});
+          notify('MASTERY EXCLUSIVE!',`${r.emoji} ${r.name} was added to your permanent collection.`,'🌟',5200);
+        }
+        function syncMasteryStats(){
+          const st=masteryState.stats;
+          st.prestiges=Math.max(st.prestiges,Number(prestigeData().times||0));
+          st.bosses=Math.max(st.bosses,Number(bossMeta().defeats||0));
+          st.modifiedBest=Math.max(st.modifiedBest,masteryModifiedCount());
+          st.seasonsComplete=Math.max(st.seasonsComplete,masterySeasonCompletions());
+          let newly=0;
+          MASTERY_OBJECTIVES.forEach(o=>{if(!masteryState.completed[o.id]&&Number(st[o.stat]||0)>=o.goal){masteryState.completed[o.id]=Date.now();grantMasteryExclusive(o.id);newly++;}});
+          if(newly){
+            saveMastery();notify('MASTERY COMPLETE!',`${newly} new Mastery objective${newly===1?'':'s'} completed.`,'🌟',4200);
+            if(typeof speedrunState!=='undefined'&&speedrunState.active&&speedrunState.category==='firstMastery'){
+              const nowDone=Object.keys(masteryState.completed||{}).length;
+              if(nowDone>Number(speedrunState.masteryBaseline||0))finishSpeedrun(speedrunCategoryDef('firstMastery'));
+            }
+          } else saveMastery();
+          return newly;
+        }
+        function recordMasteryDiscovery(el){
+          if(!el||el.excludeFromRank||el.isExclusive||el.isSpeedrun||el.isAprilFools||el.isKey||el.isPrestige)return;
+          masteryState.stats.discoveries++;if(el.isEverything)masteryState.stats.everything++;syncMasteryStats();
+        }
+        function recordMasteryEverything(){masteryState.stats.everything++;syncMasteryStats();}
+        function renderMastery(){
+          syncMasteryStats();
+          const done=MASTERY_OBJECTIVES.filter(o=>masteryState.completed[o.id]).length,total=MASTERY_OBJECTIVES.length,st=masteryState.stats;
+          $('masteryOverview').innerHTML=`<div><strong>${done}/${total}</strong><small>MASTERIES</small></div><div><strong>${st.discoveries.toLocaleString()}</strong><small>LIFETIME FINDS</small></div><div><strong>${st.everything.toLocaleString()}</strong><small>EVERYTHING FORGED</small></div>`;
+          const grid=$('masteryObjectiveGrid');grid.replaceChildren();
+          MASTERY_OBJECTIVES.forEach((o,i)=>{const val=Number(st[o.stat]||0),complete=!!masteryState.completed[o.id],pct=Math.min(100,val/o.goal*100),card=document.createElement('div');card.className='mastery-card'+(complete?' done':'');card.innerHTML=`<div class="mastery-card-top"><strong>${o.icon} ${o.name}</strong><span class="mastery-tier">${o.group.toUpperCase()}</span></div><p>${o.desc}</p><div class="mastery-bar"><i style="width:${pct}%"></i></div><div class="mastery-progress"><span>${Math.min(val,o.goal).toLocaleString()} / ${o.goal.toLocaleString()}</span><span>${complete?'MASTERED ✓':Math.floor(pct)+'%'}</span></div><div class="mastery-reward-line">${complete?'⭐ Permanent Mastery earned':'✦ Permanent objective'}</div>`;grid.appendChild(card);});
+          if($('masteryBtn'))$('masteryBtn').textContent=`🌟 Mastery ${done}/${total}`;
+        }
+
+        // ─── SPEEDRUN MODE ───
+        const CM_SPEEDRUN_KEY='cm_speedrun_state_v1';
+        let speedrunState={active:false,finished:false,start:0,end:0,category:'rankP'};
+        try{speedrunState={...speedrunState,...JSON.parse(localStorage.getItem(CM_SPEEDRUN_KEY)||'{}')}}catch(e){}
+        function saveSpeedrun(){try{localStorage.setItem(CM_SPEEDRUN_KEY,JSON.stringify(speedrunState));}catch(e){}}
+        function speedrunMs(){return speedrunState.active?Math.max(0,Date.now()-speedrunState.start):speedrunState.finished?Math.max(0,speedrunState.end-speedrunState.start):0}
+        function formatSpeedrun(ms){const h=Math.floor(ms/3600000),m=Math.floor(ms/60000)%60,sec=Math.floor(ms/1000)%60,x=ms%1000;return (h?h+':':'')+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')+'.'+String(x).padStart(3,'0')}
+        function speedrunRankProgress(){
+          const catalog=rankedCatalog();
+          const counted=catalog.filter(name=>elements.some(e=>e.name.toLowerCase()===name.toLowerCase()&&!e.isExclusive&&!e.isAprilFools)).length;
+          return{counted,total:catalog.length,pct:catalog.length?Math.floor(counted/catalog.length*100):0};
+        }
+        
+        function applySpeedrunLocks(){
+          const locked=!!speedrunState.active;
+          ['importBtn','exportBtn'].forEach(id=>{
+            const el=$(id);
+            if(!el)return;
+            el.disabled=locked;
+            el.hidden=locked;
+            el.style.display=locked?'none':'';
+          });
+        }
+
+        const SPEEDRUN_SPLITS=[
+          {id:'elements25',label:'25 Elements',test:()=>speedrunRankProgress().counted>=25},
+          {id:'shop',label:'Shop',test:()=>!!gs.shopUnlocked||elements.some(e=>e.name==='Shop')},
+          {id:'elements50',label:'50 Elements',test:()=>speedrunRankProgress().counted>=50},
+          {id:'forge',label:'Star Forge',test:()=>!!gs.sfUnlocked||elements.some(e=>e.name==='Star Forge')},
+          {id:'elements100',label:'100 Elements',test:()=>speedrunRankProgress().counted>=100},
+          {id:'keys25',label:'25 Keys',test:()=>typeof totalKeys==='function'&&totalKeys()>=25},
+          {id:'prestige1',label:'Prestige 1',test:()=>prestigeData().times>=1},
+          {id:'mastery1',label:'Mastery 1',test:()=>Object.keys(masteryState.completed||{}).length>=1}
+        ];
+        const SPEEDRUN_MEDALS={
+          rankP:[12*60e3,20*60e3,35*60e3,60*60e3],
+          firstPrestige:[8*60e3,15*60e3,25*60e3,45*60e3],
+          firstMastery:[3*60e3,7*60e3,15*60e3,30*60e3],
+          season100:[10*60e3,20*60e3,35*60e3,60*60e3]
+        };
+        function speedrunMedal(category,ms){const t=SPEEDRUN_MEDALS[category]||SPEEDRUN_MEDALS.rankP;return ms<=t[0]?'DIAMOND':ms<=t[1]?'GOLD':ms<=t[2]?'SILVER':ms<=t[3]?'BRONZE':'FINISHER';}
+        function speedrunPBRelic(){const d=speedrunCategoryDef();return elements.find(e=>e.isSpeedrun&&e.speedrunCategory===d.id&&(d.id!=='season100'||!d.seasonName||e.speedrunSeason===d.seasonName));}
+        function updateSpeedrunSplits(){
+          if(!speedrunState.active)return;
+          speedrunState.splits=speedrunState.splits||{};
+          for(const sp of SPEEDRUN_SPLITS){if(speedrunState.splits[sp.id]==null&&sp.test()){speedrunState.splits[sp.id]=speedrunMs();saveSpeedrun();}}
+        }
+        function speedrunSplitHTML(){
+          const relic=speedrunPBRelic(),pb=relic?.speedrunBestSplits||{},cur=speedrunState.splits||{};
+          const rows=SPEEDRUN_SPLITS.filter(sp=>cur[sp.id]!=null||pb[sp.id]!=null).map(sp=>{const c=cur[sp.id],b=pb[sp.id],delta=c!=null&&b!=null?c-b:null;return `<div class="speedrun-split"><span>${sp.label}</span><span>${c!=null?formatSpeedrun(c):'—'}</span><span class="${delta==null?'':delta<=0?'ahead':'behind'}">${delta==null?'':(delta<=0?'−':'+')+formatSpeedrun(Math.abs(delta))}</span></div>`}).join('');
+          let ghost='No PB ghost yet — finish this category once.';
+          if(relic?.speedrunBestTime){const elapsed=speedrunMs(),diff=elapsed-relic.speedrunBestTime;ghost=`👻 PB Ghost · ${formatSpeedrun(relic.speedrunBestTime)} finish · current ${diff<=0?formatSpeedrun(-diff)+' ahead':formatSpeedrun(diff)+' behind'}`;}
+          return `<div class="speedrun-splits">${rows||'<div class="speedrun-split"><span>Splits appear automatically</span><span>—</span><span></span></div>'}</div><div class="speedrun-ghost">${ghost}</div>`;
+        }
+        function showRunSummary(data){
+          const box=$('runSummaryBody');if(!box)return;
+          const stats=data||{},splits=stats.splits||{};
+          box.innerHTML=`<div class="run-summary-grid"><div class="run-summary-stat"><strong>${stats.time?formatSpeedrun(stats.time):'—'}</strong><small>TIME</small></div><div class="run-summary-stat"><strong>${stats.discoveries||0}</strong><small>NEW FINDS</small></div><div class="run-summary-stat"><strong>${stats.crafts||0}</strong><small>CRAFTS</small></div><div class="run-summary-stat"><strong>${stats.invalid||0}</strong><small>INVALIDS</small></div><div class="run-summary-stat"><strong>${stats.medal||'—'}</strong><small>MEDAL</small></div></div><h3 class="font-semibold text-sm mb-2">🏁 Splits</h3>${SPEEDRUN_SPLITS.filter(x=>splits[x.id]!=null).map(x=>`<div class="speedrun-split"><span>${x.label}</span><span>${formatSpeedrun(splits[x.id])}</span><span></span></div>`).join('')||'<p class="text-xs">No splits recorded.</p>'}`;
+          openModal('runSummaryModal');
+        }
+        function speedrunCategoryDef(id=speedrunState.category){
+          if(id==='firstPrestige')return{id,label:'1st Prestige',goal:'Complete your first Prestige',reward:'SPEEDRUN 1st Prestige',emoji:'🏆'};
+          if(id==='firstMastery')return{id,label:'1st Mastery',goal:'Complete your first Mastery objective',reward:'SPEEDRUN 1st Mastery',emoji:'🌟'};
+          if(id==='season100'){
+            const ev=getActiveSeasonalEvents()[0]||null;
+            return{id,label:'100/100 Seasonal',goal:ev?`Complete ${ev.name} 100/100`:'No active season',reward:ev?`SPEEDRUN ${ev.name} 100/100`:'SPEEDRUN Seasonal 100/100',emoji:ev?ev.icon:'🎉',seasonId:ev?.id||'',seasonName:ev?.name||''};
+          }
+          return{id:'rankP',label:'Rank P — 100% Ranked',goal:'Reach Rank P / 100%',reward:'SPEEDRUN Rank P',emoji:'🏁'};
+        }
+        function renderSpeedrun(){
+          applySpeedrunLocks();
+          const speedTitleOn=!!(speedrunState.active||speedrunState.finished);
+          if($('normalGameHeading'))$('normalGameHeading').hidden=speedTitleOn||!!bossMode;
+          if($('speedrunGameHeading'))$('speedrunGameHeading').hidden=!speedTitleOn||!!bossMode;
+          if($('bossGameHeading')&&bossMode)$('speedrunGameHeading').hidden=true;
+          const hud=$('speedrunHud'),btn=$('speedrunBtn'),st=$('speedrunStatus'),p=speedrunRankProgress(),def=speedrunCategoryDef();
+          const select=$('speedrunCategory');
+          if(select){
+            const seasonalOption=select.querySelector('option[value="season100"]'),hasSeason=getActiveSeasonalEvents().length>0;
+            if(seasonalOption){seasonalOption.disabled=!hasSeason;seasonalOption.textContent=hasSeason?`100/100 Seasonal — ${getActiveSeasonalEvents()[0].name}`:'100/100 Seasonal — No active season';}
+            if(speedrunState.category==='season100'&&!hasSeason&&!speedrunState.active)speedrunState.category='rankP';
+            select.value=speedrunState.category||'rankP';select.disabled=!!speedrunState.active;
+          }
+          if(hud){
+            hud.hidden=!(speedrunState.active||speedrunState.finished);
+            hud.classList.toggle('finished',!!speedrunState.finished);
+            hud.querySelector('.speedrun-time').textContent=formatSpeedrun(speedrunMs());
+            const goal=hud.querySelector('.speedrun-goal');if(goal)goal.textContent='→ '+def.label;
+          }
+          if(btn)btn.classList.toggle('speedrun-active',!!speedrunState.active);
+          if(st)st.innerHTML=`<strong>${speedrunState.active?'🟢 RUNNING':speedrunState.finished?'🏆 FINISHED':'⚪ READY'}</strong><br>Category: <b>${def.label}</b><br>Time: <b>${formatSpeedrun(speedrunMs())}</b><br>${def.id==='rankP'?`Ranked completion: ${p.counted}/${p.total} (${p.pct}%)<br>`:''}Goal: <b>${def.goal}</b><br>Reward: <b>${def.reward}</b>`;
+          if($('speedrunStop'))$('speedrunStop').disabled=!speedrunState.active;
+                  updateSpeedrunSplits();
+          if(st&&speedrunState.active)st.insertAdjacentHTML('beforeend',speedrunSplitHTML());
+}
+        function grantSpeedrunReward(def,ms){
+          let existing=elements.find(e=>e.name===def.reward);
+          if(existing){
+            const clears=Math.max(1,Number(existing.speedrunClears||existing.isSpeedrun||1))+1;
+            const oldBest=Number(existing.speedrunBestTime||existing.speedrunTime||Infinity);
+            const best=Math.min(oldBest,ms);
+            existing.isSpeedrun=clears;
+            existing.isSpeedrunReward=true;
+            existing.speedrunClears=clears;
+            existing.speedrunBestTime=best;
+            existing.speedrunTime=best;
+            existing.speedrunCategory=def.id;existing.speedrunSeason=def.seasonName||existing.speedrunSeason||'';
+            if(best===ms)existing.speedrunBestSplits=structuredClone(speedrunState.splits||{});existing.speedrunMedal=speedrunMedal(def.id,best);
+            existing.description=`BEST RECORD · ${formatSpeedrun(best)} · ${clears} CLEARS`;
+          }else{
+            existing={name:def.reward,emoji:def.emoji,
+              description:`BEST RECORD · ${formatSpeedrun(ms)} · 1 CLEAR`,
+              isSpeedrun:1,isSpeedrunReward:true,speedrunClears:1,
+              speedrunCategory:def.id,speedrunSeason:def.seasonName||'',speedrunBestTime:ms,speedrunTime:ms,speedrunBestSplits:structuredClone(speedrunState.splits||{}),speedrunMedal:speedrunMedal(def.id,ms),
+              excludeFromRank:true,discoveredAt:Date.now()};
+            elements.push(existing);
+          }
+          save();renderEls();updateCount();
+          return existing;
+        }
+        function finishSpeedrun(def){
+          if(!speedrunState.active)return;
+          speedrunState.active=false;speedrunState.finished=true;speedrunState.end=Date.now();
+          const ms=speedrunMs(),summary={...(speedrunState.runStats||{}),time:ms,splits:structuredClone(speedrunState.splits||{}),medal:speedrunMedal(def.id,ms)},carry=speedrunCarrySnapshot();saveSpeedrun();const reward=grantSpeedrunReward(def,ms),rewardCopy=structuredClone(reward);
+          transferSpeedrunProgressToMain(carry,rewardCopy);renderSpeedrun();
+          const best=Number(rewardCopy.speedrunBestTime||ms),clears=Number(rewardCopy.speedrunClears||rewardCopy.isSpeedrun||1);
+          notify('SPEEDRUN COMPLETE!',`${def.label} · Run ${formatSpeedrun(ms)} · BEST ${formatSpeedrun(best)} · ×${clears}`,def.emoji,10000);
+          setTimeout(()=>showRunSummary(summary),450);
+        }
+        function enterSpeedrunSave(){
+          // Main save is already durable under fc_*; Speedrun gets a completely separate namespace.
+          window.speedrunSaveMode=true;_setItem('fc_speedrun_active','1');
+          elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();fractionalCoins=0;
+          // Mastery is run-local here: the main account's permanent Mastery progress is untouched.
+          masteryState={stats:{discoveries:0,everything:0,prestiges:0,bosses:0,modifiedBest:0,seasonsComplete:0,bossMasteries:0},completed:{}};
+          saveMasterySpeedrun();
+          resetDZs();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();
+          if($('viewRankBtn'))$('viewRankBtn').classList.add('hidden');
+          save();
+        }
+        function saveMasterySpeedrun(){try{localStorage.setItem('cm_objective_mastery_speedrun_v1',JSON.stringify(masteryState));}catch(e){}}
+        function loadMasterySpeedrun(){try{const raw=localStorage.getItem('cm_objective_mastery_speedrun_v1');if(raw)masteryState=JSON.parse(raw);}catch(e){}}
+        function speedrunCarrySnapshot(){
+          const runEls=elements.map(e=>structuredClone(e));
+          const runGs=structuredClone(gs);
+          const runCombos=combos.map(c=>structuredClone(c));
+          const runMastery=structuredClone(masteryState);
+          return{elements:runEls,gs:runGs,combos:runCombos,mastery:runMastery};
+        }
+        function restoreMainAfterSpeedrun(){
+          window.speedrunSaveMode=false;
+          try{localStorage.removeItem('fc_speedrun_active');}catch(e){}
+          bossMode=false;loadNamedSave(false,false);fractionalCoins=0;
+          masteryState={stats:{discoveries:0,everything:0,prestiges:0,bosses:0,modifiedBest:0,seasonsComplete:0,bossMasteries:0},completed:{}};
+          try{masteryState={...masteryState,...JSON.parse(localStorage.getItem(CM_MASTERY_KEY)||'{}')};masteryState.stats={discoveries:0,everything:0,prestiges:0,bosses:0,modifiedBest:0,seasonsComplete:0,bossMasteries:0,...masteryState.stats};masteryState.completed=masteryState.completed||{}}catch(e){}
+        }
+        function transferSpeedrunProgressToMain(carry,reward){
+          restoreMainAfterSpeedrun();
+          const unlocked=[];
+          let unlockedEnding=false;
+          if(carry){
+            // Boss-style discovery carry: every genuinely new challenge discovery enters the main collection.
+            for(const el of carry.elements||[]){
+              if(!el?.name||el.isSpeedrun)continue;
+              if(elements.some(x=>String(x?.name||'').toLowerCase()===String(el.name).toLowerCase()))continue;
+              const copy=structuredClone(el);
+              elements.push(copy);unlocked.push(copy.name);
+              if(copy.name==='Shop')gs.shopUnlocked=true;
+              if(copy.name==='Star Forge')gs.sfUnlocked=true;
+              if(copy.isEndGameTrigger||copy.name==='The End Game')unlockedEnding=true;
+            }
+            // Preserve progression unlocks earned in the challenge, like Boss discovery carry.
+            if(carry.gs?.shopUnlocked||unlocked.some(n=>n==='Shop'))gs.shopUnlocked=true;
+            if(carry.gs?.sfUnlocked||unlocked.some(n=>n==='Star Forge'))gs.sfUnlocked=true;
+            if(carry.gs?.sfUpgraded)gs.sfUpgraded=true;
+
+            // Carry discovered recipes whose result now exists on the main account.
+            const names=new Set(elements.map(e=>String(e.name).toLowerCase()));
+            for(const c of carry.combos||[]){
+              if(!c?.r||!names.has(String(c.r).toLowerCase()))continue;
+              const duplicate=combos.some(x=>String(x.e1).toLowerCase()===String(c.e1).toLowerCase()&&String(x.e2).toLowerCase()===String(c.e2).toLowerCase()&&String(x.r).toLowerCase()===String(c.r).toLowerCase());
+              if(!duplicate)combos.push(structuredClone(c));
+            }
+
+            // Objective Mastery earned in Speedrun is real progress too.
+            const ms=carry.mastery;
+            if(ms){
+              for(const [k,v] of Object.entries(ms.stats||{}))masteryState.stats[k]=Math.max(Number(masteryState.stats[k]||0),Number(v||0));
+              for(const [id,when] of Object.entries(ms.completed||{}))if(!masteryState.completed[id])masteryState.completed[id]=when;
+              saveMastery();
+            }
+          }
+
+          // Speedrun relic/PB always transfers.
+          if(reward){
+            let existing=elements.find(e=>e.name===reward.name);
+            if(existing&&existing.isSpeedrun){
+              existing.isSpeedrun=reward.isSpeedrun;existing.isSpeedrunReward=true;existing.speedrunClears=reward.speedrunClears;
+              existing.speedrunBestTime=reward.speedrunBestTime;existing.speedrunTime=reward.speedrunTime;
+              existing.speedrunCategory=reward.speedrunCategory;existing.speedrunSeason=reward.speedrunSeason||'';
+              existing.description=reward.description;
+            }else elements.push(structuredClone(reward));
+          }
+          save();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateProgressionUI();
+          if(gs.hasShownEnding&&$('viewRankBtn'))$('viewRankBtn').classList.remove('hidden');
+          if(unlocked.length)notify('SPEEDRUN DISCOVERIES SAVED',`${unlocked.length} new element${unlocked.length===1?'':'s'} carried into your normal collection.`,'📦',5600);
+          if((carry?.gs?.sfUnlocked||unlocked.includes('Star Forge'))&&gs.sfUnlocked)notify('STAR FORGE SAVED','Star Forge progress from the Speedrun is now available on your main save.','🌟',4300);
+          if(unlockedEnding)setTimeout(showEnding,1100);
+        }
+        function leaveSpeedrunSave(carryProgress=true){
+          const carry=carryProgress?speedrunCarrySnapshot():null;
+          transferSpeedrunProgressToMain(carry,null);
+        }
+
+        function startSpeedrun(){
+          if(speedrunState.active)return;
+          const selected=$('speedrunCategory')?.value||'rankP',def=speedrunCategoryDef(selected);
+          if(selected==='season100'&&!def.seasonId){notify('No active season','Seasonal 100/100 is disabled until a seasonal event is active.','🔒',3500);return;}
+          if(!confirm(`Start a fresh ${def.label} speedrun? This resets normal run progress before the timer begins.`))return;
+          try{enterSpeedrunSave();}
+          catch(e){console.error('Speedrun isolated-save start failed',e);window.speedrunSaveMode=false;try{localStorage.removeItem('fc_speedrun_active');}catch(_){}loadNamedSave(false,false);return;}
+          speedrunState={active:true,finished:false,start:Date.now(),end:0,category:selected,seasonId:def.seasonId||'',seasonName:def.seasonName||'',
+            masteryBaseline:0,splits:{},runStats:{crafts:0,discoveries:0,invalid:0}};
+          saveSpeedrun();save();renderSpeedrun();closeModal('speedrunModal');
+          notify('Speedrun started',`${def.label}: ${def.goal}`,'⏱️',3500);
+        }
+        function stopSpeedrun(){
+          if(!speedrunState.active)return;
+          speedrunState.active=false;speedrunState.finished=false;speedrunState.end=Date.now();
+          saveSpeedrun();if(window.speedrunSaveMode)leaveSpeedrunSave(true);renderSpeedrun();notify('Speedrun stopped','Returned to your main save. New discoveries and progression were kept.','⏹️',3200);
+        }
+        function checkSpeedrunFinish(){
+          if(!speedrunState.active)return;
+          if(speedrunState.category==='rankP'){
+            const p=speedrunRankProgress();
+            if(p.total>0&&p.counted>=p.total){finishSpeedrun(speedrunCategoryDef('rankP'));setTimeout(()=>showEnding(),250);}
+            return;
+          }
+          if(speedrunState.category==='season100'){
+            const ev=SEASONAL_EVENTS.find(x=>x.id===speedrunState.seasonId);
+            if(!ev)return;
+            const got=elements.filter(e=>isSeasonalElement(e)&&(seasonalEventFromElement(e)||{}).id===ev.id&&!e.isChristmasExclusive&&!e.isNewYearReward).length;
+            if(got>=100)finishSpeedrun({id:'season100',label:`100/100 Seasonal — ${ev.name}`,goal:`Complete ${ev.name} 100/100`,reward:`SPEEDRUN ${ev.name} 100/100`,emoji:ev.icon,seasonId:ev.id,seasonName:ev.name});
+          }
+        }
+        function checkFirstPrestigeSpeedrun(beforeTimes,afterTimes){
+          if(!speedrunState.active||speedrunState.category!=='firstPrestige')return;
+          if(beforeTimes<1&&afterTimes>=1)finishSpeedrun(speedrunCategoryDef('firstPrestige'));
+        }
+        setInterval(()=>{if(speedrunState.active)renderSpeedrun()},47);
+        setTimeout(renderSpeedrun,0);
 
         // ─── ENDING / RANK ───
         function showEnding(){
@@ -7787,7 +8295,29 @@ loadMilestones();
         $('milestonesBtn').addEventListener('click',()=>{renderMilestones();openModal('milestonesModal');});
         $('milestoneList').addEventListener('click',e=>{const b=e.target.closest('[data-milestone]');if(b)claimMilestone(b.dataset.milestone);});
 
-        $('masteryBtn').addEventListener('click',()=>openModal('masteryModal'));
+        function renderTrophyRoom(){
+          const trophyEls=elements.filter(e=>e.isSpeedrun||e.isBossDefeat||e.isBossMasteryTrophy||e.isPrestige||e.isMasteryExclusive||e.isSeasonalCompletion);
+          const speed=trophyEls.filter(e=>e.isSpeedrun).length,boss=trophyEls.filter(e=>e.isBossDefeat||e.isBossMasteryTrophy).length,master=trophyEls.filter(e=>e.isMasteryExclusive).length;
+          $('trophyRoomStats').innerHTML=`<div><strong>${trophyEls.length}</strong><small>TROPHIES</small></div><div><strong>${speed}</strong><small>SPEEDRUN</small></div><div><strong>${boss}</strong><small>BOSS</small></div><div><strong>${master}</strong><small>MASTERY</small></div>`;
+          const g=$('trophyRoomGrid');g.replaceChildren();
+          if(!trophyEls.length){g.innerHTML='<p class="text-xs" style="color:var(--text-secondary)">No trophies yet. Go cause problems.</p>';return;}
+          trophyEls.forEach(e=>{const c=document.createElement('div');c.className='trophy-card '+(e.isSpeedrun?'speed':e.isMasteryExclusive?'master':(e.isBossDefeat||e.isBossMasteryTrophy)?'boss':'');c.innerHTML=`<strong>${e.emoji||'🏆'} ${e.name}</strong><small>${e.description||'Permanent trophy'}${e.speedrunMedal?` · ${e.speedrunMedal}`:''}</small>`;g.appendChild(c);});
+        }
+        $('trophyRoomBtn').addEventListener('click',()=>{renderTrophyRoom();openModal('trophyRoomModal');});
+        $('masteryBtn').addEventListener('click',()=>{renderMastery();openModal('masteryModal');});
+        $('speedrunBtn').addEventListener('click',()=>{renderSpeedrun();openModal('speedrunModal');});
+        $('speedrunStart').addEventListener('click',startSpeedrun);
+        $('speedrunStop').addEventListener('click',stopSpeedrun);
+        $('speedrunCategory').addEventListener('change',e=>{if(!speedrunState.active){speedrunState.category=e.target.value;speedrunState.finished=false;saveSpeedrun();renderSpeedrun();}});
+
+        ['importBtn','exportBtn'].forEach(id=>{
+          const el=$(id);
+          if(el)el.addEventListener('click',ev=>{
+            if(!speedrunState.active)return;
+            ev.preventDefault();ev.stopImmediatePropagation();
+            notify('Disabled in Speedrun Mode','Import and Export are locked while the timer is running.','🔒',3000);
+          },true);
+        });
         $('settingsBtn').addEventListener('click',openSettings);
         $('themeModeSetting').addEventListener('change',e=>{
             if(window.__cmSetThemeMode)window.__cmSetThemeMode(e.target.value);
@@ -8121,6 +8651,10 @@ loadMilestones();
         applySiteFooter();
         applyAprilFoolsMode();
         load();
+        if(window.speedrunSaveMode)loadMasterySpeedrun();
+        // Older saves predate Mastery tracking: seed only progress we can prove from current permanent/save state.
+        masteryState.stats.discoveries=Math.max(masteryState.stats.discoveries,elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isSpeedrun&&!e.isAprilFools&&!e.isKey&&!e.isPrestige).length);
+        syncMasteryStats();
         maybeShowNewPlayerTutorial();
         syncSeasonalEvents(true);
         loadSortPref();
@@ -8175,16 +8709,47 @@ loadMilestones();
 </div>
 
 
+
+    <!-- Speedrun Modal -->
+    <div id="speedrunModal" class="modal-overlay"><div class="modal-box" style="max-width:590px">
+      <button class="modal-close" data-close="speedrunModal">&times;</button>
+      <h2 class="font-display text-xl mb-1">⏱️ Speedrun Mode</h2>
+      <p class="text-xs mb-3" style="color:var(--text-secondary)">Built-in timer with a Boss-style challenge save. New elements and progression you earn are carried back to your main save.</p>
+      <label class="text-xs font-semibold" for="speedrunCategory">Category</label>
+      <select id="speedrunCategory" class="w-full px-3 py-2 rounded-xl mb-3" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary)">
+        <option value="rankP">Rank P — 100% Ranked</option>
+        <option value="firstPrestige">1st Prestige</option>
+        <option value="firstMastery">1st Mastery</option>
+        <option value="season100">100/100 Seasonal</option>
+      </select>
+      <div id="speedrunStatus" class="milestone-card"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button id="speedrunStart" class="milestone-claim">🏁 Start Fresh Run</button>
+        <button id="speedrunStop" class="milestone-claim" style="background:#dc2626">Stop Run</button>
+      </div>
+      <p class="text-xs mt-3" style="color:var(--text-secondary)">Starting enters a separate fresh Speedrun save, like a Boss fight. When you return, new discoveries and progression unlocks are carried into your main save.</p>
+    </div></div>
+    <div id="speedrunHud" hidden><span class="speedrun-time">00:00.000</span><span class="speedrun-goal">→ Rank P</span></div>
+    <div id="trophyRoomModal" class="modal-overlay"><div class="modal-box trophy-room-box" style="max-width:820px">
+      <button class="modal-close" data-close="trophyRoomModal">&times;</button>
+      <div class="trophy-room-head"><span>CRAFT MADNESS ARCHIVE</span><h2>🏛️ TROPHY ROOM</h2><p>Prestige, Boss, Mastery, Seasonal, and Speedrun relics — all the permanent flex in one place.</p></div>
+      <div id="trophyRoomStats" class="trophy-room-stats"></div><div id="trophyRoomGrid" class="trophy-room-grid"></div>
+    </div></div>
+    <div id="runSummaryModal" class="modal-overlay"><div class="modal-box" style="max-width:700px">
+      <button class="modal-close" data-close="runSummaryModal">&times;</button>
+      <h2 class="font-display text-xl mb-2">📊 Run Summary</h2><div id="runSummaryBody"></div>
+    </div></div>
     <!-- Mastery Modal -->
     <div id="masteryModal" class="modal-overlay">
-      <div class="modal-box" style="max-width:620px">
+      <div class="modal-box mastery-objective-box" style="max-width:760px">
         <button class="modal-close" data-close="masteryModal">&times;</button>
-        <h2 class="font-display text-xl mb-2">🌟 Mastery</h2>
-        <p class="text-sm" style="color:var(--text-secondary)">Mastery is coming next. This will be the permanent progression layer beyond Prestige.</p>
-        <div class="milestone-card" style="margin-top:14px">
-          <strong>Mastery System</strong>
-          <div class="milestone-reward">The button is now in the main progression area beside Prestige and ready for the full system.</div>
+        <div class="mastery-objective-head">
+          <span>✦ PERMANENT CHALLENGES ✦</span>
+          <h2>🌟 MASTERY</h2>
+          <p>Huge long-term feats. No Mastery reset — progress and rewards survive Prestige.</p>
         </div>
+        <div id="masteryOverview" class="mastery-overview"></div>
+        <div id="masteryObjectiveGrid" class="mastery-objective-grid"></div>
       </div>
     </div>
 </body>
