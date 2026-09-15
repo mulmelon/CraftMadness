@@ -2151,6 +2151,29 @@ html[data-special-season] body{background:transparent!important}
 #cmViewportPortal{z-index:2147483000!important}
 @supports not (height:100dvh){#cmSeasonWallpaper{height:100vh!important}}
 
+
+/* ─── MODS / MOD MAKER ─── */
+.mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mod-field{display:flex;flex-direction:column;gap:5px}
+.mod-field label{font-size:.72rem;font-weight:700;color:var(--text-secondary)}
+.mod-input,.mod-textarea,.mod-select{
+    width:100%;border:1px solid var(--border-color);border-radius:10px;padding:9px 10px;
+    background:var(--bg-secondary);color:var(--text-primary);font-size:.78rem
+}
+.mod-textarea{min-height:70px;resize:vertical}
+.mod-panel{border:1px solid var(--border-color);background:var(--bg-secondary);border-radius:13px;padding:12px;margin-top:12px}
+.mod-panel h3{font-weight:800;font-size:.88rem;margin-bottom:8px}
+.mod-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border:1px solid var(--border-color);border-radius:10px;margin-top:6px}
+.mod-row-main{min-width:0}.mod-row-main strong{display:block;font-size:.78rem}.mod-row-main small{font-size:.65rem;color:var(--text-secondary);overflow-wrap:anywhere}
+.mod-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.mod-btn{border:1px solid var(--border-color);background:var(--bg-tertiary);color:var(--text-primary);border-radius:9px;padding:7px 10px;font-size:.72rem;font-weight:700}
+.mod-btn:hover{filter:brightness(1.08)}
+.mod-btn-danger{color:#ef4444}
+.mod-note{font-size:.68rem;line-height:1.5;color:var(--text-secondary);margin-top:8px}
+.mod-status{font-size:.7rem;min-height:1.2em;margin-top:8px;color:var(--text-secondary)}
+.mod-badge{display:inline-flex;padding:1px 5px;border-radius:999px;font-size:.52rem;font-weight:900;background:#7c3aed;color:white;margin-left:4px;vertical-align:middle}
+@media(max-width:620px){.mod-grid{grid-template-columns:1fr}}
+
 </style>
 
 </head>
@@ -2486,7 +2509,70 @@ html[data-special-season] body{background:transparent!important}
             </select>
         </div>
 
+<button id="modsBtn" class="settings-wide-btn">🧩 Mods</button>
+<button id="modMakerBtn" class="settings-wide-btn">🛠️ Mod Maker</button>
 <button id="creditsBtn" class="settings-wide-btn">🎬 Credits</button>
+    </div></div>
+
+
+    <!-- Mods Modal -->
+    <div id="modsModal" class="modal-overlay"><div class="modal-box" style="max-width:620px">
+        <button class="modal-close" data-close="modsModal">&times;</button>
+        <h2 class="font-display text-xl mb-1">🧩 Mods</h2>
+        <p class="text-xs mb-3" style="color:var(--text-secondary)">Installed local Craft Madness mods. Modded discoveries never count toward rank or Prestige requirements.</p>
+        <div id="modsList"></div>
+        <div class="mod-panel">
+            <h3>Import mod</h3>
+            <textarea id="modImportText" class="mod-textarea" placeholder="Paste a Craft Madness mod code (JSON) here…"></textarea>
+            <div class="mod-actions">
+                <button id="modImportBtn" class="mod-btn">📥 Import & Install</button>
+                <button id="modOpenMakerBtn" class="mod-btn">🛠️ Open Mod Maker</button>
+            </div>
+            <div id="modsStatus" class="mod-status"></div>
+        </div>
+    </div></div>
+
+    <!-- Mod Maker Modal -->
+    <div id="modMakerModal" class="modal-overlay"><div class="modal-box" style="max-width:720px">
+        <button class="modal-close" data-close="modMakerModal">&times;</button>
+        <h2 class="font-display text-xl mb-1">🛠️ Mod Maker</h2>
+        <p class="text-xs mb-3" style="color:var(--text-secondary)">Build a normal-element recipe pack without editing the game code.</p>
+
+        <div class="mod-grid">
+            <div class="mod-field"><label>Mod name</label><input id="modNameInput" class="mod-input" maxlength="48" placeholder="My Cool Mod"></div>
+            <div class="mod-field"><label>Author</label><input id="modAuthorInput" class="mod-input" maxlength="48" placeholder="Your name"></div>
+        </div>
+
+        <div class="mod-panel">
+            <h3>➕ Add element</h3>
+            <div class="mod-grid">
+                <div class="mod-field"><label>Element name</label><input id="modElName" class="mod-input" maxlength="60" placeholder="Crystal Apple"></div>
+                <div class="mod-field"><label>Emoji</label><input id="modElEmoji" class="mod-input" maxlength="16" placeholder="🍎"></div>
+            </div>
+            <div class="mod-field" style="margin-top:8px"><label>Description</label><input id="modElDesc" class="mod-input" maxlength="180" placeholder="A strange fruit made of crystal."></div>
+            <button id="modAddElementBtn" class="mod-btn" style="margin-top:9px">Add Element</button>
+            <div id="modElementList"></div>
+        </div>
+
+        <div class="mod-panel">
+            <h3>🔗 Add recipe</h3>
+            <div class="mod-grid">
+                <div class="mod-field"><label>Ingredient 1</label><input id="modRecipeA" class="mod-input" maxlength="60" placeholder="Water"></div>
+                <div class="mod-field"><label>Ingredient 2</label><input id="modRecipeB" class="mod-input" maxlength="60" placeholder="Crystal Apple"></div>
+            </div>
+            <div class="mod-field" style="margin-top:8px"><label>Result (must be an element in this mod)</label><input id="modRecipeResult" class="mod-input" maxlength="60" placeholder="Crystal Juice"></div>
+            <button id="modAddRecipeBtn" class="mod-btn" style="margin-top:9px">Add Recipe</button>
+            <div id="modRecipeList"></div>
+        </div>
+
+        <p class="mod-note">🔒 Mod elements are always normal, rank-excluded elements. Mods cannot create or imitate <strong>Exclusive</strong>, <strong>Seasonal</strong>, <strong>April Fools</strong>, or <strong>Everything</strong> elements. Protected existing names are blocked too.</p>
+        <div class="mod-actions">
+            <button id="modInstallDraftBtn" class="mod-btn">💾 Install Mod</button>
+            <button id="modExportDraftBtn" class="mod-btn">📤 Export Code</button>
+            <button id="modClearDraftBtn" class="mod-btn mod-btn-danger">Clear Draft</button>
+        </div>
+        <textarea id="modExportText" class="mod-textarea" readonly placeholder="Exported mod code appears here…" style="margin-top:10px"></textarea>
+        <div id="modMakerStatus" class="mod-status"></div>
     </div></div>
 
     <!-- Credits Modal -->
@@ -3095,6 +3181,94 @@ html[data-special-season] body{background:transparent!important}
             blank: { name:'Blank', emoji:'💭', color:'bg-gray-300', description:'A void between elements', isBlank:true },
             validCombination: { name:'Valid Combination', emoji:'✅', color:'bg-teal-600', description:'Opposite of invalid — think outside the box', isSecret:true, isValidCombination:true, excludeFromRank:true }
         };
+
+
+        // ─── LOCAL MOD SYSTEM ───
+        const CM_MOD_STORAGE='cm_installed_mods_v1';
+        let installedMods=[];
+        let modDraft={name:'',author:'',elements:[],recipes:[]};
+
+        function modPairKey(a,b){return [String(a).trim().toLowerCase(),String(b).trim().toLowerCase()].sort().join('|');}
+        function readInstalledMods(){
+            try{const v=JSON.parse(localStorage.getItem(CM_MOD_STORAGE)||'[]');installedMods=Array.isArray(v)?v:[];}catch(e){installedMods=[];}
+        }
+        function writeInstalledMods(){try{localStorage.setItem(CM_MOD_STORAGE,JSON.stringify(installedMods));}catch(e){}}
+        function protectedModFlags(o){
+            return !!(o&&(o.isExclusive||o.isSeasonal||o.isAprilFools||o.isEverything));
+        }
+        function protectedElementNames(){
+            const names=new Set(['everything']);
+            try{
+                elements.forEach(e=>{if(e&&(e.isExclusive||e.isSeasonal||e.isAprilFools||e.isEverything))names.add(String(e.name).trim().toLowerCase());});
+            }catch(e){}
+            try{
+                Object.values(recipes).forEach(e=>{if(e&&(e.isExclusive||e.isSeasonal||e.isAprilFools||e.isEverything))names.add(String(e.name).trim().toLowerCase());});
+            }catch(e){}
+            return names;
+        }
+        function normalGameNames(){
+            const names=new Set();
+            try{STARTERS.forEach(e=>names.add(String(e.name).trim().toLowerCase()));}catch(e){}
+            try{Object.values(recipes).forEach(e=>e?.name&&names.add(String(e.name).trim().toLowerCase()));}catch(e){}
+            try{Object.values(SPECIAL_ELEMENTS).forEach(e=>e?.name&&names.add(String(e.name).trim().toLowerCase()));}catch(e){}
+            return names;
+        }
+        function validateMod(raw){
+            if(!raw||typeof raw!=='object')throw new Error('Invalid mod data.');
+            const name=String(raw.name||'').trim().slice(0,48);
+            const author=String(raw.author||'').trim().slice(0,48);
+            if(!name)throw new Error('Mod name is required.');
+            if(!Array.isArray(raw.elements)||!Array.isArray(raw.recipes))throw new Error('Mod needs element and recipe lists.');
+            if(raw.elements.length>250||raw.recipes.length>500)throw new Error('Mod is too large.');
+            const protectedNames=protectedElementNames(), baseNames=normalGameNames(), localNames=new Set();
+            const cleanEls=raw.elements.map((e,i)=>{
+                if(!e||typeof e!=='object'||protectedModFlags(e))throw new Error('Protected element flags are not allowed.');
+                const n=String(e.name||'').trim().slice(0,60);
+                if(!n)throw new Error(`Element ${i+1} needs a name.`);
+                const low=n.toLowerCase();
+                if(protectedNames.has(low)||low==='everything')throw new Error(`"${n}" is protected and cannot be a mod element.`);
+                if(baseNames.has(low))throw new Error(`"${n}" already exists in Craft Madness.`);
+                if(localNames.has(low))throw new Error(`Duplicate mod element: "${n}".`);
+                localNames.add(low);
+                return{name:n,emoji:String(e.emoji||'🧩').trim().slice(0,16)||'🧩',description:String(e.description||'A modded element.').trim().slice(0,180)||'A modded element.'};
+            });
+            const exactName=new Map(cleanEls.map(e=>[e.name.toLowerCase(),e.name]));
+            const seenPairs=new Set();
+            const cleanRecipes=raw.recipes.map((r,i)=>{
+                if(!r||typeof r!=='object')throw new Error(`Recipe ${i+1} is invalid.`);
+                const a=String(r.a||'').trim().slice(0,60),b=String(r.b||'').trim().slice(0,60),res=String(r.result||'').trim().slice(0,60);
+                if(!a||!b||!res)throw new Error(`Recipe ${i+1} needs two ingredients and a result.`);
+                const resultName=exactName.get(res.toLowerCase());
+                if(!resultName)throw new Error(`Recipe result "${res}" must be an element created by this mod.`);
+                const pk=modPairKey(a,b);
+                if(seenPairs.has(pk))throw new Error(`Duplicate recipe: ${a} + ${b}.`);
+                seenPairs.add(pk);
+                return{a,b,result:resultName};
+            });
+            return{id:String(raw.id||('mod_'+Date.now()+'_'+Math.random().toString(36).slice(2,7))).slice(0,80),name,author,elements:cleanEls,recipes:cleanRecipes,enabled:raw.enabled!==false,version:1};
+        }
+        function modRecipeFor(a,b){
+            const key=modPairKey(a,b);
+            for(const mod of installedMods){
+                if(mod.enabled===false)continue;
+                const r=(mod.recipes||[]).find(x=>modPairKey(x.a,x.b)===key);
+                if(!r)continue;
+                const d=(mod.elements||[]).find(e=>String(e.name).toLowerCase()===String(r.result).toLowerCase());
+                if(d)return{...d,isModded:true,modId:mod.id,modName:mod.name,excludeFromRank:true,isRankExcluded:true};
+            }
+            return null;
+        }
+        function sanitizeLoadedModElements(){
+            if(!Array.isArray(elements))return;
+            elements=elements.filter(e=>!(e?.isModded&&protectedModFlags(e)));
+            elements.forEach(e=>{
+                if(e?.isModded){
+                    delete e.isExclusive;delete e.isSeasonal;delete e.isAprilFools;delete e.isEverything;
+                    e.excludeFromRank=true;e.isRankExcluded=true;
+                }
+            });
+        }
+        readInstalledMods();
 
         // ─── RECIPES ───
         const recipes = {
@@ -5248,7 +5422,7 @@ html[data-special-season] body{background:transparent!important}
             const pre=isBoss?'fc_boss_':'fc_';
             elements=[...STARTERS.map(e=>({...e}))];combos=[];gs=baseGameState();
             const e=_getItem(pre+'el'),c=_getItem(pre+'co'),st=_getItem(pre+'gs');
-            if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
+            if(e){elements=JSON.parse(e);sanitizeLoadedModElements();elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
             if(c)combos=JSON.parse(c);
             if(st){const l=JSON.parse(st);gs={...gs,...l};}
             normalizeKeyStacks();
@@ -6452,7 +6626,7 @@ html[data-special-season] body{background:transparent!important}
                 return{seasonalBlock:true,eventName:ev?ev.name:'this seasonal event',eventIcon:ev?ev.icon:'🎉'};
             }
             const key1=n1+'+'+n2, key2=n2+'+'+n1;
-            let result=seasonalRecipeFor(n1,n2)||recipes[key1]||recipes[key2];
+            let result=seasonalRecipeFor(n1,n2)||modRecipeFor(n1,n2)||recipes[key1]||recipes[key2];
             if(!result){
                 if(OldAllCreate)return generateAprilFoolsElement(n1,n2);
                 return{invalid:true,name:'Invalid Combination',emoji:'❌',description:'These elements cannot be combined.',color:'bg-gray-500'};
@@ -7336,6 +7510,80 @@ html[data-special-season] body{background:transparent!important}
         },1000);
         // ─── CHANGELOG ───
         $('changelogBtn').addEventListener('click',()=>openModal('changelogModal'));
+
+
+        function escMod(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+        function modStatus(id,msg,bad=false){const el=$(id);if(el){el.textContent=msg;el.style.color=bad?'#ef4444':'var(--text-secondary)';}}
+        function renderMods(){
+            const host=$('modsList');if(!host)return;
+            if(!installedMods.length){host.innerHTML='<div class="mod-panel"><small style="color:var(--text-secondary)">No mods installed yet.</small></div>';return;}
+            host.innerHTML=installedMods.map((m,i)=>`<div class="mod-row">
+                <div class="mod-row-main"><strong>🧩 ${escMod(m.name)} ${m.enabled===false?'<span class="mod-badge">OFF</span>':'<span class="mod-badge">ON</span>'}</strong>
+                <small>${escMod(m.author||'Unknown author')} · ${(m.elements||[]).length} elements · ${(m.recipes||[]).length} recipes</small></div>
+                <div style="display:flex;gap:5px;flex-wrap:wrap">
+                    <button class="mod-btn" data-mod-toggle="${i}">${m.enabled===false?'Enable':'Disable'}</button>
+                    <button class="mod-btn" data-mod-export="${i}">Export</button>
+                    <button class="mod-btn mod-btn-danger" data-mod-delete="${i}">Delete</button>
+                </div></div>`).join('');
+        }
+        function renderModDraft(){
+            $('modNameInput').value=modDraft.name||'';$('modAuthorInput').value=modDraft.author||'';
+            $('modElementList').innerHTML=(modDraft.elements||[]).map((e,i)=>`<div class="mod-row"><div class="mod-row-main"><strong>${escMod(e.emoji)} ${escMod(e.name)}</strong><small>${escMod(e.description)}</small></div><button class="mod-btn mod-btn-danger" data-draft-el="${i}">Remove</button></div>`).join('')||'<div class="mod-note">No mod elements yet.</div>';
+            $('modRecipeList').innerHTML=(modDraft.recipes||[]).map((r,i)=>`<div class="mod-row"><div class="mod-row-main"><strong>${escMod(r.a)} + ${escMod(r.b)} → ${escMod(r.result)}</strong></div><button class="mod-btn mod-btn-danger" data-draft-recipe="${i}">Remove</button></div>`).join('')||'<div class="mod-note">No recipes yet.</div>';
+        }
+        function openMods(){renderMods();modStatus('modsStatus','');openModal('modsModal');}
+        function openModMaker(){renderModDraft();modStatus('modMakerStatus','');openModal('modMakerModal');}
+        function currentDraft(){return{name:$('modNameInput').value.trim(),author:$('modAuthorInput').value.trim(),elements:modDraft.elements||[],recipes:modDraft.recipes||[]};}
+        function installModObject(raw){
+            const clean=validateMod(raw);
+            const collision=installedMods.findIndex(m=>m.id===clean.id||String(m.name).toLowerCase()===clean.name.toLowerCase());
+            if(collision>=0)installedMods[collision]=clean;else installedMods.push(clean);
+            writeInstalledMods();renderMods();return clean;
+        }
+
+        $('modsBtn').addEventListener('click',openMods);
+        $('modMakerBtn').addEventListener('click',openModMaker);
+        $('modOpenMakerBtn').addEventListener('click',()=>{closeModal('modsModal');openModMaker();});
+
+        $('modAddElementBtn').addEventListener('click',()=>{
+            try{
+                modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();
+                const e={name:$('modElName').value.trim(),emoji:$('modElEmoji').value.trim()||'🧩',description:$('modElDesc').value.trim()||'A modded element.'};
+                const test={...currentDraft(),elements:[...(modDraft.elements||[]),e]};
+                validateMod({...test,recipes:[]});
+                modDraft.elements.push(e);$('modElName').value='';$('modElEmoji').value='';$('modElDesc').value='';
+                renderModDraft();modStatus('modMakerStatus',`Added ${e.name}.`);
+            }catch(err){modStatus('modMakerStatus',err.message,true);}
+        });
+        $('modAddRecipeBtn').addEventListener('click',()=>{
+            try{
+                modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();
+                const r={a:$('modRecipeA').value.trim(),b:$('modRecipeB').value.trim(),result:$('modRecipeResult').value.trim()};
+                validateMod({...currentDraft(),recipes:[...(modDraft.recipes||[]),r]});
+                modDraft.recipes.push(r);$('modRecipeA').value='';$('modRecipeB').value='';$('modRecipeResult').value='';
+                renderModDraft();modStatus('modMakerStatus',`Added recipe ${r.a} + ${r.b} → ${r.result}.`);
+            }catch(err){modStatus('modMakerStatus',err.message,true);}
+        });
+        $('modElementList').addEventListener('click',e=>{const b=e.target.closest('[data-draft-el]');if(!b)return;const i=Number(b.dataset.draftEl);const removed=modDraft.elements.splice(i,1)[0];modDraft.recipes=modDraft.recipes.filter(r=>String(r.result).toLowerCase()!==String(removed?.name).toLowerCase());renderModDraft();});
+        $('modRecipeList').addEventListener('click',e=>{const b=e.target.closest('[data-draft-recipe]');if(!b)return;modDraft.recipes.splice(Number(b.dataset.draftRecipe),1);renderModDraft();});
+        $('modInstallDraftBtn').addEventListener('click',()=>{
+            try{modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();const m=installModObject(currentDraft());modStatus('modMakerStatus',`Installed "${m.name}". Recipes work immediately.`,false);notify('Mod installed',`${m.name} · ${m.elements.length} elements · ${m.recipes.length} recipes`,'🧩');}
+            catch(err){modStatus('modMakerStatus',err.message,true);}
+        });
+        $('modExportDraftBtn').addEventListener('click',()=>{
+            try{modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();const m=validateMod(currentDraft());$('modExportText').value=JSON.stringify({...m,enabled:true},null,2);modStatus('modMakerStatus','Export code generated.');}
+            catch(err){modStatus('modMakerStatus',err.message,true);}
+        });
+        $('modClearDraftBtn').addEventListener('click',()=>{modDraft={name:'',author:'',elements:[],recipes:[]};$('modExportText').value='';renderModDraft();modStatus('modMakerStatus','Draft cleared.');});
+        $('modImportBtn').addEventListener('click',()=>{
+            try{const raw=JSON.parse($('modImportText').value);const m=installModObject(raw);$('modImportText').value='';modStatus('modsStatus',`Installed "${m.name}".`);notify('Mod installed',m.name,'🧩');}
+            catch(err){modStatus('modsStatus',err.message||'Invalid mod code.',true);}
+        });
+        $('modsList').addEventListener('click',e=>{
+            let b=e.target.closest('[data-mod-toggle]');if(b){const m=installedMods[Number(b.dataset.modToggle)];if(m){m.enabled=m.enabled===false;writeInstalledMods();renderMods();save();}return;}
+            b=e.target.closest('[data-mod-export]');if(b){const m=installedMods[Number(b.dataset.modExport)];if(m){$('modImportText').value=JSON.stringify(m,null,2);modStatus('modsStatus','Export code placed in the box below.');}return;}
+            b=e.target.closest('[data-mod-delete]');if(b){const i=Number(b.dataset.modDelete);const m=installedMods[i];if(!m)return;installedMods.splice(i,1);writeInstalledMods();renderMods();modStatus('modsStatus',`Deleted "${m.name}". Already-discovered mod elements stay in this save, but its recipes stop working.`);}
+        });
 
         $('settingsBtn').addEventListener('click',openSettings);
         $('themeModeSetting').addEventListener('change',e=>{
