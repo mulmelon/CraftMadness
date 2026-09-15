@@ -6,7 +6,14 @@
     <title>Craft Madness</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+        window.addEventListener('load',()=>{
+            armNewYearCountdown();
+            armChristmasCountdown();
+            setInterval(armNewYearCountdown,1000);
+            setInterval(armChristmasCountdown,1000);
+        });
+</script>
     <script disable-devtool-auto src='cdn.jsdelivr.net/npm/disable-devtool' ></script>
     <script>
         tailwind.config = {
@@ -1905,6 +1912,103 @@ html.card-hover-off .sculpted-card:hover{
     border-radius:8px;background:var(--ui-button,var(--bg-card-hover));color:var(--text-primary);
     cursor:pointer;font-size:.75rem;font-weight:700;
 }
+
+/* Theme contrast repair: GUI/system text follows the active site theme. */
+.modal-box,
+.modal-box p,
+.modal-box li,
+.modal-box label,
+.modal-box summary,
+.modal-box details,
+.modal-box td,
+.modal-box th,
+.modal-box small,
+.modal-box .text-sm:not([style*="color"]),
+.modal-box .text-xs:not([style*="color"]),
+#notifContainer .notif,
+#notifContainer .notif strong,
+#battleLog,
+#battleLog p,
+#craftGuide,
+#craftHints,
+#developerSeasonStatus{
+    color:var(--text-primary)!important;
+}
+.modal-box [style*="color:var(--text-secondary)"],
+#notifContainer .notif .text-xs,
+.account-note,#accountStatus,
+.fusion-rejected p,.fusion-rejected small{
+    color:var(--text-secondary)!important;
+}
+select,option,input,textarea,
+.settings-select,
+#developerSeasonSelect{
+    background:var(--bg-card)!important;
+    color:var(--text-primary)!important;
+    border-color:var(--ui-edge,var(--border))!important;
+}
+::placeholder{color:var(--text-secondary)!important;opacity:.8}
+.dark select,.dark option{color-scheme:dark}
+html:not(.dark) select,html:not(.dark) option{color-scheme:light}
+
+/* April Fools intentionally keeps its ridiculous authored colors. */
+body.april-fools-mode .notif{color:#111!important}
+body.april-fools-mode .modal-box p{color:#111!important}
+
+#seasonalUpcoming[hidden]{display:none!important}
+.seasonal-upcoming-card{
+    display:flex;align-items:center;gap:10px;width:100%;margin:10px 0 4px;padding:10px 12px;
+    border:1px solid var(--border);border-radius:12px;background:var(--bg-card);
+    color:var(--text-primary);text-align:left;
+}
+.seasonal-upcoming-icon{font-size:1.7rem;line-height:1}
+
+/* ── New Year 60-second celebration ── */
+.ny-countdown{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;overflow:hidden;
+background:
+ radial-gradient(circle at 50% 40%,rgba(255,215,80,.18),transparent 28%),
+ radial-gradient(circle at 20% 80%,rgba(120,110,255,.18),transparent 32%),
+ linear-gradient(145deg,#050712,#11152b 58%,#080914);
+color:#fff;font-family:inherit}
+.ny-countdown[hidden]{display:none!important}
+.ny-countdown:before{content:"";position:absolute;inset:-30%;background:conic-gradient(from 0deg,transparent,rgba(255,220,120,.10),transparent 28%,rgba(145,120,255,.10),transparent 60%);
+animation:nySpin 12s linear infinite}
+.ny-countdown-card{position:relative;width:min(90vw,680px);padding:38px 24px 28px;text-align:center;border:1px solid rgba(255,230,150,.42);
+border-radius:28px;background:rgba(8,10,25,.68);box-shadow:0 0 80px rgba(255,210,90,.18),inset 0 0 35px rgba(255,255,255,.04);backdrop-filter:blur(16px);
+animation:nyCardFloat 3s ease-in-out infinite}
+.ny-kicker{font-size:.72rem;font-weight:900;letter-spacing:.42em;opacity:.72}
+.ny-title{font-size:clamp(1.2rem,5vw,2.5rem);font-weight:1000;letter-spacing:.13em;margin-top:10px;text-shadow:0 0 25px rgba(255,220,120,.4)}
+.ny-number{font-size:clamp(7rem,30vw,14rem);font-weight:1000;line-height:.9;margin:18px 0 12px;
+background:linear-gradient(180deg,#fff9d9,#ffd76a 55%,#ff9f43);-webkit-background-clip:text;background-clip:text;color:transparent;
+filter:drop-shadow(0 0 22px rgba(255,199,70,.45));animation:nyPulse 1s cubic-bezier(.2,.8,.2,1) infinite}
+.ny-number.ny-final{animation:nyFinalPulse .5s ease-in-out infinite}
+.ny-sub{font-size:1rem;font-weight:800;opacity:.82}
+.ny-reward-preview{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:22px}
+.ny-reward-preview span{padding:7px 10px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.07);font-size:.72rem;font-weight:800}
+.ny-fireworks i{position:absolute;width:8px;height:8px;border-radius:50%;left:var(--x);top:var(--y);box-shadow:
+0 -52px 0 #ffd76a,37px -37px 0 #fff,52px 0 0 #ff8f70,37px 37px 0 #9ad7ff,0 52px 0 #fff,-37px 37px 0 #d6a4ff,-52px 0 0 #ffd76a,-37px -37px 0 #fff;
+animation:nyBurst 2.1s ease-out infinite;animation-delay:var(--d)}
+.ny-fireworks i:nth-child(1){--x:14%;--y:22%;--d:0s}.ny-fireworks i:nth-child(2){--x:82%;--y:20%;--d:.6s}
+.ny-fireworks i:nth-child(3){--x:22%;--y:72%;--d:1.2s}.ny-fireworks i:nth-child(4){--x:78%;--y:72%;--d:1.7s}
+.ny-fireworks i:nth-child(5){--x:48%;--y:14%;--d:2.2s}.ny-fireworks i:nth-child(6){--x:52%;--y:84%;--d:2.7s}
+.ny-countdown.ny-midnight .ny-countdown-card{animation:nyMidnight .8s ease both}
+@keyframes nySpin{to{transform:rotate(360deg)}}@keyframes nyCardFloat{50%{transform:translateY(-8px) scale(1.008)}}
+@keyframes nyPulse{0%,100%{transform:scale(.92);opacity:.82}35%{transform:scale(1.04);opacity:1}}
+@keyframes nyFinalPulse{50%{transform:scale(1.11);filter:drop-shadow(0 0 45px rgba(255,215,80,.9))}}
+@keyframes nyBurst{0%{transform:scale(.05);opacity:0}18%{opacity:1}75%{transform:scale(1.18);opacity:.8}100%{transform:scale(1.35);opacity:0}}
+@keyframes nyMidnight{0%{transform:scale(.8);filter:brightness(1)}50%{transform:scale(1.08);filter:brightness(2)}100%{transform:scale(1);filter:brightness(1)}}
+html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-countdown *{animation-duration:.001ms!important;animation-iteration-count:1!important}}
+
+.xmas-countdown{position:fixed;inset:0;z-index:2147482999;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 28%,rgba(255,245,210,.16),transparent 27%),linear-gradient(145deg,#06160f,#0d2b1d 48%,#321016);color:#fff}
+.xmas-countdown[hidden]{display:none!important}.xmas-countdown:before{content:"";position:absolute;inset:-30%;background:conic-gradient(from 20deg,transparent,rgba(255,255,255,.08),transparent 25%,rgba(255,215,120,.12),transparent 55%);animation:xmasSpin 14s linear infinite}
+.xmas-countdown-card{position:relative;width:min(90vw,680px);padding:38px 24px 28px;text-align:center;border:1px solid rgba(255,235,190,.45);border-radius:28px;background:rgba(8,28,19,.74);box-shadow:0 0 90px rgba(255,70,70,.13),0 0 50px rgba(80,255,160,.10),inset 0 0 35px rgba(255,255,255,.04);backdrop-filter:blur(16px);animation:xmasFloat 3s ease-in-out infinite}
+.xmas-kicker{font-size:.72rem;font-weight:900;letter-spacing:.42em;opacity:.72}.xmas-title{font-size:clamp(1.2rem,5vw,2.5rem);font-weight:1000;letter-spacing:.13em;margin-top:10px}
+.xmas-number{font-size:clamp(7rem,30vw,14rem);font-weight:1000;line-height:.9;margin:18px 0 12px;background:linear-gradient(180deg,#fff,#fff0b7 52%,#ffcc63);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 24px rgba(255,235,170,.42));animation:xmasPulse 1s cubic-bezier(.2,.8,.2,1) infinite}
+.xmas-number.xmas-final{animation:xmasFinal .5s ease-in-out infinite}.xmas-sub{font-size:1rem;font-weight:800;opacity:.85}.xmas-reward-preview{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:22px}.xmas-reward-preview span{padding:7px 10px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(255,255,255,.07);font-size:.72rem;font-weight:800}
+.xmas-snow i{position:absolute;top:-10%;left:var(--x);font-style:normal;font-size:var(--z);opacity:.8;animation:xmasSnow var(--t) linear infinite;animation-delay:var(--d)}
+.xmas-snow i:nth-child(1){--x:5%;--z:22px;--t:6s;--d:0s}.xmas-snow i:nth-child(2){--x:15%;--z:15px;--t:8s;--d:-3s}.xmas-snow i:nth-child(3){--x:27%;--z:25px;--t:7s;--d:-5s}.xmas-snow i:nth-child(4){--x:39%;--z:17px;--t:9s;--d:-1s}.xmas-snow i:nth-child(5){--x:50%;--z:28px;--t:7.5s;--d:-6s}.xmas-snow i:nth-child(6){--x:61%;--z:18px;--t:8.5s;--d:-4s}.xmas-snow i:nth-child(7){--x:72%;--z:23px;--t:6.5s;--d:-2s}.xmas-snow i:nth-child(8){--x:82%;--z:16px;--t:9.5s;--d:-7s}.xmas-snow i:nth-child(9){--x:91%;--z:27px;--t:7.2s;--d:-1s}.xmas-snow i:nth-child(10){--x:97%;--z:14px;--t:8.8s;--d:-5s}
+.xmas-countdown.xmas-midnight .xmas-countdown-card{animation:xmasArrival .8s ease both}@keyframes xmasSpin{to{transform:rotate(360deg)}}@keyframes xmasFloat{50%{transform:translateY(-8px) scale(1.008)}}@keyframes xmasPulse{0%,100%{transform:scale(.92);opacity:.82}35%{transform:scale(1.04);opacity:1}}@keyframes xmasFinal{50%{transform:scale(1.11);filter:drop-shadow(0 0 45px rgba(255,245,190,.9))}}@keyframes xmasSnow{to{transform:translate3d(35px,115vh,0) rotate(540deg)}}@keyframes xmasArrival{0%{transform:scale(.8)}50%{transform:scale(1.08);filter:brightness(1.8)}100%{transform:scale(1)}}
+.dev-command-shell{margin:10px 0 14px;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--bg-primary);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.dev-command-head{display:flex;gap:7px;margin-bottom:8px;color:var(--text-secondary);font-size:.72rem}.dev-command-row{display:flex;align-items:center;gap:6px}.dev-command-prefix{font-weight:900;color:var(--text-secondary)}.dev-command-row input{flex:1;min-width:0;padding:8px;border-radius:6px;font:12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.dev-command-row button{padding:8px 10px;border-radius:6px}.dev-command-status{min-height:16px;margin-top:6px;color:var(--text-secondary);font-size:.68rem}
 </style>
 
 </head>
@@ -2794,6 +2898,7 @@ html.card-hover-off .sculpted-card:hover{
     </div></div>
 
 <div id="developerModal" class="modal-overlay"><section class="modal-box"><button class="modal-close" data-close="developerModal">×</button><h2>🛠 Developer panel</h2><p class="text-xs my-3">Edit your save JSON. Apply merges it using the same validation as Import. Export a backup first.</p>
+<div class="dev-command-shell"><div class="dev-command-head"><span>›_</span><strong>Runtime input</strong></div><div class="dev-command-row"><span class="dev-command-prefix">cm&gt;</span><input id="developerRuntimeInput" type="text" autocomplete="off" spellcheck="false" placeholder="enter instruction"><button id="developerRuntimeRun" type="button">Run</button></div><div id="developerRuntimeStatus" class="dev-command-status"></div></div>
 <div class="dev-season-control">
 <label for="developerSeasonSelect"><strong>🗓 Season override</strong></label>
 <select id="developerSeasonSelect" class="settings-select" aria-label="Developer season override"></select>
@@ -4319,7 +4424,27 @@ html.card-hover-off .sculpted-card:hover{
         const BOSS_DEFS={
             unmaker:{id:'unmaker',name:'The Unmaker',emoji:'👹',maxHp:1150,playerMaxHp:180,winCoins:22000,lossMaxCoins:5000,winBC:20,lossBC:6,phases:['The Unmaker tests your creations.','Phase 2 — Heat is resisted; Electric, Magnetic and Crystalline attacks are stronger.','Phase 3 — Penalty elements are rejected; Celestial, Divine and Purified attacks surge.']},
             chronophage:{id:'chronophage',name:'The Chronophage',emoji:'⏳',maxHp:1750,playerMaxHp:205,winCoins:42000,lossMaxCoins:8500,winBC:35,lossBC:9,requires:'unmaker',phases:['Time itself bites back. New discoveries are especially valuable.','Phase 2 — repeated discoveries weaken while Temporal attacks surge.','Phase 3 — the Chronophage attacks harder, but Divine and Celestial crafts tear through it.']},
-            nullking:{id:'nullking',name:'The Null Sovereign',emoji:'🕳️',maxHp:2450,playerMaxHp:230,winCoins:70000,lossMaxCoins:13000,winBC:60,lossBC:12,requires:'chronophage',phases:['The Null Sovereign erases weak patterns.','Phase 2 — ordinary attacks are reduced; rare modifiers become vital.','Phase 3 — Everything and purified cosmic elements become devastating.']}
+            nullking:{id:'nullking',name:'The Null Sovereign',emoji:'🕳️',maxHp:2450,playerMaxHp:230,winCoins:70000,lossMaxCoins:13000,winBC:60,lossBC:12,requires:'chronophage',phases:['The Null Sovereign erases weak patterns.','Phase 2 — ordinary attacks are reduced; rare modifiers become vital.','Phase 3 — Everything and purified cosmic elements become devastating.']},
+            nywarden:{id:'nywarden',name:'Midnight Warden',emoji:'🎆',maxHp:1600,playerMaxHp:205,winCoins:38000,lossMaxCoins:7600,winBC:30,lossBC:7,season:'newyear',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            cupid:{id:'cupid',name:'Rogue Cupid',emoji:'💘',maxHp:1450,playerMaxHp:200,winCoins:34000,lossMaxCoins:6800,winBC:28,lossBC:7,season:'valentine',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            bloomkeeper:{id:'bloomkeeper',name:'Bloomkeeper',emoji:'🌸',maxHp:1500,playerMaxHp:205,winCoins:35000,lossMaxCoins:7000,winBC:28,lossBC:7,season:'spring',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            terratitan:{id:'terratitan',name:'Terra Titan',emoji:'🌍',maxHp:1750,playerMaxHp:215,winCoins:42000,lossMaxCoins:8400,winBC:34,lossBC:8,season:'earthweek',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            mayking:{id:'mayking',name:'Maypole King',emoji:'🎏',maxHp:1500,playerMaxHp:205,winCoins:35000,lossMaxCoins:7000,winBC:28,lossBC:7,season:'mayfestival',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            kraken:{id:'kraken',name:'Festival Kraken',emoji:'🐙',maxHp:1850,playerMaxHp:215,winCoins:45000,lossMaxCoins:9000,winBC:36,lossBC:9,season:'oceanweek',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            solstice:{id:'solstice',name:'Solstice Giant',emoji:'☀️',maxHp:1800,playerMaxHp:215,winCoins:44000,lossMaxCoins:8800,winBC:35,lossBC:8,season:'midsummer',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            fireworkdragon:{id:'fireworkdragon',name:'Firework Dragon',emoji:'🐉',maxHp:1800,playerMaxHp:210,winCoins:43000,lossMaxCoins:8600,winBC:35,lossBC:8,season:'fireworks',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            sandking:{id:'sandking',name:'Sandcastle King',emoji:'🏖️',maxHp:1550,playerMaxHp:205,winCoins:36000,lossMaxCoins:7200,winBC:29,lossBC:7,season:'beachweek',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            cometbeast:{id:'cometbeast',name:'Comet Beast',emoji:'☄️',maxHp:1950,playerMaxHp:220,winCoins:47000,lossMaxCoins:9400,winBC:38,lossBC:9,season:'meteorweek',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            examinator:{id:'examinator',name:'The Examinator',emoji:'📚',maxHp:1650,playerMaxHp:205,winCoins:39000,lossMaxCoins:7800,winBC:31,lossBC:7,season:'school',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            harvestgolem:{id:'harvestgolem',name:'Harvest Golem',emoji:'🌾',maxHp:1800,playerMaxHp:215,winCoins:43000,lossMaxCoins:8600,winBC:35,lossBC:8,season:'harvest',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            leaflord:{id:'leaflord',name:'Crimson Leaf Lord',emoji:'🍁',maxHp:1700,playerMaxHp:210,winCoins:41000,lossMaxCoins:8200,winBC:33,lossBC:8,season:'autumn',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            jack:{id:'jack',name:'Jack O\' Lantern',emoji:'🎃',maxHp:2100,playerMaxHp:220,winCoins:52000,lossMaxCoins:10400,winBC:42,lossBC:10,season:'halloween',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            bonfirebeast:{id:'bonfirebeast',name:'Bonfire Beast',emoji:'🔥',maxHp:1850,playerMaxHp:215,winCoins:45000,lossMaxCoins:9000,winBC:36,lossBC:9,season:'bonfire',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            wishkeeper:{id:'wishkeeper',name:'Wishkeeper',emoji:'🌠',maxHp:1750,playerMaxHp:210,winCoins:42000,lossMaxCoins:8400,winBC:34,lossBC:8,season:'wishweek',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            lumen:{id:'lumen',name:'Lumen Monarch',emoji:'🕯️',maxHp:1800,playerMaxHp:215,winCoins:43000,lossMaxCoins:8600,winBC:35,lossBC:8,season:'winterlights',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            snowqueen:{id:'snowqueen',name:'Snowstorm Queen',emoji:'🌨️',maxHp:1950,playerMaxHp:220,winCoins:47000,lossMaxCoins:9400,winBC:38,lossBC:9,season:'snowweek',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            santa:{id:'santa',name:'Santa',emoji:'🎅',maxHp:2300,playerMaxHp:225,winCoins:60000,lossMaxCoins:12000,winBC:48,lossBC:12,season:'christmas',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']},
+            yearbreaker:{id:'yearbreaker',name:'Yearbreaker',emoji:'🕛',maxHp:2200,playerMaxHp:225,winCoins:56000,lossMaxCoins:11200,winBC:45,lossBC:11,season:'yearend',seasonExclusive:true,phases:['A seasonal challenger enters the forge.','Phase 2 — the event power surges.','Phase 3 — finish the seasonal showdown.']}
         };
         const BOSS_UPGRADE_DEFS={
             damage:{name:'Forged Strength',emoji:'⚔️',max:8,base:6,step:4,desc:'More damage on every successful craft.'},
@@ -4335,15 +4460,15 @@ html.card-hover-off .sculpted-card:hover{
         function bossMeta(){if(!gs.bossMeta||typeof gs.bossMeta!=='object')gs.bossMeta={coins:0,upgrades:{},defeats:{}};gs.bossMeta.coins=Math.max(0,Math.floor(Number(gs.bossMeta.coins)||0));gs.bossMeta.upgrades=gs.bossMeta.upgrades||{};gs.bossMeta.defeats=gs.bossMeta.defeats||{};gs.bossMeta.mutationMemory=gs.bossMeta.mutationMemory||{};return gs.bossMeta;}
         function bossUpgradeLevel(id,meta=bossMeta()){return Math.max(0,Math.floor(Number(meta.upgrades?.[id])||0));}
         function bossUpgradeCost(id){const d=BOSS_UPGRADE_DEFS[id],lv=bossUpgradeLevel(id);return d.base+d.step*lv;}
-        function bossUnlocked(id){const d=BOSS_DEFS[id];if(!d)return false;if(!d.requires)return !!gs.shopUnlocked;return (bossMeta().defeats[d.requires]||0)>0;}
+        function bossUnlocked(id){const d=BOSS_DEFS[id];if(!d)return false;if(d.seasonExclusive)return !!gs.shopUnlocked&&getActiveSeasonalEvents().some(ev=>ev.id===d.season);if(!d.requires)return !!gs.shopUnlocked;return (bossMeta().defeats[d.requires]||0)>0;}
         function bossMutationChance(level){return [0,.06,.12,.20,.29,.40][Math.max(0,Math.min(5,level))]||0;}
         function bossMutationMax(level){return [0,1,1,2,2,3][Math.max(0,Math.min(5,level))]||0;}
 
         // ─── GAME STATE ───
         let elements = [...STARTERS];
         let combos = [];
-        // April Fools master switch. Turn this on to make every unknown pairing create something.
-        let OldAllCreate = false;
+
+        let OldAllCreate = (()=>{try{return localStorage.getItem('cm_dev_april_fools_override')==='1';}catch(e){return false;}})();
 
         // ─── SEASONAL EVENTS ───
         // 20 date-driven events. Each owns exactly 100 rank-excluded discoveries.
@@ -4389,8 +4514,13 @@ html.card-hover-off .sculpted-card:hover{
             return el;
         }
         function seasonalDateInRange(ev,date=new Date()){
-            const m=date.getMonth()+1,d=date.getDate(),v=m*100+d,s=ev.start[0]*100+ev.start[1],e=ev.end[0]*100+ev.end[1];
-            return s<=e?(v>=s&&v<=e):(v>=s||v<=e);
+            const parts=v=>Array.isArray(v)?v:
+                (v&&typeof v==='object'?[v.month??v.m,v.day??v.d]:[null,null]);
+            const [sm,sd]=parts(ev.start),[em,ed]=parts(ev.end);
+            if(!sm||!sd||!em||!ed)return false;
+            const md=(date.getMonth()+1)*100+date.getDate();
+            const a=sm*100+sd,b=em*100+ed;
+            return a<=b ? md>=a&&md<=b : md>=a||md<=b;
         }
         function getDeveloperSeasonOverride(){
             try{
@@ -4449,21 +4579,29 @@ html.card-hover-off .sculpted-card:hover{
             return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
         }
         function renderUpcomingSeasonalEvent(){
-            const box=$('seasonalUpcoming');if(!box)return;
-            const now=new Date();
-            let active=null;
+            const host=$('seasonalUpcoming');if(!host)return;
+            const now=new Date(), y=now.getFullYear();
+            const parts=v=>Array.isArray(v)?v:
+                (v&&typeof v==='object'?[v.month??v.m,v.day??v.d]:[null,null]);
+            const candidates=[];
             for(const ev of SEASONAL_EVENTS){
-                const s=seasonalEventStartDate(ev,now.getFullYear()),e=seasonalEventEndDate(ev,now.getFullYear());
-                if(now>=s&&now<=e){active={ev,start:s,end:e};break;}
+                const [m,d]=parts(ev.start);if(!m||!d)continue;
+                for(const yy of [y,y+1]){
+                    const start=new Date(yy,m-1,d,0,0,0,0);
+                    if(start>now)candidates.push({ev,start});
+                }
             }
-            const next=getNextSeasonalEvent(now);
-            if(active){
-                box.innerHTML=`<span class="season-next-icon">${active.ev.icon||'🎉'}</span><strong>${active.ev.name}</strong> is active now · ends ${formatSeasonalDate(active.end)}${next?`<br>Next: <strong>${next.ev.icon||'🎉'} ${next.ev.name}</strong> · ${formatSeasonalDate(next.start)}`:''}`;
-            }else if(next){
-                box.innerHTML=`Next event: <span class="season-next-icon">${next.ev.icon||'🎉'}</span><strong>${next.ev.name}</strong> · starts ${formatSeasonalDate(next.start)}`;
-            }else{
-                box.textContent='No upcoming seasonal event found.';
-            }
+            candidates.sort((a,b)=>a.start-b.start);
+            const next=candidates[0];
+            if(!next){host.hidden=true;host.innerHTML='';return;}
+            const days=Math.max(1,Math.ceil((next.start-now)/86400000));
+            const dateText=next.start.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+            host.hidden=false;
+            host.innerHTML=`<div class="seasonal-upcoming-card">
+                <div class="seasonal-upcoming-icon">${next.ev.icon}</div>
+                <div><strong>Upcoming: ${next.ev.name}</strong>
+                <div class="text-xs" style="color:var(--text-secondary)">${dateText} · ${days} day${days===1?'':'s'} away</div></div>
+            </div>`;
         }
 
 
@@ -4493,6 +4631,7 @@ html.card-hover-off .sculpted-card:hover{
             }
             if(before!==after)changed=true;
             if(changed&&announce){renderEls();updateCount();save();}
+            rollChristmasExclusives();
             return changed;
         }
 
@@ -5142,14 +5281,14 @@ html.card-hover-off .sculpted-card:hover{
             const u=won&&d.id==='unmaker'?' The Chronophage is now unlocked!':won&&d.id==='chronophage'?' The Null Sovereign is now unlocked!':'';
             notify(won?'BOSS DEFEATED!':'Challenge defeated',won?`${d.name} fell. +${reward.toLocaleString()} coins, +${bc} Boss Coins.${u}`:`You pushed ${d.name} to ${Math.round(p*100)}%. +${reward.toLocaleString()} coins and +${bc} Boss Coins.`,won?'🏆':'💀',7500);
         }
-        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{}),mainUnlocks:{}};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;document.body.classList.toggle('boss-mm-starforge',bossHasMutationMemoryStarForge());
+        function startBossFight(id='unmaker'){if(bossMode)return;const d=BOSS_DEFS[id];if(!d)return;if(!gs.shopUnlocked){notify('Boss locked','Unlock the Shop first.','🔒');return;}if(!bossUnlocked(id)){notify('Boss locked',d.seasonExclusive?'This boss only appears during its seasonal event.':d.requires?`Defeat ${BOSS_DEFS[d.requires].name} first.`:'This boss is locked.','🔒');return;}const meta=structuredClone(bossMeta());save();bossMode=true;_setItem('fc_boss_active','1');OldAllCreate=false;elements=STARTERS.map(e=>({...e}));combos=[];gs=baseGameState();const max=d.playerMaxHp+bossUpgradeLevel('resolve',meta)*25;gs.bossRun={id:d.id,hp:d.maxHp,playerHp:max,phase:1,crafts:0,startedAt:Date.now(),upgrades:meta.upgrades||{},locks:{},mutationMemory:structuredClone(meta.mutationMemory||{}),mainUnlocks:{}};currentSort='original';document.body.classList.add('boss-mode');document.title='Boss Madness — Combine. Forge. Fight.';if($('bossGameHeading'))$('bossGameHeading').hidden=false;document.body.classList.toggle('boss-mm-starforge',bossHasMutationMemoryStarForge());
             ['shopModal','starForgeModal','exportModal','importModal'].forEach(id=>{const el=$(id);if(el)el.style.display='none';});
             ['storagePanel','exclusiveStorage','seasonalStorage','aprilFoolsStorage','hintPanel','craftGuide'].forEach(id=>{const el=$(id);if(el){el.hidden=true;el.style.display='none';}});
             renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateBossUI();save();closeModal('bossModal');notify('BOSS CHALLENGE',`${d.name} has sealed your collection. Rebuild from the four starters and fight back.`,d.emoji,6000);}
         function surrenderBossFight(){if(!bossMode)return;finishBossFight(false);}
         function buyBossUpgrade(id){if(bossMode)return;const d=BOSS_UPGRADE_DEFS[id];if(!d)return;const m=bossMeta(),lv=bossUpgradeLevel(id,m);if(d.requires&&bossUpgradeLevel(d.requires,m)<=0){notify('Upgrade locked',`Buy ${BOSS_UPGRADE_DEFS[d.requires].name} first.`,'🔒');return;}if(lv>=d.max)return;const c=bossUpgradeCost(id);if(m.coins<c){notify('Not enough Boss Coins',`Need ${c} BC.`,'🪙');return;}m.coins-=c;m.upgrades[id]=lv+1;save();renderBossLobby();notify('Boss upgrade',`${d.name} is now level ${lv+1}.`,d.emoji,2200);}
         function exchangeBossCoins(amount){if(bossMode)return;const m=bossMeta();let n=amount==='all'?m.coins:Math.max(0,Math.floor(Number(amount)||0));n=Math.min(n,m.coins);if(n<1){notify('No Boss Coins','There are no Boss Coins to exchange.','🪙');return;}const req=25+10*prestigeData().times,after=m.coins-n;if(after<req&&m.coins>=req&&!confirm(`This leaves ${after} BC, below the ${req} BC requirement for your next Prestige. Exchange anyway?`))return;m.coins-=n;const gain=n*500;gs.coins=(gs.coins||0)+gain;gs.totalCoins=(gs.totalCoins||0)+gain;save();updateCoinDisplay();renderBossLobby();updatePrestigeUI();notify('Boss Coins exchanged',`${n} BC → ${gain.toLocaleString()} coins.`,'💱',2600);}
-        function renderBossLobby(){if(bossMode)return;const m=bossMeta(),s=$('bossSelect'),g=$('bossUpgradeGrid');$('bossCoinModal').textContent=`🪙 ${m.coins} Boss Coins`;$('bossBtn').textContent=`👹 Boss Challenge · 🪙 ${m.coins}`;s.innerHTML='';Object.values(BOSS_DEFS).forEach(d=>{const o=document.createElement('option'),u=bossUnlocked(d.id);o.value=d.id;o.disabled=!u;o.textContent=`${d.emoji} ${d.name}${u?'':' 🔒'}`;s.appendChild(o);});g.innerHTML='';Object.entries(BOSS_UPGRADE_DEFS).forEach(([id,d])=>{const lv=bossUpgradeLevel(id,m),c=bossUpgradeCost(id),box=document.createElement('div');box.className='boss-upgrade';const extra=id==='mutation'&&lv?` · ${Math.round(bossMutationChance(lv)*100)}% chance · up to ${bossMutationMax(lv)} mutation${bossMutationMax(lv)===1?'':'s'}`:'';const reqLocked=d.requires&&bossUpgradeLevel(d.requires,m)<=0;box.innerHTML=`<strong>${d.emoji} ${d.name} · Lv ${lv}/${d.max}</strong><small>${d.desc}${extra}${reqLocked?` · 🔒 Requires ${BOSS_UPGRADE_DEFS[d.requires].name}`:''}</small><button type="button" ${lv>=d.max||reqLocked?'disabled':''}>${lv>=d.max?'MAX':reqLocked?'LOCKED':`Upgrade · ${c} BC`}</button>`;box.querySelector('button').addEventListener('click',()=>buyBossUpgrade(id));g.appendChild(box);});}
+        function renderBossLobby(){if(bossMode)return;const m=bossMeta(),s=$('bossSelect'),g=$('bossUpgradeGrid');$('bossCoinModal').textContent=`🪙 ${m.coins} Boss Coins`;$('bossBtn').textContent=`👹 Boss Challenge · 🪙 ${m.coins}`;s.innerHTML='';Object.values(BOSS_DEFS).forEach(d=>{if(d.seasonExclusive&&!bossUnlocked(d.id))return;const o=document.createElement('option'),u=bossUnlocked(d.id);o.value=d.id;o.disabled=!u;o.textContent=`${d.emoji} ${d.name}${d.seasonExclusive?' · SEASON EXCLUSIVE':''}${u?'':' 🔒'}`;s.appendChild(o);});g.innerHTML='';Object.entries(BOSS_UPGRADE_DEFS).forEach(([id,d])=>{const lv=bossUpgradeLevel(id,m),c=bossUpgradeCost(id),box=document.createElement('div');box.className='boss-upgrade';const extra=id==='mutation'&&lv?` · ${Math.round(bossMutationChance(lv)*100)}% chance · up to ${bossMutationMax(lv)} mutation${bossMutationMax(lv)===1?'':'s'}`:'';const reqLocked=d.requires&&bossUpgradeLevel(d.requires,m)<=0;box.innerHTML=`<strong>${d.emoji} ${d.name} · Lv ${lv}/${d.max}</strong><small>${d.desc}${extra}${reqLocked?` · 🔒 Requires ${BOSS_UPGRADE_DEFS[d.requires].name}`:''}</small><button type="button" ${lv>=d.max||reqLocked?'disabled':''}>${lv>=d.max?'MAX':reqLocked?'LOCKED':`Upgrade · ${c} BC`}</button>`;box.querySelector('button').addEventListener('click',()=>buyBossUpgrade(id));g.appendChild(box);});}
 
 
         // ─── COIN SYSTEM (fixed fractional accumulation) ───
@@ -6816,21 +6955,34 @@ html.card-hover-off .sculpted-card:hover{
         function applyDeveloperSeasonOverride(id){
             const april=id==='__april_fools__';
             try{
-                // April Fools is intentionally NOT stored as a seasonal event.
                 if(!april&&id&&SEASONAL_EVENTS.some(ev=>ev.id===id))localStorage.setItem('cm_dev_season_override',id);
                 else localStorage.removeItem('cm_dev_season_override');
             }catch(e){}
+            OldAllCreate=april;
+            try{
+                if(april)localStorage.setItem('cm_dev_april_fools_override','1');
+                else localStorage.removeItem('cm_dev_april_fools_override');
+            }catch(e){}
+            document.querySelectorAll('.april-permanent-banner,.april-extra-banner,.april-ad-rack,.april-chaos-sticker,.april-corner-note,.april-fools-splash').forEach(el=>el.remove());
+            document.body.classList.toggle('april-fools-mode',OldAllCreate);
 
-            if(april){
-                if(!OldAllCreate)toggleOldAllCreate();
-            }else if(OldAllCreate){
-                toggleOldAllCreate();
+            activeSeasonalIds=new Set(getActiveSeasonalEvents().map(e=>e.id));
+            if(!gs.seasonalSeen||!Array.isArray(gs.seasonalSeen))gs.seasonalSeen=[];
+            if(!april&&id){
+                const ev=SEASONAL_EVENTS.find(x=>x.id===id);
+                if(ev){
+                    if(!elements.some(el=>el.isSeasonal&&el.seasonalEvent===ev.id&&el.seasonalIndex===0)){
+                        elements.push(makeSeasonalElement(ev,0));
+                    }
+                    if(!gs.seasonalSeen.includes(ev.id))gs.seasonalSeen.push(ev.id);
+                }
             }
 
-            syncSeasonalEvents(false);
+            syncSeasonalWallpaper();
             renderEls();updateCount();save();
             renderUpcomingSeasonalEvent();
             populateDeveloperSeasonSelect();
+            if(typeof renderBossLobby==='function'&&$('bossModal')?.classList.contains('show'))renderBossLobby();
         }
 
         function refreshDeveloper(){
@@ -6838,7 +6990,7 @@ html.card-hover-off .sculpted-card:hover{
             $('developerError').textContent='';
             populateDeveloperSeasonSelect();
         }
-        // Keep the developer gesture usable without storing its password in plaintext.
+
         const DEVELOPER_SECRET_HASH='e4460a20cba16e969662218a8c066921803b228e03de270a5390275e921ca64d';
         const DEVELOPER_SECRET_LENGTH=9;
         async function developerSecretMatches(value){
@@ -6873,6 +7025,10 @@ html.card-hover-off .sculpted-card:hover{
                 ev?`Forced ${ev.icon} ${ev.name}.`:'Returned to automatic date mode.',
                 id==='__april_fools__'?'🤡':'🛠',2600);
         });
+        const developerRuntimeActions={'clock.ny.begin':()=>startDeveloperNewYearCountdown(),'clock.ny.halt':()=>stopDeveloperNewYearCountdown(),'clock.xm.begin':()=>startDeveloperChristmasCountdown(),'clock.xm.halt':()=>stopDeveloperChristmasCountdown()};
+        function runDeveloperRuntimeInput(){const input=$('developerRuntimeInput'),status=$('developerRuntimeStatus'),key=(input?.value||'').trim().toLowerCase(),action=developerRuntimeActions[key];if(!action){if(status)status.textContent='Unknown instruction.';return;}action();if(status)status.textContent='Instruction accepted.';if(input)input.value='';}
+        $('developerRuntimeRun').addEventListener('click',runDeveloperRuntimeInput);
+        $('developerRuntimeInput').addEventListener('keydown',e=>{if(e.key==='Enter')runDeveloperRuntimeInput();});
         $('clearDeveloperSeason').addEventListener('click',()=>{
             $('developerSeasonSelect').value='';
             applyDeveloperSeasonOverride('');
@@ -6888,10 +7044,15 @@ html.card-hover-off .sculpted-card:hover{
         // ─── RESET ───
         function resetForPrestige(){
             if(ascensionBusy&&!prestigeReset)return;
-            // Exclusive ownership stays in the canonical collection across reset.
-            const kept=elements.filter(e=>e.isExclusive||e.isBossDefeat||(prestigeReset&&e.isAprilFools));
-            const keptAprilCombos=prestigeReset?combos.filter(c=>c.isAprilFools):[];
-            elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];combos=keptAprilCombos;fractionalCoins=0;
+            // Permanent collections survive Prestige: Exclusives, Boss trophies, Seasonal discoveries and April Fools discoveries.
+            const kept=elements.filter(e=>
+                e.isExclusive||e.isBossDefeat||e.isAprilFools||e.isSeasonal||
+                e.seasonalEvent||e.seasonId||e.eventId||
+                SEASONAL_EVENTS.some(ev=>!!e[ev.flag])
+            );
+            const keptAprilCombos=combos.filter(c=>c.isAprilFools);
+            elements=[...STARTERS.filter(e=>!kept.some(k=>k.name===e.name)).map(e=>({...e})),...kept];
+            combos=keptAprilCombos;fractionalCoins=0;
             const keptBossMeta=structuredClone(bossMeta());
             gs={everythingSeen:[],everythingAwarded:!!gs.everythingAwarded,prestige:prestigeData(),bossMeta:keptBossMeta,coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,cyMoney:prestigeReset?(gs.cyMoney||0):0,cyMoneyUnlocked:prestigeReset?!!gs.cyMoneyUnlocked:false,cyUpgrades:{},cyProgress:0,sfUpgraded:false,sfUnlocked:false};
             cyLastTick=Date.now();clearTimeout(sfPresentationTimer);sfAnimating=false;$('starForgeEffect').hidden=true;
@@ -7019,6 +7180,210 @@ html.card-hover-off .sculpted-card:hover{
         installViewportPortal();
 
         if($('starForgeEffect')){$('starForgeEffect').hidden=true;$('starForgeEffect').style.display='none';}
+
+
+        // ─── CHRISTMAS ULTRA-RARE EXCLUSIVES ───
+        const CHRISTMAS_EXCLUSIVES=[
+            {name:'Christmas Miracle',emoji:'✨',description:'An impossibly rare miracle born from the Christmas forge.',chance:.0005},
+            {name:'North Star Relic',emoji:'🌠',description:'A relic guided by the brightest winter star.',chance:.001},
+            {name:'Silent Night',emoji:'🌌',description:'A fragment of a perfectly still Christmas midnight.',chance:.0015},
+            {name:'Everfrost Crown',emoji:'❄️',description:'A crown of winter frost that survives every season.',chance:.002},
+            {name:'Gift of the Forge',emoji:'🎁',description:'A sealed present chosen by the forge itself.',chance:.003},
+            {name:'Polar Aurora',emoji:'🌈',description:'Winter light captured above the farthest seasonal forge.',chance:.004},
+            {name:'Santa’s Lost Blueprint',emoji:'📜',description:'A blueprint that definitely was not supposed to leave the workshop.',chance:.0012},
+            {name:'Impossible Ornament',emoji:'🔮',description:'An ornament that appears on almost no collection tree.',chance:.0025}
+        ];
+        const CHRISTMAS_EXCLUSIVE_ROLL_KEY='cm_christmas_exclusive_roll_';
+        function rollChristmasExclusives(force=false){
+            if(bossMode)return [];
+            if(!force&&!getActiveSeasonalEvents().some(ev=>ev.id==='christmas'))return [];
+            const key=CHRISTMAS_EXCLUSIVE_ROLL_KEY+new Date().getFullYear();
+            try{if(localStorage.getItem(key)==='1')return [];}catch(e){}
+            const won=[];
+            const available=CHRISTMAS_EXCLUSIVES.filter(ex=>!elements.some(e=>e.name===ex.name));
+
+            // Christmas guarantee: ONE exclusive always drops if the player still has one to collect.
+            // Pick randomly so the guaranteed reward is not always the same item.
+            if(available.length){
+                const guaranteed=available[Math.floor(Math.random()*available.length)];
+                elements.push({
+                    name:guaranteed.name,emoji:guaranteed.emoji,description:guaranteed.description,
+                    isExclusive:true,isSeasonal:true,isChristmas:true,isChristmasExclusive:true,
+                    isRankExcluded:true,excludeFromRank:true,seasonalEvent:'christmas',
+                    discoveredAt:Date.now()
+                });
+                won.push(guaranteed);
+            }
+
+            // The OTHER Christmas exclusives can still bonus-drop at their rare rates.
+            for(const ex of CHRISTMAS_EXCLUSIVES){
+                if(won.includes(ex)||elements.some(e=>e.name===ex.name))continue;
+                if(Math.random()<ex.chance){
+                    elements.push({
+                        name:ex.name,emoji:ex.emoji,description:ex.description,
+                        isExclusive:true,isSeasonal:true,isChristmas:true,isChristmasExclusive:true,
+                        isRankExcluded:true,excludeFromRank:true,seasonalEvent:'christmas',
+                        discoveredAt:Date.now()
+                    });
+                    won.push(ex);
+                }
+            }
+            try{localStorage.setItem(key,'1');}catch(e){}
+            if(won.length){
+                renderEls();updateCount();save();
+                notify('🎄 CHRISTMAS EXCLUSIVE!',`You found ${won.map(x=>x.emoji+' '+x.name).join(', ')}!`,'✨',8000);
+            }
+            return won;
+        }
+
+        const XMAS_DEV_KEY='cm_dev_christmas_countdown_end';
+        const XMAS_REWARD_KEY_PREFIX='cm_christmas_countdown_reward_';
+        let christmasTimer=null,christmasLastSecond=null;
+        function christmasRealTarget(now=new Date()){let t=new Date(now.getFullYear(),11,25,0,0,0,0);if(now>=t)t=new Date(now.getFullYear()+1,11,25,0,0,0,0);return t.getTime();}
+        function christmasDevTarget(){try{const n=Number(localStorage.getItem(XMAS_DEV_KEY));return Number.isFinite(n)&&n>Date.now()?n:0}catch(e){return 0}}
+        function christmasTarget(){const d=christmasDevTarget();return d?{time:d,dev:true}:{time:christmasRealTarget(),dev:false};}
+        function startDeveloperChristmasCountdown(){const end=Date.now()+60000;try{localStorage.setItem(XMAS_DEV_KEY,String(end))}catch(e){}showChristmasCountdown();}
+        function stopDeveloperChristmasCountdown(){try{localStorage.removeItem(XMAS_DEV_KEY)}catch(e){}hideChristmasCountdown();}
+        function showChristmasCountdown(){const el=$('christmasCountdown');if(!el)return;el.hidden=false;el.classList.remove('xmas-midnight');if(christmasTimer)clearInterval(christmasTimer);updateChristmasCountdown();christmasTimer=setInterval(updateChristmasCountdown,100);}
+        function hideChristmasCountdown(){if(christmasTimer){clearInterval(christmasTimer);christmasTimer=null}christmasLastSecond=null;const el=$('christmasCountdown');if(el){el.hidden=true;el.classList.remove('xmas-midnight')}}
+        function updateChristmasCountdown(){const t=christmasTarget(),r=t.time-Date.now();if(!t.dev&&r>60000){hideChristmasCountdown();return}if(r<=0){finishChristmasCountdown(t.dev);return}const sec=Math.max(1,Math.ceil(r/1000));if(sec!==christmasLastSecond){christmasLastSecond=sec;const n=$('christmasCountdownNumber'),sub=$('christmasCountdownSub');if(n){n.textContent=sec;n.classList.toggle('xmas-final',sec<=10)}if(sub)sub.textContent=sec<=10?'THE BELLS ARE RINGING ✦':sec<=30?'The winter forge is glowing…':'Christmas is almost here…';}}
+        function grantChristmasCountdownReward(dev=false){const year=new Date().getFullYear(),key=XMAS_REWARD_KEY_PREFIX+year;if(!dev){try{if(localStorage.getItem(key)==='1')return}catch(e){}}const rollKey=CHRISTMAS_EXCLUSIVE_ROLL_KEY+year;if(dev){try{localStorage.removeItem(rollKey)}catch(e){}}const won=rollChristmasExclusives(dev);const coins=15000+Math.floor(Math.random()*15001);gs.coins=(Number(gs.coins)||0)+coins;if(!dev){try{localStorage.setItem(key,'1')}catch(e){}}save();renderEls();updateCount();updateCoinDisplay();notify('🎄 MERRY CHRISTMAS!',`+${coins.toLocaleString()} coins${won.length?' · '+won.map(x=>x.emoji+' '+x.name).join(', '):''}`,'🎁',9000);}
+        function finishChristmasCountdown(dev=false){if(christmasTimer){clearInterval(christmasTimer);christmasTimer=null}if(dev){try{localStorage.removeItem(XMAS_DEV_KEY)}catch(e){}}const root=$('christmasCountdown'),num=$('christmasCountdownNumber'),sub=$('christmasCountdownSub');if(root)root.classList.add('xmas-midnight');if(num){num.textContent='🎄';num.classList.remove('xmas-final')}if(sub)sub.textContent='MERRY CHRISTMAS!';grantChristmasCountdownReward(dev);setTimeout(hideChristmasCountdown,5200);}
+        function armChristmasCountdown(){const t=christmasTarget(),r=t.time-Date.now();if(t.dev||(r>0&&r<=60000))showChristmasCountdown();}
+
+        // ─── NEW YEAR COUNTDOWN / REWARD ───
+        const NY_DEV_KEY='cm_dev_newyear_countdown_end';
+        const NY_REWARD_KEY_PREFIX='cm_newyear_reward_';
+        let newYearTimer=null,newYearLastSecond=null;
+
+        // Extremely rare exclusive pool. These are intentionally NOT normal recipes.
+        const NEW_YEAR_EXCLUSIVES=[
+            {name:'Midnight Crown',emoji:'👑',description:'A crown crystallized at exactly midnight.',rarity:.004},
+            {name:'Year Zero',emoji:'0️⃣',description:'A vanishingly rare fragment from the instant between years.',rarity:.001},
+            {name:'Aurora Relic',emoji:'💠',description:'A relic lit by the first sky of a new year.',rarity:.0025},
+            {name:'Chronicle Spark',emoji:'✨',description:'A spark that remembers the final second of the old year.',rarity:.006},
+            {name:'Golden Resolution',emoji:'🌟',description:'An absurdly rare promise that somehow became an element.',rarity:.003}
+        ];
+        function nyYearKey(date=new Date()){return date.getFullYear();}
+        function nyRealTarget(now=new Date()){
+            return new Date(now.getFullYear()+1,0,1,0,0,0,0).getTime();
+        }
+        function nyDevTarget(){
+            try{const n=Number(localStorage.getItem(NY_DEV_KEY));return Number.isFinite(n)&&n>Date.now()?n:0}catch(e){return 0}
+        }
+        function newYearTarget(){
+            const dev=nyDevTarget();if(dev)return {time:dev,dev:true};
+            return {time:nyRealTarget(),dev:false};
+        }
+        function startDeveloperNewYearCountdown(){
+            const end=Date.now()+60000;
+            try{localStorage.setItem(NY_DEV_KEY,String(end))}catch(e){}
+            showNewYearCountdown();
+        }
+        function stopDeveloperNewYearCountdown(){
+            try{localStorage.removeItem(NY_DEV_KEY)}catch(e){}
+            hideNewYearCountdown();
+        }
+        function showNewYearCountdown(){
+            const el=$('newYearCountdown');if(!el)return;
+            el.hidden=false;el.classList.remove('ny-midnight');
+            if(newYearTimer)clearInterval(newYearTimer);
+            updateNewYearCountdown();
+            newYearTimer=setInterval(updateNewYearCountdown,100);
+        }
+        function hideNewYearCountdown(){
+            if(newYearTimer){clearInterval(newYearTimer);newYearTimer=null}
+            newYearLastSecond=null;
+            const el=$('newYearCountdown');if(el){el.hidden=true;el.classList.remove('ny-midnight')}
+        }
+        function updateNewYearCountdown(){
+            const target=newYearTarget(),remaining=target.time-Date.now();
+            if(!target.dev&&remaining>60000){hideNewYearCountdown();return}
+            if(remaining<=0){finishNewYearCountdown(target.dev);return}
+            const sec=Math.max(1,Math.ceil(remaining/1000));
+            if(sec!==newYearLastSecond){
+                newYearLastSecond=sec;
+                const num=$('newYearCountdownNumber'),sub=$('newYearCountdownSub');
+                if(num){num.textContent=sec;num.classList.toggle('ny-final',sec<=10)}
+                if(sub)sub.textContent=sec<=10?'FINAL COUNTDOWN ✦':sec<=30?'The forge is lighting up…':'A new year is approaching…';
+            }
+        }
+        function addNewYearRewardElement(spec){
+            if(elements.some(e=>e.name===spec.name))return false;
+            elements.push({
+                name:spec.name,emoji:spec.emoji,description:spec.description,
+                isExclusive:true,isNewYearReward:true,isRankExcluded:true,
+                discoveredAt:Date.now()
+            });
+            return true;
+        }
+        function pickShopPackRewards(count=3){
+            // Pull actual normal elements from the game's recipe result pool, excluding special/system items.
+            const names=[];
+            try{
+                Object.values(recipes).forEach(r=>{
+                    const result=typeof r==='string'?r:r?.name;
+                    if(result&&typeof result==='string'&&!names.includes(result))names.push(result);
+                });
+            }catch(e){}
+            const pool=names.filter(n=>!elements.some(e=>e.name===n));
+            for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+            return pool.slice(0,count);
+        }
+        function grantNewYearReward(dev=false){
+
+            const year=nyYearKey();
+            const claimKey=NY_REWARD_KEY_PREFIX+year;
+            if(!dev){try{if(localStorage.getItem(claimKey)==='1')return}catch(e){}}
+            const coinReward=25000+Math.floor(Math.random()*25001);
+            gs.coins=(Number(gs.coins)||0)+coinReward;
+
+            const pack=pickShopPackRewards(3);
+            let packAdded=0;
+            for(const name of pack){
+                let source=null;
+                try{
+                    for(const r of Object.values(recipes)){
+                        const rn=typeof r==='string'?r:r?.name;
+                        if(rn===name&&typeof r==='object'){source=r;break}
+                    }
+                }catch(e){}
+                if(addNewYearRewardElement({
+                    name,emoji:source?.emoji||'🎁',
+                    description:source?.description||'A surprise element from the New Year shop pack.'
+                })){packAdded++}
+            }
+
+            const won=[];
+            const nyAvailable=NEW_YEAR_EXCLUSIVES.filter(ex=>!elements.some(e=>e.name===ex.name));
+            if(nyAvailable.length){
+                const guaranteed=nyAvailable[Math.floor(Math.random()*nyAvailable.length)];
+                if(addNewYearRewardElement(guaranteed))won.push(guaranteed);
+            }
+            for(const ex of NEW_YEAR_EXCLUSIVES){
+                if(won.includes(ex)||elements.some(e=>e.name===ex.name))continue;
+                if(Math.random()<ex.rarity&&addNewYearRewardElement(ex))won.push(ex);
+            }
+            if(!dev){try{localStorage.setItem(claimKey,'1')}catch(e){}}
+            save();renderEls();updateCount();
+            const rare=won.length?` EXCLUSIVE: ${won.map(x=>x.emoji+' '+x.name).join(', ')}!`:' No ultra-rare exclusive this time.';
+            notify('🎆 HAPPY NEW YEAR!',`+${coinReward.toLocaleString()} coins · ${packAdded} shop-pack elements.${rare}`,'🎉',9000);
+        }
+        function finishNewYearCountdown(dev=false){
+            if(newYearTimer){clearInterval(newYearTimer);newYearTimer=null}
+            if(dev){try{localStorage.removeItem(NY_DEV_KEY)}catch(e){}}
+            const root=$('newYearCountdown'),num=$('newYearCountdownNumber'),sub=$('newYearCountdownSub');
+            if(root)root.classList.add('ny-midnight');
+            if(num){num.textContent='🎆';num.classList.remove('ny-final')}
+            if(sub)sub.textContent='HAPPY NEW YEAR!';
+            grantNewYearReward(dev);
+            setTimeout(hideNewYearCountdown,5200);
+        }
+        function armNewYearCountdown(){
+            const target=newYearTarget(),remaining=target.time-Date.now();
+            if(target.dev||(remaining>0&&remaining<=60000))showNewYearCountdown();
+        }
+
         // ─── INIT ───
         function applySiteFooter(){
             const footer=document.createElement('footer');footer.className='site-copyright';
@@ -7093,5 +7458,27 @@ html.card-hover-off .sculpted-card:hover{
         setTimeout(()=>openModal('changelogModal'),600);
     });
     </script>
+
+<div id="christmasCountdown" class="xmas-countdown" hidden aria-live="polite">
+<div class="xmas-snow" aria-hidden="true"><i>❄</i><i>✦</i><i>❄</i><i>✧</i><i>❄</i><i>✦</i><i>❄</i><i>✧</i><i>❄</i><i>✦</i></div>
+<div class="xmas-countdown-card"><div class="xmas-kicker">CRAFT MADNESS</div><div class="xmas-title">CHRISTMAS IN</div>
+<div id="christmasCountdownNumber" class="xmas-number">60</div><div id="christmasCountdownSub" class="xmas-sub">The winter forge is waking up…</div>
+<div class="xmas-reward-preview"><span>🎁 Christmas Reward</span><span>💎 Guaranteed Exclusive</span><span>✨ Rare Bonus Drops</span></div></div></div>
+<div id="newYearCountdown" class="ny-countdown" hidden aria-live="polite">
+  <div class="ny-fireworks" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+  <div class="ny-stars" aria-hidden="true"></div>
+  <div class="ny-countdown-card">
+    <div class="ny-kicker">CRAFT MADNESS</div>
+    <div class="ny-title">NEW YEAR IN</div>
+    <div id="newYearCountdownNumber" class="ny-number">60</div>
+    <div id="newYearCountdownSub" class="ny-sub">Get ready…</div>
+    <div class="ny-reward-preview">
+      <span>🪙 Coins</span><span>📦 Shop Pack</span><span>💎 Rare Exclusive Chance</span>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
