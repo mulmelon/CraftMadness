@@ -2428,6 +2428,88 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
 #trophyRoomGrid .el-name,#trophyRoomGrid .name{font-size:.58rem!important;line-height:1.1!important}
 #trophyRoomGrid .vault-pedestal,#trophyRoomGrid .vault-glow,#trophyRoomGrid .pedestal,#trophyRoomGrid .trophy-pedestal{display:none!important}
 #trophyRoomGrid .ultra-rare:before{display:none!important}
+
+/* CHRONO + TROPHY BOX controls — tiny, permanent, side-by-side */
+#speedrunToggle,#trophyRoomBtn{
+ width:28px!important;min-width:28px!important;max-width:28px!important;height:28px!important;min-height:28px!important;
+ padding:0!important;margin:0!important;border-radius:8px!important;font-size:.82rem!important;line-height:1!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 28px!important;
+ transform:none!important;box-sizing:border-box!important;
+}
+#speedrunToggle{background:rgba(34,197,94,.10)!important;color:#67e8f9!important;border:1px solid rgba(103,232,249,.28)!important}
+#trophyRoomBtn{background:rgba(250,204,21,.09)!important;color:#facc15!important;border:1px solid rgba(250,204,21,.25)!important}
+
+/* Speedrun medal progression: Bronze normal-ish, Silver fancy, Gold VERY fancy, Diamond = insanity */
+.el-card.speedrun-showpiece.medal-SILVER{
+ border-color:#cbd5e1!important;
+ box-shadow:inset 0 0 18px rgba(226,232,240,.12),0 0 13px rgba(203,213,225,.32)!important;
+}
+.el-card.speedrun-showpiece.medal-SILVER .el-emoji{filter:drop-shadow(0 0 8px rgba(226,232,240,.8))!important}
+.el-card.speedrun-showpiece.medal-GOLD{
+ border-color:#facc15!important;
+ background:radial-gradient(circle at 50% 15%,rgba(254,240,138,.28),transparent 24%),linear-gradient(145deg,#251a03,#3a2604 48%,#120d02)!important;
+ box-shadow:inset 0 0 25px rgba(250,204,21,.22),0 0 10px #facc15,0 0 28px rgba(250,204,21,.5)!important;
+}
+.el-card.speedrun-showpiece.medal-GOLD::before{
+ background:conic-gradient(from 0deg,transparent,#fde68a,transparent,#f59e0b,transparent,#fff7ae,transparent)!important;
+ animation-duration:2.1s!important;opacity:.65!important;
+}
+.el-card.speedrun-showpiece.medal-GOLD .el-emoji{filter:drop-shadow(0 0 7px #fde68a) drop-shadow(0 0 16px #f59e0b)!important}
+.el-card.speedrun-showpiece.medal-DIAMOND{
+ border-color:#a5f3fc!important;
+ background:
+  radial-gradient(circle at 20% 10%,rgba(255,255,255,.55),transparent 12%),
+  radial-gradient(circle at 82% 25%,rgba(103,232,249,.42),transparent 20%),
+  radial-gradient(circle at 50% 90%,rgba(192,132,252,.38),transparent 30%),
+  linear-gradient(135deg,#02131d,#06243b 32%,#24104a 67%,#02131d)!important;
+ box-shadow:inset 0 0 30px rgba(255,255,255,.16),0 0 8px #fff,0 0 18px #67e8f9,0 0 36px #22d3ee,0 0 58px rgba(192,132,252,.65)!important;
+ animation:diamondRelicPulse 1.15s ease-in-out infinite alternate!important;
+}
+.el-card.speedrun-showpiece.medal-DIAMOND::before{
+ inset:-90%!important;opacity:.95!important;
+ background:conic-gradient(from 0deg,transparent 0 8%,#fff 12%,#67e8f9 17%,transparent 23%,#c084fc 31%,transparent 39%,#22d3ee 48%,#fff 54%,transparent 61%,#a78bfa 72%,transparent 80%,#67e8f9 90%,transparent)!important;
+ animation-duration:1.25s!important;
+}
+.el-card.speedrun-showpiece.medal-DIAMOND::after{
+ content:"✦ 💎 CHRONO DIAMOND 💎 ✦"!important;color:#fff!important;
+ text-shadow:0 0 5px #fff,0 0 11px #67e8f9,0 0 20px #c084fc!important;
+}
+.el-card.speedrun-showpiece.medal-DIAMOND .el-emoji{
+ filter:drop-shadow(0 0 5px #fff) drop-shadow(0 0 13px #67e8f9) drop-shadow(0 0 24px #c084fc)!important;
+ animation-duration:.45s!important;
+}
+@keyframes diamondRelicPulse{from{transform:translateY(0) scale(1)}to{transform:translateY(-2px) scale(1.025)}}
+
+/* BEST first, medal centered directly below it */
+.speedrun-showpiece .speedrun-record-plaque{text-align:center!important;margin:5px auto 0!important;max-width:96%!important}
+.speedrun-showpiece .speedrun-medal{
+ position:relative!important;top:auto!important;left:auto!important;right:auto!important;
+ display:block!important;width:max-content!important;margin:4px auto 0!important;z-index:6!important;
+}
+
+/* ─── MOBILE KEYBOARD / VOID HARDENING ───
+   Typing must not resize the seasonal wallpaper into a black/empty void. */
+:root{--cm-stable-vh:100vh}
+@supports(height:100lvh){:root{--cm-stable-vh:100lvh}}
+html,body{min-height:var(--cm-stable-vh)!important}
+#cmSeasonWallpaper{
+  top:0!important;left:0!important;right:auto!important;bottom:auto!important;
+  width:100vw!important;height:var(--cm-stable-vh)!important;min-height:var(--cm-stable-vh)!important;
+}
+html[data-special-season]{
+  min-height:var(--cm-stable-vh)!important;
+  background:var(--bg-primary)!important;
+}
+html[data-special-season] body{
+  min-height:var(--cm-stable-vh)!important;
+  background:transparent!important;
+}
+html.cm-keyboard-open #cmSeasonWallpaper{
+  height:var(--cm-stable-vh)!important;min-height:var(--cm-stable-vh)!important;
+}
+html.cm-keyboard-open #cmViewportPortal{
+  position:fixed!important;top:0!important;left:0!important;width:0!important;height:0!important;
+}
 </style>
 
 </head>
@@ -2532,7 +2614,7 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
                 </div>
             <div class="mt-3 flex items-center justify-center gap-2 flex-wrap">
                 <span id="elCount" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:var(--gold-glow);color:var(--gold)">4 Discovered</span>
-                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button><button id="trophyRoomBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(250,204,21,.10);color:#facc15">🏛️ Trophies</button><button id="masteryBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(139,92,246,.14);color:#c4b5fd">🌟 Mastery</button><button id="playerStatsBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(14,165,233,.12);color:#7dd3fc">📊 Stats</button><button id="discoveryJournalBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" title="Discovery Journal">📖 Journal</button><button id="speedrunBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(34,197,94,.12);color:#22c55e">⏱️ Speedrun</button>
+                <button id="prestigeBtn" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(234,179,8,.12);color:var(--gold)">🏆 Prestige</button><button id="masteryBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(139,92,246,.14);color:#c4b5fd">🌟 Mastery</button><button id="playerStatsBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(14,165,233,.12);color:#7dd3fc">📊 Stats</button><button id="discoveryJournalBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" title="Discovery Journal">📖 Journal</button><button id="speedrunBtn" type="button" class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(34,197,94,.12);color:#22c55e">⏱️ Speedrun</button>
                 <button id="prestigeShopBtn" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full" style="background:rgba(168,85,247,.12);color:#a78bfa">🏆 Prestige Shop</button>
                 <button id="viewRankBtn" class="hidden text-xs font-semibold px-3 py-1 rounded-full transition-colors" style="background:rgba(234,179,8,0.12);color:#eab308">View Rank</button>
                 <div id="coinDisplay" data-progression hidden class="text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1" style="background:rgba(234,179,8,0.12);color:#eab308">
@@ -2730,7 +2812,7 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
                 <button id="sortOriginal" class="sort-btn sort-active text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="original">Discovery ↕</button>
                 <button id="sortType" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="type">Type</button>
                 <button id="sortAlpha" class="sort-btn text-xs font-medium px-2.5 py-1 rounded-lg transition-all" data-sort="alpha">A → Z</button>
-                <button type="button" id="speedrunToggle" aria-controls="speedrunStorage" aria-expanded="false" aria-label="Show Speedrun Storage" title="Show Speedrun Storage">⚡</button>
+                <button type="button" id="speedrunToggle" aria-controls="speedrunStorage" aria-expanded="false" aria-label="Show Speedrun Storage" title="Show Speedrun Storage">⚡</button><button type="button" id="trophyRoomBtn" aria-controls="trophyRoomModal" aria-label="Open Trophy Box" title="Trophy Box">🏆</button>
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
                 <button type="button" id="seasonalToggle" aria-controls="seasonalStorage" aria-expanded="false" aria-label="Show Seasonal Vault" title="Show Seasonal Vault">🎉</button>
                 <button type="button" id="aprilFoolsToggle" aria-controls="aprilFoolsStorage" aria-expanded="false" aria-label="Show April Fools Storer" title="Show April Fools Storer">🤡</button>
@@ -6746,14 +6828,19 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
 
         function sculptElementCard(card,el){
             if(el&&el.isSpeedrun){
-  const medal=document.createElement('span');medal.className='speedrun-medal '+(el.speedrunMedal||'FINISHER');medal.textContent=el.speedrunMedal||'FINISHER';card.appendChild(medal);
-                card.classList.add('speedrun-showpiece');
-                const old=card.querySelector('.speedrun-record-plaque');if(old)old.remove();
-                const plaque=document.createElement('div');plaque.className='speedrun-record-plaque';
-                const clears=Math.max(1,Number(el.speedrunClears||el.isSpeedrun||1));
+                const medalName=el.speedrunMedal||'FINISHER';
+                card.classList.add('speedrun-showpiece','medal-'+medalName);
+                // Remove any generic card badge/ribbon left by old saves/render paths.
+                card.querySelectorAll('.card-ribbon,.card-tier,.type-badge,.normal-badge').forEach(x=>x.remove());
                 const best=Number(el.speedrunBestTime||el.speedrunTime||0);
-                plaque.textContent=`⚡ BEST ${best?formatSpeedrun(best):'--:--.---'} · ×${clears}`;
+                const plaque=document.createElement('div');plaque.className='speedrun-record-plaque';
+                plaque.textContent=`BEST ${best?formatSpeedrun(best):'--:--.---'}`;
                 card.appendChild(plaque);
+                const medal=document.createElement('span');medal.className='speedrun-medal '+medalName;medal.textContent=medalName;
+                card.appendChild(medal);
+                card.dataset.tier='';
+                card.title=(el.description||'')+' · Speedrun relic';
+                return;
             }
 
             if(isSeasonalElement(el)){sculptSeasonalCard(card,el);return;}
@@ -6873,8 +6960,11 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
             if(!seasonalTotal){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='No seasonal discoveries yet.';seasonalGrid.appendChild(empty);}
             const speedrunRelics=elements.filter(e=>e.isSpeedrun);
             $('speedrunCount').textContent=speedrunRelics.length+' relic'+(speedrunRelics.length===1?'':'s');
-            $('speedrunToggle').hidden=!speedrunRelics.length;
-            if(!speedrunRelics.length){$('speedrunStorage').hidden=true;$('speedrunStorage').style.setProperty('display','none','important');$('speedrunToggle').setAttribute('aria-expanded','false');}
+            $('speedrunToggle').hidden=false;
+            if(!speedrunRelics.length){
+              const sg=$('speedrunGrid');
+              if(sg&&!sg.children.length){const empty=document.createElement('p');empty.className='speedrun-empty';empty.style.cssText='grid-column:1/-1;font-size:.72rem;text-align:center;padding:14px;color:var(--text-secondary)';empty.textContent='No speedrun relics yet.';sg.appendChild(empty);}
+            }
             const count=elements.filter(e=>e.isExclusive).length;
             $('exclusiveCount').textContent=count;
             if(!count){const empty=document.createElement('p');empty.style.cssText='grid-column:1/-1;font-size:.75rem;text-align:center;padding:16px 4px;color:var(--text-secondary)';empty.textContent='A little space for rare discoveries.';exclusiveGrid.appendChild(empty);}
@@ -8611,6 +8701,32 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
             document.documentElement.classList.add('cm-viewport-locked');
         }
         installViewportPortal();
+        // Mobile virtual keyboards shrink visualViewport while typing. Never let that
+        // shrink the game's wallpaper/root height and expose the old background/void bug.
+        (function installStableViewportGuard(){
+            let stableH=Math.max(window.innerHeight||0,document.documentElement.clientHeight||0);
+            const root=document.documentElement;
+            const isTypingTarget=el=>!!(el&&(el.matches?.('input,textarea,select')||el.isContentEditable));
+            const apply=()=>{
+                const active=isTypingTarget(document.activeElement);
+                const vv=window.visualViewport;
+                const current=Math.max(window.innerHeight||0,document.documentElement.clientHeight||0,vv?.height||0);
+                if(!active&&current>stableH)stableH=current;
+                root.style.setProperty('--cm-stable-vh',Math.ceil(stableH)+'px');
+                const keyboardOpen=!!(active&&vv&&stableH-vv.height>80);
+                root.classList.toggle('cm-keyboard-open',keyboardOpen);
+            };
+            apply();
+            window.addEventListener('resize',apply,{passive:true});
+            window.addEventListener('orientationchange',()=>{stableH=0;setTimeout(()=>{stableH=Math.max(window.innerHeight||0,document.documentElement.clientHeight||0);apply()},180)},{passive:true});
+            document.addEventListener('focusin',e=>{if(isTypingTarget(e.target)){apply();requestAnimationFrame(apply)}},{passive:true});
+            document.addEventListener('focusout',()=>setTimeout(apply,120),{passive:true});
+            if(window.visualViewport){
+                visualViewport.addEventListener('resize',apply,{passive:true});
+                visualViewport.addEventListener('scroll',apply,{passive:true});
+            }
+        })();
+
 
         if($('starForgeEffect')){$('starForgeEffect').hidden=true;$('starForgeEffect').style.display='none';}
 
