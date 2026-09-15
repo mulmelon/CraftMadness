@@ -2152,27 +2152,20 @@ html[data-special-season] body{background:transparent!important}
 @supports not (height:100dvh){#cmSeasonWallpaper{height:100vh!important}}
 
 
-/* ─── MODS / MOD MAKER ─── */
-.mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mod-field{display:flex;flex-direction:column;gap:5px}
-.mod-field label{font-size:.72rem;font-weight:700;color:var(--text-secondary)}
-.mod-input,.mod-textarea,.mod-select{
-    width:100%;border:1px solid var(--border-color);border-radius:10px;padding:9px 10px;
-    background:var(--bg-secondary);color:var(--text-primary);font-size:.78rem
-}
-.mod-textarea{min-height:70px;resize:vertical}
-.mod-panel{border:1px solid var(--border-color);background:var(--bg-secondary);border-radius:13px;padding:12px;margin-top:12px}
-.mod-panel h3{font-weight:800;font-size:.88rem;margin-bottom:8px}
-.mod-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px;border:1px solid var(--border-color);border-radius:10px;margin-top:6px}
-.mod-row-main{min-width:0}.mod-row-main strong{display:block;font-size:.78rem}.mod-row-main small{font-size:.65rem;color:var(--text-secondary);overflow-wrap:anywhere}
-.mod-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.mod-btn{border:1px solid var(--border-color);background:var(--bg-tertiary);color:var(--text-primary);border-radius:9px;padding:7px 10px;font-size:.72rem;font-weight:700}
-.mod-btn:hover{filter:brightness(1.08)}
-.mod-btn-danger{color:#ef4444}
-.mod-note{font-size:.68rem;line-height:1.5;color:var(--text-secondary);margin-top:8px}
-.mod-status{font-size:.7rem;min-height:1.2em;margin-top:8px;color:var(--text-secondary)}
-.mod-badge{display:inline-flex;padding:1px 5px;border-radius:999px;font-size:.52rem;font-weight:900;background:#7c3aed;color:white;margin-left:4px;vertical-align:middle}
-@media(max-width:620px){.mod-grid{grid-template-columns:1fr}}
+/* ─── PERMANENT MILESTONES ─── */
+.milestone-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.milestone-stat{padding:9px;border:1px solid var(--border-color);border-radius:11px;background:var(--bg-secondary);text-align:center}
+.milestone-stat strong{display:block;font-size:1rem}.milestone-stat small{font-size:.61rem;color:var(--text-secondary)}
+.milestone-card{border:1px solid var(--border-color);background:var(--bg-secondary);border-radius:13px;padding:11px;margin:8px 0}
+.milestone-card.done{box-shadow:inset 0 0 0 1px rgba(34,197,94,.35)}
+.milestone-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.milestone-title{font-size:.78rem;font-weight:900}.milestone-reward{font-size:.66rem;color:var(--text-secondary);margin-top:4px}
+.milestone-bar{height:7px;background:var(--bg-tertiary);border-radius:999px;overflow:hidden;margin-top:8px}
+.milestone-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#22c55e);border-radius:999px}
+.milestone-claim{border:0;border-radius:8px;padding:6px 9px;font-size:.66rem;font-weight:900;background:#7c3aed;color:#fff}
+.milestone-claim:disabled{opacity:.55}
+.milestone-perks{font-size:.68rem;line-height:1.55;color:var(--text-secondary)}
+@media(max-width:520px){.milestone-summary{grid-template-columns:1fr}}
 
 </style>
 
@@ -2509,72 +2502,20 @@ html[data-special-season] body{background:transparent!important}
             </select>
         </div>
 
-<button id="modsBtn" class="settings-wide-btn">🧩 Mods</button>
-<button id="modMakerBtn" class="settings-wide-btn">🛠️ Mod Maker</button>
+<button id="milestonesBtn" class="settings-wide-btn">🏆 Milestones</button>
 <button id="creditsBtn" class="settings-wide-btn">🎬 Credits</button>
     </div></div>
 
 
-    <!-- Mods Modal -->
-    <div id="modsModal" class="modal-overlay"><div class="modal-box" style="max-width:620px">
-        <button class="modal-close" data-close="modsModal">&times;</button>
-        <h2 class="font-display text-xl mb-1">🧩 Mods</h2>
-        <p class="text-xs mb-3" style="color:var(--text-secondary)">Installed local Craft Madness mods. Modded discoveries never count toward rank or Prestige requirements.</p>
-        <div id="modsList"></div>
-        <div class="mod-panel">
-            <h3>Import mod</h3>
-            <textarea id="modImportText" class="mod-textarea" placeholder="Paste a Craft Madness mod code (JSON) here…"></textarea>
-            <div class="mod-actions">
-                <button id="modImportBtn" class="mod-btn">📥 Import & Install</button>
-                <button id="modOpenMakerBtn" class="mod-btn">🛠️ Open Mod Maker</button>
-            </div>
-            <div id="modsStatus" class="mod-status"></div>
-        </div>
+    <!-- Milestones Modal -->
+    <div id="milestonesModal" class="modal-overlay"><div class="modal-box" style="max-width:650px">
+        <button class="modal-close" data-close="milestonesModal">&times;</button>
+        <h2 class="font-display text-xl mb-1">🏆 Permanent Milestones</h2>
+        <p class="text-xs" style="color:var(--text-secondary)">Big account-wide goals. Claimed upgrades survive Prestige.</p>
+        <div id="milestoneSummary" class="milestone-summary"></div>
+        <div id="milestonePerks" class="milestone-card milestone-perks"></div>
+        <div id="milestoneList"></div>
     </div></div>
-
-    <!-- Mod Maker Modal -->
-    <div id="modMakerModal" class="modal-overlay"><div class="modal-box" style="max-width:720px">
-        <button class="modal-close" data-close="modMakerModal">&times;</button>
-        <h2 class="font-display text-xl mb-1">🛠️ Mod Maker</h2>
-        <p class="text-xs mb-3" style="color:var(--text-secondary)">Build a normal-element recipe pack without editing the game code.</p>
-
-        <div class="mod-grid">
-            <div class="mod-field"><label>Mod name</label><input id="modNameInput" class="mod-input" maxlength="48" placeholder="My Cool Mod"></div>
-            <div class="mod-field"><label>Author</label><input id="modAuthorInput" class="mod-input" maxlength="48" placeholder="Your name"></div>
-        </div>
-
-        <div class="mod-panel">
-            <h3>➕ Add element</h3>
-            <div class="mod-grid">
-                <div class="mod-field"><label>Element name</label><input id="modElName" class="mod-input" maxlength="60" placeholder="Crystal Apple"></div>
-                <div class="mod-field"><label>Emoji</label><input id="modElEmoji" class="mod-input" maxlength="16" placeholder="🍎"></div>
-            </div>
-            <div class="mod-field" style="margin-top:8px"><label>Description</label><input id="modElDesc" class="mod-input" maxlength="180" placeholder="A strange fruit made of crystal."></div>
-            <button id="modAddElementBtn" class="mod-btn" style="margin-top:9px">Add Element</button>
-            <div id="modElementList"></div>
-        </div>
-
-        <div class="mod-panel">
-            <h3>🔗 Add recipe</h3>
-            <div class="mod-grid">
-                <div class="mod-field"><label>Ingredient 1</label><input id="modRecipeA" class="mod-input" maxlength="60" placeholder="Water"></div>
-                <div class="mod-field"><label>Ingredient 2</label><input id="modRecipeB" class="mod-input" maxlength="60" placeholder="Crystal Apple"></div>
-            </div>
-            <div class="mod-field" style="margin-top:8px"><label>Result (must be an element in this mod)</label><input id="modRecipeResult" class="mod-input" maxlength="60" placeholder="Crystal Juice"></div>
-            <button id="modAddRecipeBtn" class="mod-btn" style="margin-top:9px">Add Recipe</button>
-            <div id="modRecipeList"></div>
-        </div>
-
-        <p class="mod-note">🔒 Mod elements are always normal, rank-excluded elements. Mods cannot create or imitate <strong>Exclusive</strong>, <strong>Seasonal</strong>, <strong>April Fools</strong>, or <strong>Everything</strong> elements. Protected existing names are blocked too.</p>
-        <div class="mod-actions">
-            <button id="modInstallDraftBtn" class="mod-btn">💾 Install Mod</button>
-            <button id="modExportDraftBtn" class="mod-btn">📤 Export Code</button>
-            <button id="modClearDraftBtn" class="mod-btn mod-btn-danger">Clear Draft</button>
-        </div>
-        <textarea id="modExportText" class="mod-textarea" readonly placeholder="Exported mod code appears here…" style="margin-top:10px"></textarea>
-        <div id="modMakerStatus" class="mod-status"></div>
-    </div></div>
-
     <!-- Credits Modal -->
     <div id="creditsModal" class="modal-overlay"><div class="modal-box credits-box" style="max-width:540px">
         <button class="modal-close" data-close="creditsModal">&times;</button>
@@ -3183,92 +3124,101 @@ html[data-special-season] body{background:transparent!important}
         };
 
 
-        // ─── LOCAL MOD SYSTEM ───
-        const CM_MOD_STORAGE='cm_installed_mods_v1';
-        let installedMods=[];
-        let modDraft={name:'',author:'',elements:[],recipes:[]};
-
-        function modPairKey(a,b){return [String(a).trim().toLowerCase(),String(b).trim().toLowerCase()].sort().join('|');}
-        function readInstalledMods(){
-            try{const v=JSON.parse(localStorage.getItem(CM_MOD_STORAGE)||'[]');installedMods=Array.isArray(v)?v:[];}catch(e){installedMods=[];}
+        // ─── PERMANENT MILESTONES ───
+        const CM_MILESTONE_KEY='cm_permanent_milestones_v1';
+        let milestoneData={claimed:[],bestElements:0,bestModified:0,bestBosses:0,bestCoins:0,bestKeys:0,bestPrestige:0,bestEverything:0,bestSeasonComplete:0};
+        const MILESTONES=[
+{id:'el50',type:'elements',need:50,title:'Pocket Collection',icon:'📗',reward:'+3% coin income',perk:{coinPct:3}},
+{id:'el100',type:'elements',need:100,title:'Collector I',icon:'📚',reward:'+5% coin income',perk:{coinPct:5}},
+{id:'el250',type:'elements',need:250,title:'Collector II',icon:'🗂️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'el500',type:'elements',need:500,title:'Collector III',icon:'🗃️',reward:'+10% coin income',perk:{coinPct:10}},
+{id:'el750',type:'elements',need:750,title:'Grand Archive',icon:'🏛️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'el1000',type:'elements',need:1000,title:'Collector IV',icon:'🌐',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'el1500',type:'elements',need:1500,title:'Collector V',icon:'🌌',reward:'+15% coin income',perk:{coinPct:15}},
+{id:'mod10',type:'modified',need:10,title:'Mutation Curious',icon:'🧪',reward:'+3% coin income',perk:{coinPct:3}},
+{id:'mod25',type:'modified',need:25,title:'Mutation Apprentice',icon:'✨',reward:'+5% coin income',perk:{coinPct:5}},
+{id:'mod75',type:'modified',need:75,title:'Mutation Hunter',icon:'💫',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'mod150',type:'modified',need:150,title:'Mutation Master',icon:'🌟',reward:'+10% coin income',perk:{coinPct:10}},
+{id:'mod300',type:'modified',need:300,title:'Mutation Legend',icon:'🔮',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
+{id:'mod500',type:'modified',need:500,title:'Mutation Overlord',icon:'🧬',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'boss1',type:'bosses',need:1,title:'Boss Breaker',icon:'⚔️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'boss3',type:'bosses',need:3,title:'Boss Hunter',icon:'👑',reward:'+10% coin income',perk:{coinPct:10}},
+{id:'boss10',type:'bosses',need:10,title:'Boss Veteran',icon:'🏆',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
+{id:'boss25',type:'bosses',need:25,title:'Boss Slayer',icon:'💥',reward:'+10% coin income',perk:{coinPct:10}},
+{id:'boss50',type:'bosses',need:50,title:'Boss Legend',icon:'👹',reward:'+15% Boss damage',perk:{bossDamagePct:15}},
+{id:'boss100',type:'bosses',need:100,title:'Boss Annihilator',icon:'💀',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
+{id:'coin100k',type:'coins',need:100000,title:'First Fortune',icon:'🪙',reward:'+3% coin income',perk:{coinPct:3}},
+{id:'coin1m',type:'coins',need:1000000,title:'Millionaire',icon:'💰',reward:'+5% coin income',perk:{coinPct:5}},
+{id:'coin10m',type:'coins',need:10000000,title:'Coin Tycoon',icon:'🏦',reward:'+8% coin income',perk:{coinPct:8}},
+{id:'coin100m',type:'coins',need:100000000,title:'Coin Empire',icon:'👑',reward:'+12% coin income',perk:{coinPct:12}},
+{id:'key10',type:'keys',need:10,title:'Keyring',icon:'🔑',reward:'+3% key luck',perk:{keyLuckPct:3}},
+{id:'key50',type:'keys',need:50,title:'Key Collector',icon:'🗝️',reward:'+5% key luck',perk:{keyLuckPct:5}},
+{id:'key150',type:'keys',need:150,title:'Keymaster',icon:'🔐',reward:'+8% key luck',perk:{keyLuckPct:8}},
+{id:'p1',type:'prestige',need:1,title:'Fresh Start',icon:'🏅',reward:'+5% coin income',perk:{coinPct:5}},
+{id:'p3',type:'prestige',need:3,title:'Prestige Adept',icon:'🎖️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'p5',type:'prestige',need:5,title:'Prestige Master',icon:'🏆',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'p10',type:'prestige',need:10,title:'Prestige Legend',icon:'💠',reward:'+10% coin income',perk:{coinPct:10}},
+{id:'everything1',type:'everything',need:1,title:'Everything Awakened',icon:'🌈',reward:'+10% coin income',perk:{coinPct:10}},
+{id:'everything5',type:'everything',need:5,title:'Everything Collector',icon:'🌠',reward:'+10% Boss damage',perk:{bossDamagePct:10}},
+{id:'everything20',type:'everything',need:20,title:'Everything Everywhere',icon:'♾️',reward:'+5% coin income',perk:{coinPct:5}},
+{id:'season1',type:'seasons',need:1,title:'Season Finisher',icon:'🎊',reward:'+5% coin income',perk:{coinPct:5}},
+{id:'season5',type:'seasons',need:5,title:'Season Veteran',icon:'🎆',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'season10',type:'seasons',need:10,title:'Season Master',icon:'🏵️',reward:'+5% Boss damage',perk:{bossDamagePct:5}},
+{id:'season20',type:'seasons',need:20,title:'Calendar Conqueror',icon:'📅',reward:'+10% coin income + 5% Boss damage',perk:{coinPct:10,bossDamagePct:5}}
+];
+        function loadMilestones(){try{const x=JSON.parse(localStorage.getItem(CM_MILESTONE_KEY)||'{}');milestoneData={...milestoneData,...x};if(!Array.isArray(milestoneData.claimed))milestoneData.claimed=[];}catch(e){}}
+        function saveMilestones(){try{localStorage.setItem(CM_MILESTONE_KEY,JSON.stringify(milestoneData));}catch(e){}}
+        function isModifiedMilestoneElement(e){
+          if(!e||e.isRankExcluded||e.excludeFromRank||e.isExclusive||e.isSeasonal||e.isAprilFools||e.isBossDefeat||e.isPrestige||e.isEverything)return false;
+          return !!(e.isHot||e.isSuperHot||e.isBasic||e.isRadioactive||e.isBlessed||e.isUnstable||e.isPhantom||e.isGolden||e.isCrystalline||e.isHoly||e.isEthereal||e.isLegendary||e.isChromatic||e.isAncient||e.isDivine||e.isAntimatter||e.isMagnetic||e.isTemporal||e.isAbyssal||e.isCelestial||e.isElectric||e.isPurified||e.isTsunami||e.isInfernal||e.isToxic||e.isViral||e.isParasitic||e.isCorrupted||e.isCursed||e.isVoid);
         }
-        function writeInstalledMods(){try{localStorage.setItem(CM_MOD_STORAGE,JSON.stringify(installedMods));}catch(e){}}
-        function protectedModFlags(o){
-            return !!(o&&(o.isExclusive||o.isSeasonal||o.isAprilFools||o.isEverything));
+        function milestoneCounts(){
+const ranked=(elements||[]).filter(e=>!e.isRankExcluded&&!e.excludeFromRank&&!e.isExclusive&&!e.isSeasonal&&!e.isAprilFools&&!e.isBossDefeat&&!e.isPrestige).length;
+const modified=(elements||[]).filter(isModifiedMilestoneElement).length;
+let bosses=0,everything=0,seasons=0,keys=0,prestige=0,coins=0;
+try{bosses=(elements||[]).filter(e=>e.isBossDefeat).reduce((n,e)=>n+Math.max(1,Number(e.defeatCount||e.count||1)),0);}catch(e){}
+try{everything=(elements||[]).filter(e=>checkIsEverything(e)||e.isEverything).length;}catch(e){}
+try{seasons=SEASONAL_EVENTS.filter(ev=>(elements||[]).filter(e=>isSeasonalElement(e)&&(seasonalEventFromElement(e)||{}).id===ev.id&&!e.isChristmasExclusive&&!e.isNewYearReward).length>=100).length;}catch(e){}
+try{keys=totalKeys();}catch(e){}
+try{const t=(elements||[]).find(e=>e.isPrestige);prestige=Number(t?.amountOfPrestige||0);}catch(e){}
+try{coins=Number(gs?.totalCoins||0);}catch(e){}
+milestoneData.bestElements=Math.max(+milestoneData.bestElements||0,ranked);
+milestoneData.bestModified=Math.max(+milestoneData.bestModified||0,modified);
+milestoneData.bestBosses=Math.max(+milestoneData.bestBosses||0,bosses);
+milestoneData.bestCoins=Math.max(+milestoneData.bestCoins||0,coins);
+milestoneData.bestKeys=Math.max(+milestoneData.bestKeys||0,keys);
+milestoneData.bestPrestige=Math.max(+milestoneData.bestPrestige||0,prestige);
+milestoneData.bestEverything=Math.max(+milestoneData.bestEverything||0,everything);
+milestoneData.bestSeasonComplete=Math.max(+milestoneData.bestSeasonComplete||0,seasons);
+saveMilestones();
+return{elements:milestoneData.bestElements,modified:milestoneData.bestModified,bosses:milestoneData.bestBosses,coins:milestoneData.bestCoins,keys:milestoneData.bestKeys,prestige:milestoneData.bestPrestige,everything:milestoneData.bestEverything,seasons:milestoneData.bestSeasonComplete};
+}
+function milestonePerks(){
+          const p={coinPct:0,bossDamagePct:0,bossDefensePct:0,mutationPct:0,keyLuckPct:0};
+          MILESTONES.forEach(m=>{if(!milestoneData.claimed.includes(m.id))return;Object.entries(m.perk||{}).forEach(([k,v])=>p[k]=(p[k]||0)+v);});
+          return p;
         }
-        function protectedElementNames(){
-            const names=new Set(['everything']);
-            try{
-                elements.forEach(e=>{if(e&&(e.isExclusive||e.isSeasonal||e.isAprilFools||e.isEverything))names.add(String(e.name).trim().toLowerCase());});
-            }catch(e){}
-            try{
-                Object.values(recipes).forEach(e=>{if(e&&(e.isExclusive||e.isSeasonal||e.isAprilFools||e.isEverything))names.add(String(e.name).trim().toLowerCase());});
-            }catch(e){}
-            return names;
+        function milestoneCoinMultiplier(){return 1+milestonePerks().coinPct/100;}
+        function milestoneBossDamageMultiplier(){return 1+milestonePerks().bossDamagePct/100;}
+function milestoneBossDefenseMultiplier(){return Math.max(.5,1-milestonePerks().bossDefensePct/100);}
+function milestoneMutationBonus(){return milestonePerks().mutationPct/100;}
+function milestoneKeyLuckMultiplier(){return 1+milestonePerks().keyLuckPct/100;}
+        function claimMilestone(id){
+          const m=MILESTONES.find(x=>x.id===id);if(!m||milestoneData.claimed.includes(id))return;
+          const c=milestoneCounts();if((c[m.type]||0)<m.need)return;
+          milestoneData.claimed.push(id);saveMilestones();renderMilestones();
+          notify('Permanent upgrade unlocked',`${m.icon} ${m.title}: ${m.reward}`,'🏆',5000);
         }
-        function normalGameNames(){
-            const names=new Set();
-            try{STARTERS.forEach(e=>names.add(String(e.name).trim().toLowerCase()));}catch(e){}
-            try{Object.values(recipes).forEach(e=>e?.name&&names.add(String(e.name).trim().toLowerCase()));}catch(e){}
-            try{Object.values(SPECIAL_ELEMENTS).forEach(e=>e?.name&&names.add(String(e.name).trim().toLowerCase()));}catch(e){}
-            return names;
-        }
-        function validateMod(raw){
-            if(!raw||typeof raw!=='object')throw new Error('Invalid mod data.');
-            const name=String(raw.name||'').trim().slice(0,48);
-            const author=String(raw.author||'').trim().slice(0,48);
-            if(!name)throw new Error('Mod name is required.');
-            if(!Array.isArray(raw.elements)||!Array.isArray(raw.recipes))throw new Error('Mod needs element and recipe lists.');
-            if(raw.elements.length>250||raw.recipes.length>500)throw new Error('Mod is too large.');
-            const protectedNames=protectedElementNames(), baseNames=normalGameNames(), localNames=new Set();
-            const cleanEls=raw.elements.map((e,i)=>{
-                if(!e||typeof e!=='object'||protectedModFlags(e))throw new Error('Protected element flags are not allowed.');
-                const n=String(e.name||'').trim().slice(0,60);
-                if(!n)throw new Error(`Element ${i+1} needs a name.`);
-                const low=n.toLowerCase();
-                if(protectedNames.has(low)||low==='everything')throw new Error(`"${n}" is protected and cannot be a mod element.`);
-                if(baseNames.has(low))throw new Error(`"${n}" already exists in Craft Madness.`);
-                if(localNames.has(low))throw new Error(`Duplicate mod element: "${n}".`);
-                localNames.add(low);
-                return{name:n,emoji:String(e.emoji||'🧩').trim().slice(0,16)||'🧩',description:String(e.description||'A modded element.').trim().slice(0,180)||'A modded element.'};
-            });
-            const exactName=new Map(cleanEls.map(e=>[e.name.toLowerCase(),e.name]));
-            const seenPairs=new Set();
-            const cleanRecipes=raw.recipes.map((r,i)=>{
-                if(!r||typeof r!=='object')throw new Error(`Recipe ${i+1} is invalid.`);
-                const a=String(r.a||'').trim().slice(0,60),b=String(r.b||'').trim().slice(0,60),res=String(r.result||'').trim().slice(0,60);
-                if(!a||!b||!res)throw new Error(`Recipe ${i+1} needs two ingredients and a result.`);
-                const resultName=exactName.get(res.toLowerCase());
-                if(!resultName)throw new Error(`Recipe result "${res}" must be an element created by this mod.`);
-                const pk=modPairKey(a,b);
-                if(seenPairs.has(pk))throw new Error(`Duplicate recipe: ${a} + ${b}.`);
-                seenPairs.add(pk);
-                return{a,b,result:resultName};
-            });
-            return{id:String(raw.id||('mod_'+Date.now()+'_'+Math.random().toString(36).slice(2,7))).slice(0,80),name,author,elements:cleanEls,recipes:cleanRecipes,enabled:raw.enabled!==false,version:1};
-        }
-        function modRecipeFor(a,b){
-            const key=modPairKey(a,b);
-            for(const mod of installedMods){
-                if(mod.enabled===false)continue;
-                const r=(mod.recipes||[]).find(x=>modPairKey(x.a,x.b)===key);
-                if(!r)continue;
-                const d=(mod.elements||[]).find(e=>String(e.name).toLowerCase()===String(r.result).toLowerCase());
-                if(d)return{...d,isModded:true,modId:mod.id,modName:mod.name,excludeFromRank:true,isRankExcluded:true};
-            }
-            return null;
-        }
-        function sanitizeLoadedModElements(){
-            if(!Array.isArray(elements))return;
-            elements=elements.filter(e=>!(e?.isModded&&protectedModFlags(e)));
-            elements.forEach(e=>{
-                if(e?.isModded){
-                    delete e.isExclusive;delete e.isSeasonal;delete e.isAprilFools;delete e.isEverything;
-                    e.excludeFromRank=true;e.isRankExcluded=true;
-                }
-            });
-        }
-        readInstalledMods();
+        function renderMilestones(){
+const c=milestoneCounts(),p=milestonePerks(),sum=$('milestoneSummary');if(!sum)return;
+sum.innerHTML=`<div class="milestone-stat"><strong>${c.elements}</strong><small>Best elements</small></div><div class="milestone-stat"><strong>${c.modified}</strong><small>Best modified</small></div><div class="milestone-stat"><strong>${c.bosses}</strong><small>Boss defeats</small></div>`;
+$('milestonePerks').innerHTML=`<strong>Permanent upgrade total</strong><br>🪙 +${p.coinPct}% income · ⚔️ +${p.bossDamagePct}% boss damage · 🔑 +${p.keyLuckPct}% key luck<br><small>Best records and claimed upgrades survive Prestige.</small>`;
+const labels={elements:'📚 ELEMENT COLLECTION',modified:'🧬 MODIFIED ELEMENTS',bosses:'⚔️ BOSSES',coins:'🪙 LIFETIME COINS',keys:'🔑 KEYS',prestige:'🏅 PRESTIGE',everything:'🌈 EVERYTHING',seasons:'🎊 SEASON COMPLETION'};
+let html='';
+Object.keys(labels).forEach(type=>{const list=MILESTONES.filter(m=>m.type===type);if(!list.length)return;html+=`<h3 style="font-size:.72rem;font-weight:900;margin:16px 2px 6px;color:var(--text-secondary)">${labels[type]}</h3>`;html+=list.map(m=>{const v=c[type]||0,done=v>=m.need,claimed=milestoneData.claimed.includes(m.id),pct=Math.min(100,v/m.need*100),shown=type==='coins'?Math.floor(Math.min(v,m.need)).toLocaleString():Math.min(v,m.need);return `<div class="milestone-card ${claimed?'done':''}"><div class="milestone-top"><div><div class="milestone-title">${m.icon} ${m.title} — ${shown}/${m.need.toLocaleString()}</div><div class="milestone-reward">${m.reward}</div></div><button class="milestone-claim" data-milestone="${m.id}" ${!done||claimed?'disabled':''}>${claimed?'✓ Permanent':done?'Claim':'Locked'}</button></div><div class="milestone-bar"><div class="milestone-fill" style="width:${pct}%"></div></div></div>`}).join('');});
+$('milestoneList').innerHTML=html;
+}
+loadMilestones();
 
         // ─── RECIPES ───
         const recipes = {
@@ -4588,7 +4538,257 @@ html[data-special-season] body{background:transparent!important}
             'Temporal Rift+Dark Magic':{name:'Chrono Curse',emoji:'⏳',color:'bg-purple-800',description:'A curse that echoes through all timelines',isTemporal:true,isCursed:true},
             'Electromagnet+Enchanted Crystal':{name:'Magnetic Crystal',emoji:'💎',color:'bg-violet-500',description:'Crystal aligned by invisible force',isMagnetic:true,isCrystalline:true},
             'Deep Trench+Uranium':{name:'Abyssal Reactor',emoji:'☢️',color:'bg-teal-800',description:'Nuclear power at crushing depth',isAbyssal:true,isRadioactive:true},
-            'Chain Lightning+Blessing':{name:'Divine Bolt',emoji:'⚡',color:'bg-yellow-300',description:'Lightning cast by the heavens',isElectric:true,isBlessed:true}
+            'Chain Lightning+Blessing':{name:'Divine Bolt',emoji:'⚡',color:'bg-yellow-300',description:'Lightning cast by the heavens',isElectric:true,isBlessed:true},
+
+            // ─── NEW CONNECTED ELEMENT TREES ───
+            'Stone+Energy':{name:'Charged Stone',emoji:'🔷',description:'A stone humming with stored energy'},
+            'Charged Stone+Water':{name:'Prism Shard',emoji:'💎',description:'A clear shard that bends light'},
+            'Prism Shard+Fire':{name:'Sun Crystal',emoji:'🔶',description:'A crystal glowing with captured heat'},
+            'Prism Shard+Water':{name:'Tide Crystal',emoji:'🔹',description:'A crystal with water moving inside'},
+            'Prism Shard+Earth':{name:'Geode Heart',emoji:'🪨',description:'The brilliant core of a geode'},
+            'Prism Shard+Air':{name:'Sky Crystal',emoji:'🔷',description:'A weightless blue crystal'},
+            'Sun Crystal+Sky Crystal':{name:'Radiant Prism',emoji:'🌈',description:'A prism overflowing with colored light'},
+            'Tide Crystal+Geode Heart':{name:'Crystal Reef',emoji:'🪸',description:'A reef grown from mineral glass'},
+            'Radiant Prism+Crystal Reef':{name:'Prismatic Sanctuary',emoji:'💠',description:'A glittering refuge of living crystal'},
+            'Sun Crystal+Geode Heart':{name:'Magma Gem',emoji:'♦️',description:'A gemstone forged by heat and pressure'},
+            'Magma Gem+Sky Crystal':{name:'Comet Jewel',emoji:'☄️',description:'A jewel streaked with celestial fire'},
+            'Comet Jewel+Radiant Prism':{name:'Starlight Diamond',emoji:'💎',description:'A diamond sparkling like a tiny star'},
+            'Metal+Energy':{name:'Powered Metal',emoji:'⚙️',description:'Metal carrying a steady electric charge'},
+            'Powered Metal+Tool':{name:'Mechanism',emoji:'⚙️',description:'A compact system of moving parts'},
+            'Mechanism+Air':{name:'Turbine',emoji:'🌀',description:'Blades that turn flowing air into power'},
+            'Mechanism+Water':{name:'Hydraulic System',emoji:'🔩',description:'Machinery driven by pressurized water'},
+            'Mechanism+Fire':{name:'Engine Block',emoji:'🛠️',description:'The heavy core of a combustion engine'},
+            'Turbine+Energy':{name:'Generator',emoji:'⚡',description:'A machine that produces usable power'},
+            'Hydraulic System+Tool':{name:'Excavator',emoji:'🚜',description:'A powerful digging machine'},
+            'Engine Block+Tool':{name:'Motor',emoji:'⚙️',description:'A machine that turns energy into motion'},
+            'Motor+Wheel':{name:'Vehicle',emoji:'🚙',description:'A powered machine made for travel'},
+            'Vehicle+Air':{name:'Hovercraft',emoji:'🛸',description:'A vehicle riding on a cushion of air'},
+            'Power Station+Vehicle':{name:'Electric Transport',emoji:'🚈',description:'Transportation powered by a large electric network'},
+            'Plant+Water':{name:'Sapling',emoji:'🌱',description:'A young plant beginning to grow'},
+            'Sapling+Time':{name:'Ancient Tree',emoji:'🌳',description:'A tree that has stood for generations'},
+            'Ancient Tree+Water':{name:'Rainforest',emoji:'🌴',description:'A dense forest fed by constant rain'},
+            'Ancient Tree+Air':{name:'Whispering Grove',emoji:'🍃',description:'A grove whose leaves sing in the wind'},
+            'Ancient Tree+Earth':{name:'Root Network',emoji:'🌿',description:'A vast web of roots beneath the soil'},
+            'Rainforest+Life':{name:'Canopy',emoji:'🌳',description:'A living roof of branches and leaves'},
+            'Root Network+Life':{name:'Mycelial Grove',emoji:'🍄',description:'A forest floor connected by fungal threads'},
+            'Canopy+Air':{name:'Cloud Forest',emoji:'🌫️',description:'A high forest wrapped in mist'},
+            'Whispering Grove+Time':{name:'Elderwood',emoji:'🪵',description:'Wood hardened by an extraordinary age'},
+            'Elderwood+Tool':{name:'Carved Totem',emoji:'🗿',description:'A carefully carved monument of old wood'},
+            'Cloud Forest+Mycelial Grove':{name:'Living Biome',emoji:'🌎',description:'A deeply interconnected ecosystem'},
+            'Living Biome+Time':{name:'Primeval Wilds',emoji:'🌲',description:'A wilderness untouched across ages'},
+            'Ocean+Earth':{name:'Seabed',emoji:'🌊',description:'The ground beneath the ocean'},
+            'Seabed+Fire':{name:'Hydrothermal Vent',emoji:'♨️',description:'A superheated opening on the ocean floor'},
+            'Seabed+Life':{name:'Deep Coral',emoji:'🪸',description:'Coral adapted to the dark depths'},
+            'Ocean+Air':{name:'Ocean Current',emoji:'🌊',description:'A huge stream of moving seawater'},
+            'Ocean Current+Time':{name:'Gyre',emoji:'🌀',description:'A vast rotating system of ocean currents'},
+            'Hydrothermal Vent+Life':{name:'Vent Colony',emoji:'🦐',description:'Life thriving around a deep-sea vent'},
+            'Deep Coral+Time':{name:'Ancient Reef',emoji:'🪸',description:'A reef built over countless generations'},
+            'Gyre+Earth':{name:'Abyssal Plain',emoji:'🌑',description:'A broad and silent deep-ocean floor'},
+            'Abyssal Plain+Life':{name:'Deep Sea Habitat',emoji:'🐟',description:'An ecosystem far below the sunlight'},
+            'Vent Colony+Ancient Reef':{name:'Midnight Reef',emoji:'🌌',description:'A glowing reef hidden in the deep'},
+            'Midnight Reef+Ocean Current':{name:'Pelagic Kingdom',emoji:'🐋',description:'A vast realm of open-ocean life'},
+            'Pelagic Kingdom+Deep Sea Habitat':{name:'World Ocean',emoji:'🌐',description:'An ocean system connected across the planet'},
+            'Air+Energy':{name:'Charged Air',emoji:'⚡',description:'Air crackling with electrical energy'},
+            'Charged Air+Water':{name:'Storm Front',emoji:'🌩️',description:'A boundary where powerful weather gathers'},
+            'Storm Front+Air':{name:'Jet Stream',emoji:'💨',description:'A fast river of air high in the atmosphere'},
+            'Storm Front+Earth':{name:'Thunderhead',emoji:'⛈️',description:'A towering storm cloud'},
+            'Jet Stream+Water':{name:'Sky River',emoji:'☁️',description:'A long atmospheric stream carrying moisture'},
+            'Thunderhead+Energy':{name:'Lightning Field',emoji:'⚡',description:'A storm region alive with electrical discharge'},
+            'Jet Stream+Time':{name:'Weather Pattern',emoji:'🌀',description:'A repeating large-scale movement of weather'},
+            'Sky River+Cold':{name:'Ice Cloud',emoji:'🌨️',description:'A cloud filled with suspended ice crystals'},
+            'Weather Pattern+Ocean':{name:'Climate System',emoji:'🌍',description:'The interacting machinery of global climate'},
+            'Lightning Field+Sky River':{name:'Tempest',emoji:'🌪️',description:'A huge and violent atmospheric disturbance'},
+            'Climate System+Time':{name:'Climate Cycle',emoji:'🔄',description:'A long repeating shift in planetary climate'},
+            'Tempest+Climate Cycle':{name:'Atmospheric Engine',emoji:'🌐',description:'A planet-scale engine of wind, water, and heat'},
+
+            // ─── SPACE EXPANSION ───
+            'Sky+Night':{name:'Outer Space',emoji:'🌌',description:'The vast region beyond the atmosphere'},
+            'Outer Space+Earth':{name:'Planetary Orbit',emoji:'🛰️',description:'A path around a planet'},
+            'Outer Space+Stone':{name:'Asteroid',emoji:'☄️',description:'A rocky body traveling through space'},
+            'Asteroid+Fire':{name:'Meteor',emoji:'🌠',description:'A space rock burning through an atmosphere'},
+            'Protostar+Time':{name:'Star System',emoji:'☀️',description:'A mature star and the bodies around it'},
+            'Star System+Earth':{name:'Rocky Planet',emoji:'🪐',description:'A solid world orbiting a star'},
+            'Star System+Ocean':{name:'Ocean Planet',emoji:'🌊',description:'A world covered by a global ocean'},
+            'Star System+Life':{name:'Living Planet',emoji:'🌎',description:'A planet supporting a biosphere'},
+            'Star System+Star System':{name:'Binary Star',emoji:'🌟',description:'Two stars orbiting one another'},
+            'Star System+Time':{name:'Stellar Remnant',emoji:'✨',description:'What remains after a star changes beyond its main life'},
+            'Galaxy+Galaxy':{name:'Galaxy Cluster',emoji:'🌀',description:'A huge gathering of galaxies'},
+            'Cosmic Web+Time':{name:'Deep Cosmos',emoji:'🌌',description:'The universe viewed across immense scales'},
+
+            // ─── CIVILIZATION EXPANSION ───
+            'Human+Earth':{name:'Settlement',emoji:'🏕️',description:'A place where people begin living together'},
+            'Village+Tool':{name:'Workshop',emoji:'🛠️',description:'A place where skilled work is performed'},
+            'Town+Tool':{name:'Industry',emoji:'🏭',description:'Organized production using tools and machines'},
+            'Town+Knowledge':{name:'Schoolhouse',emoji:'🏫',description:'A community place for teaching and learning'},
+            'City+Trade Route':{name:'Commerce',emoji:'🏪',description:'Large-scale exchange of goods and services'},
+            'City+Industry':{name:'Industrial City',emoji:'🏭',description:'A city shaped by large-scale manufacturing'},
+            'City+Electricity':{name:'Electric City',emoji:'🌃',description:'A city illuminated and powered by electricity'},
+            'Metropolis+Vehicle':{name:'Transit Network',emoji:'🚇',description:'A system moving people throughout a large city'},
+            'Metropolis+Knowledge':{name:'Research Institute',emoji:'🔬',description:'An organization dedicated to discovery'},
+            'Commerce+Ocean':{name:'Global Trade',emoji:'🚢',description:'Trade connecting distant regions of the world'},
+            'Research Institute+Energy':{name:'Advanced Science',emoji:'🧪',description:'Research pushing beyond established technology'},
+            'Metropolis+Living Biome':{name:'Green City',emoji:'🌱',description:'A city designed to coexist with living systems'},
+
+            // ─── BIOLOGY EXPANSION ───
+            'Life+Water':{name:'Microbe',emoji:'🦠',description:'A tiny living organism'},
+            'Microbe+Time':{name:'Microbial Colony',emoji:'🧫',description:'A growing community of microorganisms'},
+            'Life+Earth':{name:'Organism',emoji:'🧬',description:'An individual living system'},
+            'Organism+Time':{name:'Adaptation',emoji:'🧬',description:'A trait shaped by survival across generations'},
+            'Evolution+Plant':{name:'Flora',emoji:'🌿',description:'The plant life of a region'},
+            'Evolution+Animal':{name:'Fauna',emoji:'🦌',description:'The animal life of a region'},
+            'Flora+Fauna':{name:'Ecosystem',emoji:'🌎',description:'Living communities interacting with their environment'},
+            'Fungi+Root Network':{name:'Symbiosis',emoji:'🤝',description:'Different organisms living in close cooperation'},
+            'Ecosystem+Time':{name:'Biodiversity',emoji:'🦋',description:'A rich variety of living forms'},
+            'Biodiversity+Earth':{name:'Habitat',emoji:'🌳',description:'A place where organisms live'},
+            'Habitat+Water':{name:'Wetland',emoji:'🪷',description:'A water-rich habitat full of life'},
+            'Habitat+Mountain':{name:'Alpine Habitat',emoji:'🏔️',description:'A high-elevation ecosystem'},
+            'Habitat+Sand':{name:'Desert Habitat',emoji:'🌵',description:'An ecosystem adapted to dry conditions'},
+            'Biology+Technology':{name:'Biotechnology',emoji:'🧬',description:'Technology built using biological processes'},
+            'Biodiversity+Knowledge':{name:'Ecology',emoji:'🌱',description:'The study of relationships in living systems'},
+            'Ecology+Climate System':{name:'Biosphere Science',emoji:'🌍',description:'The study of life across the whole planet'},
+
+            // ─── FOOD EXPANSION ───
+            'Plant+Earth':{name:'Crop',emoji:'🌾',description:'A plant grown for food or materials'},
+            'Crop+Tool':{name:'Harvested Crop',emoji:'🧺',description:'A crop gathered and ready for use'},
+            'Harvested Crop+Stone':{name:'Flour',emoji:'🌾',description:'Ground grain ready for cooking'},
+            'Soup+Fire':{name:'Stew',emoji:'🥘',description:'A rich slow-cooked meal'},
+            'Fermentation+Crop':{name:'Vinegar',emoji:'🫙',description:'A sharp fermented cooking ingredient'},
+            'Bread+Human':{name:'Bakery',emoji:'🥐',description:'A place devoted to baked foods'},
+            'Restaurant+Commerce':{name:'Food Industry',emoji:'🏪',description:'Large-scale production and sale of food'},
+            'Agriculture+Technology':{name:'Smart Farming',emoji:'🌱',description:'Farming guided by modern technology'},
+            'Food Industry+Global Trade':{name:'World Cuisine',emoji:'🌍',description:'Food traditions shared across the world'},
+
+            // ─── ALCHEMY EXPANSION ───
+            'Potion+Life':{name:'Vital Elixir',emoji:'⚗️',description:'An alchemical mixture associated with vitality'},
+            'Potion+Fire':{name:'Flame Tonic',emoji:'🔥',description:'A potion carrying intense heat'},
+            'Potion+Cold':{name:'Frost Tonic',emoji:'❄️',description:'A potion carrying deep cold'},
+            'Potion+Air':{name:'Vapor Elixir',emoji:'💨',description:'A potion lighter than ordinary liquid'},
+            'Potion+Earth':{name:'Mineral Elixir',emoji:'🪨',description:'A dense potion rich with minerals'},
+            'Metal+Potion':{name:'Alchemical Metal',emoji:'⚙️',description:'Metal altered through strange chemistry'},
+            'Alchemical Metal+Gold':{name:'Gilded Alloy',emoji:'🟨',description:'An unusual alloy with a golden shine'},
+            'Potion+Knowledge':{name:'Alchemy',emoji:'⚗️',description:'The experimental art of transformation'},
+            'Alchemy Crystal+Time':{name:'Transmutation Stone',emoji:'💠',description:'A stone associated with changing one material into another'},
+            'Transmutation Stone+Gold':{name:'Philosopher Stone',emoji:'🔴',description:'A legendary symbol of perfected alchemy'},
+            'Alchemy+Biology':{name:'Bioalchemy',emoji:'🧬',description:'Alchemy focused on living materials'},
+            'Alchemy+Advanced Science':{name:'Modern Alchemy',emoji:'🧪',description:'Old transformation ideas viewed through advanced science'},
+
+            // ─── ERAS EXPANSION ───
+            'Human+Stone':{name:'Stone Age',emoji:'🪨',description:'An era defined by widespread stone tools'},
+            'Stone Age+Metal':{name:'Metal Age',emoji:'⚒️',description:'An era increasingly shaped by metalworking'},
+            'Metal Age+Industry':{name:'Industrial Age',emoji:'🏭',description:'An era transformed by mechanized production'},
+            'Industrial Age+Electricity':{name:'Electric Age',emoji:'💡',description:'An era reshaped by electrical power'},
+            'Connected Age+Advanced Science':{name:'Innovation Age',emoji:'🔬',description:'An era driven by rapid scientific development'},
+            'Innovation Age+Outer Space':{name:'Space Age',emoji:'🚀',description:'An era of exploration beyond Earth'},
+            'Space Age+Living Planet':{name:'Interplanetary Age',emoji:'🪐',description:'An era capable of reaching other worlds'},
+            'Interplanetary Age+Star System':{name:'Stellar Age',emoji:'🌟',description:'An era spanning an entire star system'},
+            'Stellar Age+Galaxy':{name:'Galactic Age',emoji:'🌌',description:'An era reaching across a galaxy'},
+
+            // ─── CONVERGENCE EXPANSION ───
+            'Civilization+Climate System':{name:'Anthropocene',emoji:'🌍',description:'An age where civilization strongly shapes planetary systems'},
+            'Biotechnology+Smart Farming':{name:'Synthetic Agriculture',emoji:'🧬',description:'Agriculture redesigned through biotechnology'},
+            'Research Institute+Starlight Diamond':{name:'Quantum Crystal Lab',emoji:'🔬',description:'A laboratory studying unusual crystalline phenomena'},
+            'Atmospheric Engine+Electric City':{name:'Weather Grid',emoji:'🌩️',description:'A city-scale network interacting with atmospheric energy'},
+            'World Ocean+Global Trade':{name:'Oceanic Civilization',emoji:'🌊',description:'A civilization deeply connected through the world ocean'},
+            'Primeval Wilds+Biodiversity':{name:'Untamed Biosphere',emoji:'🌲',description:'A vast and exceptionally diverse living wilderness'},
+            'Advanced Science+Neutron Star':{name:'Extreme Physics',emoji:'⚛️',description:'Science studying matter under extraordinary conditions'},
+            'Extreme Physics+Quantum Crystal Lab':{name:'Quantum Engineering',emoji:'⚛️',description:'Engineering based on unusual physical effects'},
+            'Quantum Engineering+Space Age':{name:'Deep Space Technology',emoji:'🛰️',description:'Technology designed for long-distance space exploration'},
+            'Deep Space Technology+Living Planet':{name:'World Seeder',emoji:'🌱',description:'A theoretical system for establishing life-supporting environments'},
+            'Green City+Smart Farming':{name:'Sustainable Civilization',emoji:'♻️',description:'A civilization designed around long-term resource balance'},
+            'Sustainable Civilization+Biosphere Science':{name:'Planetary Stewardship',emoji:'🌎',description:'Coordinated care for a planet\'s living systems'},
+            'Galactic Age+Quantum Engineering':{name:'Starway Network',emoji:'✨',description:'A vast network linking distant stellar regions'},
+            'Starway Network+World Seeder':{name:'Cosmic Settlement',emoji:'🪐',description:'Settlements spread across distant worlds'},
+            'Cosmic Settlement+Planetary Stewardship':{name:'Interstellar Ecology',emoji:'🌌',description:'Ecology considered across inhabited worlds'},
+            'Interstellar Ecology+Deep Cosmos':{name:'Cosmic Civilization',emoji:'🌠',description:'A civilization operating across immense cosmic distances'},
+
+            // ─── GEOLOGY TREE ───
+            'Stone+Fire':{name:'Igneous Rock',emoji:'🌋',description:'Rock formed from cooled molten material'},
+            'Igneous Rock+Time':{name:'Mineral Deposit',emoji:'💎',description:'Minerals concentrated through geological processes'},
+            'Mineral Deposit+Tool':{name:'Mine',emoji:'⛏️',description:'A place where useful minerals are extracted'},
+            'Mine+Industry':{name:'Mining Industry',emoji:'🏭',description:'Large-scale extraction of geological resources'},
+            'Mountain+Fire':{name:'Volcanic Mountain',emoji:'🌋',description:'A mountain built by volcanic activity'},
+            'Volcanic Mountain+Time':{name:'Caldera',emoji:'🌋',description:'A vast volcanic depression'},
+            'Geology+Advanced Science':{name:'Geoscience',emoji:'🌍',description:'Advanced study of planetary geological systems'},
+
+            // ─── COMPUTING TREE ───
+            'Circuit+Metal':{name:'Electronic Circuit',emoji:'🖥️',description:'A compact circuit built from electronic components'},
+            'Electronic Circuit+Knowledge':{name:'Processor',emoji:'💻',description:'A device that performs programmed operations'},
+            'Processor+Processor':{name:'Parallel Computer',emoji:'🖥️',description:'A computer using many processors together'},
+            'Internet+Knowledge':{name:'Search Engine',emoji:'🔎',description:'A system for finding information across networks'},
+            'Internet+Commerce':{name:'E-Commerce',emoji:'🛒',description:'Trade performed through computer networks'},
+            'Computer+Advanced Science':{name:'Supercomputer',emoji:'🖥️',description:'A computer designed for enormous calculations'},
+            'Supercomputer+Climate System':{name:'Climate Model',emoji:'🌍',description:'A computational simulation of climate'},
+            'Supercomputer+Biology':{name:'Bioinformatics',emoji:'🧬',description:'Computing used to analyze biological information'},
+            'Internet+Research Institute':{name:'Open Knowledge',emoji:'📚',description:'Research and information shared across networks'},
+            'Parallel Computer+Quantum Engineering':{name:'Quantum Computer',emoji:'⚛️',description:'A computer using quantum information'},
+
+            // ─── MUSIC TREE ───
+            'Music+Human':{name:'Musician',emoji:'🎸',description:'A person who creates or performs music'},
+            'Musician+Musician':{name:'Band',emoji:'🎤',description:'A group performing music together'},
+            'Music+City':{name:'Concert',emoji:'🎫',description:'A live public musical performance'},
+            'Music+Knowledge':{name:'Music Theory',emoji:'🎼',description:'The study of musical structure'},
+
+            // ─── ARCHITECTURE TREE ───
+            'House+House':{name:'Neighborhood',emoji:'🏘️',description:'A group of nearby homes'},
+            'Stone+Knowledge':{name:'Architecture',emoji:'📐',description:'The art and science of designing buildings'},
+            'Architecture+House':{name:'Designed Home',emoji:'🏡',description:'A deliberately planned living space'},
+            'Architecture+City':{name:'Urban Design',emoji:'🏙️',description:'Design applied to the structure of cities'},
+            'Skyscraper+Skyscraper':{name:'Skyline',emoji:'🌆',description:'The outline formed by a city\'s tall buildings'},
+            'Architecture+Ancient Tree':{name:'Treehouse',emoji:'🌳',description:'A structure built among tree branches'},
+            'Architecture+Energy':{name:'Smart Building',emoji:'🏢',description:'A building managed by automated systems'},
+            'Smart Building+Green City':{name:'Eco District',emoji:'🌱',description:'A neighborhood designed for efficient resource use'},
+            'Urban Design+Transit Network':{name:'Walkable City',emoji:'🚶',description:'A city designed around accessible movement'},
+            'Eco District+Walkable City':{name:'Regenerative City',emoji:'🌿',description:'A city designed to restore as well as conserve'},
+
+            // ─── MEDICINE TREE ───
+            'Biology+Knowledge':{name:'Medicine',emoji:'⚕️',description:'Knowledge applied to health and disease'},
+            'Medicine+Technology':{name:'Medical Technology',emoji:'🩺',description:'Technology used in medical care'},
+            'Medicine+City':{name:'Hospital',emoji:'🏥',description:'A facility for medical treatment'},
+            'Hospital+Research Institute':{name:'Medical Research',emoji:'🔬',description:'Research focused on health and treatment'},
+            'Medical Research+Biotechnology':{name:'Gene Therapy',emoji:'🧬',description:'Biotechnology used to alter genetic function'},
+            'Medical Technology+Computer':{name:'Medical Imaging',emoji:'🖥️',description:'Technology for viewing structures inside the body'},
+            'Biology+Computer':{name:'Computational Biology',emoji:'💻',description:'Computing applied to biological systems'},
+            'Computational Biology+Medical Research':{name:'Precision Medicine',emoji:'🎯',description:'Treatment informed by detailed biological data'},
+            'Medical Research+Advanced Science':{name:'Biomedical Science',emoji:'🧪',description:'Advanced science focused on living health systems'},
+            'Biomedical Science+Smart Farming':{name:'Nutrition Science',emoji:'🥗',description:'Scientific study of food and health'},
+
+            // ─── EXPLORATION TREE ───
+            'Sailor+Knowledge':{name:'Navigator',emoji:'🧭',description:'A traveler skilled at finding routes'},
+            'Navigator+Ocean Current':{name:'Sea Chart',emoji:'🗺️',description:'A map designed for ocean travel'},
+            'Navigator+Sky':{name:'Star Navigation',emoji:'⭐',description:'Navigation using stars as reference points'},
+            'Astronaut+Planetary Orbit':{name:'Orbital Mission',emoji:'🛰️',description:'A mission operating around a planet'},
+            'Astronaut+Rocky Planet':{name:'Planetary Explorer',emoji:'🚀',description:'An explorer traveling across another world'},
+            'Planetary Explorer+Deep Space Technology':{name:'Deep Space Mission',emoji:'🛰️',description:'A mission traveling far beyond a home planet'},
+            'Deep Space Mission+Star System':{name:'Interstellar Probe',emoji:'📡',description:'A probe intended for the space between stars'},
+            'Interstellar Probe+Deep Cosmos':{name:'Cosmic Expedition',emoji:'🌌',description:'An expedition into extremely distant space'},
+
+            // ─── KNOWLEDGE TREE ───
+            'Scholar+Earth':{name:'Geography',emoji:'🗺️',description:'The study of places and planetary surfaces'},
+            'Scholar+Life':{name:'Natural Science',emoji:'🔬',description:'Systematic study of the natural world'},
+            'Scholar+City':{name:'Social Science',emoji:'🏙️',description:'Systematic study of societies'},
+            'Library+Computer':{name:'Digital Library',emoji:'💻',description:'A library stored and accessed digitally'},
+            'University+Library':{name:'Academia',emoji:'🎓',description:'A community centered on advanced scholarship'},
+            'Academia+Research Institute':{name:'Scientific Community',emoji:'🔬',description:'A network of people producing research'},
+            'Scientific Community+Open Knowledge':{name:'Knowledge Commons',emoji:'🌐',description:'Shared knowledge available to a broad community'},
+            'History+Archaeology':{name:'Ancient Studies',emoji:'🏺',description:'Study of ancient societies and material remains'},
+            'Natural Science+Advanced Science':{name:'Frontier Science',emoji:'⚛️',description:'Scientific work at the edge of current understanding'},
+
+            // ─── CROSSROADS TREE ───
+            'Geoscience+Climate Model':{name:'Earth System Model',emoji:'🌍',description:'A model combining geology, oceans and atmosphere'},
+            'Internet+Electric City':{name:'Smart Grid',emoji:'⚡',description:'A digitally coordinated electrical network'},
+            'Smart Grid+Sustainable Civilization':{name:'Resilient Infrastructure',emoji:'🏙️',description:'Infrastructure designed to adapt and endure'},
+            'Bioinformatics+Gene Therapy':{name:'Genomic Medicine',emoji:'🧬',description:'Medicine informed by large-scale genetic analysis'},
+            'Quantum Computer+Extreme Physics':{name:'Quantum Simulation',emoji:'⚛️',description:'Computation used to model extreme quantum systems'},
+            'Music Theory+Quantum Computer':{name:'Algorithmic Music',emoji:'🎼',description:'Music generated through complex computation'},
+            'Regenerative City+Planetary Stewardship':{name:'Planetary Habitat',emoji:'🌎',description:'Human settlements designed as part of planetary ecology'},
+            'Cosmic Expedition+Cosmic Civilization':{name:'Deep Cosmos Survey',emoji:'🔭',description:'A civilization-scale survey of distant space'},
+            'Paleontology+Evolution':{name:'Evolutionary History',emoji:'🦖',description:'The history of life\'s changes through deep time'},
+            'Earth System Model+Biosphere Science':{name:'Planetary Science',emoji:'🪐',description:'Integrated study of a planet as a complete system'},
+            'Planetary Science+Living Planet':{name:'Astrobiology',emoji:'👽',description:'The study of life in a planetary and cosmic context'},
+            'Astrobiology+Cosmic Settlement':{name:'Exobiology Network',emoji:'🧬',description:'Biological research spanning multiple worlds'},
+
+
+
         };
 
         // ─── SHOP PACKS ───
@@ -4614,7 +4814,18 @@ html[data-special-season] body{background:transparent!important}
             deepSpace:{id:'deepSpace',name:'Deep Space Cache',price:150000,description:'Extreme cosmic matter and stellar objects that unlock a large late-game recipe network.',maxStock:1,stockChance:0.15,
                 elements:[{name:'Pulsar',emoji:'📡',description:'A rapidly rotating neutron beacon',weight:30},{name:'Quasar',emoji:'🌠',description:'A galaxy core blazing across the universe',weight:25},{name:'Cosmic Dust',emoji:'✨',description:'Fine matter drifting between stars',weight:25},{name:'Dark Energy',emoji:'🌌',description:'The force pushing the universe apart',weight:20}]},
             fracturedReality:{id:'fracturedReality',name:'Fractured Reality Crate',price:300000,description:'Pieces of impossible space. Expensive, dangerous and connected to endgame reality recipes.',maxStock:1,stockChance:0.08,
-                elements:[{name:'Dimension',emoji:'🧊',description:'An axis along which reality can exist',weight:30},{name:'Parallel World',emoji:'🪞',description:'A reality beside this one',weight:25},{name:'Reality Shard',emoji:'🔷',description:'A broken piece of existence',weight:25},{name:'Spatial Rift',emoji:'🕳️',description:'A tear connecting distant places',weight:20}]}
+                elements:[{name:'Dimension',emoji:'🧊',description:'An axis along which reality can exist',weight:30},{name:'Parallel World',emoji:'🪞',description:'A reality beside this one',weight:25},{name:'Reality Shard',emoji:'🔷',description:'A broken piece of existence',weight:25},{name:'Spatial Rift',emoji:'🕳️',description:'A tear connecting distant places',weight:20}]},
+            naturalHistory:{id:'naturalHistory',name:'Natural History Case',price:9000,description:'Fossils, minerals and field discoveries that grow into geology and ancient-life branches.',maxStock:2,stockChance:0.6,
+                elements:[{name:'Amber',emoji:'🟠',description:'Ancient resin hardened through time',weight:30},{name:'Fossil',emoji:'🦴',description:'Preserved evidence of ancient life',weight:30},{name:'Mineral Sample',emoji:'💎',description:'A specimen collected from rock',weight:25},{name:'Field Journal',emoji:'📓',description:'Recorded observations from exploration',weight:15}]},
+            digitalFrontier:{id:'digitalFrontier',name:'Digital Frontier Pack',price:24000,description:'Computing roots that branch into networks, software and advanced machines.',maxStock:2,stockChance:0.45,
+                elements:[{name:'Code',emoji:'💻',description:'Instructions written for a computer',weight:30},{name:'Server',emoji:'🖥️',description:'A computer providing network services',weight:25},{name:'Sensor',emoji:'📡',description:'A device that measures its surroundings',weight:25},{name:'Database',emoji:'🗄️',description:'An organized store of digital information',weight:20}]},
+            cultureCache:{id:'cultureCache',name:'Culture Cache',price:42000,description:'Creative roots for art, music, stories and shared culture.',maxStock:2,stockChance:0.35,
+                elements:[{name:'Canvas',emoji:'🖼️',description:'A surface prepared for art',weight:30},{name:'Melody',emoji:'🎶',description:'A memorable sequence of musical notes',weight:25},{name:'Story',emoji:'📖',description:'Events shaped into a narrative',weight:25},{name:'Stage',emoji:'🎭',description:'A place built for performance',weight:20}]},
+            scienceCrate:{id:'scienceCrate',name:'Research Crate',price:85000,description:'Laboratory roots that open chemistry, measurement and experimental-science trees.',maxStock:1,stockChance:0.25,
+                elements:[{name:'Sample',emoji:'🧪',description:'Material collected for study',weight:30},{name:'Lens',emoji:'🔍',description:'Curved material that redirects light',weight:25},{name:'Catalyst',emoji:'⚗️',description:'A substance that speeds a reaction',weight:25},{name:'Measurement',emoji:'📏',description:'A quantified observation',weight:20}]},
+            futureTech:{id:'futureTech',name:'Future Tech Capsule',price:220000,description:'Rare engineering roots that connect robotics, automation and space technology.',maxStock:1,stockChance:0.12,
+                elements:[{name:'Drone',emoji:'🚁',description:'An unmanned mobile machine',weight:30},{name:'Nanomaterial',emoji:'🔬',description:'Material engineered at extremely small scales',weight:25},{name:'Automation',emoji:'🤖',description:'Machines performing tasks automatically',weight:25},{name:'Prototype',emoji:'🛠️',description:'An early experimental design',weight:20}]}
+
         };
 
 
@@ -5411,6 +5622,7 @@ html[data-special-season] body{background:transparent!important}
         function _getItem(k){if(_store[k]!==undefined)return _store[k];try{const v=localStorage.getItem(k);if(v!==null)return _store[k]=v;}catch(e){}try{const m=document.cookie.match(new RegExp('(?:^|; )'+encodeURIComponent(k).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'=([^;]*)'));if(m)return _store[k]=decodeURIComponent(m[1]),_store[k];}catch(e){}return null;}
         function baseGameState(){return {prestige:{coins:0,times:0,upgrades:{}},bossMeta:{coins:0,upgrades:{},defeats:{}},coins:0,totalCoins:0,lastCalcTime:Date.now(),shopRefresh:Date.now(),shopStock:{},packsBought:0,hasShownEnding:false,sfUnlocked:false,cyMoney:0,sfUpgraded:false};}
         function save(){
+            try{milestoneCounts();}catch(e){}
             normalizeKeyStacks();normalizeEverything();updateProgressionUI();
             try{
                 const pre=bossMode?'fc_boss_':'fc_';
@@ -5422,7 +5634,7 @@ html[data-special-season] body{background:transparent!important}
             const pre=isBoss?'fc_boss_':'fc_';
             elements=[...STARTERS.map(e=>({...e}))];combos=[];gs=baseGameState();
             const e=_getItem(pre+'el'),c=_getItem(pre+'co'),st=_getItem(pre+'gs');
-            if(e){elements=JSON.parse(e);sanitizeLoadedModElements();elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
+            if(e){elements=JSON.parse(e);elements.forEach(el=>{if(checkIsEverything(el)){stripToEverything(el);}});}
             if(c)combos=JSON.parse(c);
             if(st){const l=JSON.parse(st);gs={...gs,...l};}
             normalizeKeyStacks();
@@ -5584,7 +5796,7 @@ html[data-special-season] body{background:transparent!important}
         function tickBossLocks(){const b=bossData();if(!b)return;b.locks=b.locks||{};Object.keys(b.locks).forEach(n=>{b.locks[n]--;if(b.locks[n]<=0)delete b.locks[n];});}
         function refreshBossLockedCards(){if(!bossMode)return;document.querySelectorAll('.el-card[data-name]').forEach(c=>{const t=bossLockedTurns(c.dataset.name);c.classList.toggle('boss-locked-card',t>0);if(t>0)c.dataset.lockTurns=t;else delete c.dataset.lockTurns;});}
         function updateBossUI(){const panel=$('bossPanel'),b=bossData();document.body.classList.toggle('boss-mode',!!b);if(!b){panel.hidden=true;return;}panel.hidden=false;const d=BOSS_DEFS[b.id]||BOSS_DEFS.unmaker,max=d.playerMaxHp+bossRunUpgrade('resolve')*25;$('bossEmoji').textContent=d.emoji;$('bossName').textContent=d.name;$('bossPhase').textContent='Phase '+b.phase;$('bossTurnCount').textContent=(b.crafts||0)+' crafts';$('bossHpText').textContent=Math.max(0,b.hp)+' / '+d.maxHp;$('bossPlayerHpText').textContent=Math.max(0,b.playerHp)+' / '+max;$('bossHpFill').style.width=Math.max(0,Math.min(100,b.hp/d.maxHp*100))+'%';$('bossPlayerHpFill').style.width=Math.max(0,Math.min(100,b.playerHp/max*100))+'%';const locks=Object.entries(b.locks||{}).filter(([,v])=>v>0).map(([n,t])=>n+' 🔒'+t);$('bossRule').textContent=d.phases[Math.max(0,Math.min(2,b.phase-1))]+(locks.length?' · Locked: '+locks.join(', '):'');refreshBossLockedCards();}
-        function bossDamageFromElement(el,isNew){const b=bossData();if(!b)return 0;let x=34+(isNew?12:0)+bossRunUpgrade('damage')*7+(isNew?bossRunUpgrade('insight')*8:0);if(el.isBasic)x+=6;if(el.isHot)x+=10;if(el.isSuperHot)x+=24;if(el.isElectric)x+=20;if(el.isMagnetic)x+=18;if(el.isCrystalline)x+=18;if(el.isLegendary)x+=28;if(el.isDivine)x+=34;if(el.isCelestial)x+=40;if(el.isPurified)x+=22;if(el.isFinal)x+=18;if(el.isEverything)x=300+bossRunUpgrade('damage')*10;if(b.id==='unmaker'){if(b.phase===2){if(el.isHot||el.isSuperHot)x=Math.floor(x*.55);if(el.isElectric||el.isMagnetic||el.isCrystalline)x+=28;}if(b.phase===3){if(hasPenaltyMod(el))return 0;if(el.isCelestial||el.isDivine)x=Math.floor(x*1.65);if(el.isPurified)x+=35;}}else if(b.id==='chronophage'){if(!isNew&&b.phase>=2)x=Math.floor(x*.7);if(el.isTemporal)x+=45;if(b.phase===3&&(el.isDivine||el.isCelestial))x=Math.floor(x*1.5);}else if(b.id==='nullking'){if(b.phase>=2&&!el.isLegendary&&!el.isDivine&&!el.isCelestial&&!el.isEverything)x=Math.floor(x*.72);if(b.phase===3&&(el.isPurified||el.isCelestial||el.isDivine))x=Math.floor(x*1.7);}return Math.max(0,Math.floor(x));}
+        function bossDamageFromElement(el,isNew){const b=bossData();if(!b)return 0;let x=34+(isNew?12:0)+bossRunUpgrade('damage')*7+(isNew?bossRunUpgrade('insight')*8:0);if(el.isBasic)x+=6;if(el.isHot)x+=10;if(el.isSuperHot)x+=24;if(el.isElectric)x+=20;if(el.isMagnetic)x+=18;if(el.isCrystalline)x+=18;if(el.isLegendary)x+=28;if(el.isDivine)x+=34;if(el.isCelestial)x+=40;if(el.isPurified)x+=22;if(el.isFinal)x+=18;if(el.isEverything)x=300+bossRunUpgrade('damage')*10;if(b.id==='unmaker'){if(b.phase===2){if(el.isHot||el.isSuperHot)x=Math.floor(x*.55);if(el.isElectric||el.isMagnetic||el.isCrystalline)x+=28;}if(b.phase===3){if(hasPenaltyMod(el))return 0;if(el.isCelestial||el.isDivine)x=Math.floor(x*1.65);if(el.isPurified)x+=35;}}else if(b.id==='chronophage'){if(!isNew&&b.phase>=2)x=Math.floor(x*.7);if(el.isTemporal)x+=45;if(b.phase===3&&(el.isDivine||el.isCelestial))x=Math.floor(x*1.5);}else if(b.id==='nullking'){if(b.phase>=2&&!el.isLegendary&&!el.isDivine&&!el.isCelestial&&!el.isEverything)x=Math.floor(x*.72);if(b.phase===3&&(el.isPurified||el.isCelestial||el.isDivine))x=Math.floor(x*1.7);}return Math.max(0,Math.floor(x*milestoneBossDamageMultiplier()));}
         function bossCounterDamage(el){const b=bossData();if(!b)return 0;let x=([0,5,7,9][b.phase]||9)+(b.id==='chronophage'?2:b.id==='nullking'?4:0)+Math.floor(Math.random()*4);x=Math.max(1,x-bossRunUpgrade('defense')*1.25);if(el.isHoly||el.isBlessed||el.isDivine||el.isPurified)x=Math.max(1,x-3);if(el.isFrozen||el.isPermafrost)x+=2;return Math.floor(x);}
         function maybeBossLockInsteadOfAttack(){const b=bossData();if(!b||b.id!=='unmaker'||Math.random()>=.22)return false;const pool=elements.filter(e=>!STARTERS.some(s=>s.name===e.name)&&!e.isPrestige&&!e.isBossDefeat&&bossLockedTurns(e.name)<=0);if(!pool.length)return false;const t=pool[Math.floor(Math.random()*pool.length)];b.locks=b.locks||{};b.locks[t.name]=3;notify('ELEMENT SEALED',`The Unmaker locked ${t.name} for 3 crafts instead of attacking.`,'🔒',3600);return true;}
         function maybeBossRecovery(){const b=bossData(),lv=bossRunUpgrade('recovery');if(!b||!lv)return;const d=BOSS_DEFS[b.id],max=d.playerMaxHp+bossRunUpgrade('resolve')*25;if(Math.random()<lv*.08){const h=3+lv*2;b.playerHp=Math.min(max,b.playerHp+h);notify('Second Wind',`Recovered ${h} Resolve.`,'💚',1800);}}
@@ -5670,7 +5882,7 @@ html[data-special-season] body{background:transparent!important}
                 if(el.isVoid) base=Math.max(1,base-2);
                 r+=base;
             });
-            return r*(1+.25*prestigeLevel('income'))*(1+.2*cyLevel('income'));
+            return r*(1+.25*prestigeLevel('income'))*(1+.2*cyLevel('income'))*milestoneCoinMultiplier();
         }
 
         function tickCoins() {
@@ -5720,6 +5932,63 @@ html[data-special-season] body{background:transparent!important}
                 btn.textContent=gs.coins<shopPrice(p)?'Need '+shopPrice(p)+' 🪙':'Buy for '+shopPrice(p)+' 🪙';
             });
         }
+
+        
+        // ─── MORE SHOP PACK RECIPE TREES ───
+        Object.assign(recipes,{
+            // Natural History Case
+            'Amber+Life':{name:'Preserved Specimen',emoji:'🦟',description:'Ancient biological material sealed away by time'},
+            'Amber+Electricity':{name:'Electrostatic Amber',emoji:'⚡',description:'Amber holding a static electric charge'},
+            'Fossil+Earth':{name:'Fossil Layer',emoji:'🦴',description:'A geological layer rich with fossils'},
+            'Fossil+Evolution':{name:'Evolution Record',emoji:'🧬',description:'Fossils arranged into a history of change'},
+            'Mineral Sample+Metal':{name:'Ore Sample',emoji:'⛏️',description:'A sample containing useful metal-bearing minerals'},
+            'Field Journal+Knowledge':{name:'Field Research',emoji:'📓',description:'Knowledge gathered through direct observation'},
+            'Preserved Specimen+Field Research':{name:'Natural History',emoji:'🏛️',description:'The study and collection of the natural world'},
+            'Fossil Layer+Natural History':{name:'Museum Fossil',emoji:'🦕',description:'A fossil prepared for public study'},
+            'Ore Sample+Industry':{name:'Resource Survey',emoji:'🧭',description:'A survey locating useful geological resources'},
+            'Natural History+Museum Fossil':{name:'Museum Collection',emoji:'🏺',description:'A curated collection preserving natural history'},
+            // Digital Frontier Pack
+            'Code+Computer':{name:'Software',emoji:'💾',description:'Instructions running on a computer'},
+            'Code+Knowledge':{name:'Programming',emoji:'⌨️',description:'The practice of creating software'},
+            'Server+Internet':{name:'Web Server',emoji:'🌐',description:'A server delivering information across the internet'},
+            'Sensor+Air':{name:'Weather Sensor',emoji:'🌡️',description:'A sensor measuring atmospheric conditions'},
+            'Sensor+Machine':{name:'Machine Sensor',emoji:'📡',description:'A sensor monitoring a machine'},
+            'Database+Knowledge':{name:'Knowledge Base',emoji:'🗄️',description:'Structured information organized for retrieval'},
+            'Database+Commerce':{name:'Transaction Database',emoji:'💳',description:'A database recording commercial activity'},
+            'Programming+Machine':{name:'Robotics Software',emoji:'🤖',description:'Software controlling machines'},
+            'Robotics Software+Automation':{name:'Autonomous System',emoji:'🦾',description:'A machine system able to perform tasks with little intervention'},
+            // Culture Cache
+            'Melody+Note':{name:'Tune',emoji:'🎵',description:'Notes organized into a recognizable musical phrase'},
+            'Melody+Human':{name:'Composer',emoji:'🎼',description:'A person who creates music'},
+            'Story+Writing':{name:'Literature',emoji:'📚',description:'Stories shaped through written language'},
+            'Story+Human':{name:'Storyteller',emoji:'🗣️',description:'A person who shares stories'},
+            'Stage+Human':{name:'Performer',emoji:'🎭',description:'A person presenting to an audience'},
+            'Stage+Music':{name:'Live Performance',emoji:'🎤',description:'Music performed before an audience'},
+            'Painting+History':{name:'Art History',emoji:'🖼️',description:'The study of art across time'},
+            'Composer+Technology':{name:'Music Production',emoji:'🎛️',description:'Technology used to create and arrange music'},
+            // Research Crate
+            'Sample+Knowledge':{name:'Experiment',emoji:'🧪',description:'A controlled attempt to learn from evidence'},
+            'Sample+Biology':{name:'Biological Sample',emoji:'🧬',description:'Living material collected for study'},
+            'Lens+Light':{name:'Optics',emoji:'🔍',description:'The study and control of light'},
+            'Catalyst+Fire':{name:'Fast Reaction',emoji:'⚗️',description:'A chemical process accelerated by a catalyst'},
+            'Catalyst+Industry':{name:'Industrial Chemistry',emoji:'🏭',description:'Chemistry applied at production scale'},
+            'Measurement+Time':{name:'Timekeeping',emoji:'⏱️',description:'Measurement applied to the passage of time'},
+            'Measurement+Knowledge':{name:'Data',emoji:'📊',description:'Recorded values ready for analysis'},
+            'Experiment+Data':{name:'Evidence',emoji:'📈',description:'Data produced by a test'},
+            'Evidence+Knowledge':{name:'Scientific Method',emoji:'🔬',description:'A structured process for testing explanations'},
+            'Scientific Method+Research Institute':{name:'Research Program',emoji:'🧪',description:'Organized investigation across many experiments'},
+            // Future Tech Capsule
+            'Drone+Sensor':{name:'Mapping Drone',emoji:'🗺️',description:'A drone collecting environmental measurements'},
+            'Nanomaterial+Metal':{name:'Advanced Material',emoji:'🔬',description:'A material engineered for unusual properties'},
+            'Nanomaterial+Medicine':{name:'Nanomedicine',emoji:'🧬',description:'Nanoscale materials applied to medicine'},
+            'Automation+Industry':{name:'Automated Factory',emoji:'🏭',description:'A factory where machines perform much of the work'},
+            'Automation+Computer':{name:'Machine Control',emoji:'🖥️',description:'Computerized control of automated machinery'},
+            'Prototype+Technology':{name:'Invention Prototype',emoji:'🛠️',description:'A first working version of a new technology'},
+            'Prototype+Advanced Science':{name:'Experimental Device',emoji:'⚙️',description:'A device built to test a scientific idea'},
+            'Advanced Material+Deep Space Technology':{name:'Space Material',emoji:'🛰️',description:'Engineered material designed for space environments'},
+            'Automated Factory+Robotics Software':{name:'Robotic Industry',emoji:'🦾',description:'Industry operated by coordinated robotic systems'},
+            'Experimental Device+Quantum Engineering':{name:'Quantum Prototype',emoji:'⚛️',description:'An experimental machine using quantum engineering'},
+        });
 
         // ─── SHOP SYSTEM ───
         function refreshShop() {
@@ -6626,7 +6895,7 @@ html[data-special-season] body{background:transparent!important}
                 return{seasonalBlock:true,eventName:ev?ev.name:'this seasonal event',eventIcon:ev?ev.icon:'🎉'};
             }
             const key1=n1+'+'+n2, key2=n2+'+'+n1;
-            let result=seasonalRecipeFor(n1,n2)||modRecipeFor(n1,n2)||recipes[key1]||recipes[key2];
+            let result=seasonalRecipeFor(n1,n2)||recipes[key1]||recipes[key2];
             if(!result){
                 if(OldAllCreate)return generateAprilFoolsElement(n1,n2);
                 return{invalid:true,name:'Invalid Combination',emoji:'❌',description:'These elements cannot be combined.',color:'bg-gray-500'};
@@ -7512,78 +7781,8 @@ html[data-special-season] body{background:transparent!important}
         $('changelogBtn').addEventListener('click',()=>openModal('changelogModal'));
 
 
-        function escMod(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-        function modStatus(id,msg,bad=false){const el=$(id);if(el){el.textContent=msg;el.style.color=bad?'#ef4444':'var(--text-secondary)';}}
-        function renderMods(){
-            const host=$('modsList');if(!host)return;
-            if(!installedMods.length){host.innerHTML='<div class="mod-panel"><small style="color:var(--text-secondary)">No mods installed yet.</small></div>';return;}
-            host.innerHTML=installedMods.map((m,i)=>`<div class="mod-row">
-                <div class="mod-row-main"><strong>🧩 ${escMod(m.name)} ${m.enabled===false?'<span class="mod-badge">OFF</span>':'<span class="mod-badge">ON</span>'}</strong>
-                <small>${escMod(m.author||'Unknown author')} · ${(m.elements||[]).length} elements · ${(m.recipes||[]).length} recipes</small></div>
-                <div style="display:flex;gap:5px;flex-wrap:wrap">
-                    <button class="mod-btn" data-mod-toggle="${i}">${m.enabled===false?'Enable':'Disable'}</button>
-                    <button class="mod-btn" data-mod-export="${i}">Export</button>
-                    <button class="mod-btn mod-btn-danger" data-mod-delete="${i}">Delete</button>
-                </div></div>`).join('');
-        }
-        function renderModDraft(){
-            $('modNameInput').value=modDraft.name||'';$('modAuthorInput').value=modDraft.author||'';
-            $('modElementList').innerHTML=(modDraft.elements||[]).map((e,i)=>`<div class="mod-row"><div class="mod-row-main"><strong>${escMod(e.emoji)} ${escMod(e.name)}</strong><small>${escMod(e.description)}</small></div><button class="mod-btn mod-btn-danger" data-draft-el="${i}">Remove</button></div>`).join('')||'<div class="mod-note">No mod elements yet.</div>';
-            $('modRecipeList').innerHTML=(modDraft.recipes||[]).map((r,i)=>`<div class="mod-row"><div class="mod-row-main"><strong>${escMod(r.a)} + ${escMod(r.b)} → ${escMod(r.result)}</strong></div><button class="mod-btn mod-btn-danger" data-draft-recipe="${i}">Remove</button></div>`).join('')||'<div class="mod-note">No recipes yet.</div>';
-        }
-        function openMods(){renderMods();modStatus('modsStatus','');openModal('modsModal');}
-        function openModMaker(){renderModDraft();modStatus('modMakerStatus','');openModal('modMakerModal');}
-        function currentDraft(){return{name:$('modNameInput').value.trim(),author:$('modAuthorInput').value.trim(),elements:modDraft.elements||[],recipes:modDraft.recipes||[]};}
-        function installModObject(raw){
-            const clean=validateMod(raw);
-            const collision=installedMods.findIndex(m=>m.id===clean.id||String(m.name).toLowerCase()===clean.name.toLowerCase());
-            if(collision>=0)installedMods[collision]=clean;else installedMods.push(clean);
-            writeInstalledMods();renderMods();return clean;
-        }
-
-        $('modsBtn').addEventListener('click',openMods);
-        $('modMakerBtn').addEventListener('click',openModMaker);
-        $('modOpenMakerBtn').addEventListener('click',()=>{closeModal('modsModal');openModMaker();});
-
-        $('modAddElementBtn').addEventListener('click',()=>{
-            try{
-                modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();
-                const e={name:$('modElName').value.trim(),emoji:$('modElEmoji').value.trim()||'🧩',description:$('modElDesc').value.trim()||'A modded element.'};
-                const test={...currentDraft(),elements:[...(modDraft.elements||[]),e]};
-                validateMod({...test,recipes:[]});
-                modDraft.elements.push(e);$('modElName').value='';$('modElEmoji').value='';$('modElDesc').value='';
-                renderModDraft();modStatus('modMakerStatus',`Added ${e.name}.`);
-            }catch(err){modStatus('modMakerStatus',err.message,true);}
-        });
-        $('modAddRecipeBtn').addEventListener('click',()=>{
-            try{
-                modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();
-                const r={a:$('modRecipeA').value.trim(),b:$('modRecipeB').value.trim(),result:$('modRecipeResult').value.trim()};
-                validateMod({...currentDraft(),recipes:[...(modDraft.recipes||[]),r]});
-                modDraft.recipes.push(r);$('modRecipeA').value='';$('modRecipeB').value='';$('modRecipeResult').value='';
-                renderModDraft();modStatus('modMakerStatus',`Added recipe ${r.a} + ${r.b} → ${r.result}.`);
-            }catch(err){modStatus('modMakerStatus',err.message,true);}
-        });
-        $('modElementList').addEventListener('click',e=>{const b=e.target.closest('[data-draft-el]');if(!b)return;const i=Number(b.dataset.draftEl);const removed=modDraft.elements.splice(i,1)[0];modDraft.recipes=modDraft.recipes.filter(r=>String(r.result).toLowerCase()!==String(removed?.name).toLowerCase());renderModDraft();});
-        $('modRecipeList').addEventListener('click',e=>{const b=e.target.closest('[data-draft-recipe]');if(!b)return;modDraft.recipes.splice(Number(b.dataset.draftRecipe),1);renderModDraft();});
-        $('modInstallDraftBtn').addEventListener('click',()=>{
-            try{modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();const m=installModObject(currentDraft());modStatus('modMakerStatus',`Installed "${m.name}". Recipes work immediately.`,false);notify('Mod installed',`${m.name} · ${m.elements.length} elements · ${m.recipes.length} recipes`,'🧩');}
-            catch(err){modStatus('modMakerStatus',err.message,true);}
-        });
-        $('modExportDraftBtn').addEventListener('click',()=>{
-            try{modDraft.name=$('modNameInput').value.trim();modDraft.author=$('modAuthorInput').value.trim();const m=validateMod(currentDraft());$('modExportText').value=JSON.stringify({...m,enabled:true},null,2);modStatus('modMakerStatus','Export code generated.');}
-            catch(err){modStatus('modMakerStatus',err.message,true);}
-        });
-        $('modClearDraftBtn').addEventListener('click',()=>{modDraft={name:'',author:'',elements:[],recipes:[]};$('modExportText').value='';renderModDraft();modStatus('modMakerStatus','Draft cleared.');});
-        $('modImportBtn').addEventListener('click',()=>{
-            try{const raw=JSON.parse($('modImportText').value);const m=installModObject(raw);$('modImportText').value='';modStatus('modsStatus',`Installed "${m.name}".`);notify('Mod installed',m.name,'🧩');}
-            catch(err){modStatus('modsStatus',err.message||'Invalid mod code.',true);}
-        });
-        $('modsList').addEventListener('click',e=>{
-            let b=e.target.closest('[data-mod-toggle]');if(b){const m=installedMods[Number(b.dataset.modToggle)];if(m){m.enabled=m.enabled===false;writeInstalledMods();renderMods();save();}return;}
-            b=e.target.closest('[data-mod-export]');if(b){const m=installedMods[Number(b.dataset.modExport)];if(m){$('modImportText').value=JSON.stringify(m,null,2);modStatus('modsStatus','Export code placed in the box below.');}return;}
-            b=e.target.closest('[data-mod-delete]');if(b){const i=Number(b.dataset.modDelete);const m=installedMods[i];if(!m)return;installedMods.splice(i,1);writeInstalledMods();renderMods();modStatus('modsStatus',`Deleted "${m.name}". Already-discovered mod elements stay in this save, but its recipes stop working.`);}
-        });
+        $('milestonesBtn').addEventListener('click',()=>{renderMilestones();openModal('milestonesModal');});
+        $('milestoneList').addEventListener('click',e=>{const b=e.target.closest('[data-milestone]');if(b)claimMilestone(b.dataset.milestone);});
 
         $('settingsBtn').addEventListener('click',openSettings);
         $('themeModeSetting').addEventListener('change',e=>{
@@ -7937,7 +8136,7 @@ html[data-special-season] body{background:transparent!important}
         save();
         keyLockNotificationsReady=true;awakeningReady=true;
         // One independent roll per active second; no offline key catch-up.
-        setInterval(()=>{if(!bossMode&&!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))*(1+.15*cyLevel('luck'))/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
+        setInterval(()=>{if(!bossMode&&!document.hidden&&Math.random()<(1+.2*prestigeLevel('keyLuck'))*(1+.15*cyLevel('luck'))*milestoneKeyLuckMultiplier()/500)addElement({name:'Key',emoji:'🔑',description:'Reveal recipes or use Key Services. Recipe reveals cost 1 key. Service costs vary.',isKey:true,amountOfKey:1+prestigeLevel('keyBundle'),excludeFromRank:true});},1000);
         setInterval(tickCyIncome,1000);
         document.addEventListener('visibilitychange',()=>{cyLastTick=Date.now();});
         setInterval(tickCoins,3000);
