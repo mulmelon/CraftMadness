@@ -2691,6 +2691,35 @@ html.cm-challenge-active .notification{
 .profile-banner.theme-gold{background:radial-gradient(circle at 18% 8%,rgba(255,249,196,.38),transparent 23%),linear-gradient(135deg,#211500,#805600 52%,#e1b51a)!important;border-color:#fde047!important;box-shadow:inset 0 0 28px rgba(255,240,130,.18),0 0 16px rgba(250,204,21,.24)!important}
 .profile-banner.theme-diamond{background:radial-gradient(circle at 14% 12%,rgba(255,255,255,.34),transparent 18%),radial-gradient(circle at 88% 82%,rgba(192,132,252,.26),transparent 28%),linear-gradient(135deg,#031923,#075985 48%,#312e81)!important;border-color:#a5f3fc!important;box-shadow:inset 0 0 30px rgba(255,255,255,.13),0 0 18px rgba(103,232,249,.32),0 0 30px rgba(192,132,252,.16)!important}
 #trophyRoomStats{display:none!important}
+
+/* DIAMOND LOADING SCREEN — earned from a Diamond Chrono relic */
+#cmBootLoader.cm-boot-diamond{
+ background:
+  radial-gradient(circle at 50% 42%,rgba(125,211,252,.20),transparent 28%),
+  radial-gradient(circle at 20% 90%,rgba(186,230,253,.10),transparent 30%),
+  linear-gradient(145deg,#02070b 0%,#06131b 52%,#020405 100%)!important;
+}
+#cmBootLoader.cm-boot-diamond:before{
+ background:repeating-linear-gradient(115deg,transparent 0 42px,rgba(125,211,252,.025) 43px 44px)!important;
+}
+#cmBootLoader.cm-boot-diamond .cm-boot-mark{
+ filter:drop-shadow(0 0 25px rgba(125,211,252,.42))!important;
+}
+#cmBootLoader.cm-boot-diamond .cm-boot-kicker,
+#cmBootLoader.cm-boot-diamond .cm-boot-studio,
+#cmBootLoader.cm-boot-diamond .cm-boot-studio span,
+#cmBootLoader.cm-boot-diamond .cm-boot-game{
+ color:#bae6fd!important;
+ text-shadow:0 0 30px rgba(125,211,252,.24)!important;
+}
+#cmBootLoader.cm-boot-diamond .cm-boot-studio{color:#f0f9ff!important}
+#cmBootLoader.cm-boot-diamond .cm-boot-track{
+ box-shadow:0 0 0 1px rgba(125,211,252,.18),0 0 18px rgba(125,211,252,.08)!important;
+}
+#cmBootLoader.cm-boot-diamond .cm-boot-track i{
+ background:linear-gradient(90deg,transparent,#7dd3fc,#e0f2fe,#7dd3fc,transparent)!important;
+}
+#cmBootLoader.cm-boot-diamond .cm-boot-text{color:#bae6fd!important}
 </style>
 
 </head>
@@ -2718,7 +2747,7 @@ html.cm-challenge-active .notification{
   const messages=[...normalMessages];
   try{
     const be=JSON.parse(localStorage.getItem('fc_el')||'[]'),bh=JSON.parse(localStorage.getItem('cm_speedrun_history_v1')||'[]'),bm=JSON.parse(localStorage.getItem('cm_objective_mastery_v1')||'{}');
-    if(bh.some(r=>r.medal==='DIAMOND'))loader.classList.add('cm-boot-diamond');
+    if(be.some(e=>(e.isSpeedrun||e.isSpeedrunRelic||e.isChronoArchive||e.chronoArchive)&&String(e.speedrunMedal||'').toUpperCase()==='DIAMOND')||bh.some(r=>String(r.medal||'').toUpperCase()==='DIAMOND'))loader.classList.add('cm-boot-diamond');
     else if(Object.keys(bm.completed||{}).length>=20)loader.classList.add('cm-boot-mastery');
     else if(be.some(e=>e.name==='Everything'))loader.classList.add('cm-boot-everything');
   }catch(e){}
