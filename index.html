@@ -2043,7 +2043,7 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
 .dev-command-shell{margin:10px 0 14px;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--bg-primary);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.dev-command-head{display:flex;gap:7px;margin-bottom:8px;color:var(--text-secondary);font-size:.72rem}.dev-command-status{min-height:16px;margin-top:6px;color:var(--text-secondary);font-size:.68rem}
 
 /* Premium wallpapers for ONLY New Year, Halloween, and Christmas. */
-#cmSeasonWallpaper{position:fixed;inset:0;width:100vw;height:100dvh;pointer-events:none;overflow:hidden;z-index:-1;opacity:0;transition:opacity .65s ease;contain:strict}
+#cmSeasonWallpaper{position:fixed;inset:0;width:100vw;height:100dvh;pointer-events:none;overflow:hidden;z-index:0;opacity:0;transition:opacity .65s ease;contain:strict}
 @supports not (height:100dvh){#cmSeasonWallpaper{height:100vh}}
 #cmSeasonWallpaper.active{opacity:1}
 #cmSeasonWallpaper::before,#cmSeasonWallpaper::after{content:"";position:absolute;inset:-8%;pointer-events:none}
@@ -2060,6 +2060,8 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
 #cmSeasonWallpaper[data-season="christmas"]::after{inset:auto -5% -2%;height:31%;background:radial-gradient(circle at 18% 47%,rgba(250,204,21,.9) 0 2px,transparent 3px),radial-gradient(circle at 73% 39%,rgba(250,204,21,.85) 0 2px,transparent 3px),linear-gradient(165deg,transparent 0 23%,#eaf6ff 24% 45%,#d7efff 46% 100%)}
 @keyframes cmChristmasSnow{to{background-position:0 0,0 0,42px 84px}}
 html[data-special-season] body{background:transparent!important}
+html[data-special-season] body>*:not(#cmViewportPortal){position:relative;z-index:1}
+#cmViewportPortal{z-index:2147483000!important}
 @media(prefers-reduced-motion:reduce){#cmSeasonWallpaper,#cmSeasonWallpaper::before,#cmSeasonWallpaper::after{animation:none!important;transition:none!important}}
 
 </style>
@@ -6600,7 +6602,7 @@ html[data-special-season] body{background:transparent!important}
                         const purifiedNames=targets.map(ti=>elements[ti].name).join(' & ');
                         notify('Purified!',purifiedNames+' has been purified! (−'+cost+' coins)','🪽');
                         if(result.invalid){
-                secretExclusiveInvalid();
+                
                             resultArea.innerHTML='<div class="text-center"><div class="el-card purified-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">🪽</div><div class="el-name">Purified!</div></div><div class="text-xs" style="color:var(--text-secondary)">'+purifiedNames+' was cleansed by holy power (−'+cost+' coins)</div></div>';
                             resetDZs();return;
                         }
@@ -7381,80 +7383,7 @@ html[data-special-season] body{background:transparent!important}
         function armChristmasCountdown(){const t=christmasTarget(),r=t.time-Date.now();if(t.dev||(r>0&&r<=60000))showChristmasCountdown();}
 
 
-        const SECRET_EXCLUSIVE_DEFS=[
-            {id:'stillwater',name:'Still Water',emoji:'🫧',description:'The forge noticed that you waited.',trigger:'idle'},
-            {id:'mirror',name:'Mirror Shard',emoji:'🪞',description:'Something looked back from the collection.',trigger:'mirror'},
-            {id:'fourfold',name:'Fourfold Relic',emoji:'✥',description:'Four beginnings aligned in the right order.',trigger:'starters'},
-            {id:'nightcode',name:'Night Signal',emoji:'📡',description:'A signal found between one day and the next.',trigger:'midnight'},
-            {id:'vaultdust',name:'Vault Dust',emoji:'✨',description:'You searched where almost nothing was left.',trigger:'vault'},
-            {id:'echo',name:'Resonance',emoji:'〰️',description:'The same answer was asked for again and again.',trigger:'repeat'},
-            {id:'backwards',name:'Backwards Spark',emoji:'↩️',description:'The forge briefly remembered the wrong direction.',trigger:'reverse'},
-            {id:'tinydoor',name:'Tiny Door',emoji:'🚪',description:'A door hidden inside a number that looked unimportant.',trigger:'count'},
-            {id:'ghostcoin',name:'Ghost Coin',emoji:'🪙',description:'A coin that was never in the shop.',trigger:'coins'},
-            {id:'lastpixel',name:'Last Pixel',emoji:'▪️',description:'You found the edge of the interface.',trigger:'edge'},
-            {id:'quietstar',name:'Quiet Star',emoji:'✦',description:'A star that only appears when nothing else is happening.',trigger:'quiet'},
-            {id:'wronganswer',name:'Wrong Answer',emoji:'☒',description:'Incorrect enough to become correct.',trigger:'invalid'}
-        ];
-        const secretExclusiveState={idleAt:Date.now(),starterTrail:[],repeatName:'',repeatCount:0,invalidCount:0,edgeCount:0,vaultCount:0};
-        function grantSecretExclusive(id){
-            const d=SECRET_EXCLUSIVE_DEFS.find(x=>x.id===id);
-            if(!d||elements.some(e=>e.name===d.name))return false;
-            elements.push({name:d.name,emoji:d.emoji,description:d.description,isExclusive:true,isSecretExclusive:true,isRankExcluded:true,excludeFromRank:true,discoveredAt:Date.now()});
-            save();renderEls();updateCount();
-            notify('???',`${d.emoji} ${d.name}`,'🔐',5000);
-            return true;
-        }
-        function secretExclusiveActivity(){secretExclusiveState.idleAt=Date.now();}
-        function secretExclusiveElementTap(el){
-            if(!el)return;
-            secretExclusiveActivity();
-            const starters=['Water','Fire','Earth','Air'];
-            if(starters.includes(el.name)){
-                secretExclusiveState.starterTrail.push(el.name);
-                secretExclusiveState.starterTrail=secretExclusiveState.starterTrail.slice(-4);
-                if(secretExclusiveState.starterTrail.join('|')==='Water|Fire|Earth|Air')grantSecretExclusive('fourfold');
-            }
-            if(secretExclusiveState.repeatName===el.name)secretExclusiveState.repeatCount++;
-            else{secretExclusiveState.repeatName=el.name;secretExclusiveState.repeatCount=1;}
-            if(secretExclusiveState.repeatCount>=7)grantSecretExclusive('echo');
-            if(el.name==='Mirror')grantSecretExclusive('mirror');
-            if(elements.length===64)grantSecretExclusive('tinydoor');
-        }
-        function secretExclusiveInvalid(){
-            secretExclusiveState.invalidCount++;
-            if(secretExclusiveState.invalidCount>=13)grantSecretExclusive('wronganswer');
-        }
-        function secretExclusiveVault(){
-            secretExclusiveState.vaultCount++;
-            if(secretExclusiveState.vaultCount>=9)grantSecretExclusive('vaultdust');
-        }
-        function secretExclusiveEdge(){
-            secretExclusiveState.edgeCount++;
-            if(secretExclusiveState.edgeCount>=6)grantSecretExclusive('lastpixel');
-        }
-        setInterval(()=>{
-            const now=new Date();
-            if(Date.now()-secretExclusiveState.idleAt>=180000)grantSecretExclusive('stillwater');
-            if(now.getHours()===0&&now.getMinutes()===0)grantSecretExclusive('nightcode');
-            if(Date.now()-secretExclusiveState.idleAt>=420000)grantSecretExclusive('quietstar');
-            const c=Math.floor(Number(gs?.coins)||0);
-            if(c>0&&String(c).endsWith('777'))grantSecretExclusive('ghostcoin');
-        },1000);
-
-
-        document.addEventListener('click',e=>{
-            const card=e.target.closest?.('.element-card,.el-card');
-            if(card){
-                const name=card.dataset?.name||card.querySelector?.('.el-name')?.textContent?.trim();
-                if(name){const el=elements.find(x=>x.name===name);if(el)secretExclusiveElementTap(el);}
-            }
-            if(e.target.closest?.('#seasonalStorage,#exclusiveStorage'))secretExclusiveVault();
-        },true);
-        window.addEventListener('pointerdown',e=>{
-            const w=innerWidth,h=innerHeight;
-            if(e.clientX<=4||e.clientY<=4||e.clientX>=w-4||e.clientY>=h-4)secretExclusiveEdge();
-        },true);
-        ['keydown','pointerdown','touchstart'].forEach(type=>window.addEventListener(type,secretExclusiveActivity,{passive:true}));
+        
 
 
         let secretReversePair=[];
@@ -7532,7 +7461,7 @@ html[data-special-season] body{background:transparent!important}
         }
         function addNewYearRewardElement(spec){
             if(elements.some(e=>e.name===spec.name))return false;
-            elements.push({
+            elements.push({isSeasonal:true,isNewYear:true,seasonalEvent:'newyear',
                 name:spec.name,emoji:spec.emoji,description:spec.description,
                 isExclusive:true,isNewYearReward:true,isRankExcluded:true,
                 discoveredAt:Date.now()
