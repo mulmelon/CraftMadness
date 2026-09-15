@@ -2112,6 +2112,33 @@ html[data-special-season] body{background:transparent!important}
 html{isolation:isolate}
 #cmSeasonWallpaper{z-index:-1!important}
 
+
+/* Keep root-level visual layers from extending the document past the real footer. */
+html{
+    min-height:100%;
+    overflow-x:hidden;
+    overflow-y:clip;
+}
+body{
+    min-height:100dvh;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior-y:none;
+}
+@supports not (height:100dvh){body{min-height:100vh}}
+#cmSeasonWallpaper{
+    top:0!important;
+    right:0!important;
+    bottom:auto!important;
+    left:0!important;
+    width:100%!important;
+    height:100dvh!important;
+    max-height:100dvh!important;
+}
+@supports not (height:100dvh){
+    #cmSeasonWallpaper{height:100vh!important;max-height:100vh!important}
+}
+
 </style>
 
 </head>
