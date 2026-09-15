@@ -2113,30 +2113,31 @@ html{isolation:isolate}
 #cmSeasonWallpaper{z-index:-1!important}
 
 
-/* Keep root-level visual layers from extending the document past the real footer. */
-html{
-    min-height:100%;
-    overflow-x:hidden;
-    overflow-y:clip;
+
+/* Proper viewport layers: native page scroll, zero layout contribution. */
+html{overflow-x:hidden!important;overflow-y:auto!important}
+body{overflow-x:hidden!important;overflow-y:visible!important}
+#cmViewportPortal{
+    position:fixed!important;inset:0!important;
+    width:0!important;height:0!important;
+    margin:0!important;padding:0!important;border:0!important;
+    overflow:visible!important;pointer-events:none!important;
 }
-body{
-    min-height:100dvh;
-    overflow-x:hidden;
-    overflow-y:auto;
-    overscroll-behavior-y:none;
+#cmViewportPortal>#cmSeasonWallpaper{
+    position:fixed!important;inset:0!important;
+    width:100vw!important;height:100dvh!important;
+    max-width:none!important;max-height:none!important;
+    pointer-events:none!important;
 }
-@supports not (height:100dvh){body{min-height:100vh}}
-#cmSeasonWallpaper{
-    top:0!important;
-    right:0!important;
-    bottom:auto!important;
-    left:0!important;
-    width:100%!important;
-    height:100dvh!important;
-    max-height:100dvh!important;
-}
+#cmViewportPortal>.modal-overlay,
+#cmViewportPortal>#changelogBtn,
+#cmViewportPortal>#notifContainer,
+#cmViewportPortal>#loader,
+#cmViewportPortal>#bossFxLayer,
+#cmViewportPortal>#starForgeEffect,
+#cmViewportPortal>#ascensionOverlay{pointer-events:auto}
 @supports not (height:100dvh){
-    #cmSeasonWallpaper{height:100vh!important;max-height:100vh!important}
+    #cmViewportPortal>#cmSeasonWallpaper{height:100vh!important}
 }
 
 </style>
@@ -7369,8 +7370,8 @@ body{
             if(!seasonWallpaper){
                 seasonWallpaper=document.createElement('div');
                 seasonWallpaper.id='cmSeasonWallpaper';
-                document.documentElement.insertBefore(seasonWallpaper,document.body);
             }
+            if(seasonWallpaper.parentNode!==portal)portal.prepend(seasonWallpaper);
             let animationLayer=document.getElementById('cmAnimationLayer');
             if(!animationLayer){
                 animationLayer=document.createElement('div');
