@@ -6092,7 +6092,7 @@ html[data-special-season] body{background:transparent!important}
             const seasonalGrid=$('seasonalGrid');seasonalGrid.innerHTML='';
             const seasonalByEvent=new Map();
             for(const ev of SEASONAL_EVENTS){
-                const found=elements.filter(e=>isSeasonalElement(e)&&(seasonalEventFromElement(e)||{}).id===ev.id&&!e.isChristmasExclusive);
+                const found=elements.filter(e=>isSeasonalElement(e)&&(seasonalEventFromElement(e)||{}).id===ev.id&&!e.isChristmasExclusive&&!e.isNewYearReward);
                 if(found.length)seasonalByEvent.set(ev.id,found);
             }
             const seasonalTotal=[...seasonalByEvent.values()].reduce((n,a)=>n+a.length,0);
@@ -6135,7 +6135,7 @@ html[data-special-season] body{background:transparent!important}
             const sorted = getSortedElements();
             let lastType = null;
             sorted.forEach(({el,origIdx})=>{
-                if(isSeasonalElement(el)&&!el.isChristmasExclusive){
+                if(isSeasonalElement(el)&&!el.isChristmasExclusive&&!el.isNewYearReward){
                     const ev=seasonalEventFromElement(el),host=ev?seasonHosts.get(ev.id):null;
                     const seasonCount=ev?(seasonalByEvent.get(ev.id)||[]).length:0;
                     // Every completed season lives only as its trophy in Seasonal Vault.
