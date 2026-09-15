@@ -2626,6 +2626,37 @@ html.cm-challenge-active #notificationContainer{
 .profile-banner.banner-silver,[data-banner="silver"]{background:linear-gradient(135deg,#111827,#475569 50%,#e2e8f0)!important;border-color:#e2e8f0!important;box-shadow:inset 0 0 22px rgba(255,255,255,.10)!important}
 .profile-banner.banner-gold,[data-banner="gold"]{background:radial-gradient(circle at 20% 10%,rgba(255,248,180,.34),transparent 25%),linear-gradient(135deg,#1d1300,#6b4800 48%,#d4a500 100%)!important;border-color:#fde047!important;box-shadow:inset 0 0 28px rgba(255,240,130,.18),0 0 16px rgba(250,204,21,.24)!important}
 .profile-banner.banner-diamond,[data-banner="diamond"]{background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.32),transparent 18%),radial-gradient(circle at 85% 80%,rgba(192,132,252,.24),transparent 30%),linear-gradient(135deg,#031923,#075985 48%,#312e81)!important;border-color:#a5f3fc!important;box-shadow:inset 0 0 30px rgba(255,255,255,.12),0 0 18px rgba(103,232,249,.32),0 0 30px rgba(192,132,252,.15)!important}
+
+/* MOBILE CHROME ADDRESS-BAR / SCROLL-UP HARDENING */
+html,body{
+  overscroll-behavior-x:none!important;
+  overflow-anchor:none;
+}
+body{min-height:100%;}
+
+/* Fixed full-screen overlays use the dynamic viewport instead of stale 100vh. */
+#cmViewportPortal>.modal-overlay,
+#cmViewportPortal>#loader,
+#cmViewportPortal>#bossFxLayer,
+#cmViewportPortal>#starForgeEffect,
+#cmViewportPortal>#ascensionOverlay,
+#cmViewportPortal>#cmAnimationLayer{
+  height:100dvh!important;
+  max-height:100dvh!important;
+}
+@supports not (height:100dvh){
+  #cmViewportPortal>.modal-overlay,
+  #cmViewportPortal>#loader,
+  #cmViewportPortal>#bossFxLayer,
+  #cmViewportPortal>#starForgeEffect,
+  #cmViewportPortal>#ascensionOverlay,
+  #cmViewportPortal>#cmAnimationLayer{height:100vh!important;max-height:100vh!important}
+}
+
+/* Never let Chrome scroll anchoring drag the workshop when cards/results mutate. */
+#elementsGrid,#exclusiveGrid,#speedrunGrid,#comboHistory,#resultArea,.workshop-panel{
+  overflow-anchor:none!important;
+}
 </style>
 
 </head>
@@ -7455,9 +7486,6 @@ function cmSetUsername(v){
 
             // ─── Random freeze (original mechanic) ───
             const preventFreeze=p1.isHot||p2.isHot||p1.isSuperHot||p2.isSuperHot||result.isHot||result.isSuperHot||p1.isBlessed||p2.isBlessed||result.isBlessed||result.isInfernal||result.isPermafrost;
-            if(Math.random()<0.05&&!result.isFinal&&!result.isError&&!result.isFatalError&&!result.isFrozen&&!preventFreeze&&!result.isPermafrost){
-                result.isFrozen=true;result.meltProgress=0;result.meltGoal=10;
-            }
             return result;
         }
 
@@ -8833,7 +8861,19 @@ function cmSetUsername(v){
             document.addEventListener('focusout',()=>setTimeout(apply,120),{passive:true});
             if(window.visualViewport){
                 visualViewport.addEventListener('resize',apply,{passive:true});
-                visualViewport.addEventListener('scroll',apply,{passive:true});
+                let lastVVH=visualViewport.height;
+                visualViewport.addEventListener('resize',()=>{
+                    const active=document.activeElement;
+                    const typing=!!(active&&(active.matches?.('input,textarea,select')||active.isContentEditable));
+                    const h=visualViewport.height;
+                    // Address-bar animation can resize by a small amount while scrolling.
+                    // Do not rewrite page scroll position; just refresh stable dimensions.
+                    if(!typing&&Math.abs(h-lastVVH)<180){
+                        document.documentElement.style.setProperty('--cm-browser-vh',Math.round(h)+'px');
+                    }
+                    lastVVH=h;
+                },{passive:true});
+
             }
         })();
 
