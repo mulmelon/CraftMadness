@@ -2290,6 +2290,25 @@ background:linear-gradient(90deg,transparent,#22c55e,#67e8f9,transparent)}
 .run-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0}.run-summary-stat{padding:10px;border:1px solid var(--border);border-radius:12px;text-align:center}.run-summary-stat strong{display:block;font-size:1rem}.run-summary-stat small{font-size:.5rem;color:var(--text-secondary)}
 .mastery-exclusive{border-color:rgba(250,204,21,.35)!important;box-shadow:0 0 18px rgba(192,132,252,.12)!important}
 @media(max-width:520px){.trophy-room-stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ─── TROPHY VAULT: MAXIMUM FANCY ─── */
+#trophyRoomModal .modal-box{position:relative;overflow:hidden;border:1px solid rgba(250,204,21,.32)!important;box-shadow:0 0 0 1px rgba(103,232,249,.08),0 0 55px rgba(168,85,247,.16),inset 0 0 70px rgba(250,204,21,.035)!important}
+#trophyRoomModal .modal-box:before{content:"";position:absolute;inset:-50%;pointer-events:none;background:conic-gradient(from 0deg,transparent,rgba(103,232,249,.07),transparent,rgba(250,204,21,.07),transparent);animation:vaultOrbit 18s linear infinite}
+#trophyRoomModal .modal-box>*{position:relative;z-index:1}
+@keyframes vaultOrbit{to{transform:rotate(360deg)}}
+.trophy-room-head h2{text-shadow:0 0 24px rgba(250,204,21,.25),0 0 45px rgba(192,132,252,.18)}
+.trophy-room-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))!important;gap:12px!important;padding:5px}
+.trophy-vault-element{position:relative!important;min-height:170px!important;padding:20px 10px 12px!important;border-radius:18px!important;overflow:hidden!important;text-align:center!important;cursor:pointer;isolation:isolate;background:linear-gradient(155deg,rgba(255,255,255,.075),rgba(255,255,255,.018))!important;border:1px solid rgba(255,255,255,.14)!important;box-shadow:inset 0 1px rgba(255,255,255,.12),0 12px 30px rgba(0,0,0,.22)!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.trophy-vault-element:hover{transform:translateY(-5px) scale(1.025);border-color:rgba(250,204,21,.55)!important;box-shadow:0 0 30px rgba(250,204,21,.12),0 16px 35px rgba(0,0,0,.3)!important}
+.trophy-vault-element .vault-glow{position:absolute;z-index:-1;width:110px;height:110px;left:50%;top:35%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(192,132,252,.22),rgba(34,211,238,.08) 45%,transparent 70%);filter:blur(5px);animation:vaultPulse 2.6s ease-in-out infinite}
+@keyframes vaultPulse{50%{transform:translate(-50%,-50%) scale(1.18);opacity:.65}}
+.trophy-vault-element .emoji{font-size:2.35rem!important;filter:drop-shadow(0 0 12px rgba(255,255,255,.22));margin:7px 0!important}
+.trophy-vault-element .name{font-size:.7rem!important;font-weight:1000!important;line-height:1.15!important}
+.vault-type{margin-top:7px;font:900 .42rem/1.2 ui-monospace,monospace;letter-spacing:.08em;color:#fde68a}
+.vault-desc{margin-top:7px;font-size:.45rem;line-height:1.35;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vault-medal{position:absolute;top:7px;right:7px;padding:4px 6px;border-radius:999px;background:rgba(0,0,0,.5);border:1px solid currentColor;font:1000 .4rem/1 ui-monospace,monospace;letter-spacing:.04em}.vault-medal.DIAMOND{color:#a5f3fc;box-shadow:0 0 13px rgba(165,243,252,.25)}.vault-medal.GOLD{color:#fde68a}.vault-medal.SILVER{color:#e2e8f0}.vault-medal.BRONZE{color:#fdba74}
+.trophy-empty{grid-column:1/-1;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px dashed rgba(250,204,21,.25);border-radius:18px;background:radial-gradient(circle,rgba(250,204,21,.06),transparent 60%)}.trophy-empty b{font-size:.8rem;color:#fde68a}.trophy-empty span{margin-top:7px;font-size:.55rem;color:var(--text-secondary)}
+@media(prefers-reduced-motion:reduce){#trophyRoomModal .modal-box:before,.trophy-vault-element .vault-glow{animation:none}}
 </style>
 
 </head>
@@ -7358,7 +7377,7 @@ loadMilestones();
             }
             // If element qualifies as Everything, strip all mods and set isEverything only
             if(checkIsEverything(newEl)){stripToEverything(newEl);}
-            if(speedrunState?.active&&speedrunState.runStats&&newEl.invalid)speedrunState.runStats.invalid++;
+            if(speedrunState?.active&&speedrunState.runStats&&newEl.invalid){speedrunState.runStats.invalid++;speedrunState.runStats.failed=(speedrunState.runStats.failed||0)+1;}
             const exists=elements.findIndex(e=>e.name.toLowerCase()===newEl.name.toLowerCase());
             if(exists!==-1){
                 if(newEl.isAprilFools){
@@ -8041,7 +8060,7 @@ loadMilestones();
         function showRunSummary(data){
           const box=$('runSummaryBody');if(!box)return;
           const stats=data||{},splits=stats.splits||{};
-          box.innerHTML=`<div class="run-summary-grid"><div class="run-summary-stat"><strong>${stats.time?formatSpeedrun(stats.time):'—'}</strong><small>TIME</small></div><div class="run-summary-stat"><strong>${stats.discoveries||0}</strong><small>NEW FINDS</small></div><div class="run-summary-stat"><strong>${stats.crafts||0}</strong><small>CRAFTS</small></div><div class="run-summary-stat"><strong>${stats.invalid||0}</strong><small>INVALIDS</small></div><div class="run-summary-stat"><strong>${stats.medal||'—'}</strong><small>MEDAL</small></div></div><h3 class="font-semibold text-sm mb-2">🏁 Splits</h3>${SPEEDRUN_SPLITS.filter(x=>splits[x.id]!=null).map(x=>`<div class="speedrun-split"><span>${x.label}</span><span>${formatSpeedrun(splits[x.id])}</span><span></span></div>`).join('')||'<p class="text-xs">No splits recorded.</p>'}`;
+          box.innerHTML=`<div class="run-summary-grid"><div class="run-summary-stat"><strong>${stats.time?formatSpeedrun(stats.time):'—'}</strong><small>TIME</small></div><div class="run-summary-stat"><strong>${stats.discoveries||0}</strong><small>NEW FINDS</small></div><div class="run-summary-stat"><strong>${stats.crafts||0}</strong><small>CRAFTS</small></div><div class="run-summary-stat"><strong>${stats.failed??stats.invalid??0}</strong><small>FAILED FUSIONS</small></div><div class="run-summary-stat"><strong>${stats.medal||'—'}</strong><small>MEDAL</small></div></div><h3 class="font-semibold text-sm mb-2">🏁 Splits</h3>${SPEEDRUN_SPLITS.filter(x=>splits[x.id]!=null).map(x=>`<div class="speedrun-split"><span>${x.label}</span><span>${formatSpeedrun(splits[x.id])}</span><span></span></div>`).join('')||'<p class="text-xs">No splits recorded.</p>'}`;
           openModal('runSummaryModal');
         }
         function speedrunCategoryDef(id=speedrunState.category){
@@ -8206,7 +8225,7 @@ loadMilestones();
           try{enterSpeedrunSave();}
           catch(e){console.error('Speedrun isolated-save start failed',e);window.speedrunSaveMode=false;try{localStorage.removeItem('fc_speedrun_active');}catch(_){}loadNamedSave(false,false);return;}
           speedrunState={active:true,finished:false,start:Date.now(),end:0,category:selected,seasonId:def.seasonId||'',seasonName:def.seasonName||'',
-            masteryBaseline:0,splits:{},runStats:{crafts:0,discoveries:0,invalid:0}};
+            masteryBaseline:0,splits:{},runStats:{crafts:0,discoveries:0,invalid:0,failed:0}};
           saveSpeedrun();save();renderSpeedrun();closeModal('speedrunModal');
           notify('Speedrun started',`${def.label}: ${def.goal}`,'⏱️',3500);
         }
@@ -8297,14 +8316,25 @@ loadMilestones();
 
         $('milestonesBtn').addEventListener('click',()=>{renderMilestones();openModal('milestonesModal');});
         $('milestoneList').addEventListener('click',e=>{const b=e.target.closest('[data-milestone]');if(b)claimMilestone(b.dataset.milestone);});
-
+        function trophyRoomElements(){
+          return elements.filter(e=>e.isSpeedrun||e.isSpeedrunReward||e.isBossDefeat||e.isBossMasteryTrophy||e.isPrestige||e.isMasteryExclusive||e.isSeasonalCompletion||e.isSeasonalReward);
+        }
         function renderTrophyRoom(){
-          const trophyEls=elements.filter(e=>e.isSpeedrun||e.isBossDefeat||e.isBossMasteryTrophy||e.isPrestige||e.isMasteryExclusive||e.isSeasonalCompletion);
-          const speed=trophyEls.filter(e=>e.isSpeedrun).length,boss=trophyEls.filter(e=>e.isBossDefeat||e.isBossMasteryTrophy).length,master=trophyEls.filter(e=>e.isMasteryExclusive).length;
-          $('trophyRoomStats').innerHTML=`<div><strong>${trophyEls.length}</strong><small>TROPHIES</small></div><div><strong>${speed}</strong><small>SPEEDRUN</small></div><div><strong>${boss}</strong><small>BOSS</small></div><div><strong>${master}</strong><small>MASTERY</small></div>`;
-          const g=$('trophyRoomGrid');g.replaceChildren();
-          if(!trophyEls.length){g.innerHTML='<p class="text-xs" style="color:var(--text-secondary)">No trophies yet. Go cause problems.</p>';return;}
-          trophyEls.forEach(e=>{const c=document.createElement('div');c.className='trophy-card '+(e.isSpeedrun?'speed':e.isMasteryExclusive?'master':(e.isBossDefeat||e.isBossMasteryTrophy)?'boss':'');c.innerHTML=`<strong>${e.emoji||'🏆'} ${e.name}</strong><small>${e.description||'Permanent trophy'}${e.speedrunMedal?` · ${e.speedrunMedal}`:''}</small>`;g.appendChild(c);});
+          const all=trophyRoomElements(),g=$('trophyRoomGrid');
+          const speed=all.filter(e=>e.isSpeedrun).length,boss=all.filter(e=>e.isBossDefeat||e.isBossMasteryTrophy).length,master=all.filter(e=>e.isMasteryExclusive).length;
+          $('trophyRoomStats').innerHTML=`<div><strong>${all.length}</strong><small>RELICS STORED</small></div><div><strong>${speed}</strong><small>SPEEDRUN</small></div><div><strong>${boss}</strong><small>BOSS</small></div><div><strong>${master}</strong><small>MASTERY</small></div>`;
+          g.replaceChildren();
+          if(!all.length){g.innerHTML='<div class="trophy-empty"><b>🏛️ THE VAULT IS EMPTY</b><span>Your permanent relic elements will be stored here.</span></div>';return;}
+          all.forEach(el=>{
+            const w=document.createElement('div');
+            w.className='element trophy-vault-element '+(typeof elementClass==='function'?elementClass(el):'');
+            w.dataset.name=el.name;
+            const medal=el.isSpeedrun?(el.speedrunMedal||'FINISHER'):'';
+            w.innerHTML=`${medal?`<span class="vault-medal ${medal}">${medal}</span>`:''}<div class="vault-glow"></div><div class="emoji">${el.emoji||'🏆'}</div><div class="name">${el.name}</div><div class="vault-type">${el.isSpeedrun?'⚡ SPEEDRUN RELIC':el.isBossMasteryTrophy?'👑 BOSS MASTERY':el.isBossDefeat?'⚔️ BOSS TROPHY':el.isMasteryExclusive?'🌟 MASTERY EXCLUSIVE':el.isPrestige?'🏆 PRESTIGE RELIC':'🎉 SEASONAL RELIC'}</div>${el.description?`<div class="vault-desc">${el.description}</div>`:''}`;
+            w.title=el.description||el.name;
+            w.addEventListener('click',()=>{if(typeof selectElement==='function')selectElement(el.name);});
+            g.appendChild(w);
+          });
         }
         $('trophyRoomBtn').addEventListener('click',()=>{renderTrophyRoom();openModal('trophyRoomModal');});
         $('masteryBtn').addEventListener('click',()=>{renderMastery();openModal('masteryModal');});
@@ -8735,7 +8765,7 @@ loadMilestones();
     <div id="speedrunHud" hidden><span class="speedrun-time">00:00.000</span><span class="speedrun-goal">→ Rank P</span></div>
     <div id="trophyRoomModal" class="modal-overlay"><div class="modal-box trophy-room-box" style="max-width:820px">
       <button class="modal-close" data-close="trophyRoomModal">&times;</button>
-      <div class="trophy-room-head"><span>CRAFT MADNESS ARCHIVE</span><h2>🏛️ TROPHY ROOM</h2><p>Prestige, Boss, Mastery, Seasonal, and Speedrun relics — all the permanent flex in one place.</p></div>
+      <div class="trophy-room-head"><span>CRAFT MADNESS ARCHIVE</span><h2>🏛️ TROPHY ROOM</h2><p>A permanent neon vault for the rarest elements you have earned. Every relic here is still a real element in your collection.</p></div>
       <div id="trophyRoomStats" class="trophy-room-stats"></div><div id="trophyRoomGrid" class="trophy-room-grid"></div>
     </div></div>
     <div id="runSummaryModal" class="modal-overlay"><div class="modal-box" style="max-width:700px">
