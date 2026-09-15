@@ -2008,7 +2008,7 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
 .xmas-snow i{position:absolute;top:-10%;left:var(--x);font-style:normal;font-size:var(--z);opacity:.8;animation:xmasSnow var(--t) linear infinite;animation-delay:var(--d)}
 .xmas-snow i:nth-child(1){--x:5%;--z:22px;--t:6s;--d:0s}.xmas-snow i:nth-child(2){--x:15%;--z:15px;--t:8s;--d:-3s}.xmas-snow i:nth-child(3){--x:27%;--z:25px;--t:7s;--d:-5s}.xmas-snow i:nth-child(4){--x:39%;--z:17px;--t:9s;--d:-1s}.xmas-snow i:nth-child(5){--x:50%;--z:28px;--t:7.5s;--d:-6s}.xmas-snow i:nth-child(6){--x:61%;--z:18px;--t:8.5s;--d:-4s}.xmas-snow i:nth-child(7){--x:72%;--z:23px;--t:6.5s;--d:-2s}.xmas-snow i:nth-child(8){--x:82%;--z:16px;--t:9.5s;--d:-7s}.xmas-snow i:nth-child(9){--x:91%;--z:27px;--t:7.2s;--d:-1s}.xmas-snow i:nth-child(10){--x:97%;--z:14px;--t:8.8s;--d:-5s}
 .xmas-countdown.xmas-midnight .xmas-countdown-card{animation:xmasArrival .8s ease both}@keyframes xmasSpin{to{transform:rotate(360deg)}}@keyframes xmasFloat{50%{transform:translateY(-8px) scale(1.008)}}@keyframes xmasPulse{0%,100%{transform:scale(.92);opacity:.82}35%{transform:scale(1.04);opacity:1}}@keyframes xmasFinal{50%{transform:scale(1.11);filter:drop-shadow(0 0 45px rgba(255,245,190,.9))}}@keyframes xmasSnow{to{transform:translate3d(35px,115vh,0) rotate(540deg)}}@keyframes xmasArrival{0%{transform:scale(.8)}50%{transform:scale(1.08);filter:brightness(1.8)}100%{transform:scale(1)}}
-.dev-command-shell{margin:10px 0 14px;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--bg-primary);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.dev-command-head{display:flex;gap:7px;margin-bottom:8px;color:var(--text-secondary);font-size:.72rem}.dev-command-row{display:flex;align-items:center;gap:6px}.dev-command-prefix{font-weight:900;color:var(--text-secondary)}.dev-command-row input{flex:1;min-width:0;padding:8px;border-radius:6px;font:12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.dev-command-row button{padding:8px 10px;border-radius:6px}.dev-command-status{min-height:16px;margin-top:6px;color:var(--text-secondary);font-size:.68rem}
+.dev-command-shell{margin:10px 0 14px;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--bg-primary);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.dev-command-head{display:flex;gap:7px;margin-bottom:8px;color:var(--text-secondary);font-size:.72rem}.dev-command-status{min-height:16px;margin-top:6px;color:var(--text-secondary);font-size:.68rem}
 </style>
 
 </head>
@@ -2898,7 +2898,19 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
     </div></div>
 
 <div id="developerModal" class="modal-overlay"><section class="modal-box"><button class="modal-close" data-close="developerModal">×</button><h2>🛠 Developer panel</h2><p class="text-xs my-3">Edit your save JSON. Apply merges it using the same validation as Import. Export a backup first.</p>
-<div class="dev-command-shell"><div class="dev-command-head"><span>›_</span><strong>Runtime input</strong></div><div class="dev-command-row"><span class="dev-command-prefix">cm&gt;</span><input id="developerRuntimeInput" type="text" autocomplete="off" spellcheck="false" placeholder="enter instruction"><button id="developerRuntimeRun" type="button">Run</button></div><div id="developerRuntimeStatus" class="dev-command-status"></div></div>
+<div class="dev-command-shell">
+<div class="dev-command-head"><span>›_</span><strong>Runtime event</strong></div>
+<select id="developerCountdownSelect" class="settings-select" aria-label="Runtime event">
+<option value="">Select event…</option>
+<option value="ny">🎆 New Year countdown</option>
+<option value="xm">🎄 Christmas countdown</option>
+</select>
+<div class="flex gap-2 mt-2 flex-wrap">
+<button id="developerCountdownStart" type="button">Start</button>
+<button id="developerCountdownStop" type="button">Stop</button>
+</div>
+<div id="developerRuntimeStatus" class="dev-command-status"></div>
+</div>
 <div class="dev-season-control">
 <label for="developerSeasonSelect"><strong>🗓 Season override</strong></label>
 <select id="developerSeasonSelect" class="settings-select" aria-label="Developer season override"></select>
@@ -6488,6 +6500,7 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
                         const purifiedNames=targets.map(ti=>elements[ti].name).join(' & ');
                         notify('Purified!',purifiedNames+' has been purified! (−'+cost+' coins)','🪽');
                         if(result.invalid){
+                secretExclusiveInvalid();
                             resultArea.innerHTML='<div class="text-center"><div class="el-card purified-el inline-flex flex-col items-center p-4 mb-2"><div class="el-emoji">🪽</div><div class="el-name">Purified!</div></div><div class="text-xs" style="color:var(--text-secondary)">'+purifiedNames+' was cleansed by holy power (−'+cost+' coins)</div></div>';
                             resetDZs();return;
                         }
@@ -7025,10 +7038,15 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
                 ev?`Forced ${ev.icon} ${ev.name}.`:'Returned to automatic date mode.',
                 id==='__april_fools__'?'🤡':'🛠',2600);
         });
-        const developerRuntimeActions={'clock.ny.begin':()=>startDeveloperNewYearCountdown(),'clock.ny.halt':()=>stopDeveloperNewYearCountdown(),'clock.xm.begin':()=>startDeveloperChristmasCountdown(),'clock.xm.halt':()=>stopDeveloperChristmasCountdown()};
-        function runDeveloperRuntimeInput(){const input=$('developerRuntimeInput'),status=$('developerRuntimeStatus'),key=(input?.value||'').trim().toLowerCase(),action=developerRuntimeActions[key];if(!action){if(status)status.textContent='Unknown instruction.';return;}action();if(status)status.textContent='Instruction accepted.';if(input)input.value='';}
-        $('developerRuntimeRun').addEventListener('click',runDeveloperRuntimeInput);
-        $('developerRuntimeInput').addEventListener('keydown',e=>{if(e.key==='Enter')runDeveloperRuntimeInput();});
+        function runSelectedCountdown(start=true){
+            const id=$('developerCountdownSelect')?.value,status=$('developerRuntimeStatus');
+            if(id==='ny')start?startDeveloperNewYearCountdown():stopDeveloperNewYearCountdown();
+            else if(id==='xm')start?startDeveloperChristmasCountdown():stopDeveloperChristmasCountdown();
+            else{if(status)status.textContent='Select an event.';return;}
+            if(status)status.textContent=start?'Event started.':'Event stopped.';
+        }
+        $('developerCountdownStart').addEventListener('click',()=>runSelectedCountdown(true));
+        $('developerCountdownStop').addEventListener('click',()=>runSelectedCountdown(false));
         $('clearDeveloperSeason').addEventListener('click',()=>{
             $('developerSeasonSelect').value='';
             applyDeveloperSeasonOverride('');
@@ -7250,6 +7268,98 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
         function grantChristmasCountdownReward(dev=false){const year=new Date().getFullYear(),key=XMAS_REWARD_KEY_PREFIX+year;if(!dev){try{if(localStorage.getItem(key)==='1')return}catch(e){}}const rollKey=CHRISTMAS_EXCLUSIVE_ROLL_KEY+year;if(dev){try{localStorage.removeItem(rollKey)}catch(e){}}const won=rollChristmasExclusives(dev);const coins=15000+Math.floor(Math.random()*15001);gs.coins=(Number(gs.coins)||0)+coins;if(!dev){try{localStorage.setItem(key,'1')}catch(e){}}save();renderEls();updateCount();updateCoinDisplay();notify('🎄 MERRY CHRISTMAS!',`+${coins.toLocaleString()} coins${won.length?' · '+won.map(x=>x.emoji+' '+x.name).join(', '):''}`,'🎁',9000);}
         function finishChristmasCountdown(dev=false){if(christmasTimer){clearInterval(christmasTimer);christmasTimer=null}if(dev){try{localStorage.removeItem(XMAS_DEV_KEY)}catch(e){}}const root=$('christmasCountdown'),num=$('christmasCountdownNumber'),sub=$('christmasCountdownSub');if(root)root.classList.add('xmas-midnight');if(num){num.textContent='🎄';num.classList.remove('xmas-final')}if(sub)sub.textContent='MERRY CHRISTMAS!';grantChristmasCountdownReward(dev);setTimeout(hideChristmasCountdown,5200);}
         function armChristmasCountdown(){const t=christmasTarget(),r=t.time-Date.now();if(t.dev||(r>0&&r<=60000))showChristmasCountdown();}
+
+
+        const SECRET_EXCLUSIVE_DEFS=[
+            {id:'stillwater',name:'Still Water',emoji:'🫧',description:'The forge noticed that you waited.',trigger:'idle'},
+            {id:'mirror',name:'Mirror Shard',emoji:'🪞',description:'Something looked back from the collection.',trigger:'mirror'},
+            {id:'fourfold',name:'Fourfold Relic',emoji:'✥',description:'Four beginnings aligned in the right order.',trigger:'starters'},
+            {id:'nightcode',name:'Night Signal',emoji:'📡',description:'A signal found between one day and the next.',trigger:'midnight'},
+            {id:'vaultdust',name:'Vault Dust',emoji:'✨',description:'You searched where almost nothing was left.',trigger:'vault'},
+            {id:'echo',name:'Echo',emoji:'〰️',description:'The same answer was asked for again and again.',trigger:'repeat'},
+            {id:'backwards',name:'Backwards Spark',emoji:'↩️',description:'The forge briefly remembered the wrong direction.',trigger:'reverse'},
+            {id:'tinydoor',name:'Tiny Door',emoji:'🚪',description:'A door hidden inside a number that looked unimportant.',trigger:'count'},
+            {id:'ghostcoin',name:'Ghost Coin',emoji:'🪙',description:'A coin that was never in the shop.',trigger:'coins'},
+            {id:'lastpixel',name:'Last Pixel',emoji:'▪️',description:'You found the edge of the interface.',trigger:'edge'},
+            {id:'quietstar',name:'Quiet Star',emoji:'✦',description:'A star that only appears when nothing else is happening.',trigger:'quiet'},
+            {id:'wronganswer',name:'Wrong Answer',emoji:'☒',description:'Incorrect enough to become correct.',trigger:'invalid'}
+        ];
+        const secretExclusiveState={idleAt:Date.now(),starterTrail:[],repeatName:'',repeatCount:0,invalidCount:0,edgeCount:0,vaultCount:0};
+        function grantSecretExclusive(id){
+            const d=SECRET_EXCLUSIVE_DEFS.find(x=>x.id===id);
+            if(!d||elements.some(e=>e.name===d.name))return false;
+            elements.push({name:d.name,emoji:d.emoji,description:d.description,isExclusive:true,isSecretExclusive:true,isRankExcluded:true,excludeFromRank:true,discoveredAt:Date.now()});
+            save();renderEls();updateCount();
+            notify('???',`${d.emoji} ${d.name}`,'🔐',5000);
+            return true;
+        }
+        function secretExclusiveActivity(){secretExclusiveState.idleAt=Date.now();}
+        function secretExclusiveElementTap(el){
+            if(!el)return;
+            secretExclusiveActivity();
+            const starters=['Water','Fire','Earth','Air'];
+            if(starters.includes(el.name)){
+                secretExclusiveState.starterTrail.push(el.name);
+                secretExclusiveState.starterTrail=secretExclusiveState.starterTrail.slice(-4);
+                if(secretExclusiveState.starterTrail.join('|')==='Water|Fire|Earth|Air')grantSecretExclusive('fourfold');
+            }
+            if(secretExclusiveState.repeatName===el.name)secretExclusiveState.repeatCount++;
+            else{secretExclusiveState.repeatName=el.name;secretExclusiveState.repeatCount=1;}
+            if(secretExclusiveState.repeatCount>=7)grantSecretExclusive('echo');
+            if(el.name==='Mirror')grantSecretExclusive('mirror');
+            if(elements.length===64)grantSecretExclusive('tinydoor');
+        }
+        function secretExclusiveInvalid(){
+            secretExclusiveState.invalidCount++;
+            if(secretExclusiveState.invalidCount>=13)grantSecretExclusive('wronganswer');
+        }
+        function secretExclusiveVault(){
+            secretExclusiveState.vaultCount++;
+            if(secretExclusiveState.vaultCount>=9)grantSecretExclusive('vaultdust');
+        }
+        function secretExclusiveEdge(){
+            secretExclusiveState.edgeCount++;
+            if(secretExclusiveState.edgeCount>=6)grantSecretExclusive('lastpixel');
+        }
+        setInterval(()=>{
+            const now=new Date();
+            if(Date.now()-secretExclusiveState.idleAt>=180000)grantSecretExclusive('stillwater');
+            if(now.getHours()===0&&now.getMinutes()===0)grantSecretExclusive('nightcode');
+            if(Date.now()-secretExclusiveState.idleAt>=420000)grantSecretExclusive('quietstar');
+            const c=Math.floor(Number(gs?.coins)||0);
+            if(c>0&&String(c).endsWith('777'))grantSecretExclusive('ghostcoin');
+        },1000);
+
+
+        document.addEventListener('click',e=>{
+            const card=e.target.closest?.('.element-card,.el-card');
+            if(card){
+                const name=card.dataset?.name||card.querySelector?.('.el-name')?.textContent?.trim();
+                if(name){const el=elements.find(x=>x.name===name);if(el)secretExclusiveElementTap(el);}
+            }
+            if(e.target.closest?.('#seasonalStorage,#exclusiveStorage'))secretExclusiveVault();
+        },true);
+        window.addEventListener('pointerdown',e=>{
+            const w=innerWidth,h=innerHeight;
+            if(e.clientX<=4||e.clientY<=4||e.clientX>=w-4||e.clientY>=h-4)secretExclusiveEdge();
+        },true);
+        ['keydown','pointerdown','touchstart'].forEach(type=>window.addEventListener(type,secretExclusiveActivity,{passive:true}));
+
+
+        let secretReversePair=[];
+        document.addEventListener('click',e=>{
+            const card=e.target.closest?.('.element-card,.el-card');if(!card)return;
+            const name=card.dataset?.name||card.querySelector?.('.el-name')?.textContent?.trim();if(!name)return;
+            secretReversePair.push(name);secretReversePair=secretReversePair.slice(-2);
+            if(secretReversePair.length===2){
+                const [a,b]=secretReversePair;
+                const reverseKnown=combos.some(c=>{
+                    const ca=c.a||c.first||c.el1||c.input1,cb=c.b||c.second||c.el2||c.input2;
+                    return ca===b&&cb===a;
+                });
+                if(reverseKnown&&a!==b)grantSecretExclusive('backwards');
+            }
+        },true);
 
         // ─── NEW YEAR COUNTDOWN / REWARD ───
         const NY_DEV_KEY='cm_dev_newyear_countdown_end';
