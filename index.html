@@ -1831,7 +1831,8 @@ html.cm-viewport-locked{overflow-x:hidden}
 #cmViewportPortal>#loader,
 #cmViewportPortal>#bossFxLayer,
 #cmViewportPortal>#starForgeEffect,
-#cmViewportPortal>#ascensionOverlay{
+#cmViewportPortal>#ascensionOverlay,
+#cmViewportPortal>#cmAnimationLayer{
     position:fixed!important;
     inset:0!important;
     width:100vw!important;
@@ -1851,7 +1852,25 @@ html.cm-viewport-locked{overflow-x:hidden}
     #cmViewportPortal>#loader,
     #cmViewportPortal>#bossFxLayer,
     #cmViewportPortal>#starForgeEffect,
-    #cmViewportPortal>#ascensionOverlay{height:100vh!important}
+    #cmViewportPortal>#ascensionOverlay,
+    #cmViewportPortal>#cmAnimationLayer{height:100vh!important}
+}
+
+
+#cmViewportPortal>#cmAnimationLayer{
+    pointer-events:none!important;
+    overflow:hidden!important;
+    z-index:2147482998!important;
+}
+#cmAnimationLayer>.ny-countdown,
+#cmAnimationLayer>.xmas-countdown{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    max-width:none!important;
+    transform:none!important;
+    pointer-events:auto!important;
 }
 
 /* Card size preference */
@@ -7188,8 +7207,17 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
                 // Direct child of <html>, deliberately outside animated/transformed <body>.
                 document.documentElement.appendChild(portal);
             }
+            let animationLayer=document.getElementById('cmAnimationLayer');
+            if(!animationLayer){
+                animationLayer=document.createElement('div');
+                animationLayer.id='cmAnimationLayer';
+                portal.appendChild(animationLayer);
+            }else if(animationLayer.parentNode!==portal)portal.appendChild(animationLayer);
             const ids=['changelogBtn','notifContainer','loader','bossFxLayer','starForgeEffect','ascensionOverlay'];
             ids.forEach(id=>{const el=$(id);if(el&&el.parentNode!==portal)portal.appendChild(el);});
+            ['christmasCountdown','newYearCountdown'].forEach(id=>{
+                const el=$(id);if(el&&el.parentNode!==animationLayer)animationLayer.appendChild(el);
+            });
             document.querySelectorAll('.modal-overlay').forEach(el=>{
                 if(el.parentNode!==portal)portal.appendChild(el);
             });
@@ -7262,7 +7290,7 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
         function christmasTarget(){const d=christmasDevTarget();return d?{time:d,dev:true}:{time:christmasRealTarget(),dev:false};}
         function startDeveloperChristmasCountdown(){const end=Date.now()+60000;try{localStorage.setItem(XMAS_DEV_KEY,String(end))}catch(e){}showChristmasCountdown();}
         function stopDeveloperChristmasCountdown(){try{localStorage.removeItem(XMAS_DEV_KEY)}catch(e){}hideChristmasCountdown();}
-        function showChristmasCountdown(){const el=$('christmasCountdown');if(!el)return;el.hidden=false;el.classList.remove('xmas-midnight');if(christmasTimer)clearInterval(christmasTimer);updateChristmasCountdown();christmasTimer=setInterval(updateChristmasCountdown,100);}
+        function showChristmasCountdown(){installViewportPortal();const el=$('christmasCountdown');if(!el)return;el.hidden=false;el.classList.remove('xmas-midnight');if(christmasTimer)clearInterval(christmasTimer);updateChristmasCountdown();christmasTimer=setInterval(updateChristmasCountdown,100);}
         function hideChristmasCountdown(){if(christmasTimer){clearInterval(christmasTimer);christmasTimer=null}christmasLastSecond=null;const el=$('christmasCountdown');if(el){el.hidden=true;el.classList.remove('xmas-midnight')}}
         function updateChristmasCountdown(){const t=christmasTarget(),r=t.time-Date.now();if(!t.dev&&r>60000){hideChristmasCountdown();return}if(r<=0){finishChristmasCountdown(t.dev);return}const sec=Math.max(1,Math.ceil(r/1000));if(sec!==christmasLastSecond){christmasLastSecond=sec;const n=$('christmasCountdownNumber'),sub=$('christmasCountdownSub');if(n){n.textContent=sec;n.classList.toggle('xmas-final',sec<=10)}if(sub)sub.textContent=sec<=10?'THE BELLS ARE RINGING ✦':sec<=30?'The winter forge is glowing…':'Christmas is almost here…';}}
         function grantChristmasCountdownReward(dev=false){const year=new Date().getFullYear(),key=XMAS_REWARD_KEY_PREFIX+year;if(!dev){try{if(localStorage.getItem(key)==='1')return}catch(e){}}const rollKey=CHRISTMAS_EXCLUSIVE_ROLL_KEY+year;if(dev){try{localStorage.removeItem(rollKey)}catch(e){}}const won=rollChristmasExclusives(dev);const coins=15000+Math.floor(Math.random()*15001);gs.coins=(Number(gs.coins)||0)+coins;if(!dev){try{localStorage.setItem(key,'1')}catch(e){}}save();renderEls();updateCount();updateCoinDisplay();notify('🎄 MERRY CHRISTMAS!',`+${coins.toLocaleString()} coins${won.length?' · '+won.map(x=>x.emoji+' '+x.name).join(', '):''}`,'🎁',9000);}
@@ -7395,6 +7423,7 @@ html.reduced-motion .ny-countdown *,@media (prefers-reduced-motion:reduce){.ny-c
             hideNewYearCountdown();
         }
         function showNewYearCountdown(){
+            installViewportPortal();
             const el=$('newYearCountdown');if(!el)return;
             el.hidden=false;el.classList.remove('ny-midnight');
             if(newYearTimer)clearInterval(newYearTimer);
