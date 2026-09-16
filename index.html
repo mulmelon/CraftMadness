@@ -2833,6 +2833,16 @@ html.cm-daily-mode #elGrid .el-card{animation:cmDailyCardIn .34s ease-out both}
 @keyframes cmDailyDiscovery{0%{opacity:.25;transform:scale(.82);filter:brightness(2)}45%{transform:scale(1.08);filter:brightness(1.65) drop-shadow(0 0 15px #c4b5fd)}100%{opacity:1;transform:none;filter:none}}
 .daily-challenge-enter{animation:cmDailyEnter .65s ease-out}
 @keyframes cmDailyEnter{0%{filter:brightness(1.8);opacity:.35}100%{filter:none;opacity:1}}
+
+#cmDailyClearFx{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;visibility:hidden;background:radial-gradient(circle at 50% 50%,rgba(124,58,237,.18),rgba(2,6,23,.72));transition:opacity .2s}
+#cmDailyClearFx.show{opacity:1;visibility:visible}
+.daily-clear-card{position:relative;min-width:min(86vw,390px);padding:25px 22px;text-align:center;border:1px solid #c4b5fd;border-radius:18px;background:linear-gradient(145deg,#07111f,#172554 58%,#312e81);box-shadow:0 0 35px rgba(167,139,250,.38),inset 0 0 24px rgba(255,255,255,.06);animation:cmDailyClearCard 3.05s cubic-bezier(.2,.8,.2,1)}
+.daily-clear-card small{font:900 .48rem/1 ui-monospace,monospace;letter-spacing:.18em;color:#c4b5fd}.daily-clear-card h2{margin:8px 0 11px;color:#f5f3ff;text-shadow:0 0 16px rgba(196,181,253,.7)}
+.daily-clear-target{font-size:.58rem;color:#cbd5e1}.daily-clear-reward{margin-top:13px;font-size:.82rem;font-weight:900;color:#fde68a;animation:cmDailyRewardPop .8s .45s both}.daily-clear-transfer{margin-top:7px;font-size:.5rem;color:#a7f3d0}
+.daily-clear-burst{position:absolute;font-size:11rem;color:#ddd6fe;opacity:.12;animation:cmDailyBurst 2.8s ease-out}
+@keyframes cmDailyClearCard{0%{opacity:0;transform:translateY(24px) scale(.86);filter:brightness(1.7)}16%{opacity:1;transform:translateY(0) scale(1.045)}28%,84%{transform:scale(1)}100%{opacity:0;transform:scale(.98)}}
+@keyframes cmDailyRewardPop{0%{opacity:0;transform:scale(.7)}65%{opacity:1;transform:scale(1.12)}100%{opacity:1;transform:scale(1)}}
+@keyframes cmDailyBurst{0%{opacity:0;transform:scale(.3) rotate(-15deg)}35%{opacity:.18;transform:scale(1) rotate(8deg)}100%{opacity:0;transform:scale(1.45) rotate(18deg)}}
 </style>
 
 </head>
@@ -9016,6 +9026,7 @@ save();checkStarForgeUnlock();
         function updatePatchNewDot(){const d=$('patchNewDot');if(d)d.hidden=localStorage.getItem(CM_PATCH_SEEN)===CM_PATCH_VERSION}
         function markPatchNotesSeen(){try{localStorage.setItem(CM_PATCH_SEEN,CM_PATCH_VERSION)}catch(e){}updatePatchNewDot()}
         const CM_PATCH_NOTES=[
+          ['Daily Rewards Update','Clearing the Daily Challenge now awards 2,500 coins and plays a dedicated Challenge Clear reward animation.'],
           ['Daily Challenge Update','Daily Puzzle now runs as an isolated challenge save using the normal Elements + Combine interface, transfers new discoveries back, uses challenge animations, and changes the page title while active.'],
           ['Discovery Web Update','Discovery Web now has fogged exploration, classified nodes, unknown branches, discovery shimmer reveals, discovered-recipe labels, secret elements shown as anonymous ???? nodes, and rotating Daily Puzzle difficulty.'],
           ['Perfect Records Update','Perfect Diamond relics, Perfect Diamond profile title/banner, medal deterioration, evolving boss trophies, Personal Records, relic upgrade effects, and evolved loading screens.'],
@@ -9629,12 +9640,26 @@ save();checkStarForgeUnlock();
           const crafts=cmDailyState.crafts,target=cmDailyState.target,key=cmDailyState.key;
           elements=cmDailyMain.elements;combos=cmDailyMain.combos;gs=cmDailyMain.gs;currentSort=cmDailyMain.sortMode;
           let added=0;for(const e of gained)if(!elements.some(x=>x.name.toLowerCase()===e.name.toLowerCase())){elements.push(e);try{recordMasteryDiscovery(e)}catch(_){}try{recordJournalElement(e)}catch(_){}added++}
-          if(won)try{localStorage.setItem(CM_DAILY_KEY,JSON.stringify({date:key,complete:true,crafts,target}))}catch(e){}
+          const dailyCoinReward=won?2500:0;
+          if(won){
+            gs.coins=(Number(gs.coins)||0)+dailyCoinReward;
+            try{localStorage.setItem(CM_DAILY_KEY,JSON.stringify({date:key,complete:true,crafts,target,rewardCoins:dailyCoinReward}))}catch(e){}
+          }
           cmDailyState=cmDailyMain=null;try{localStorage.removeItem(CM_DAILY_SAVE)}catch(e){}
           document.documentElement.classList.remove('cm-daily-mode','daily-challenge-enter');document.title='Craft Madness';
           if($('dailyGameHeading'))$('dailyGameHeading').hidden=true;if($('normalGameHeading'))$('normalGameHeading').hidden=false;
           save();renderEls();renderHistory();updateCount();updateProgressionUI();resetDZs();
-          notify(won?'Daily Challenge complete!':'Daily Challenge left',(won?'Target complete. ':'')+(added?added+' undiscovered element'+(added===1?'':'s')+' added to your main collection.':'No new elements to transfer.'),won?'🏆':'↩️',4300);
+          if(won)cmShowDailyClear(dailyCoinReward,added,target,crafts);
+          else notify('Daily Challenge left',added?added+' undiscovered element'+(added===1?'':'s')+' added to your main collection.':'No new elements to transfer.','↩️',4300);
+        }
+        function cmShowDailyClear(coins,added,target,crafts){
+          let fx=$('cmDailyClearFx');
+          if(!fx){fx=document.createElement('div');fx.id='cmDailyClearFx';fx.innerHTML='<div class="daily-clear-burst">✦</div><div class="daily-clear-card"><small>DAILY CHALLENGE</small><h2>CHALLENGE CLEAR!</h2><div class="daily-clear-target"></div><div class="daily-clear-reward"></div><div class="daily-clear-transfer"></div></div>';document.body.appendChild(fx)}
+          fx.querySelector('.daily-clear-target').textContent=target+' · '+crafts+' discoveries';
+          fx.querySelector('.daily-clear-reward').textContent='🪙 +'+Number(coins).toLocaleString()+' COINS';
+          fx.querySelector('.daily-clear-transfer').textContent=added?added+' new element'+(added===1?'':'s')+' transferred':'Collection already had every discovery';
+          fx.classList.remove('show');void fx.offsetWidth;fx.classList.add('show');
+          setTimeout(()=>fx.classList.remove('show'),3200);
         }
         function cmRenderDailyPreview(){
           const p=cmBuildDaily();$('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleInfo').textContent='5-CRAFT · Exactly five starting elements. The target is five NEW discoveries deep. You will enter a separate fresh save with only Elements and Combine. Any elements your main save does not have are transferred back when you leave or win.';
