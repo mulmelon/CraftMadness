@@ -2906,6 +2906,16 @@ html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-ev
 .cm-profile-actions{justify-content:center;margin:8px 0 0!important}
 .cm-web-evolution-bar{position:sticky;top:0;z-index:3;background:var(--bg-card);padding:6px;border-radius:10px}
 #dwMap.cm-currents-on .dw-card{box-shadow:0 0 0 1px rgba(125,211,252,.08),inset 0 -2px 0 rgba(125,211,252,.18)}
+
+#dailyPuzzleBtn.cm-hard-disabled,#dailyPuzzleStart.cm-hard-disabled,
+#cmIdCardBtn.cm-hard-disabled,#cmCapsulesBtn.cm-hard-disabled{
+  opacity:.42!important;filter:grayscale(.72) saturate(.2)!important;
+  border:1px dashed #64748b!important;background:#1f2937!important;color:#94a3b8!important;
+  box-shadow:none!important;text-shadow:none!important;cursor:not-allowed!important;
+  transform:none!important;animation:none!important
+}
+#dailyPuzzleBtn.cm-hard-disabled small{display:block;font-size:.34rem;letter-spacing:.08em;color:#94a3b8}
+#cmIdCardBtn.cm-hard-disabled::after,#cmCapsulesBtn.cm-hard-disabled::after{content:'  🔒';font-size:.48rem}
 </style>
 
 </head>
@@ -9933,7 +9943,7 @@ save();checkStarForgeUnlock();
           }
           if(start){
             const locked=!shop||done||challenge;
-            start.disabled=locked;
+            start.disabled=false;
             start.classList.toggle('cm-disabled-look',locked);
             start.textContent=!shop?'🔒 Discover Shop First':done?'✓ Daily Complete — Come Back Tomorrow':challenge?'🔒 Finish Current Challenge':'Start Daily Challenge';
             start.title=!shop?'Discover Shop to unlock Daily Challenge.':done?'Today’s Daily Challenge has already been completed.':challenge?'Daily is unavailable during Boss/Speedrun.':'';
@@ -10198,6 +10208,8 @@ function legacy(){const ds=dailyStats(),masteries=Object.keys(masteryState?.comp
 function modal(title,body){const o=document.createElement('div');o.className='cm-feature-modal';o.innerHTML=`<div class="cm-feature-box"><div class="cm-feature-head"><h2>${title}</h2><button>✕ CLOSE</button></div>${body}</div>`;document.documentElement.appendChild(o);o.querySelector('.cm-feature-head button').onclick=()=>o.remove();o.onclick=e=>{if(e.target===o)o.remove()};return o}
 function hasIdCard(){const L=legacy();return L.prest>0||L.masteries>0||L.boss>0||L.ds.total>0||L.web>=25||elements.length>=100}
 function hasCapsules(){return jget(CAPS,[]).length>0}
+window.cmHasCrafterId=hasIdCard;
+window.cmHasTimeCapsule=hasCapsules;
 function syncProfileUnlockButtons(){const id=$('cmIdCardBtn'),cap=$('cmCapsulesBtn'),idOK=hasIdCard(),capOK=hasCapsules();for(const [b,ok,msg] of [[id,idOK,'Unlock your Crafter ID by reaching a major progression milestone first.'],[cap,capOK,'Time Capsules are created automatically when you Prestige.']])if(b){b.classList.toggle('cm-disabled-look',!ok);b.setAttribute('aria-disabled',ok?'false':'true');b.title=ok?'':msg}}
 function showCapsules(){const a=jget(CAPS,[]);if(!a.length){notify('Time Capsules locked','Prestige once to create your first read-only Time Capsule.','🔒',3800);return}const o=modal('🕰️ TIME CAPSULES',a.map((x,i)=>`<button class="cm-capsule-open" data-i="${i}">ERA ${roman(x.prestige)} · ${new Date(x.date).toLocaleDateString()} · ${x.elements.length} elements</button>`).join(''));o.querySelectorAll('.cm-capsule-open').forEach(b=>b.onclick=()=>inspectCapsule(a[+b.dataset.i]))}
 function inspectCapsule(x){modal(`🕰️ ERA ${roman(x.prestige)} · ARCHIVED SAVE`,`<div class="cm-capsule-save"><small>READ-ONLY TIME CAPSULE · ${new Date(x.date).toLocaleString()}</small><h2>${x.username||'Crafter'} · ${x.title||'Crafter'}</h2><p>🪙 ${Number(x.gs?.coins||0).toLocaleString()} coins · ${x.combos?.length||0} combinations · ${x.elements?.length||0} elements</p><div class="cm-capsule-grid">${(x.elements||[]).map(e=>`<div class="cm-capsule-el">${e.emoji||'◇'} ${e.name}</div>`).join('')}</div></div>`)}
@@ -10213,6 +10225,76 @@ function bindAftermath(){const a=cmDailyArchive(),n=new Date(),y=n.getFullYear()
 function refreshAll(){try{renderStatsExtras()}catch(e){console.warn('CM stats extras',e)}try{renderDailyPrestige()}catch(e){console.warn('CM daily extras',e)}try{enhanceWeb()}catch(e){console.warn('CM web extras',e)}try{bindAftermath()}catch(e){}}
 document.addEventListener('click',e=>{if(e.target.closest('#playerStatsBtn,#profileBtn'))setTimeout(refreshAll,0);if(e.target.closest('#discoveryWebBtn'))setTimeout(enhanceWeb,0);if(e.target.closest('#dailyArchiveBtn'))setTimeout(bindAftermath,0);if(e.target.closest('#dailyPuzzleBtn'))setTimeout(renderDailyPrestige,0)});
 setTimeout(refreshAll,150);
+})();
+</script>
+<script>
+(()=>{
+  function cmDailyGateState(){
+    const shop=typeof cmDailyShopUnlocked==='function'&&cmDailyShopUnlocked();
+    const challenge=typeof cmChallengeToolsLocked==='function'&&cmChallengeToolsLocked();
+    const done=!!(typeof cmDailyArchive==='function'&&typeof cmDailyKey==='function'&&cmDailyArchive()?.[cmDailyKey()]?.cleared);
+    return {shop,challenge,done};
+  }
+  window.cmApplyHardLocks=function(){
+    const d=cmDailyGateState(),daily=$('dailyPuzzleBtn'),start=$('dailyPuzzleStart');
+    if(daily){
+      if(!daily.dataset.cmOriginalHtml)daily.dataset.cmOriginalHtml=daily.innerHTML;
+      const locked=!d.shop||d.challenge;
+      daily.classList.toggle('cm-hard-disabled',locked);
+      daily.setAttribute('aria-disabled',String(locked));
+      daily.dataset.cmLock=!d.shop?'shop':d.challenge?'challenge':'';
+      daily.innerHTML=!d.shop?'🔒 Daily <small>SHOP REQUIRED</small>':daily.dataset.cmOriginalHtml;
+    }
+    if(start){
+      const locked=!d.shop||d.done||d.challenge;
+      start.classList.toggle('cm-hard-disabled',locked);
+      start.setAttribute('aria-disabled',String(locked));
+      start.dataset.cmLock=!d.shop?'shop':d.done?'done':d.challenge?'challenge':'';
+      start.textContent=!d.shop?'🔒 Discover Shop to Unlock':d.done?'✓ Daily Complete — Come Back Tomorrow':d.challenge?'🔒 Finish Current Challenge':'Start Daily Challenge';
+    }
+    const id=$('cmIdCardBtn'),caps=$('cmCapsulesBtn');
+    const idOK=typeof cmHasCrafterId==='function'?cmHasCrafterId():false;
+    const capOK=typeof cmHasTimeCapsule==='function'?cmHasTimeCapsule():false;
+    if(id){id.classList.toggle('cm-hard-disabled',!idOK);id.setAttribute('aria-disabled',String(!idOK));id.dataset.cmLock=idOK?'':'id'}
+    if(caps){caps.classList.toggle('cm-hard-disabled',!capOK);caps.setAttribute('aria-disabled',String(!capOK));caps.dataset.cmLock=capOK?'':'capsule'}
+  };
+  document.addEventListener('click',e=>{
+    const daily=e.target.closest('#dailyPuzzleBtn,#dailyPuzzleStart');
+    if(daily){
+      const d=cmDailyGateState();
+      if(!d.shop){
+        e.preventDefault();e.stopImmediatePropagation();
+        notify('Daily Challenge locked','Discover Shop first to unlock the Daily Challenge.','🔒',4000);
+        cmApplyHardLocks();return;
+      }
+      if(d.done&&daily.id==='dailyPuzzleStart'){
+        e.preventDefault();e.stopImmediatePropagation();
+        notify('Daily already complete','You already cleared today’s Daily Challenge. Come back tomorrow.','🏅',4000);
+        cmApplyHardLocks();return;
+      }
+      if(d.challenge){
+        e.preventDefault();e.stopImmediatePropagation();
+        notify('Daily unavailable','Finish your current Boss or Speedrun challenge first.','🔒',4000);
+        return;
+      }
+    }
+    const id=e.target.closest('#cmIdCardBtn');
+    if(id&&!(typeof cmHasCrafterId==='function'&&cmHasCrafterId())){
+      e.preventDefault();e.stopImmediatePropagation();
+      notify('Crafter ID locked','Reach your first permanent progression milestone to unlock your Crafter ID.','🔒',4000);
+      cmApplyHardLocks();return;
+    }
+    const cap=e.target.closest('#cmCapsulesBtn');
+    if(cap&&!(typeof cmHasTimeCapsule==='function'&&cmHasTimeCapsule())){
+      e.preventDefault();e.stopImmediatePropagation();
+      notify('Time Capsules locked','Prestige once to seal your first Time Capsule.','🔒',4000);
+      cmApplyHardLocks();return;
+    }
+  },true);
+  const obs=new MutationObserver(()=>cmApplyHardLocks());
+  obs.observe(document.body,{childList:true,subtree:true});
+  setTimeout(cmApplyHardLocks,0);
+  setTimeout(cmApplyHardLocks,300);
 })();
 </script>
 </body>
