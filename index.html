@@ -938,7 +938,7 @@ header button,header #elCount,header #coinDisplay,header #cyMoneyDisplay,.collec
 button:disabled {opacity:.4;box-shadow:none!important;}
 button:focus-visible {outline:2px solid #b39ad9;outline-offset:3px;}
 .collection-panel .sort-active {background:linear-gradient(130deg,#72538f,#493665)!important;color:#fff!important;}
-#exclusiveToggle,#seasonalToggle,#aprilFoolsToggle,#discoveryWebBtn,#dailyPuzzleBtn{
+#exclusiveToggle,#seasonalToggle,#aprilFoolsToggle,#hintToggle,#guideToggle{
     width:32px;
     height:32px;
     min-width:32px;
@@ -2784,16 +2784,9 @@ html.cm-first-mastery-run #bossBtn{display:none!important}
 #cmBootLoader.cm-boot-boss .cm-boot-kicker,#cmBootLoader.cm-boot-boss .cm-boot-studio span,#cmBootLoader.cm-boot-boss .cm-boot-game{color:#fca5a5!important}
 #cmBootLoader.cm-boot-boss .cm-boot-track i{background:linear-gradient(90deg,transparent,#ef4444,#f59e0b,#ef4444,transparent)!important}
 
-/* Discovery Web */
-.discovery-web-box{max-width:940px!important}.dw-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.dw-head small,.daily-overline{font:800 .48rem/1 ui-monospace,monospace;letter-spacing:.15em;color:#a78bfa}.dw-head h2{margin-top:5px}.dw-head>span{font-size:.6rem;color:var(--text-secondary)}
-.dw-tabs{display:flex;gap:6px;margin:12px 0}.dw-tab.active{border-color:#a78bfa!important;box-shadow:inset 0 -2px #a78bfa!important}.dw-note{font-size:.62rem;color:var(--text-secondary);line-height:1.55;margin:8px 0 12px}
-#discoveryWebCanvas{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;max-height:52vh;overflow:auto;padding:4px}
-.dw-node{position:relative;padding:10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025);min-height:68px}.dw-node.owned{border-color:rgba(74,222,128,.32)}.dw-node.near{border-color:rgba(250,204,21,.5)}.dw-node.important{box-shadow:inset 0 0 18px rgba(167,139,250,.08)}.dw-node .dw-emoji{font-size:1.25rem}.dw-node strong{display:block;font-size:.62rem;margin-top:4px}.dw-node small{font-size:.48rem;color:var(--text-secondary)}.dw-node .dw-links{margin-top:5px;font-size:.45rem;color:#a78bfa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#discoveryRiddles,#discoveryGuide{display:grid;gap:8px;max-height:54vh;overflow:auto;padding:3px}.dw-riddle,.dw-guide-row{padding:11px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}.dw-riddle strong,.dw-guide-row strong{font-size:.65rem}.dw-riddle p,.dw-guide-row p{font-size:.55rem;color:var(--text-secondary);margin-top:5px;line-height:1.5}.dw-riddle details{margin-top:6px;font-size:.52rem}.dw-riddle summary{cursor:pointer;color:#facc15}
-
-/* Daily Recipe Puzzle */
-.daily-puzzle-box{max-width:620px!important}.daily-starts{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.daily-chip{padding:7px 9px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.035);font-size:.58rem}.daily-target{margin:15px 0;padding:16px;border:1px solid #a78bfa66;border-radius:15px;text-align:center;background:radial-gradient(circle at 50% 0,rgba(167,139,250,.13),transparent 70%)}.daily-target small{display:block;font-size:.48rem;letter-spacing:.15em;color:#a78bfa}.daily-target strong{display:block;font-size:1rem;margin-top:5px}.daily-actions{display:flex;gap:8px;justify-content:center;margin-top:14px}#dailyPuzzleStatus{font-size:.6rem;color:var(--text-secondary);text-align:center;min-height:20px}
-html.cm-daily-puzzle #shopBtn,html.cm-daily-puzzle #starForgeBtn,html.cm-daily-puzzle #upgradeForgeBtn,html.cm-daily-puzzle #prestigeBtn,html.cm-daily-puzzle #bossBtn{display:none!important}
+#discoveryWebBtn,#dailyPuzzleBtn{width:32px;height:32px;padding:0;border:1px solid var(--border);border-radius:9px;background:var(--bg-card);cursor:pointer}
+.discovery-web-box{max-width:900px!important}.dw-tabs{display:flex;gap:6px;margin:10px 0 12px}.dw-tab.active{border-color:#a78bfa!important;box-shadow:inset 0 -2px #a78bfa}.dw-panel{max-height:58vh;overflow:auto}.dw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}.dw-card,.dw-riddle,.dw-guide-row{padding:10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}.dw-card.owned{border-color:rgba(74,222,128,.35)}.dw-card.important{box-shadow:inset 0 0 16px rgba(167,139,250,.09)}.dw-card strong,.dw-riddle strong,.dw-guide-row strong{display:block;font-size:.62rem}.dw-card small,.dw-riddle p,.dw-guide-row p,.dw-note{font-size:.55rem;color:var(--text-secondary);line-height:1.5}.dw-riddle,.dw-guide-row{margin-bottom:8px}
+.daily-puzzle-box{max-width:650px!important}.daily-target{padding:12px;margin:10px 0;border:1px solid #a78bfa66;border-radius:12px;text-align:center}.daily-elements{display:flex;flex-wrap:wrap;gap:7px;max-height:45vh;overflow:auto;padding:5px}.daily-el{padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg-card);cursor:pointer}.daily-el.selected{border-color:#a78bfa;box-shadow:0 0 12px #a78bfa55}.daily-el.new{border-color:#4ade8066}.daily-actions{display:flex;gap:8px;justify-content:center;margin-top:12px}
 </style>
 
 </head>
@@ -2973,8 +2966,55 @@ html.cm-daily-puzzle #shopBtn,html.cm-daily-puzzle #starForgeBtn,html.cm-daily-p
                     <div id="aprilFoolsGrid"></div>
                 </aside>
 
-        <aside id="craftGuide" hidden style="display:none!important" aria-label="Legacy crafting guide"><h3>📖 Crafting guide</h3><div id="craftGuideList"></div></aside>
-        <aside id="craftHints" hidden style="display:none!important" aria-label="Legacy crafting hints"><input type="checkbox" id="showDiscoveredHints" hidden><span id="keyBalance" hidden>0</span><span id="hintsComplete" hidden></span></aside>
+        <aside id="craftGuide" hidden aria-label="Crafting guide"><h3>📖 Crafting guide</h3><div id="craftGuideList"></div></aside>
+        <aside id="craftHints" hidden style="display:none!important" aria-label="Crafting hints">
+            <h3 style="font-size:.8rem;color:var(--gold);margin-bottom:10px">A few clues</h3>
+            <p style="font-size:.7rem;color:var(--text-secondary)">🔑 <span id="keyBalance">0</span> keys · 1 in 500 chance each second while playing. Spend a key to reveal a recipe, or discover its element to unlock it for free.</p>
+            <label style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--text-secondary);margin-bottom:12px;cursor:pointer"><input type="checkbox" id="showDiscoveredHints"> Show discovered clues</label>
+            <article data-hint-element="Shop"><strong>🛒 Unlock Shop &amp; coins</strong>
+                <p>Build a home, then add a little more building material to turn it into a place of business.</p>
+                <details><summary>Another hint</summary><p>Water and Earth make Mud. Fire turns Mud into Brick. Keep combining matching building pieces until you have a House.</p></details>
+                <details><summary>Reveal the recipe</summary><p>Water + Earth → Mud<br>Mud + Fire → Brick<br>Brick + Brick → Wall<br>Wall + Wall → Room<br>Room + Room → House<br><strong>House + Brick → Shop</strong></p></details>
+            </article>
+            <article data-hint-element="The End Game"><strong>🎬 Find the ending</strong>
+                <p>Bring deep thought into balance. When you find The End, it still needs to meet itself.</p>
+                <details><summary>Another hint</summary><p>Fire + Paradox makes Philosophy. Two Opposites make Balance.</p></details>
+                <details><summary>Reveal the recipe</summary><p>Fire + Paradox → Philosophy<br>Opposite + Opposite → Balance<br>Philosophy + Balance → The End<br><strong>The End + The End → The End Game</strong><br>Finding the ending reveals your rank.</p></details>
+            </article>
+            <article data-hint-element="A"><strong>🔤 Discover A</strong>
+                <p>The alphabet begins when written words meet a flame.</p>
+                <details><summary>Reveal the recipe</summary><p>Stone + Ink → Writing<br><strong>Writing + Fire → A</strong></p></details>
+            </article>
+            <article data-hint-element="1"><strong>1️⃣ Discover 1</strong>
+                <p>Start counting with a single day on a calendar.</p>
+                <details><summary>Reveal the recipe</summary><p>Time + Stone → Calendar<br>Sky + Sun → Day<br><strong>Calendar + Day → 1</strong></p></details>
+            </article>
+            <article data-hint-element="Philosophy"><strong>🤔 Discover Philosophy</strong>
+                <p>Let a flame stir a question that seems to contradict itself.</p>
+                <details><summary>Reveal the recipe</summary><p>Null + Null → Paradox<br><strong>Fire + Paradox → Philosophy</strong></p></details>
+            </article>
+            <article data-hint-element="Star Forge"><strong>🌟 Discover Star Forge</strong>
+                <p>Build a place to shape metal, then give it a light from the night sky.</p>
+                <details><summary>Another hint</summary><p>A forge needs heat and metal. Look to the sky after dark for its celestial partner.</p></details>
+                <details><summary>Reveal the recipe</summary><p>Stone + Underground → Metal<br>Fire + Metal → Forge<br>Sky + Night → Star<br><strong>Star + Forge → Star Forge</strong></p></details>
+            </article>
+            <article data-hint-element="Null"><strong>⚫ Discover Null</strong>
+                <p>Peer into the deepest emptiness, then bring two of those depths together.</p>
+                <details><summary>Reveal the recipe</summary><p>Night + Ocean → Abyss<br><strong>Abyss + Abyss → Null</strong></p></details>
+            </article>
+            <section style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+                <strong>🔑 Key Services</strong>
+                <p>Each purchase asks for confirmation. Services become available as you unlock their features.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <button id="keyCoins" class="sort-btn text-xs px-2 py-1 rounded-lg">500 coins · 1 key</button>
+                    <button id="keyRestock" class="sort-btn text-xs px-2 py-1 rounded-lg">Restock Shop · 1 key</button>
+                    <button id="keyForge" class="sort-btn text-xs px-2 py-1 rounded-lg">Recharge Forge · 10 keys</button>
+                    <button id="keyCyMoney" class="sort-btn text-xs px-2 py-1 rounded-lg">1 CyMoney · 100 keys</button>
+                </div>
+                <p class="text-xs">Coins/restocks need Shop. Recharge needs a cooling-down Forge. CyMoney exchange needs CyMoney already unlocked.</p>
+            </section>
+            <p id="hintsComplete" hidden>All these discoveries are already in your collection. ✨</p>
+        </aside>
 
         <div id="keyUnlockModal" class="modal-overlay"><div class="modal-box" style="max-width:380px">
             <button class="modal-close" data-close="keyUnlockModal">&times;</button>
@@ -3055,6 +3095,8 @@ html.cm-daily-puzzle #shopBtn,html.cm-daily-puzzle #starForgeBtn,html.cm-daily-p
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
                 <button type="button" id="seasonalToggle" aria-controls="seasonalStorage" aria-expanded="false" aria-label="Show Seasonal Vault" title="Show Seasonal Vault">🎉</button>
                 <button type="button" id="aprilFoolsToggle" aria-controls="aprilFoolsStorage" aria-expanded="false" aria-label="Show April Fools Storer" title="Show April Fools Storer">🤡</button>
+                <button type="button" id="hintToggle" hidden aria-controls="craftHints" aria-expanded="false">🔑</button>
+                <button type="button" id="guideToggle" hidden aria-controls="craftGuide" aria-expanded="false">📖</button>
                 <button type="button" id="discoveryWebBtn" aria-label="Discovery Web" title="Discovery Web">🕸️</button>
                 <button type="button" id="dailyPuzzleBtn" aria-label="Daily Recipe Puzzle" title="Daily Recipe Puzzle">🧩</button>
                 <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
@@ -3071,22 +3113,22 @@ html.cm-daily-puzzle #shopBtn,html.cm-daily-puzzle #starForgeBtn,html.cm-daily-p
         <div id="discoveryWebModal" class="modal-overlay">
           <div class="modal-box discovery-web-box">
             <button class="modal-close" data-close="discoveryWebModal">×</button>
-            <div class="dw-head"><div><small>CRAFT MADNESS KNOWLEDGE MAP</small><h2>🕸️ Discovery Web</h2></div><span id="dwProgress"></span></div>
-            <div class="dw-tabs"><button class="dw-tab active" data-dwtab="web">Web</button><button class="dw-tab" data-dwtab="riddles">Riddles</button><button class="dw-tab" data-dwtab="guide">Guide</button></div>
-            <section id="dwWebPanel"><p class="dw-note">Discovered recipes connect normally. Undiscovered ranked elements show their distance, but not their ingredients.</p><div id="discoveryWebCanvas"></div></section>
-            <section id="dwRiddlePanel" hidden><p class="dw-note">Important discoveries stay visible here at all times — they are no longer mixed into the normal crafting screen.</p><div id="discoveryRiddles"></div></section>
-            <section id="dwGuidePanel" hidden><p class="dw-note">The old crafting guide now lives inside the Web.</p><div id="discoveryGuide"></div></section>
+            <h2>🕸️ Discovery Web</h2>
+            <div class="dw-tabs"><button class="dw-tab active" data-panel="dwMap">Map</button><button class="dw-tab" data-panel="dwRiddles">Riddles</button><button class="dw-tab" data-panel="dwGuide">Guide</button></div>
+            <div id="dwMap" class="dw-panel"></div>
+            <div id="dwRiddles" class="dw-panel" hidden></div>
+            <div id="dwGuide" class="dw-panel" hidden></div>
           </div>
         </div>
         <div id="dailyPuzzleModal" class="modal-overlay">
           <div class="modal-box daily-puzzle-box">
             <button class="modal-close" data-close="dailyPuzzleModal">×</button>
-            <small class="daily-overline">CHANGES DAILY · LOCAL DATE</small><h2>🧩 Daily Recipe Puzzle</h2>
-            <p id="dailyPuzzleDesc" class="dw-note"></p>
-            <div id="dailyPuzzleStarts" class="daily-starts"></div>
-            <div class="daily-target"><small>TARGET</small><strong id="dailyPuzzleTarget">—</strong></div>
-            <div id="dailyPuzzleStatus"></div>
-            <div class="daily-actions"><button id="dailyPuzzleStart">Start Puzzle</button><button id="dailyPuzzleGiveUp">Leave Puzzle</button></div>
+            <h2>🧩 Daily Recipe Puzzle</h2>
+            <p id="dailyPuzzleInfo" class="dw-note"></p>
+            <div class="daily-target">TARGET · <strong id="dailyPuzzleTarget">—</strong></div>
+            <div id="dailyPuzzleElements" class="daily-elements"></div>
+            <div id="dailyPuzzleResult" class="dw-note"></div>
+            <div class="daily-actions"><button id="dailyPuzzleReset">Reset</button><button id="dailyPuzzleLeave">Leave</button></div>
           </div>
         </div>
 
@@ -7024,114 +7066,27 @@ try{
             }finally{prestigeInFlight=false;drainAwakenings();}
         });
 
-
-        // ─── DISCOVERY WEB / DAILY PUZZLE ───
-        const DW_IMPORTANT=[
-          ['Shop','🛒','Build a home, then add a little more building material to turn it into a place of business.','Water + Earth → Mud\nMud + Fire → Brick\nBrick + Brick → Wall\nWall + Wall → Room\nRoom + Room → House\nHouse + Brick → Shop'],
-          ['The End Game','🎬','Bring deep thought into balance. When you find The End, it still needs to meet itself.','Fire + Paradox → Philosophy\nOpposite + Opposite → Balance\nPhilosophy + Balance → The End\nThe End + The End → The End Game'],
-          ['A','🔤','The alphabet begins when written words meet a flame.','Stone + Ink → Writing\nWriting + Fire → A'],
-          ['1','1️⃣','Start counting with a single day on a calendar.','Time + Stone → Calendar\nSky + Sun → Day\nCalendar + Day → 1'],
-          ['Philosophy','🤔','Let a flame stir a question that seems to contradict itself.','Null + Null → Paradox\nFire + Paradox → Philosophy'],
-          ['Star Forge','🌟','Build a place to shape metal, then give it a light from the night sky.','Stone + Underground → Metal\nFire + Metal → Forge\nSky + Night → Star\nStar + Forge → Star Forge'],
-          ['Null','⚫','Peer into the deepest emptiness, then bring two of those depths together.','Night + Ocean → Abyss\nAbyss + Abyss → Null']
-        ];
-        function dwOwned(){return new Set(elements.map(e=>e.name.toLowerCase()))}
-        function renderDiscoveryWeb(){
-          const owned=dwOwned(),missing=prestigeRequirements().missing,plans=missingCraftPlans(missing),planMap=new Map(plans.map(x=>[x.name.toLowerCase(),x]));
-          $('dwProgress').textContent=(rankedCatalog().length-missing.length)+' / '+rankedCatalog().length+' ranked';
-          const canvas=$('discoveryWebCanvas');canvas.replaceChildren();
-          const names=[...new Set([...rankedCatalog(),...DW_IMPORTANT.map(x=>x[0])])];
-          for(const name of names){
-            const low=name.toLowerCase(),isOwned=owned.has(low),p=planMap.get(low),imp=DW_IMPORTANT.some(x=>x[0]===name),node=document.createElement('div');
-            node.className='dw-node '+(isOwned?'owned ':'')+(p&&p.cost<=2?'near ':'')+(imp?'important':'');
-            const el=elements.find(e=>e.name.toLowerCase()===low),dist=isOwned?'DISCOVERED':p?(p.cost>20?'UNKNOWN ROUTE':p.cost+' CRAFT'+(p.cost===1?'':'S')+' AWAY'):'UNDISCOVERED';
-            let links='';
-            if(isOwned){
-              const known=combos.filter(c=>String(c.result||c.resultName||'').toLowerCase()===low).slice(-2).map(c=>(c.a||c.el1||c.left||'?')+' + '+(c.b||c.el2||c.right||'?'));
-              if(known.length)links=known.join(' · ');
-            }
-            node.innerHTML=`<span class="dw-emoji">${el?.emoji||DW_IMPORTANT.find(x=>x[0]===name)?.[1]||'◇'}</span><strong>${name}</strong><small>${dist}</small>${links?`<div class="dw-links">${links}</div>`:''}`;
-            canvas.appendChild(node);
-          }
-          const riddles=$('discoveryRiddles');riddles.innerHTML=DW_IMPORTANT.map(([name,emoji,clue,recipe])=>`<article class="dw-riddle"><strong>${emoji} ${name}${owned.has(name.toLowerCase())?' · ✓':''}</strong><p>${clue}</p><details><summary>Reveal route</summary><p>${recipe.replaceAll('\n','<br>')}</p></details></article>`).join('');
-          const guide=$('discoveryGuide');guide.replaceChildren();
-          const legend=document.createElement('div');legend.className='dw-guide-row';legend.innerHTML='<strong>📖 Crafting Guide</strong><p>Distances count the shortest known dependency plan using ingredients you already own. Ingredients stay hidden here so the Web still leaves discovery to you.</p>';guide.appendChild(legend);
-          for(const row of plans.slice(0,120)){const d=document.createElement('div');d.className='dw-guide-row';d.innerHTML=`<strong>${row.name}</strong><p>${row.cost>20?'Unknown distance / special discovery method':row.cost+' craft'+(row.cost===1?'':'s')+' away'}</p>`;guide.appendChild(d)}
-        }
-        $('discoveryWebBtn').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}renderDiscoveryWeb();openModal('discoveryWebModal')});
-        document.querySelectorAll('.dw-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dw-tab').forEach(x=>x.classList.toggle('active',x===b));for(const [id,p] of [['web','dwWebPanel'],['riddles','dwRiddlePanel'],['guide','dwGuidePanel']])$(p).hidden=b.dataset.dwtab!==id;}));
-
-        const DAILY_KEY='cm_daily_recipe_v1'; let dailyPuzzleState=null,dailyPuzzleBackup=null;
-        function dailySeed(){
-          const d=new Date(),key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-          let h=2166136261;for(const c of key){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return {key,rand:()=>((h=Math.imul(h^h>>>15,2246822519))>>>0)/4294967296};
-        }
-        function dailyRecipe(){
-          const {key,rand}=dailySeed(),owned=new Set(STARTERS.map(e=>e.name.toLowerCase())),byResult=new Map();
-          const recipeNames=[...new Set([...rankedCatalog(),...elements.map(e=>e.name),...STARTERS.map(e=>e.name)])].sort((a,b)=>b.length-a.length);
-          for(const [pair,res] of Object.entries(recipes)){
-            let found=null;
-            for(const a of recipeNames){
-              const prefix=a+'+';if(!pair.startsWith(prefix))continue;
-              const b=pair.slice(prefix.length);if(recipeNames.includes(b)){found=[a,b];break;}
-            }
-            if(!found)continue;
-            const k=res.name;if(!byResult.has(k))byResult.set(k,[]);byResult.get(k).push(found);
-          }
-          // Generate reachable mini-puzzles: exactly five supplied elements, target 3–5 dependency crafts away.
-          const catalog=rankedCatalog().filter(n=>!STARTERS.some(e=>e.name===n)),candidates=[];
-          function solve(target,have,depth=0,seen=new Set()){
-            if(have.has(target.toLowerCase()))return [];
-            if(depth>5||seen.has(target))return null;seen=new Set(seen);seen.add(target);
-            for(const [a,b] of byResult.get(target)||[]){
-              let aa=solve(a,have,depth+1,seen),bb=solve(b,have,depth+1,seen);if(aa&&bb)return [...aa,...bb,[a,b,target]];
-            } return null;
-          }
-          // Build candidate start pools from existing owned elements when possible; fill to five with starters.
-          const current=elements.filter(e=>!e.excludeFromRank&&!e.isAprilFools&&!e.isExclusive).map(e=>e.name);
-          const pool=[...new Set([...current,...STARTERS.map(e=>e.name)])];
-          for(const target of catalog){
-            for(let t=0;t<Math.min(16,pool.length);t++){
-              const shuffled=[...pool];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
-              const starts=shuffled.slice(0,5),plan=solve(target,new Set(starts.map(x=>x.toLowerCase())));
-              const uniq=plan?new Set(plan.map(x=>x[2])).size:0;if(uniq>=3&&uniq<=5)candidates.push({target,starts,crafts:uniq});
-            }
-            if(candidates.length>30)break;
-          }
-          if(!candidates.length)return {key,target:'Energy',starts:['Water','Fire','Earth','Air','Cloud'],crafts:2};
-          return {key,...candidates[Math.floor(rand()*candidates.length)]};
-        }
-        function renderDailyPuzzle(){
-          const p=dailyRecipe(),done=JSON.parse(localStorage.getItem(DAILY_KEY)||'{}');
-          $('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleStarts').innerHTML=p.starts.map(n=>`<span class="daily-chip">${n}</span>`).join('');
-          $('dailyPuzzleDesc').textContent=`You get exactly 5 starting elements. The target is designed to take about ${p.crafts} discovery crafts. Any puzzle element you discover that your main save did not already have is permanently added when you finish or leave.`;
-          $('dailyPuzzleStatus').textContent=done.date===p.key&&done.complete?'✓ Completed today'+(done.crafts?' in '+done.crafts+' crafts':''):'Not completed today.';
-        }
-        $('dailyPuzzleBtn').addEventListener('click',()=>{if(speedrunState?.active||bossMode){notify('Daily Puzzle locked','Finish the current challenge first.','🔒');return;}renderDailyPuzzle();openModal('dailyPuzzleModal')});
-        $('dailyPuzzleStart').addEventListener('click',()=>{
-          if(dailyPuzzleState)return;const p=dailyRecipe();dailyPuzzleBackup={elements:structuredClone(elements),combos:structuredClone(combos),gs:structuredClone(gs),sort:currentSort};
-          const byName=new Map([...elements,...STARTERS].map(e=>[e.name,e]));elements=p.starts.map(n=>structuredClone(byName.get(n)||{name:n,emoji:'◇',color:'bg-gray-500'}));combos=[];dailyPuzzleState={...p,crafts:0,mainNames:new Set(dailyPuzzleBackup.elements.map(e=>e.name.toLowerCase()))};
-          document.documentElement.classList.add('cm-daily-puzzle');closeModal('dailyPuzzleModal');renderEls();renderHistory();notify('Daily Puzzle started',p.target+' · '+p.crafts+' craft target','🧩');
-        });
-        function finishDailyPuzzle(completed=false){
-          if(!dailyPuzzleState)return;const gained=elements.filter(e=>!dailyPuzzleState.mainNames.has(e.name.toLowerCase())&&!e.isSpeedrun&&!e.isBossDefeat&&!e.isBossMasteryTrophy&&!e.isMasteryExclusive&&!e.isSeasonalReward&&!e.isTrophy).map(e=>structuredClone(e)),crafts=dailyPuzzleState.crafts,p=dailyPuzzleState;
-          elements=dailyPuzzleBackup.elements;combos=dailyPuzzleBackup.combos;gs=dailyPuzzleBackup.gs;currentSort=dailyPuzzleBackup.sort;
-          for(const e of gained)if(!elements.some(x=>x.name.toLowerCase()===e.name.toLowerCase()))elements.push(e);
-          if(completed)localStorage.setItem(DAILY_KEY,JSON.stringify({date:p.key,complete:true,crafts}));
-          dailyPuzzleState=dailyPuzzleBackup=null;document.documentElement.classList.remove('cm-daily-puzzle');save();renderEls();renderHistory();updateProgressionUI();
-          notify(completed?'Daily Puzzle complete!':'Daily Puzzle ended',gained.length?gained.length+' new element'+(gained.length===1?'':'s')+' added to your collection.':'No new elements to transfer.',completed?'🧩':'↩️',4200);
-        }
-        $('dailyPuzzleGiveUp').addEventListener('click',()=>{closeModal('dailyPuzzleModal');if(dailyPuzzleState)finishDailyPuzzle(false)});
-
         // ─── RENDER ELEMENTS ───
         // The diamond toggles the compact panel below Combine; ordinary elements stay visible.
         // Hints toggle independently; hide the full panel just like Exclusive Storage.
-        $('showDiscoveredHints')?.addEventListener('change',updateCraftHints);
+        $('showDiscoveredHints').addEventListener('change',updateCraftHints);
         function updateCraftGuide(){
             if(!$('craftGuide').hidden)renderMissingCrafts(prestigeRequirements().missing);
         }
-        
-        
+        $('guideToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
+            const panel=$('craftGuide'),show=panel.hidden;panel.hidden=!show;
+            $('guideToggle').setAttribute('aria-expanded',String(show));
+            $('guideToggle').setAttribute('aria-label',show?'Hide crafting guide':'Show crafting guide');
+            updateCraftGuide();
+        });
+        $('hintToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
+            const panel=$('craftHints'),toggle=$('hintToggle');
+            const show=toggle.getAttribute('aria-expanded')!=='true';
+            panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
+            toggle.setAttribute('aria-expanded',String(show));
+            toggle.setAttribute('aria-label',show?'Hide crafting hints':'Show crafting hints');
+            toggle.title=show?'Hide crafting hints':'Show crafting hints';
+        });
         $('speedrunToggle').addEventListener('click',()=>{if(bossPowerLocked()){notifyBossPowerLock();return;}
             const panel=$('speedrunStorage'),toggle=$('speedrunToggle'),show=toggle.getAttribute('aria-expanded')!=='true';
             panel.hidden=!show;panel.style.setProperty('display',show?'block':'none','important');
@@ -7859,7 +7814,6 @@ try{
             }
 
             const newEl={...result,color:result.color||randColor()};
-            if(dailyPuzzleState){dailyPuzzleState.crafts++;if(newEl.name===dailyPuzzleState.target)setTimeout(()=>finishDailyPuzzle(true),300);}
             if(bossMode)rememberBossViewport();
             if(bossMode)queueBossMainUnlock(newEl);
             if(bossMode)applyBossMutations(newEl);
@@ -8007,7 +7961,7 @@ try{
                 clue.hidden=!$('showDiscoveredHints').checked&&owned.has(clue.dataset.hintElement.toLowerCase());
                 if(!clue.hidden)remaining++;
             });
-            if($('hintsComplete'))$('hintsComplete').hidden=remaining!==0;
+            $('hintsComplete').hidden=remaining!==0;
         }
         function updateProgressionUI(){
             if(bossMode){
@@ -8377,7 +8331,7 @@ save();checkStarForgeUnlock();
         new MutationObserver(()=>{if($('exportModal').style.display==='none'){developerArmed=false;developerTyped='';}}).observe($('exportModal'),{attributes:true,attributeFilter:['style']});
         document.addEventListener('click',e=>{
             if(!bossPowerLocked())return;
-            const locked=e.target.closest('#storageToggle,#exclusiveToggle,#seasonalToggle,#aprilFoolsToggle,#discoveryWebBtn,#dailyPuzzleBtn,#exportBtn,#importBtn,#shopBtn,#starForgeBtn,#openShop,#sfBtn,#exportOpen,#importOpen,[data-open="shopModal"],[data-open="starForgeModal"],[data-open="exportModal"],[data-open="importModal"]');
+            const locked=e.target.closest('#storageToggle,#exclusiveToggle,#seasonalToggle,#aprilFoolsToggle,#hintToggle,#guideToggle,#exportBtn,#importBtn,#shopBtn,#starForgeBtn,#openShop,#sfBtn,#exportOpen,#importOpen,[data-open="shopModal"],[data-open="starForgeModal"],[data-open="exportModal"],[data-open="importModal"]');
             if(!locked)return;
             if(bossHasMutationMemoryStarForge()&&(locked.matches('#starForgeBtn,#sfBtn,[data-open="starForgeModal"]')||locked.closest('#starForgeBtn,#sfBtn,[data-open="starForgeModal"]')))return;
             e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
@@ -8991,7 +8945,7 @@ save();checkStarForgeUnlock();
         function updatePatchNewDot(){const d=$('patchNewDot');if(d)d.hidden=localStorage.getItem(CM_PATCH_SEEN)===CM_PATCH_VERSION}
         function markPatchNotesSeen(){try{localStorage.setItem(CM_PATCH_SEEN,CM_PATCH_VERSION)}catch(e){}updatePatchNewDot()}
         const CM_PATCH_NOTES=[
-          ['Discovery Web Update','Discovery Web with permanent important riddles and integrated crafting guide, plus a five-start-element Daily Recipe Puzzle that transfers newly discovered elements back to your collection.'],
+          ['Discovery Web Update','Discovery Web with always-visible important riddles, integrated guide, and a self-contained Daily Recipe Puzzle.'],
           ['Perfect Records Update','Perfect Diamond relics, Perfect Diamond profile title/banner, medal deterioration, evolving boss trophies, Personal Records, relic upgrade effects, and evolved loading screens.'],
           ['Vault & Archive Update','Split streaks, PB crowns, Trophy Sets, Vault levels, pedestal plaques, rare trophy effects, Discovery Journal, first records, profile titles/themes, Mastery capstones and near-completion alerts, Patch Notes NEW detection, intro variants, and rotating save backups.'],
           ['Chrono & Vault Update','Split PBs, PB Ghost improvements, medal progress, Run History, Trophy inspection, Mastery pinning, and Trophy Box displays.'],
@@ -9440,6 +9394,77 @@ save();checkStarForgeUnlock();
         }
         applySiteFooter();
         applyAprilFoolsMode();
+
+        // ─── DISCOVERY WEB + DAILY PUZZLE (self-contained rebuild) ───
+        const CM_DW_IMPORTANT=[
+          ['Shop','🛒','Build toward a place of business.','Water + Earth → Mud\nMud + Fire → Brick\nBrick + Brick → Wall\nWall + Wall → Room\nRoom + Room → House\nHouse + Brick → Shop'],
+          ['Star Forge','🌟','Build a Forge, then combine it with a Star.','Fire + Metal → Forge\nSky + Night → Star\nStar + Forge → Star Forge'],
+          ['Null','⚫','Two Abysses cancel into nothing.','Night + Ocean → Abyss\nAbyss + Abyss → Null'],
+          ['Philosophy','🤔','A paradox exposed to fire becomes thought.','Null + Null → Paradox\nFire + Paradox → Philosophy'],
+          ['A','🔤','Writing meets Fire.','Stone + Ink → Writing\nWriting + Fire → A'],
+          ['The End Game','🎬','Find The End, then make it meet itself.','Philosophy + Balance → The End\nThe End + The End → The End Game']
+        ];
+        function cmRenderDiscoveryWeb(){
+          const owned=new Set(elements.map(e=>e.name.toLowerCase())),missing=prestigeRequirements().missing,plans=missingCraftPlans(missing),pm=new Map(plans.map(x=>[x.name.toLowerCase(),x]));
+          const map=$('dwMap');map.innerHTML='<div class="dw-grid"></div>';const grid=map.firstElementChild;
+          for(const name of [...new Set([...rankedCatalog(),...CM_DW_IMPORTANT.map(x=>x[0])])]){
+            const low=name.toLowerCase(),have=owned.has(low),p=pm.get(low),imp=CM_DW_IMPORTANT.some(x=>x[0]===name),el=elements.find(e=>e.name.toLowerCase()===low),d=document.createElement('div');
+            d.className='dw-card '+(have?'owned ':'')+(imp?'important':'');
+            d.innerHTML=`<strong>${el?.emoji||CM_DW_IMPORTANT.find(x=>x[0]===name)?.[1]||'◇'} ${name}</strong><small>${have?'DISCOVERED':p?(p.cost>20?'UNKNOWN DISTANCE':p.cost+' CRAFT'+(p.cost===1?'':'S')+' AWAY'):'UNDISCOVERED'}</small>`;
+            grid.appendChild(d);
+          }
+          $('dwRiddles').innerHTML=CM_DW_IMPORTANT.map(([n,e,c,r])=>`<div class="dw-riddle"><strong>${e} ${n}${owned.has(n.toLowerCase())?' · ✓':''}</strong><p>${c}</p><details><summary>Reveal route</summary><p>${r.replaceAll('\n','<br>')}</p></details></div>`).join('');
+          $('dwGuide').innerHTML='<div class="dw-guide-row"><strong>📖 Crafting Guide</strong><p>Discovery distance is calculated from what you currently own. The map does not reveal normal undiscovered ingredients.</p></div>'+plans.slice(0,150).map(r=>`<div class="dw-guide-row"><strong>${r.name}</strong><p>${r.cost>20?'Unknown distance / special method':r.cost+' craft'+(r.cost===1?'':'s')+' away'}</p></div>`).join('');
+        }
+        $('discoveryWebBtn').addEventListener('click',()=>{cmRenderDiscoveryWeb();openModal('discoveryWebModal')});
+        document.querySelectorAll('.dw-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dw-tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('#discoveryWebModal .dw-panel').forEach(p=>p.hidden=p.id!==b.dataset.panel)}));
+
+        const CM_DAILY_KEY='cm_daily_recipe_v2';let cmDaily=null;
+        function cmDailySeed(){const d=new Date(),k=[d.getFullYear(),d.getMonth()+1,d.getDate()].join('-');let h=2166136261;for(const c of k){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return {key:k,next:n=>{h^=h>>>13;h=Math.imul(h,1274126177);return (h>>>0)%n}}}
+        function cmRecipe(a,b){return recipes[a+'+'+b]||recipes[b+'+'+a]||null}
+        function cmBuildDaily(){
+          const rng=cmDailySeed(),owned=[...new Map(elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isKey&&!e.isPrestige).map(e=>[e.name,e])).values()];
+          const base=owned.length>=5?owned:STARTERS;
+          // Pick five deterministic owned elements, then walk 3–5 valid crafts using only the local set.
+          const starts=[],used=new Set();while(starts.length<Math.min(5,base.length)){const e=base[rng.next(base.length)];if(!used.has(e.name)){used.add(e.name);starts.push(e)}}
+          for(const e of STARTERS)if(starts.length<5&&!used.has(e.name)){used.add(e.name);starts.push(e)}
+          let local=starts.map(e=>e.name),steps=[],wanted=3+rng.next(3);
+          for(let step=0;step<wanted;step++){
+            const choices=[];
+            for(let i=0;i<local.length;i++)for(let j=i;j<local.length;j++){const r=cmRecipe(local[i],local[j]);if(r&&!r.invalid&&!r.isError&&!r.isFatalError&&!r.isFinal&&!local.includes(r.name))choices.push([local[i],local[j],r])}
+            if(!choices.length)break;const pick=choices[rng.next(choices.length)];steps.push(pick);local.push(pick[2].name);
+          }
+          // Starter fallback is guaranteed to have a short connected chain.
+          if(steps.length<3)return {key:rng.key,starts:STARTERS.map(e=>({...e})).concat([{name:'Cloud',emoji:'☁️',color:'bg-gray-400'}]).slice(0,5),target:'Life',planned:3};
+          return {key:rng.key,starts:starts.map(e=>structuredClone(e)),target:steps.at(-1)[2].name,planned:steps.length};
+        }
+        function cmRenderDaily(){
+          const p=cmDaily||cmBuildDaily(),box=$('dailyPuzzleElements');box.replaceChildren();
+          $('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleInfo').textContent='Start with 5 elements. Reach the target in about '+p.planned+' crafts. New discoveries you did not own before are added to your collection when you leave or complete it.';
+          for(const e of p.local){const b=document.createElement('button');b.className='daily-el '+(p.mainNames.has(e.name.toLowerCase())?'':'new');b.textContent=(e.emoji||'◇')+' '+e.name;b.onclick=()=>cmDailyPick(e.name);box.appendChild(b)}
+          $('dailyPuzzleResult').textContent=p.message||('Crafts: '+p.crafts);
+        }
+        function cmStartDaily(){
+          const p=cmBuildDaily(),mainNames=new Set(elements.map(e=>e.name.toLowerCase()));cmDaily={...p,local:p.starts.map(e=>structuredClone(e)),mainNames,selected:[],crafts:0,message:''};cmRenderDaily();
+        }
+        function cmDailyPick(name){
+          if(!cmDaily)return;cmDaily.selected.push(name);if(cmDaily.selected.length<2){cmDaily.message='Selected '+name+'. Choose one more.';cmRenderDaily();return}
+          const [a,b]=cmDaily.selected;cmDaily.selected=[];const r=cmRecipe(a,b);cmDaily.crafts++;
+          if(!r||r.invalid){cmDaily.message='No fusion: '+a+' + '+b;cmRenderDaily();return}
+          if(!cmDaily.local.some(e=>e.name.toLowerCase()===r.name.toLowerCase()))cmDaily.local.push(structuredClone({...r,color:r.color||randColor()}));
+          cmDaily.message=a+' + '+b+' → '+r.name;
+          if(r.name===cmDaily.target){localStorage.setItem(CM_DAILY_KEY,JSON.stringify({date:cmDaily.key,complete:true,crafts:cmDaily.crafts}));cmDailyTransfer();notify('Daily Puzzle complete!','Target crafted in '+cmDaily.crafts+' crafts.','🧩',4000);closeModal('dailyPuzzleModal');return}
+          cmRenderDaily();
+        }
+        function cmDailyTransfer(){
+          if(!cmDaily)return;let gained=0;
+          for(const e of cmDaily.local)if(!cmDaily.mainNames.has(e.name.toLowerCase())&&!elements.some(x=>x.name.toLowerCase()===e.name.toLowerCase())){elements.push(structuredClone(e));recordMasteryDiscovery(e);recordJournalElement(e);gained++}
+          if(gained){save();renderEls();updateCount();updateProgressionUI()}cmDaily=null;return gained;
+        }
+        $('dailyPuzzleBtn').addEventListener('click',()=>{if(speedrunState?.active||bossMode){notify('Daily Puzzle locked','Finish the current challenge first.','🔒');return;}cmStartDaily();openModal('dailyPuzzleModal')});
+        $('dailyPuzzleReset').addEventListener('click',()=>{cmStartDaily()});
+        $('dailyPuzzleLeave').addEventListener('click',()=>{const n=cmDailyTransfer();closeModal('dailyPuzzleModal');if(n)notify('Puzzle discoveries saved',n+' new element'+(n===1?'':'s')+' added.','🧩')});
+
         load();
         if(window.speedrunSaveMode)loadMasterySpeedrun();
         // Older saves predate Mastery tracking: seed only progress we can prove from current permanent/save state.
