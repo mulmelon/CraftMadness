@@ -2847,6 +2847,13 @@ html.cm-daily-mode #elGrid .el-card{animation:cmDailyCardIn .34s ease-out both}
 @keyframes cmDailyCoinPop{0%{opacity:0;transform:translateY(9px) scale(.65)}65%{opacity:1;transform:translateY(0) scale(1.18)}100%{opacity:1;transform:scale(1)}}
 @keyframes cmDailyTextIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 @keyframes cmDailyRays{0%{opacity:0;transform:scale(.2) rotate(-12deg)}28%{opacity:.65;transform:scale(2.5) rotate(5deg)}100%{opacity:0;transform:scale(4) rotate(18deg)}}35%{opacity:.18;transform:scale(1) rotate(8deg)}100%{opacity:0;transform:scale(1.45) rotate(18deg)}}
+
+/* Guide was retired: keep legacy nodes only for old JS compatibility, never render them. */
+#guideToggle,#craftGuide,#craftGuideList{display:none!important;visibility:hidden!important;pointer-events:none!important}
+
+/* Discovery Web + Daily are unavailable inside isolated Boss/Speedrun runs. */
+html.cm-challenge-tools-locked #discoveryWebBtn,
+html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-events:none!important}
 </style>
 
 </head>
@@ -6521,7 +6528,7 @@ try{
         function bossMissedCraft(){bossCraftScrollY=null;const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);animateBossCounterAttack();notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
         function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');document.body.classList.remove('boss-mm-starforge');bossCraftScrollY=null;const fxLayer=$('bossFxLayer');if(fxLayer)fxLayer.replaceChildren();document.title='Craft Madness';if($('bossGameHeading'))$('bossGameHeading').hidden=true;loadNamedSave(false,!!window.speedrunSaveMode);if(window.speedrunSaveMode)loadMasterySpeedrun();bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
-        function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else elements.push({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
+        function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else /* trophy-only reward: stored by Trophy Box, not normal inventory */ void({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
         function finishBossFight(won){
             const b=bossData();if(!b||b.ending)return;
             b.ending=true;save();resetDZs();animateBossDefeat(won);
@@ -8048,6 +8055,8 @@ try{
             $('hintsComplete').hidden=remaining!==0;
         }
         function updateProgressionUI(){
+            cmSyncChallengeToolLocks();
+            if(!bossMode&&!speedrunState?.active)cmPurgeExclusiveTrophiesFromInventory();
             if(cmDailyState?.active){return;}
             if(bossMode){
                 $('bossBtn').hidden=true;updateBossUI();return;
@@ -9561,7 +9570,9 @@ save();checkStarForgeUnlock();
             $('dwRiddles').appendChild(card);
           }
         }
-        $('discoveryWebBtn').addEventListener('click',()=>{cmRenderDiscoveryWeb();openModal('discoveryWebModal')});
+        $('discoveryWebBtn').addEventListener('click',()=>{
+          cmSyncChallengeToolLocks();
+          if(cmChallengeToolsLocked()){notify('Discovery Web unavailable','Discovery Web is disabled during Boss and Speedrun runs.','🔒',3500);return}cmRenderDiscoveryWeb();openModal('discoveryWebModal')});
         document.querySelectorAll('.dw-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dw-tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('#discoveryWebModal .dw-panel').forEach(p=>p.hidden=p.id!==b.dataset.panel)}));
 
         const CM_DAILY_KEY='cm_daily_recipe_v3';
@@ -9661,6 +9672,8 @@ save();checkStarForgeUnlock();
           try{localStorage.setItem(CM_DAILY_SAVE,JSON.stringify({state:cmDailyState,elements,combos,gs,sortMode:currentSort}))}catch(e){}
         }
         function cmEnterDaily(){
+          cmSyncChallengeToolLocks();
+          if(cmChallengeToolsLocked()){notify('Daily Challenge unavailable','Daily is disabled during Boss and Speedrun runs.','🔒',3500);return}
           if(!cmDailyShopUnlocked()){notify('Daily Challenge locked','Discover 🛒 Shop first.','🔒',3800);return}
           if(speedrunState?.active||bossMode){notify('Daily Challenge locked','Finish the current challenge first.','🔒');return}
           const p=cmBuildDaily();
@@ -9723,14 +9736,33 @@ save();checkStarForgeUnlock();
         function cmRenderDailyPreview(){
           const p=cmBuildDaily();$('dailyPuzzleTarget').textContent=p.target||'Unavailable';$('dailyPuzzleInfo').textContent='5-CRAFT · Exactly five starting elements. The target is five NEW discoveries deep. You will enter a separate fresh save with only Elements and Combine. Any elements your main save does not have are transferred back when you leave or win.';
         }
+        function cmChallengeToolsLocked(){
+          return !!(bossMode||speedrunState?.active);
+        }
+        function cmSyncChallengeToolLocks(){
+          document.documentElement.classList.toggle('cm-challenge-tools-locked',cmChallengeToolsLocked());
+          const g=$('guideToggle'); if(g){g.hidden=true;g.style.setProperty('display','none','important')}
+          const cg=$('craftGuide'); if(cg){cg.hidden=true;cg.style.setProperty('display','none','important')}
+        }
         function cmDailyShopUnlocked(){return elements.some(e=>String(e.name||'').toLowerCase()==='shop')}
         $('dailyPuzzleBtn').addEventListener('click',()=>{
+          cmSyncChallengeToolLocks();
+          if(cmChallengeToolsLocked()){notify('Daily Challenge unavailable','Daily is disabled during Boss and Speedrun runs.','🔒',3500);return}
           if(!cmDailyShopUnlocked()){notify('Daily Challenge locked','Discover 🛒 Shop first to unlock Daily Challenge.','🔒',3800);return}
           cmRenderDailyPreview();openModal('dailyPuzzleModal')
         });
         $('dailyPuzzleStart').addEventListener('click',cmEnterDaily);
         $('dailyLeaveBtn').addEventListener('click',()=>cmDailyTransferAndRestore(false));
+
+        function cmPurgeExclusiveTrophiesFromInventory(){
+          // Trophy/exclusive reward objects must never live in the normal Elements inventory.
+          // Trophy Box remains the authoritative display/storage.
+          const before=elements.length;
+          elements=elements.filter(e=>!(e&&(e.isTrophy||e.isBossDefeat)&&(e.isExclusive||e.excludeFromRank||e.trophyOnly)));
+          if(elements.length!==before){renderEls();updateCount();save()}
+        }
         load();
+        setTimeout(()=>{cmSyncChallengeToolLocks();cmPurgeExclusiveTrophiesFromInventory()},0);
         if(window.speedrunSaveMode)loadMasterySpeedrun();
         // Older saves predate Mastery tracking: seed only progress we can prove from current permanent/save state.
         masteryState.stats.discoveries=Math.max(masteryState.stats.discoveries,elements.filter(e=>!e.excludeFromRank&&!e.isExclusive&&!e.isSpeedrun&&!e.isAprilFools&&!e.isKey&&!e.isPrestige).length);
