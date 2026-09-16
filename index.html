@@ -2879,6 +2879,26 @@ html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-ev
 .dw-level.collapsed .dw-card:not(.branch-summary){display:none!important}.dw-card.branch-summary{cursor:pointer;border-style:double!important}
 #dailyArchiveGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:9px}.daily-archive-day{min-height:47px;padding:5px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:.42rem}.daily-archive-day.done{background:rgba(49,46,129,.22)}
 .daily-medal-DIAMOND{color:#a5f3fc;text-shadow:0 0 12px rgba(103,232,249,.65)}.daily-medal-GOLD{color:#fde68a}.daily-medal-SILVER{color:#e2e8f0}.daily-medal-BRONZE{color:#fdba74}.daily-medal-showcase{margin:9px 0;padding:10px;border:1px solid #a78bfa66;border-radius:11px;text-align:center}
+.cm-username-editor{margin:0 0 12px;padding:11px;border:1px solid var(--border);border-radius:12px;background:var(--bg-card)}
+.cm-username-editor small{font-size:.48rem;color:var(--text-secondary)}.cm-username-row{display:flex;gap:7px;margin-top:8px}.cm-username-row input{min-width:0;flex:1;padding:8px 9px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text)}.cm-username-row button{padding:7px 11px;border-radius:8px;font-weight:800}
+
+.profile-username{font-size:1.35rem;font-weight:1000;letter-spacing:.04em;margin:5px 0 1px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.55)}
+.cm-banner-export{padding:7px 10px;border-radius:8px;font-size:.5rem;font-weight:900;white-space:nowrap}
+
+.cm-profile-actions,.cm-web-evolution-bar{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.cm-profile-actions button,.cm-web-evolution-bar button{font-size:.5rem;padding:6px 9px;border-radius:8px;font-weight:900}
+.profile-banner.frame-daily-1{box-shadow:0 0 0 2px #67e8f9,0 0 18px rgba(103,232,249,.25)}.profile-banner.frame-daily-2{box-shadow:0 0 0 3px #fde68a,0 0 24px rgba(253,230,138,.35)}.profile-banner.frame-daily-3{box-shadow:0 0 0 4px #c4b5fd,0 0 30px rgba(196,181,253,.45)}.profile-banner.frame-daily-4{box-shadow:0 0 0 5px #fff,0 0 0 8px #67e8f9,0 0 34px rgba(103,232,249,.5)}
+.cm-web-landmarks{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px;margin:8px 0 10px}.cm-landmark{padding:8px;border:1px solid var(--border);border-radius:11px;background:var(--bg-card);opacity:.34}.cm-landmark.earned{opacity:1;box-shadow:inset 0 0 18px rgba(125,211,252,.08)}.cm-landmark b{display:block;font-size:.55rem}.cm-landmark small{font-size:.42rem;color:var(--text-secondary)}
+.cm-web-regions{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0 10px}.cm-region-chip{font-size:.42rem;padding:4px 7px;border:1px solid var(--border);border-radius:999px;background:var(--bg-card)}.dw-card[data-region]::after{content:attr(data-region);position:absolute;right:5px;top:4px;font-size:.3rem;opacity:.42;letter-spacing:.06em}.dw-card{position:relative}
+#dwMap.cm-telescope .dw-tree{transform:scale(.48);transform-origin:top left;width:208%;max-height:1100px}#dwMap.cm-telescope .dw-card strong,#dwMap.cm-telescope .dw-card small,#dwMap.cm-telescope .dw-recipe,#dwMap.cm-telescope .dw-level-label{visibility:hidden}#dwMap.cm-telescope .dw-card{min-height:18px!important;height:18px!important;padding:0!important;border-radius:50%!important;min-width:18px!important;flex:0 0 18px!important}
+.cm-web-current-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:0}.cm-web-current-svg path{fill:none;stroke:rgba(125,211,252,.28);stroke-width:1.4;stroke-dasharray:4 8;animation:cmCurrent 3s linear infinite}@keyframes cmCurrent{to{stroke-dashoffset:-24}}@media(prefers-reduced-motion:reduce){.cm-web-current-svg path{animation:none}}
+.cm-daily-crest{margin-top:8px;padding:8px;border-radius:12px;border:1px solid var(--border);font-size:.5rem}.cm-daily-crest strong{font-size:.7rem}.cm-daily-perfects{margin-top:6px;font-size:.48rem;letter-spacing:.08em}.cm-perfect-gem{display:inline-block;margin:1px 2px;filter:drop-shadow(0 0 4px rgba(103,232,249,.5))}
+.daily-archive-day.done{cursor:pointer}.daily-archive-day.done:hover{transform:translateY(-2px)}
+.cm-heatmap{display:grid;grid-template-columns:repeat(26,1fr);gap:3px;margin:8px 0 15px}.cm-heat{aspect-ratio:1;border-radius:3px;background:rgba(148,163,184,.09);border:1px solid rgba(148,163,184,.08)}.cm-heat[data-v="1"]{background:rgba(34,197,94,.25)}.cm-heat[data-v="2"]{background:rgba(34,197,94,.45)}.cm-heat[data-v="3"]{background:rgba(34,197,94,.7)}.cm-heat[data-v="4"]{background:rgba(34,197,94,.95)}
+.cm-chronicle{max-height:250px;overflow:auto;display:grid;gap:5px}.cm-chronicle-entry{display:flex;justify-content:space-between;gap:8px;padding:7px 8px;border-bottom:1px solid var(--border);font-size:.48rem}.cm-chronicle-entry small{color:var(--text-secondary)}
+.cm-milestones{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:6px}.cm-milestone{padding:8px;border:1px solid var(--border);border-radius:10px;opacity:.3}.cm-milestone.unlocked{opacity:1}.cm-milestone b{font-size:.5rem}.cm-milestone small{display:block;font-size:.4rem;color:var(--text-secondary)}
+.cm-feature-modal{position:fixed;inset:0;z-index:999999;background:rgba(2,6,23,.84);display:grid;place-items:center;padding:20px}.cm-feature-box{width:min(900px,96vw);max-height:88vh;overflow:auto;background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 30px 90px rgba(0,0,0,.5)}.cm-feature-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.cm-feature-head button{font-size:.5rem}
+.cm-capsule-save{filter:saturate(.42) sepia(.18);background:linear-gradient(145deg,#292524,#44403c);border:1px solid #78716c;border-radius:15px;padding:14px;margin-top:10px;color:#e7e5e4}.cm-capsule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:6px;margin-top:10px}.cm-capsule-el{padding:7px;border:1px solid #78716c;border-radius:8px;background:#292524;font-size:.46rem}
+.cm-id-preview{padding:22px;border:2px solid var(--border);border-radius:18px;text-align:center;background:linear-gradient(135deg,var(--bg-card),var(--bg));margin:12px 0}.cm-id-preview h1{margin:5px 0}.cm-legacy{font-size:1.2rem;font-weight:1000}
 </style>
 
 </head>
@@ -2900,7 +2920,7 @@ html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-ev
   const loader=document.getElementById('cmBootLoader');
   const text=document.getElementById('cmBootText');
   if(!loader)return;
-  const born=performance.now(), minimum=900;
+  const born=performance.now(), minimum=2200;
   const normalMessages=['LOADING THE MADNESS...','FORGING ELEMENTS...','CALIBRATING STAR FORGE...','OPENING THE VAULT...'];
   const secretMessages=['PLEASE DO NOT COMBINE LIFE + EARTH.','CHECKING FOR RECIPE CRIMES...','VOID IS BEHAVING. PROBABLY.','POLISHING TROPHY PEDESTALS...','COUNTING 8,000+ LINES...','MELON STUDIOS HAS ENTERED THE FORGE.','INVALID COMBINATION IS A FEATURE.','DO NOT FEED THE STAR FORGE AFTER MIDNIGHT.'];
   const messages=[...normalMessages];
@@ -3213,7 +3233,7 @@ html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-ev
             <button class="modal-close" data-close="discoveryWebModal">×</button>
             <h2>🕸️ Discovery Web</h2>
             <div class="dw-tabs"><button class="dw-tab active" data-panel="dwMap">Map</button><button class="dw-tab" data-panel="dwRiddles">Riddles</button></div>
-            <div id="dwMap" class="dw-panel"></div>
+            <div class="cm-web-evolution-bar"><button id="cmTelescopeBtn" type="button">🔭 Telescope</button><button id="cmCurrentsBtn" type="button">〰 Web Currents: ON</button></div><div id="cmWebLandmarks" class="cm-web-landmarks"></div><div id="cmWebRegions" class="cm-web-regions"></div><div id="dwMap" class="dw-panel"></div>
             <div id="dwRiddles" class="dw-panel" hidden></div>
           </div>
         </div>
@@ -3223,6 +3243,7 @@ html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-ev
             <h2>🧩 Daily Challenge</h2>
             <p id="dailyPuzzleInfo" class="dw-note"></p>
             <div class="daily-target">TARGET · <strong id="dailyPuzzleTarget">—</strong></div>
+            <div id="dailyMedalAlways" class="daily-medal-showcase"><strong>🏅 DAILY MEDALS</strong><div id="dailyMedalAlwaysSummary">No clears yet</div><div id="cmDailyCrest" class="cm-daily-crest"></div><div id="cmDailyPerfects" class="cm-daily-perfects"></div></div>
             <div class="daily-actions"><button id="dailyPuzzleStart">Start Daily Challenge</button><button id="dailyArchiveBtn" type="button">📅 Archive</button></div><div id="dailyArchivePanel" hidden><div class="daily-medal-showcase"><strong>DAILY MEDALS</strong><div id="dailyMedalSummary">No clears yet</div></div><div id="dailyArchiveGrid"></div></div>
           </div>
         </div>
@@ -6304,6 +6325,31 @@ function cmSetUsername(v){
   try{localStorage.setItem(CM_USERNAME_KEY,clean||'Crafter');}catch(e){}
   return clean||'Crafter';
 }
+        function cmMountUsernameEditor(){
+          let box=$('cmUsernameEditor');
+          if(!box){
+            const modal=$('statsModal')||$('playerStatsModal')||$('profileModal');
+            const host=$('playerStatsContent')||$('statsContent')||modal?.querySelector('.modal-content')||modal;
+            if(!host)return;
+            box=document.createElement('div');box.id='cmUsernameEditor';box.className='cm-username-editor';
+            box.innerHTML='<div><strong>👤 Username</strong> <small>Craft Madness profile name</small></div><div class="cm-username-row"><input id="cmUsernameInput" maxlength="24" autocomplete="off" placeholder="Crafter"><button id="cmUsernameSave" type="button">Save</button></div><small id="cmUsernameStatus"></small>';
+            host.prepend(box);
+          }
+          const input=$('cmUsernameInput'),btn=$('cmUsernameSave'),status=$('cmUsernameStatus');
+          if(input)input.value=cmUsername();
+          if(btn&&!btn.dataset.bound){
+            btn.dataset.bound='1';
+            const commit=()=>{
+              const name=cmSetUsername(input?.value);
+              if(input)input.value=name;
+              if(status){status.textContent='✓ Saved as '+name;setTimeout(()=>{if(status)status.textContent=''},2200)}
+              try{renderPlayerStats()}catch(e){} try{save()}catch(e){}
+            };
+            btn.addEventListener('click',commit);
+            input?.addEventListener('keydown',e=>{if(e.key==='Enter')commit()});
+          }
+        }
+
         const CM_BACKUPS='cm_auto_backups_v1',CM_JOURNAL='cm_discovery_journal_v1',CM_FIRST_RECORDS='cm_first_records_v1',CM_PROFILE_PREFS='cm_profile_prefs_v1',CM_PLAQUES='cm_trophy_plaques_v1';
         function cmJSON(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')??fallback}catch(e){return fallback}}
         function cmSetJSON(key,v){try{localStorage.setItem(key,JSON.stringify(v))}catch(e){}}
@@ -6552,7 +6598,8 @@ try{
         function bossAfterCraft(el,isNew){const b=bossData();if(!b||b.ending)return !!b?.ending;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();const hit=bossDamageFromElement(el,isNew);animateBossPlayerAttack(el,hit);b.hp=Math.max(0,b.hp-hit);if(b.hp<=0){updateBossUI();save();finishBossFight(true);return true;}const r=b.hp/d.maxHp,np=r<=.33?3:r<=.66?2:1;if(np>b.phase){b.phase=np;notify('BOSS PHASE '+np,d.phases[np-1],np===3?'💀':'⚠️',4500);}if(!maybeBossLockInsteadOfAttack()){const back=bossCounterDamage(el);b.playerHp=Math.max(0,b.playerHp-back);setTimeout(animateBossCounterAttack,240);notify('Boss hit',`${el.name} dealt ${hit} damage. ${d.name} struck back for ${back}.`,'⚔️',2600);}else notify('Boss hit',`${el.name} dealt ${hit} damage. The Unmaker sealed an element instead of attacking.`,'⚔️',2600);maybeBossRecovery();updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function bossMissedCraft(){bossCraftScrollY=null;const b=bossData();if(!b)return false;const d=BOSS_DEFS[b.id];b.crafts=(b.crafts||0)+1;tickBossLocks();if(maybeBossLockInsteadOfAttack()){updateBossUI();save();return false;}let x=([0,7,9,11][b.phase]||11)+(b.id==='chronophage'?2:b.id==='nullking'?4:0);x=Math.max(1,Math.floor(x-bossRunUpgrade('defense')*1.25));b.playerHp=Math.max(0,b.playerHp-x);animateBossCounterAttack();notify(d.name+' retaliates','The failed fusion cost '+x+' Resolve.',d.emoji,2200);updateBossUI();save();if(b.playerHp<=0){finishBossFight(false);return true;}return false;}
         function clearBossSave(){_setItem('fc_boss_active','0');_setItem('fc_boss_el','[]');_setItem('fc_boss_co','[]');_setItem('fc_boss_gs','{}');}
-        function restoreMainGame(){bossMode=false;document.body.classList.remove('boss-mode');document.body.classList.remove('boss-mm-starforge');bossCraftScrollY=null;const fxLayer=$('bossFxLayer');if(fxLayer)fxLayer.replaceChildren();document.title='Craft Madness';if($('bossGameHeading'))$('bossGameHeading').hidden=true;loadNamedSave(false,!!window.speedrunSaveMode);if(window.speedrunSaveMode)loadMasterySpeedrun();bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();}
+        function restoreMainGame(){
+          cmInvalidatePendingCombine();bossMode=false;document.body.classList.remove('boss-mode');document.body.classList.remove('boss-mm-starforge');bossCraftScrollY=null;const fxLayer=$('bossFxLayer');if(fxLayer)fxLayer.replaceChildren();document.title='Craft Madness';if($('bossGameHeading'))$('bossGameHeading').hidden=true;loadNamedSave(false,!!window.speedrunSaveMode);if(window.speedrunSaveMode)loadMasterySpeedrun();bossMeta();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateBossUI();updateProgressionUI();cmRestoreCraftingAfterChallenge();}
         function awardBossDefeat(d){let t=elements.find(e=>e.isBossDefeat&&e.bossId===d.id);const n=(t?.amountOfBossDefeat||0)+1,name=`Boss ${d.name} Defeated ${n} ${n===1?'time':'times'}`;if(t){t.amountOfBossDefeat=n;t.name=name;t.description=`You defeated ${d.name} ${n} ${n===1?'time':'times'}.`;}else /* trophy-only reward: stored by Trophy Box, not normal inventory */ void({name,emoji:'🏆',description:`You defeated ${d.name} 1 time.`,isBossDefeat:true,bossId:d.id,bossName:d.name,amountOfBossDefeat:1,isBossTrophy:true,isFinal:true,isExclusive:true,excludeFromRank:true});}
         function finishBossFight(won){
             const b=bossData();if(!b||b.ending)return;
@@ -7155,7 +7202,7 @@ try{
         let prestigeInFlight=false;
         $('confirmPrestige').addEventListener('click',async()=>{
             if(prestigeInFlight||ascensionBusy||sfAnimating||isCombining||!prestigeRequirements().ready){renderPrestige();return;}
-            prestigeInFlight=true;closeModal('prestigeModal');
+            prestigeInFlight=true;cmCaptureTimeCapsule?.();closeModal('prestigeModal');
             const next=prestigeData().times+1;
             const basic=elements.filter(e=>e.isBasic&&!['water','fire','earth','air'].includes(e.name.toLowerCase()));
             const requirement=prestigeRequirements();
@@ -7603,7 +7650,30 @@ try{
         let penaltyTutShown=false;
         let shopTutShown=false;
         let starForgeTutShown=false;
+        let cmCombineGeneration=0;
+        function cmInvalidatePendingCombine(){cmCombineGeneration++}
         function resetDZs(){clearDZ(dz1,dz1c,1);clearDZ(dz2,dz2c,2);isCombining=false;}
+        function cmRestoreCraftingAfterChallenge(){
+          cmInvalidatePendingCombine();
+          // Challenge exits can happen while combine() still owns its async lock.
+          // Always rebuild the normal crafting interaction state after the save swap.
+          isCombining=false;
+          sel1=null;sel2=null;
+          clearDZ(dz1,dz1c,1);clearDZ(dz2,dz2c,2);
+          combineBtn.disabled=true;combineBtnM.disabled=true;
+          combineBtn.style.pointerEvents='';combineBtnM.style.pointerEvents='';
+          combineBtn.style.opacity='';combineBtnM.style.opacity='';
+          document.documentElement.classList.remove('cm-daily-mode','daily-challenge-enter','cm-daily-clearing');
+          document.body.classList.remove('boss-mode','boss-player-defeated');
+          if(!speedrunState?.active){
+            document.documentElement.classList.remove('cm-challenge-tools-locked');
+          }
+          cmSyncChallengeToolLocks?.();
+          // Re-render once more after challenge state/classes are gone so element cards
+          // receive normal drag/click behavior from the main save.
+          renderEls();updateCount();updateBtnState();
+          requestAnimationFrame(()=>{renderEls();requestAnimationFrame(()=>renderEls())});
+        }
         function updateBtnState(){const ok=sel1&&sel2;combineBtn.disabled=!ok;combineBtnM.disabled=!ok;}
 
         // Drag and drop
@@ -7972,14 +8042,16 @@ try{
                     cmDailyState.crafts=(cmDailyState.crafts||0)+1;
                     const cmDailyWon=String(newEl.name||'').toLowerCase()===String(cmDailyState.target||'').toLowerCase();
                     cmSaveDaily();
-                    setTimeout(()=>{
-                        const card=[...document.querySelectorAll('#elGrid .el-card')].find(x=>x.getAttribute('data-name')===newEl.name);
+                    const cmGenAtDiscovery=cmCombineGeneration;
+        setTimeout(()=>{if(cmGenAtDiscovery!==cmCombineGeneration)return;
+            const card=[...document.querySelectorAll('#elGrid .el-card')]
+              .find(x=>x.getAttribute('data-name')===newEl.name);
                         if(card){card.classList.add('cm-daily-new-discovery');setTimeout(()=>card.classList.remove('cm-daily-new-discovery'),950)}
                     },50);
                     if(cmDailyWon)setTimeout(()=>cmDailyTransferAndRestore(true),900);
                 }
                 if(speedrunState?.active&&speedrunState.runStats)speedrunState.runStats.discoveries++;
-                recordMasteryDiscovery(newEl);recordJournalElement(newEl);syncFirstRecords();
+                recordMasteryDiscovery(newEl);recordJournalElement(newEl);if(!bossMode&&!window.speedrunSaveMode&&!cmDailyState?.active)cmChronicleAdd?.('discovery','Discovered '+newEl.name,newEl.emoji||'✦');syncFirstRecords();
                 showResult(newEl,true);
                 combos.push({e1:sel1.name,e2:sel2.name,r:newEl.name,...(newEl.isAprilFools?{isAprilFools:true,pairKey:aprilPairKey(sel1.name,sel2.name)}:{}),...(newEl.isSeasonal?{isSeasonal:true,seasonalEvent:newEl.seasonalEvent}:{})});
                 addComboEntry(sel1,sel2,newEl);
@@ -8278,6 +8350,16 @@ try{
             $('editModeWrap').classList.add('hidden');$('editErr').classList.add('hidden');$('reEncryptPass').value='';
             openModal('exportModal');
         });
+        function cmExportAllPersistentStorage(){
+          const out={},temporary=new Set(['cm_daily_challenge_save_v1']);
+          for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&!temporary.has(k))out[k]=localStorage.getItem(k)}
+          return out;
+        }
+        function cmImportAllPersistentStorage(snapshot){
+          if(!snapshot||typeof snapshot!=='object')return;
+          const temporary=new Set(['cm_daily_challenge_save_v1']);
+          for(const [k,v] of Object.entries(snapshot)){if(!k||temporary.has(k))continue;try{v===null?localStorage.removeItem(k):localStorage.setItem(k,String(v))}catch(e){}}
+        }
         $('doExportBtn').addEventListener('click',async()=>{
             developerArmed=false;developerTyped='';
             const pw=$('exportPass').value;
@@ -8285,9 +8367,7 @@ try{
             $('exportErr').classList.add('hidden');
             $('doExportBtn').disabled=true;$('doExportBtn').textContent='Encrypting...';
             try{
-                const data=JSON.stringify({
-  elements,combos,gs,sortMode:currentSort,v:'3.0',
-  aux:{
+                const data=JSON.stringify({ elements,combos,gs,sortMode:currentSort,v:'4.0', aux:{ fullStorage:cmExportAllPersistentStorage(),
     mastery:localStorage.getItem('cm_objective_mastery_v1')||'',
     masteryPins:localStorage.getItem('cm_mastery_pins_v1')||'',
     masteryNear:localStorage.getItem('cm_mastery_near_toasts_v1')||'',
@@ -8350,8 +8430,7 @@ try{
                     const everythingSeen=[...new Set([...(Array.isArray(gs.everythingSeen)?gs.everythingSeen:[]),...(Array.isArray(d.gs.everythingSeen)?d.gs.everythingSeen:[])])];
                     gs={...gs,...d.gs,unlockedRecipes,everythingSeen};
                 }
-                if(d.aux&&typeof d.aux==='object'){
-  const restoreAux=(k,v)=>{if(typeof v==='string'&&v.length)try{localStorage.setItem(k,v)}catch(e){}};
+                if(d.aux&&typeof d.aux==='object'){ if(d.aux.fullStorage)cmImportAllPersistentStorage(d.aux.fullStorage); const restoreAux=(k,v)=>{if(typeof v==='string'&&v.length)try{localStorage.setItem(k,v)}catch(e){}};
   restoreAux('cm_objective_mastery_v1',d.aux.mastery);
   restoreAux('cm_mastery_pins_v1',d.aux.masteryPins);
   restoreAux('cm_mastery_near_toasts_v1',d.aux.masteryNear);
@@ -8872,13 +8951,14 @@ save();checkStarForgeUnlock();
               existing.description=reward.description;
             }else elements.push(structuredClone(reward));
           }
-          save();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateProgressionUI();
+          save();renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();checkStarForgeUnlock();updateProgressionUI();cmRestoreCraftingAfterChallenge();
           if(gs.hasShownEnding&&$('viewRankBtn'))$('viewRankBtn').classList.remove('hidden');
           if(unlocked.length)notify('SPEEDRUN DISCOVERIES SAVED',`${unlocked.length} new element${unlocked.length===1?'':'s'} carried into your normal collection.`,'📦',5600);
           if((carry?.gs?.sfUnlocked||unlocked.includes('Star Forge'))&&gs.sfUnlocked)notify('STAR FORGE SAVED','Star Forge progress from the Speedrun is now available on your main save.','🌟',4300);
           if(unlockedEnding)setTimeout(showEnding,1100);
         }
         function leaveSpeedrunSave(carryProgress=true){
+          cmInvalidatePendingCombine();
           const carry=carryProgress?speedrunCarrySnapshot():null;
           transferSpeedrunProgressToMain(carry,null);
         }
@@ -8898,7 +8978,7 @@ save();checkStarForgeUnlock();
         function stopSpeedrun(){
           if(!speedrunState.active)return;
           speedrunState.active=false;speedrunState.finished=false;speedrunState.end=Date.now();
-          saveSpeedrun();if(window.speedrunSaveMode)leaveSpeedrunSave(true);renderSpeedrun();notify('Speedrun stopped','Returned to your main save. New discoveries and progression were kept.','⏹️',3200);
+          saveSpeedrun();if(window.speedrunSaveMode)leaveSpeedrunSave(true);cmRestoreCraftingAfterChallenge();renderSpeedrun();notify('Speedrun stopped','Returned to your main save. New discoveries and progression were kept.','⏹️',3200);
         }
         function checkSpeedrunFinish(){
           if(!speedrunState.active)return;
@@ -9005,17 +9085,33 @@ save();checkStarForgeUnlock();
         function cmHasPerfectDiamond(){return elements.some(e=>isChronoArchiveRelic(e)&&e.speedrunPerfect&&String(e.speedrunMedal||'').toUpperCase()==='DIAMOND');}
         function unlockedProfileTitles(){const done=Object.keys(masteryState.completed||{}).length,bosses=cmBossWinsFromTrophies(),u=cmMedalUnlocks(),out=['Crafter'];if(elements.length>=250)out.push('The Archivist');if(bosses>0)out.push('Boss Slayer');if(bosses>=10)out.push('Boss Breaker');if(u.bronze)out.push('Bronze Crafter');if(u.silver)out.push('Silver Crafter');if(u.gold)out.push('Gold Crafter');if(u.diamond)out.push('Diamond Crafter');if(cmHasPerfectDiamond())out.push('Perfect Diamond Crafter');if(masterySeasonCompletions()>=5)out.push('Season Keeper');if((masteryState.stats.everything||0)>=10)out.push('Master of Everything');if(done>=20)out.push('Master Crafter');return out;}
         function unlockedProfileThemes(){const u=cmMedalUnlocks(),out=[['default','Default']];if(u.bronze)out.push(['bronze','Bronze']);if(u.silver)out.push(['silver','Silver']);if(u.gold)out.push(['gold','Gold']);if(u.diamond)out.push(['diamond','Diamond']);if(cmHasPerfectDiamond())out.push(['perfectDiamond','Perfect Diamond']);if(cmBossWinsFromTrophies()>0)out.push(['boss','Boss']);if(Object.keys(masteryState.completed||{}).length>=5)out.push(['mastery','Mastery']);if(masterySeasonCompletions()>0)out.push(['seasonal','Seasonal']);if((masteryState.stats.everything||0)>0)out.push(['everything','Everything']);return out;}
+        function cmExportProfileBannerPNG(){
+          try{
+            const prefs=profilePrefs(),name=cmUsername(),canvas=document.createElement('canvas');
+            canvas.width=1400;canvas.height=440;const ctx=canvas.getContext('2d');
+            const palettes={default:['#111827','#312e81','#7dd3fc'],bronze:['#451a03','#92400e','#fdba74'],silver:['#1e293b','#64748b','#e2e8f0'],gold:['#422006','#a16207','#fde68a'],diamond:['#083344','#1e3a8a','#a5f3fc'],perfectDiamond:['#071a2f','#312e81','#67e8f9'],boss:['#27060b','#7f1d1d','#fca5a5'],mastery:['#052e16','#166534','#86efac'],seasonal:['#312e81','#be185d','#f9a8d4'],everything:['#18181b','#581c87','#f0abfc']};
+            const p=palettes[prefs.theme]||palettes.default,g=ctx.createLinearGradient(0,0,1400,440);g.addColorStop(0,p[0]);g.addColorStop(.62,p[1]);g.addColorStop(1,p[0]);ctx.fillStyle=g;ctx.fillRect(0,0,1400,440);
+            ctx.strokeStyle=p[2];ctx.globalAlpha=.32;ctx.lineWidth=5;ctx.strokeRect(14,14,1372,412);ctx.globalAlpha=1;
+            ctx.textAlign='center';ctx.fillStyle=p[2];ctx.font='800 25px system-ui,sans-serif';ctx.fillText('MELON STUDIOS · PLAYER PROFILE',700,78);
+            ctx.shadowColor='rgba(0,0,0,.65)';ctx.shadowBlur=18;ctx.fillStyle='#fff';ctx.font='1000 76px system-ui,sans-serif';ctx.fillText(name,700,180);
+            ctx.shadowBlur=8;ctx.fillStyle=p[2];ctx.font='900 43px system-ui,sans-serif';ctx.fillText(String(prefs.title||'Crafter').toUpperCase(),700,244);
+            const trophies=trophyRoomElements().length,mastered=Object.keys(masteryState.completed||{}).length,prest=Number(prestigeData().times||0),medal=cmBestSpeedrunMedal()||'—';
+            ctx.shadowBlur=0;ctx.fillStyle='rgba(255,255,255,.82)';ctx.font='700 24px system-ui,sans-serif';ctx.fillText(`${elements.length} ELEMENTS  ·  ${mastered} MASTERIES  ·  P${prest}  ·  ${trophies} RELICS  ·  ${medal}`,700,326);
+            ctx.fillStyle='rgba(255,255,255,.48)';ctx.font='700 18px system-ui,sans-serif';ctx.fillText('CRAFT MADNESS',700,390);
+            canvas.toBlob(blob=>{if(!blob)return;const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=('Craft-Madness-'+name+'-Banner.png').replace(/[\\/:*?"<>|]+/g,'-');document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);notify('Banner exported','PNG created for '+name,'🖼️',3200)},'image/png');
+          }catch(e){notify('Banner export failed',String(e.message||e),'⚠️',3500)}
+        }
         function renderPlayerStats(){
           syncFirstRecords();const prefs=profilePrefs(),hist=speedrunHistory(),bosses=cmBossWinsFromTrophies(),mastered=Object.keys(masteryState.completed||{}).length;
           const relicRuns=cmSpeedrunRelicSummary(),histBest=hist.length?Math.min(...hist.map(r=>Number(r.time||Infinity))):null,best=[histBest,relicRuns.bestTime||null].filter(x=>x&&Number.isFinite(x)).sort((a,b)=>a-b)[0]||null;
           const failed=hist.reduce((a,r)=>a+Number(r.failed||0),0),crafts=hist.reduce((a,r)=>a+Number(r.crafts||0),0);
           const trophies=trophyRoomElements().length,p=prestigeData(),rank=typeof getRank==='function'?getRank():null;
           const bestMedal=cmBestSpeedrunMedal()||'—';
-          $('profileBanner').innerHTML=`<small style="font-size:.48rem;letter-spacing:.16em;color:#7dd3fc">MELON STUDIOS · PLAYER PROFILE</small><h2>${prefs.title.toUpperCase()}</h2><div style="font-size:.58rem;color:var(--text-secondary)">${elements.length} elements discovered · ${trophies} permanent relics</div><div class="profile-badges"><span>🌟 ${mastered} MASTERIES</span><span>✨ P${Number(p.times||0)}</span><span>${medalIcon(bestMedal)} ${bestMedal}</span><span>👑 ${bosses} BOSS WINS</span></div>`;
+          $('profileBanner').innerHTML=`<small style="font-size:.48rem;letter-spacing:.16em;color:#7dd3fc">MELON STUDIOS · PLAYER PROFILE</small><div class="profile-username">${cmUsername()}</div><h2>${prefs.title.toUpperCase()}</h2><div style="font-size:.58rem;color:var(--text-secondary)">${elements.length} elements discovered · ${trophies} permanent relics</div><div class="profile-badges"><span>🌟 ${mastered} MASTERIES</span><span>✨ P${Number(p.times||0)}</span><span>${medalIcon(bestMedal)} ${bestMedal}</span><span>👑 ${bosses} BOSS WINS</span></div>`;
           $('profileBanner').className='profile-banner'+(prefs.theme!=='default'?' theme-'+prefs.theme:'');
           const titles=unlockedProfileTitles(),themes=unlockedProfileThemes(),ts=$('profileTitleSelect'),ths=$('profileThemeSelect');
           ts.innerHTML=titles.map(x=>`<option ${x===prefs.title?'selected':''}>${x}</option>`).join('');ths.innerHTML=themes.map(([id,n])=>`<option value="${id}" ${id===prefs.theme?'selected':''}>${n}</option>`).join('');
-          ts.onchange=()=>{const p=profilePrefs();p.title=ts.value;saveProfilePrefs(p);renderPlayerStats()};ths.onchange=()=>{const p=profilePrefs();p.theme=ths.value;saveProfilePrefs(p);renderPlayerStats()};
+          ts.onchange=()=>{const p=profilePrefs();p.title=ts.value;saveProfilePrefs(p);renderPlayerStats()};ths.onchange=()=>{const p=profilePrefs();p.theme=ths.value;saveProfilePrefs(p);renderPlayerStats()}; const pngBtn=$('profileBannerPngBtn');if(pngBtn)pngBtn.onclick=cmExportProfileBannerPNG;
           const fr=firstRecords(),fg=$('firstRecordsGrid'),defs=[['everything','First Everything'],['prestige','First Prestige'],['mastery','First Mastery'],['boss','First Boss Victory'],['diamond','First Diamond'],['season','First Season Complete']];
           fg.innerHTML=defs.map(([id,n])=>{const r=fr[id];return `<div class="first-record"><b>${r?.emoji||'◇'} ${n}</b><span>${r?new Date(r.date).toLocaleString():'Not recorded yet'}</span></div>`}).join('');
           const stats=[['ELEMENTS',elements.length],['COMBINATIONS',combos.length],['MASTERIES',mastered],['BOSS WINS',bosses],['PRESTIGE',Number(p.times||0)],['TROPHIES',trophies],['SPEEDRUNS',Math.max(hist.length,relicRuns.totalRuns)],['BEST RUN',best?formatSpeedrun(best):'—'],['BEST MEDAL',bestMedal],['RECORDED CRAFTS',crafts],['RECORDED FAILED FUSIONS',failed],['EVERYTHING',elements.filter(e=>e.name==='Everything').length]];
@@ -9632,7 +9728,20 @@ save();checkStarForgeUnlock();
         const CM_DAILY_ARCHIVE_KEY='cm_daily_archive_v1';
         function cmDailyArchive(){try{return JSON.parse(localStorage.getItem(CM_DAILY_ARCHIVE_KEY)||'{}')}catch(e){return {}}}
         function cmDailyMedal(c){c=Number(c)||999;return c<=5?'DIAMOND':c<=6?'GOLD':c<=8?'SILVER':'BRONZE'}
-        function cmRecordDaily(k,t,c,r){const a=cmDailyArchive(),m=cmDailyMedal(c),o=a[k];if(!o||c<o.crafts)a[k]={target:t,crafts:c,medal:m,reward:r,cleared:true};localStorage.setItem(CM_DAILY_ARCHIVE_KEY,JSON.stringify(a))}
+        function cmRecordDaily(k,t,c,r,aftermath=null){const a=cmDailyArchive(),m=cmDailyMedal(c),o=a[k];if(!o||c<o.crafts)a[k]={target:t,crafts:c,medal:m,reward:r,cleared:true,...(aftermath||{})};localStorage.setItem(CM_DAILY_ARCHIVE_KEY,JSON.stringify(a));cmRefreshDailyMedals()}
+        function cmDailyMedalCounts(){
+          const cnt={DIAMOND:0,GOLD:0,SILVER:0,BRONZE:0};
+          Object.values(cmDailyArchive()).forEach(x=>{if(x?.medal&&cnt[x.medal]!==undefined)cnt[x.medal]++});
+          return cnt;
+        }
+        function cmDailyMedalSummaryHTML(){
+          const c=cmDailyMedalCounts();
+          return `<span class="daily-medal-DIAMOND">◆ ${c.DIAMOND} DIAMOND</span> · <span class="daily-medal-GOLD">● ${c.GOLD} GOLD</span> · <span class="daily-medal-SILVER">● ${c.SILVER} SILVER</span> · <span class="daily-medal-BRONZE">● ${c.BRONZE} BRONZE</span>`;
+        }
+        function cmRefreshDailyMedals(){
+          const a=$('dailyMedalAlwaysSummary'),b=$('dailyMedalSummary'),html=cmDailyMedalSummaryHTML();
+          if(a)a.innerHTML=html;if(b)b.innerHTML=html;
+        }
         function cmRenderDailyArchive(){const a=cmDailyArchive(),g=$('dailyArchiveGrid');if(!g)return;g.replaceChildren();const n=new Date(),y=n.getFullYear(),m=n.getMonth(),days=new Date(y,m+1,0).getDate(),first=new Date(y,m,1).getDay(),cnt={DIAMOND:0,GOLD:0,SILVER:0,BRONZE:0};Object.values(a).forEach(x=>x?.medal&&cnt[x.medal]++);$('dailyMedalSummary').innerHTML=`<span class="daily-medal-DIAMOND">◆ ${cnt.DIAMOND}</span> · <span class="daily-medal-GOLD">● ${cnt.GOLD}</span> · <span class="daily-medal-SILVER">● ${cnt.SILVER}</span> · <span class="daily-medal-BRONZE">● ${cnt.BRONZE}</span>`;for(let i=0;i<first;i++)g.appendChild(document.createElement('div'));for(let d=1;d<=days;d++){const k=[y,m+1,d].join('-'),r=a[k],c=document.createElement('div');c.className='daily-archive-day'+(r?' done':'');c.innerHTML='<strong>'+d+'</strong>'+(r?`<div class="daily-medal-${r.medal}">${r.medal}</div><small>${r.crafts} crafts</small>`:'<div>—</div>');g.appendChild(c)}}
 
         const CM_DAILY_SAVE='cm_daily_challenge_save_v1';
@@ -9731,6 +9840,14 @@ save();checkStarForgeUnlock();
           try{localStorage.setItem(CM_DAILY_SAVE,JSON.stringify({state:cmDailyState,elements,combos,gs,sortMode:currentSort}))}catch(e){}
         }
         function cmEnterDaily(){
+          const cmToday=cmDailyKey();
+          const cmDoneToday=cmDailyArchive()?.[cmToday]?.cleared;
+          if(cmDoneToday){
+            notify('Daily already cleared','You already completed today’s Daily Challenge. Come back tomorrow.','🏅',3600);
+            cmRenderDailyPreview?.();
+            return;
+          }
+
           cmSyncChallengeToolLocks();
           if(cmChallengeToolsLocked()){notify('Daily Challenge unavailable','Daily is disabled during Boss and Speedrun runs.','🔒',3500);return}
           if(!cmDailyShopUnlocked()){notify('Daily Challenge locked','Discover 🛒 Shop first.','🔒',3800);return}
@@ -9741,7 +9858,7 @@ save();checkStarForgeUnlock();
             return;
           }
           cmDailyMain={elements:structuredClone(elements),combos:structuredClone(combos),gs:structuredClone(gs),sortMode:currentSort};
-          cmDailyState={active:true,key:p.key,target:p.target,difficulty:p.difficulty,mainNames:cmDailyMain.elements.map(e=>e.name.toLowerCase()),crafts:0};
+          cmDailyState={active:true,key:p.key,target:p.target,difficulty:p.difficulty,mainNames:cmDailyMain.elements.map(e=>e.name.toLowerCase()),crafts:0,solution:structuredClone(p.solution),starts:p.starts.map(e=>({name:e.name,emoji:e.emoji||'◇'}))};
           elements=p.starts.map(e=>structuredClone(e));combos=[];gs=baseGameState();fractionalCoins=0;
           document.documentElement.classList.add('cm-daily-mode','daily-challenge-enter');document.title='Daily Challenge';
           if($('dailyGameGoal'))$('dailyGameGoal').textContent='EXACTLY 5 DISCOVERIES · Craft '+p.target;
@@ -9750,6 +9867,7 @@ save();checkStarForgeUnlock();
           notify('Daily Challenge started','Only Elements + Combine are available. Target: '+p.target,'🧩',3500);
         }
         function cmDailyTransferAndRestore(won){
+          cmInvalidatePendingCombine();
           if(!cmDailyState||!cmDailyMain)return;
           const crafts=cmDailyState.crafts,target=cmDailyState.target,key=cmDailyState.key,dailyCoinReward=won?2500:0;
 
@@ -9767,12 +9885,12 @@ save();checkStarForgeUnlock();
             if(won){
               gs.coins=(Number(gs.coins)||0)+dailyCoinReward;
               try{localStorage.setItem(CM_DAILY_KEY,JSON.stringify({date:key,complete:true,crafts,target,rewardCoins:dailyCoinReward}))}catch(e){}
-              cmRecordDaily(key,target,crafts,dailyCoinReward);
+              cmRecordDaily(key,target,crafts,dailyCoinReward,{solution:structuredClone(cmDailyState.solution||[]),starts:structuredClone(cmDailyState.starts||[])});
             }
             cmDailyState=cmDailyMain=null;try{localStorage.removeItem(CM_DAILY_SAVE)}catch(e){}
             document.documentElement.classList.remove('cm-daily-mode','daily-challenge-enter','cm-daily-clearing');document.title='Craft Madness';
             if($('dailyGameHeading'))$('dailyGameHeading').hidden=true;if($('normalGameHeading'))$('normalGameHeading').hidden=false;
-            save();renderEls();renderHistory();updateCount();updateProgressionUI();resetDZs();
+            save();renderEls();renderHistory();updateCount();updateProgressionUI();cmRestoreCraftingAfterChallenge();
             if(!won)notify('Daily Challenge left','Daily discoveries were challenge-only and were not added to your main collection.','↩️',4300);
           };
 
@@ -9793,7 +9911,17 @@ save();checkStarForgeUnlock();
           setTimeout(()=>fx.classList.add('leaving'),2450);
           setTimeout(()=>fx.remove(),3050);
         }
-        function cmRenderDailyPreview(){
+        
+        function cmSyncDailyOncePerDay(){
+          const btn=$('dailyPuzzleStart');
+          if(!btn)return;
+          const done=!!cmDailyArchive()?.[cmDailyKey()]?.cleared;
+          btn.disabled=done;
+          btn.textContent=done?'✓ Daily Complete — Come Back Tomorrow':'Start Daily Challenge';
+          btn.title=done?'Today’s Daily Challenge has already been completed.':'';
+        }
+function cmRenderDailyPreview(){
+          cmRefreshDailyMedals();
           const p=cmBuildDaily();$('dailyPuzzleTarget').textContent=p.target||'Unavailable';$('dailyPuzzleInfo').textContent='5-CRAFT · Exactly five starting elements. The target is five NEW discoveries deep. You will enter a separate fresh save with only Elements and Combine. Any elements your main save does not have are transferred back when you leave or win.';
         }
         function cmChallengeToolsLocked(){
@@ -9823,6 +9951,7 @@ save();checkStarForgeUnlock();
           if(elements.length!==before){renderEls();updateCount();save()}
         }
         load();
+        setTimeout(cmMountUsernameEditor,0);
         setTimeout(()=>{cmSyncChallengeToolLocks();cmPurgeExclusiveTrophiesFromInventory()},0);
         if(window.speedrunSaveMode)loadMasterySpeedrun();
         // Older saves predate Mastery tracking: seed only progress we can prove from current permanent/save state.
@@ -9991,10 +10120,10 @@ save();checkStarForgeUnlock();
 
 <div id="playerStatsModal" class="modal-overlay"><div class="modal-box player-stats-box" style="max-width:760px">
   <button class="modal-close" data-close="playerStatsModal">&times;</button>
-  <div id="profileBanner" class="profile-banner"></div>
-<div class="profile-customize"><label>Title <select id="profileTitleSelect"></select></label><label>Banner <select id="profileThemeSelect"></select></label></div>
+  <div id="profileBanner" class="profile-banner"></div><div class="cm-profile-actions"><button id="cmIdCardBtn" type="button">🪪 Crafter ID</button><button id="cmCapsulesBtn" type="button">🕰️ Time Capsules</button></div>
+<div class="profile-customize"><label>Title <select id="profileTitleSelect"></select></label><label>Banner <select id="profileThemeSelect"></select></label><button id="profileBannerPngBtn" type="button" class="cm-banner-export">🖼️ Export Banner PNG</button></div>
 <div class="first-records-head">🏅 FIRST DISCOVERY RECORDS</div><div id="firstRecordsGrid" class="first-records-grid"></div>
-  <div id="playerStatsGrid" class="player-stats-grid"></div><div class="pr-page-head">🏁 PERSONAL RECORDS</div><div id="personalRecordsGrid" class="personal-records-grid"></div>
+  <div id="playerStatsGrid" class="player-stats-grid"></div><div class="pr-page-head">🌡️ DISCOVERY HEATMAP</div><div id="cmDiscoveryHeatmap" class="cm-heatmap"></div><div class="pr-page-head">📜 CRAFTING CHRONICLE</div><div id="cmChronicle" class="cm-chronicle"></div><div class="pr-page-head">🎴 PROFILE MILESTONE CARDS</div><div id="cmMilestoneCards" class="cm-milestones"></div><div class="pr-page-head">🏁 PERSONAL RECORDS</div><div id="personalRecordsGrid" class="personal-records-grid"></div>
 </div></div>
 
 <div id="routeCompareModal" class="modal-overlay"><div class="modal-box" style="max-width:780px">
@@ -10037,5 +10166,42 @@ save();checkStarForgeUnlock();
         <div id="masteryObjectiveGrid" class="mastery-objective-grid"></div>
       </div>
     </div>
+<script>
+(()=>{
+  const _cmDailyPreviewOnce=window.cmRenderDailyPreview;
+  window.cmRenderDailyPreview=function(){const r=_cmDailyPreviewOnce.apply(this,arguments);cmSyncDailyOncePerDay();return r};
+  const _cmDailyRecordOnce=window.cmRecordDaily;
+  window.cmRecordDaily=function(){const r=_cmDailyRecordOnce.apply(this,arguments);cmSyncDailyOncePerDay();return r};
+  setTimeout(cmSyncDailyOncePerDay,100);
+})();
+</script>
+<script>
+(()=>{
+const CAPS='cm_time_capsules_v1',CHRON='cm_crafting_chronicle_v1',CUR='cm_web_currents_v1';
+const jget=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||'null')??f}catch(e){return f}},jset=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+window.cmChronicleAdd=(type,text,emoji='✦')=>{const a=jget(CHRON,[]);if(a[0]&&a[0].text===text&&Date.now()-a[0].date<1500)return;a.unshift({type,text,emoji,date:Date.now()});jset(CHRON,a.slice(0,300))};
+function roman(n){const v=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];let o='';for(const [x,c]of v)while(n>=x){o+=c;n-=x}return o||'I'}
+window.cmCaptureTimeCapsule=()=>{if(bossMode||window.speedrunSaveMode||cmDailyState?.active)return;const a=jget(CAPS,[]),next=Number(prestigeData().times||0)+1;if(a.some(x=>x.prestige===next))return;a.unshift({date:Date.now(),prestige:next,username:cmUsername(),title:profilePrefs().title,elements:structuredClone(elements),combos:structuredClone(combos),gs:structuredClone(gs)});jset(CAPS,a.slice(0,24));cmChronicleAdd('prestige','Sealed Time Capsule · Era '+roman(next),'🕰️')};
+function dailyStats(){const a=cmDailyArchive(),keys=Object.keys(a).filter(k=>a[k]?.cleared).sort(),diamonds=keys.filter(k=>a[k].medal==='DIAMOND').length;let best=0,run=0,prev=null;for(const k of keys){const q=k.split('-').map(Number),cur=new Date(q[0],q[1]-1,q[2]);run=prev&&Math.round((cur-prev)/86400000)===1?run+1:1;best=Math.max(best,run);prev=cur}let current=0;if(keys.length){const q=keys.at(-1).split('-').map(Number),last=new Date(q[0],q[1]-1,q[2]),today=new Date();today.setHours(0,0,0,0);if(Math.round((today-last)/86400000)<=1){current=1;for(let i=keys.length-1;i>0;i--){const A=keys[i].split('-').map(Number),B=keys[i-1].split('-').map(Number);if(Math.round((new Date(A[0],A[1]-1,A[2])-new Date(B[0],B[1]-1,B[2]))/86400000)===1)current++;else break}}}return{diamonds,current,best,total:keys.length}}
+function legacy(){const ds=dailyStats(),masteries=Object.keys(masteryState?.completed||{}).length,prest=Number(prestigeData()?.times||0),boss=cmBossWinsFromTrophies?.()||0,web=jget('cm_discovery_web_progress_v2',[]).length,medals=cmDailyMedalCounts(),chrono=cmBestSpeedrunMedal?.()||'';const points=prest*100+masteries*25+boss*18+web+medals.DIAMOND*12+medals.GOLD*7+medals.SILVER*4+medals.BRONZE*2+(chrono==='DIAMOND'?60:chrono==='GOLD'?35:chrono==='SILVER'?20:chrono==='BRONZE'?10:0);return{points,level:Math.max(1,Math.floor(Math.sqrt(points/18))+1),masteries,prest,boss,web,ds}}
+function modal(title,body){const o=document.createElement('div');o.className='cm-feature-modal';o.innerHTML=`<div class="cm-feature-box"><div class="cm-feature-head"><h2>${title}</h2><button>✕ CLOSE</button></div>${body}</div>`;document.documentElement.appendChild(o);o.querySelector('.cm-feature-head button').onclick=()=>o.remove();o.onclick=e=>{if(e.target===o)o.remove()};return o}
+function showCapsules(){const a=jget(CAPS,[]),o=modal('🕰️ TIME CAPSULES',a.length?a.map((x,i)=>`<button class="cm-capsule-open" data-i="${i}">ERA ${roman(x.prestige)} · ${new Date(x.date).toLocaleDateString()} · ${x.elements.length} elements</button>`).join(''):'<p>No capsules yet. One is sealed automatically immediately before each Prestige.</p>');o.querySelectorAll('.cm-capsule-open').forEach(b=>b.onclick=()=>inspectCapsule(a[+b.dataset.i]))}
+function inspectCapsule(x){modal(`🕰️ ERA ${roman(x.prestige)} · ARCHIVED SAVE`,`<div class="cm-capsule-save"><small>READ-ONLY TIME CAPSULE · ${new Date(x.date).toLocaleString()}</small><h2>${x.username||'Crafter'} · ${x.title||'Crafter'}</h2><p>🪙 ${Number(x.gs?.coins||0).toLocaleString()} coins · ${x.combos?.length||0} combinations · ${x.elements?.length||0} elements</p><div class="cm-capsule-grid">${(x.elements||[]).map(e=>`<div class="cm-capsule-el">${e.emoji||'◇'} ${e.name}</div>`).join('')}</div></div>`)}
+function showId(){const L=legacy(),p=profilePrefs(),o=modal('🪪 CRAFTER ID',`<div class="cm-id-preview"><small>MELON STUDIOS · CRAFT MADNESS</small><h1>${cmUsername()}</h1><b>${p.title}</b><div class="cm-legacy">LEGACY LV. ${L.level}</div><p>${L.points} legacy points · P${L.prest} · ${L.masteries} masteries · ${L.boss} boss wins</p><p>💎 ${L.ds.diamonds} Daily Diamonds · 🔥 ${L.ds.best} best Daily streak · 🕸️ ${L.web} Web nodes</p></div><button id="cmIdPng">🖼️ EXPORT ID PNG</button>`);o.querySelector('#cmIdPng').onclick=()=>exportCard('id')}
+function exportCard(kind,idx=0){const L=legacy(),p=profilePrefs(),c=document.createElement('canvas');c.width=1200;c.height=675;const x=c.getContext('2d'),g=x.createLinearGradient(0,0,1200,675);g.addColorStop(0,'#071827');g.addColorStop(1,'#312e81');x.fillStyle=g;x.fillRect(0,0,1200,675);x.strokeStyle='#67e8f9';x.lineWidth=5;x.strokeRect(20,20,1160,635);x.textAlign='center';x.fillStyle='#7dd3fc';x.font='800 28px system-ui';x.fillText(kind==='id'?'MELON STUDIOS · CRAFTER ID':'MELON STUDIOS · PROFILE MILESTONE',600,90);x.fillStyle='#fff';x.font='1000 76px system-ui';x.fillText(cmUsername(),600,190);if(kind==='id'){x.fillStyle='#a5f3fc';x.font='900 42px system-ui';x.fillText(p.title.toUpperCase(),600,255);x.fillStyle='#fff';x.font='1000 62px system-ui';x.fillText('LEGACY LV. '+L.level,600,355);x.font='700 27px system-ui';x.fillText(`P${L.prest}  ·  ${L.masteries} MASTERIES  ·  ${L.boss} BOSS WINS  ·  ${L.ds.diamonds} DAILY DIAMONDS`,600,430);x.fillStyle='rgba(255,255,255,.6)';x.fillText(L.points+' LEGACY POINTS',600,505)}else{const done=Object.keys(masteryState?.completed||{}),obj=MASTERY_OBJECTIVES[idx],un=!!obj&&done.includes(obj.id);x.fillStyle='#fff';x.font='1000 54px system-ui';x.fillText(un?(obj.name||'MILESTONE '+(idx+1)):'LOCKED MILESTONE',600,320);x.fillStyle='#a5f3fc';x.font='800 28px system-ui';x.fillText(`${idx+1} / ${MASTERY_OBJECTIVES.length} · ${un?'ACHIEVED':'NOT YET ACHIEVED'}`,600,390)}c.toBlob(b=>{const a=document.createElement('a'),u=URL.createObjectURL(b);a.href=u;a.download=`Craft-Madness-${kind==='id'?'Crafter-ID':'Milestone-'+(idx+1)}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(u),1200)},'image/png')}
+function renderStatsExtras(){const L=legacy(),b=$('profileBanner');if(b){b.classList.remove('frame-daily-1','frame-daily-2','frame-daily-3','frame-daily-4');if(L.ds.diamonds>=100)b.classList.add('frame-daily-4');else if(L.ds.diamonds>=50)b.classList.add('frame-daily-3');else if(L.ds.diamonds>=25)b.classList.add('frame-daily-2');else if(L.ds.diamonds>=10)b.classList.add('frame-daily-1');let q=b.querySelector('.cm-legacy-banner');if(!q){q=document.createElement('div');q.className='cm-legacy-banner';b.appendChild(q)}q.innerHTML=`LEGACY LV. <b>${L.level}</b> · ${L.points} pts`}const heat=$('cmDiscoveryHeatmap');if(heat){const by={};journalEntries().forEach(e=>{const k=new Date(e.date).toISOString().slice(0,10);by[k]=(by[k]||0)+1});heat.innerHTML='';for(let i=181;i>=0;i--){const d=new Date(Date.now()-i*86400000),k=d.toISOString().slice(0,10),n=by[k]||0,v=n?Math.min(4,1+Math.floor(Math.log2(n))):0,q=document.createElement('div');q.className='cm-heat';q.dataset.v=v;q.title=`${k} · ${n} discoveries`;heat.appendChild(q)}}const ch=$('cmChronicle');if(ch){let a=jget(CHRON,[]);if(!a.length)a=journalEntries().slice(-30).reverse().map(e=>({emoji:e.emoji,text:'Discovered '+e.name,date:e.date}));ch.innerHTML=a.slice(0,80).map(e=>`<div class="cm-chronicle-entry"><span>${e.emoji||'✦'} ${e.text}</span><small>${new Date(e.date).toLocaleString()}</small></div>`).join('')||'<small>No chronicle entries yet.</small>'}const ms=$('cmMilestoneCards');if(ms){const done=new Set(Object.keys(masteryState?.completed||{}));ms.innerHTML=MASTERY_OBJECTIVES.map((o,i)=>`<div class="cm-milestone ${done.has(o.id)?'unlocked':''}" data-m="${i}"><b>🎴 ${i+1}. ${done.has(o.id)?o.name:'LOCKED'}</b><small>${done.has(o.id)?'Profile milestone achieved':'Complete the matching Mastery objective'}</small>${done.has(o.id)?'<button>PNG</button>':''}</div>`).join('');ms.querySelectorAll('.unlocked button').forEach(q=>q.onclick=()=>exportCard('milestone',+q.closest('[data-m]').dataset.m))}$('cmIdCardBtn').onclick=showId;$('cmCapsulesBtn').onclick=showCapsules}
+const oldStats=window.renderPlayerStats;window.renderPlayerStats=function(){const r=oldStats.apply(this,arguments);setTimeout(renderStatsExtras,0);return r};
+function renderDailyPrestige(){const ds=dailyStats(),c=$('cmDailyCrest'),p=$('cmDailyPerfects');if(c){const tier=ds.best>=30?'MYTHIC':ds.best>=14?'ROYAL':ds.best>=7?'GILDED':ds.best>=3?'EMBER':'STARTER',icons=ds.best>=30?'👑◆👑':ds.best>=14?'❖👑❖':ds.best>=7?'✦◆✦':ds.best>=3?'◇🔥◇':'◇';c.innerHTML=`<strong>${icons} ${tier} STREAK CREST</strong><div>Current: ${ds.current} · Best: ${ds.best}</div><small>Evolves permanently from your best streak at 3 / 7 / 14 / 30 clears. A missed day ends only the current streak.</small>`}if(p){const gems=Array.from({length:Math.min(ds.diamonds,25)},()=>'<span class="cm-perfect-gem">◆</span>').join('');p.innerHTML=`<b>💎 DAILY PERFECT COLLECTION · ${ds.diamonds}</b><div>${gems}${ds.diamonds>25?' ×'+ds.diamonds:''}</div><small>Display case evolves at 10 / 25 / 50 / 100 Diamonds.</small>`}}
+const oldDaily=window.cmRefreshDailyMedals;window.cmRefreshDailyMedals=function(){const r=oldDaily.apply(this,arguments);renderDailyPrestige();return r};
+function showAftermath(k,r){const starts=(r.starts||[]).map(x=>`${x.emoji||'◇'} ${x.name}`).join(' · ')||'Not recorded for this older Daily.',route=(r.solution||[]).map((x,i)=>`<div class="cm-capsule-el"><b>${i+1}</b> · ${x[0]} + ${x[1]} → ${x[2]}</div>`).join('');modal(`🧩 DAILY AFTERMATH · ${k}`,`<div class="cm-id-preview"><b class="daily-medal-${r.medal}">${r.medal}</b><h2>${r.target}</h2><p>${r.crafts} crafts · 🪙 ${Number(r.reward||0).toLocaleString()}</p><small>STARTING FIVE</small><p>${starts}</p></div><div class="cm-capsule-grid">${route||'<p>This clear predates Aftermath route recording.</p>'}</div>`)}
+const oldArchive=window.cmRenderDailyArchive;window.cmRenderDailyArchive=function(){const r=oldArchive.apply(this,arguments),a=cmDailyArchive(),n=new Date(),y=n.getFullYear(),m=n.getMonth();$('dailyArchiveGrid')?.querySelectorAll('.daily-archive-day.done').forEach(c=>{const d=+c.querySelector('strong')?.textContent,k=[y,m+1,d].join('-');if(a[k])c.onclick=()=>showAftermath(k,a[k])});return r};
+function regionFor(name){const n=name.toLowerCase();if(/fire|lava|sun|spark|heat|volcan|ember/.test(n))return'EMBER';if(/water|ocean|sea|tide|rain|ice|snow/.test(n))return'TIDE';if(/earth|stone|mount|plant|tree|forest|island|nature/.test(n))return'WILD';if(/air|wind|cloud|storm|sky/.test(n))return'SKY';if(/star|moon|space|planet|meteor|cosmic|galaxy|night/.test(n))return'COSMOS';if(/computer|robot|tech|machine|internet|code|electric/.test(n))return'MACHINE';if(/void|null|abyss|dark|death|end/.test(n))return'VOID';if(/idea|philosophy|time|life|love|dream|music|art/.test(n))return'MIND';return'FRINGE'}
+function landmarks(){const L=legacy(),fr=firstRecords(),prog=jget('cm_discovery_web_progress_v2',[]),has=n=>elements.some(e=>e.name.toLowerCase()===n.toLowerCase())||prog.includes(n.toLowerCase());return[['🏪','MARKET GATE','Discover Shop',has('Shop')],['⭐','FORGE SPIRE','Unlock Star Forge',!!gs.sfUnlocked],['🏆','ASCENSION MONUMENT','First Prestige',L.prest>0||!!fr.prestige],['🌈','EVERYTHING BEACON','Discover Everything',has('Everything')||!!fr.everything],['⚔️','BOSS SCAR','First Boss victory',L.boss>0],['🌟','MASTERY SANCTUM','First Mastery',L.masteries>0],['💎','CHRONO OBELISK','Diamond speedrun',cmBestSpeedrunMedal?.()==='DIAMOND'||!!fr.diamond],['◆','DAILY CROWN','10 Daily Diamonds',L.ds.diamonds>=10]]}
+function drawCurrents(){const map=$('dwMap');if(!map||localStorage.getItem(CUR)==='0')return;map.style.position='relative';map.querySelector('.cm-web-current-svg')?.remove();const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','cm-web-current-svg');map.prepend(svg);const mr=map.getBoundingClientRect(),cards=[...map.querySelectorAll('.dw-card[data-name]')],by=new Map(cards.map(c=>[c.dataset.name.toLowerCase(),c]));cards.forEach(result=>{const recipe=result.dataset.recipe;if(!recipe)return;for(const part of recipe.split(' + ')){const a=by.get(part.toLowerCase());if(!a)continue;const A=a.getBoundingClientRect(),B=result.getBoundingClientRect(),path=document.createElementNS('http://www.w3.org/2000/svg','path'),x1=A.left+A.width/2-mr.left,y1=A.top+A.height/2-mr.top,x2=B.left+B.width/2-mr.left,y2=B.top+B.height/2-mr.top,mid=(y1+y2)/2;path.setAttribute('d',`M${x1},${y1} C${x1},${mid} ${x2},${mid} ${x2},${y2}`);svg.appendChild(path)}})}
+function enhanceWeb(){const map=$('dwMap');if(!map)return;const land=$('cmWebLandmarks');if(land)land.innerHTML=landmarks().map(x=>`<div class="cm-landmark ${x[3]?'earned':''}"><b>${x[0]} ${x[1]}</b><small>${x[3]?'PERMANENT LANDMARK':'LOCKED · '+x[2]}</small></div>`).join('');const counts={};map.querySelectorAll('.dw-card').forEach(c=>{const st=c.querySelector('strong')?.textContent||'',name=st.replace(/^[^A-Za-z0-9\[]+\s*/,'').trim(),reg=regionFor(name);c.dataset.region=reg;counts[reg]=(counts[reg]||0)+1;const rec=c.querySelector('.dw-recipe')?.textContent;if(rec){c.dataset.name=name;c.dataset.recipe=rec}});const rg=$('cmWebRegions');if(rg)rg.innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<span class="cm-region-chip">${n} · ${v}</span>`).join('');const tel=$('cmTelescopeBtn'),cur=$('cmCurrentsBtn');if(tel&&!tel.dataset.bound){tel.dataset.bound=1;tel.onclick=()=>{map.classList.toggle('cm-telescope');tel.textContent=map.classList.contains('cm-telescope')?'🔭 Exit Telescope':'🔭 Telescope';setTimeout(drawCurrents,80)}}if(cur&&!cur.dataset.bound){cur.dataset.bound=1;cur.onclick=()=>{const on=localStorage.getItem(CUR)!=='0';localStorage.setItem(CUR,on?'0':'1');cur.textContent='〰 Web Currents: '+(on?'OFF':'ON');if(on)map.querySelector('.cm-web-current-svg')?.remove();else drawCurrents()}}if(cur)cur.textContent='〰 Web Currents: '+(localStorage.getItem(CUR)==='0'?'OFF':'ON');setTimeout(drawCurrents,80)}
+const oldWeb=window.cmRenderDiscoveryWeb;window.cmRenderDiscoveryWeb=function(){const r=oldWeb.apply(this,arguments);setTimeout(enhanceWeb,0);return r};
+setTimeout(()=>{renderStatsExtras();renderDailyPrestige()},250);
+})();
+</script>
 </body>
 </html>
