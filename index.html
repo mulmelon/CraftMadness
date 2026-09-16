@@ -2785,8 +2785,21 @@ html.cm-first-mastery-run #bossBtn{display:none!important}
 #cmBootLoader.cm-boot-boss .cm-boot-track i{background:linear-gradient(90deg,transparent,#ef4444,#f59e0b,#ef4444,transparent)!important}
 
 #discoveryWebBtn,#dailyPuzzleBtn{width:32px;height:32px;padding:0;border:1px solid var(--border);border-radius:9px;background:var(--bg-card);cursor:pointer}
-.discovery-web-box{max-width:900px!important}.dw-tabs{display:flex;gap:6px;margin:10px 0 12px}.dw-tab.active{border-color:#a78bfa!important;box-shadow:inset 0 -2px #a78bfa}.dw-panel{max-height:58vh;overflow:auto}.dw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}.dw-card,.dw-riddle,.dw-guide-row{padding:10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}.dw-card.owned{border-color:rgba(74,222,128,.35)}.dw-card.important{box-shadow:inset 0 0 16px rgba(167,139,250,.09)}.dw-card strong,.dw-riddle strong,.dw-guide-row strong{display:block;font-size:.62rem}.dw-card small,.dw-riddle p,.dw-guide-row p,.dw-note{font-size:.55rem;color:var(--text-secondary);line-height:1.5}.dw-riddle,.dw-guide-row{margin-bottom:8px}
+.discovery-web-box{max-width:900px!important}.dw-tabs{display:flex;gap:6px;margin:10px 0 12px}.dw-tab.active{border-color:#a78bfa!important;box-shadow:inset 0 -2px #a78bfa}.dw-panel{max-height:58vh;overflow:auto}
+.dw-tree{min-width:760px;padding:18px 12px 30px;display:flex;flex-direction:column;gap:22px}
+.dw-level{position:relative;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;padding-top:20px}
+.dw-level:not(:first-child)::before{content:"";position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,#64748b88 12%,#64748b88 88%,transparent)}
+.dw-level:not(:first-child) .dw-card::before{content:"";position:absolute;left:50%;top:-20px;width:1px;height:20px;background:#64748b88}
+.dw-level-label{position:absolute;top:-7px;left:10px;font:800 .43rem/1 ui-monospace,monospace;letter-spacing:.12em;color:#94a3b8;background:var(--bg-card);padding:0 5px}
+.dw-card{position:relative;width:138px;min-height:62px;text-align:center}
+.dw-card .dw-parents{display:block;margin-top:4px;font-size:.4rem;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dw-card,.dw-riddle,.dw-guide-row{padding:10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}.dw-card.owned{border-color:rgba(74,222,128,.35)}.dw-card.important{box-shadow:inset 0 0 16px rgba(167,139,250,.09)}.dw-card strong,.dw-riddle strong,.dw-guide-row strong{display:block;font-size:.62rem}.dw-card small,.dw-riddle p,.dw-guide-row p,.dw-note{font-size:.55rem;color:var(--text-secondary);line-height:1.5}.dw-riddle,.dw-guide-row{margin-bottom:8px}
 .daily-puzzle-box{max-width:650px!important}.daily-target{padding:12px;margin:10px 0;border:1px solid #a78bfa66;border-radius:12px;text-align:center}.daily-elements{display:flex;flex-wrap:wrap;gap:7px;max-height:45vh;overflow:auto;padding:5px}.daily-el{padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg-card);cursor:pointer}.daily-el.selected{border-color:#a78bfa;box-shadow:0 0 12px #a78bfa55}.daily-el.new{border-color:#4ade8066}.daily-actions{display:flex;gap:8px;justify-content:center;margin-top:12px}
+
+.dw-riddle details{margin-top:5px;font-size:.46rem}
+.dw-riddle details summary{font-size:.43rem;color:#facc15;cursor:pointer;list-style-position:inside}
+.dw-riddle details p{font-size:.46rem!important;line-height:1.45!important;margin-top:5px}
+.dw-riddle .dw-route-owned{font-size:.43rem;color:#86efac;margin-top:5px}
 </style>
 
 </head>
@@ -6771,6 +6784,17 @@ try{
             });
         }
         function totalKeys(){return elements.reduce((n,e)=>n+(e.isKey?keyAmount(e):0),0);}
+        function spendKeys(amount=1){
+            let remaining=Math.max(0,Math.floor(Number(amount)||0));
+            if(totalKeys()<remaining)return false;
+            for(const key of elements){
+                if(!key.isKey||remaining<=0)continue;
+                const used=Math.min(keyAmount(key),remaining);
+                key.amountOfKey=keyAmount(key)-used;remaining-=used;
+                if(!key.amountOfKey&&(sel1===key||sel2===key))resetDZs();
+            }
+            normalizeKeyStacks();renderEls();updateCount();save();updateKeyLocks();return true;
+        }
         function recipeUnlocked(name){
             return (name==='Shop'&&gs.shopUnlocked)||
                 (Array.isArray(gs.unlockedRecipes)&&gs.unlockedRecipes.includes(name))||
@@ -9406,15 +9430,56 @@ save();checkStarForgeUnlock();
         ];
         function cmRenderDiscoveryWeb(){
           const owned=new Set(elements.map(e=>e.name.toLowerCase())),missing=prestigeRequirements().missing,plans=missingCraftPlans(missing),pm=new Map(plans.map(x=>[x.name.toLowerCase(),x]));
-          const map=$('dwMap');map.innerHTML='<div class="dw-grid"></div>';const grid=map.firstElementChild;
+          const map=$('dwMap');map.replaceChildren();const tree=document.createElement('div');tree.className='dw-tree';map.appendChild(tree);
+
+          // A real dependency tree: group discoveries by their shortest dependency depth.
+          const rows=[];
           for(const name of [...new Set([...rankedCatalog(),...CM_DW_IMPORTANT.map(x=>x[0])])]){
-            const low=name.toLowerCase(),have=owned.has(low),p=pm.get(low),imp=CM_DW_IMPORTANT.some(x=>x[0]===name),el=elements.find(e=>e.name.toLowerCase()===low),d=document.createElement('div');
-            d.className='dw-card '+(have?'owned ':'')+(imp?'important':'');
-            d.innerHTML=`<strong>${el?.emoji||CM_DW_IMPORTANT.find(x=>x[0]===name)?.[1]||'◇'} ${name}</strong><small>${have?'DISCOVERED':p?(p.cost>20?'UNKNOWN DISTANCE':p.cost+' CRAFT'+(p.cost===1?'':'S')+' AWAY'):'UNDISCOVERED'}</small>`;
-            grid.appendChild(d);
+            const low=name.toLowerCase(),have=owned.has(low),p=pm.get(low),imp=CM_DW_IMPORTANT.some(x=>x[0]===name),el=elements.find(e=>e.name.toLowerCase()===low);
+            let depth=have?0:(p&&p.cost<=20?p.cost:21),parents=[];
+            if(p?.steps?.length){
+              const last=p.steps.at(-1),line=p.steps.recipeLines?.at(-1)||'';
+              if(line.includes(' → '))parents=line.split(' → ')[0].split(' + ');
+              depth=Math.min(20,p.steps.length);
+            }
+            rows.push({name,low,have,p,imp,el,depth,parents});
           }
-          $('dwRiddles').innerHTML=CM_DW_IMPORTANT.map(([n,e,c,r])=>`<div class="dw-riddle"><strong>${e} ${n}${owned.has(n.toLowerCase())?' · ✓':''}</strong><p>${c}</p><details><summary>Reveal route</summary><p>${r.replaceAll('\n','<br>')}</p></details></div>`).join('');
-          $('dwGuide').innerHTML='<div class="dw-guide-row"><strong>📖 Crafting Guide</strong><p>Discovery distance is calculated from what you currently own. The map does not reveal normal undiscovered ingredients.</p></div>'+plans.slice(0,150).map(r=>`<div class="dw-guide-row"><strong>${r.name}</strong><p>${r.cost>20?'Unknown distance / special method':r.cost+' craft'+(r.cost===1?'':'s')+' away'}</p></div>`).join('');
+          const levels=new Map();
+          for(const row of rows){const k=row.depth>20?21:row.depth;if(!levels.has(k))levels.set(k,[]);levels.get(k).push(row)}
+          for(const [depth,list] of [...levels.entries()].sort((a,b)=>a[0]-b[0])){
+            const level=document.createElement('div');level.className='dw-level';
+            const lab=document.createElement('span');lab.className='dw-level-label';lab.textContent=depth===0?'DISCOVERED / ROOTS':depth===21?'DEEP / UNKNOWN':'DEPTH '+depth;level.appendChild(lab);
+            for(const row of list.slice(0,depth===0?80:45)){
+              const d=document.createElement('div');d.className='dw-card '+(row.have?'owned ':'')+(row.imp?'important':'');
+              d.innerHTML=`<strong>${row.el?.emoji||CM_DW_IMPORTANT.find(x=>x[0]===row.name)?.[1]||'◇'} ${row.name}</strong><small>${row.have?'DISCOVERED':row.depth>20?'UNKNOWN DISTANCE':row.depth+' CRAFT'+(row.depth===1?'':'S')+' AWAY'}</small>${row.parents.length?`<span class="dw-parents">↳ ${row.parents.join(' + ')}</span>`:''}`;
+              level.appendChild(d);
+            }
+            tree.appendChild(level);
+          }
+
+          $('dwRiddles').replaceChildren();
+          for(const [n,e,c,r] of CM_DW_IMPORTANT){
+            const unlocked=recipeUnlocked(n),card=document.createElement('div');card.className='dw-riddle';
+            card.innerHTML=`<strong>${e} ${n}${owned.has(n.toLowerCase())?' · ✓':''}</strong><p>${c}</p>`;
+            if(unlocked){
+              const details=document.createElement('details'),summary=document.createElement('summary'),route=document.createElement('p');
+              summary.textContent='🔓 Reveal route';route.innerHTML=r.replaceAll('\n','<br>');details.append(summary,route);card.appendChild(details);
+            }else{
+              const btn=document.createElement('button');btn.className='sort-btn';btn.style.cssText='font-size:.43rem;padding:3px 7px;margin-top:5px';
+              btn.textContent='🔒 Reveal route · 1 🔑';
+              btn.onclick=()=>{
+                if(totalKeys()<1){notify('Not enough keys','You need 1 key to reveal this route.','🔑');return}
+                if(!spendKeys(1))return;
+                if(!Array.isArray(gs.unlockedRecipes))gs.unlockedRecipes=[];
+                if(!gs.unlockedRecipes.includes(n))gs.unlockedRecipes.push(n);
+                save();notify('Route revealed',n+' route unlocked.','🔓');cmRenderDiscoveryWeb();
+              };
+              card.appendChild(btn);
+            }
+            $('dwRiddles').appendChild(card);
+          }
+
+          $('dwGuide').innerHTML='<div class="dw-guide-row"><strong>📖 Crafting Guide</strong><p>The map is arranged as a dependency tree: roots/discovered elements at the top, then deeper targets below. Lines connect each depth layer. Normal undiscovered recipes stay hidden; important riddle routes cost 1 key to reveal.</p></div>'+plans.slice(0,150).map(r=>`<div class="dw-guide-row"><strong>${r.name}</strong><p>${r.cost>20?'Unknown distance / special method':r.cost+' craft'+(r.cost===1?'':'s')+' away'}</p></div>`).join('');
         }
         $('discoveryWebBtn').addEventListener('click',()=>{cmRenderDiscoveryWeb();openModal('discoveryWebModal')});
         document.querySelectorAll('.dw-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dw-tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('#discoveryWebModal .dw-panel').forEach(p=>p.hidden=p.id!==b.dataset.panel)}));
