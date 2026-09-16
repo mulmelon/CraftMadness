@@ -9031,7 +9031,7 @@ save();checkStarForgeUnlock();
         function markPatchNotesSeen(){try{localStorage.setItem(CM_PATCH_SEEN,CM_PATCH_VERSION)}catch(e){}updatePatchNewDot()}
         const CM_PATCH_NOTES=[
           ['Daily Rewards Update','Clearing the Daily Challenge now awards 2,500 coins and plays a dedicated Challenge Clear reward animation.'],
-          ['Daily Challenge Update','Daily Puzzle now runs as an isolated challenge save using the normal Elements + Combine interface, transfers new discoveries back, uses challenge animations, and changes the page title while active.'],
+          ['Daily Challenge Update','Daily Puzzle now runs as an isolated challenge save using the normal Elements + Combine interface, keeps Daily discoveries challenge-only, uses challenge animations, and changes the page title while active.'],
           ['Discovery Web Update','Discovery Web now has fogged exploration, classified nodes, unknown branches, discovery shimmer reveals, discovered-recipe labels, secret elements shown as anonymous ???? nodes, and rotating Daily Puzzle difficulty.'],
           ['Perfect Records Update','Perfect Diamond relics, Perfect Diamond profile title/banner, medal deterioration, evolving boss trophies, Personal Records, relic upgrade effects, and evolved loading screens.'],
           ['Vault & Archive Update','Split streaks, PB crowns, Trophy Sets, Vault levels, pedestal plaques, rare trophy effects, Discovery Journal, first records, profile titles/themes, Mastery capstones and near-completion alerts, Patch Notes NEW detection, intro variants, and rotating save backups.'],
@@ -9579,56 +9579,95 @@ save();checkStarForgeUnlock();
         function cmBuildDaily(){
           const rng=cmDailySeed();
 
-          // EXACTLY five new discoveries from the five supplied elements.
-          // We simulate the actual recipe graph and only accept targets whose
-          // shortest new-discovery distance from that supplied set is exactly 5.
-          const allKnown=[...new Map([...STARTERS,...elements].filter(e=>!e.isKey&&!e.isTrophy&&!e.isSpeedrun&&!e.isBossDefeat&&!e.isExclusive).map(e=>[e.name,e])).values()];
-          function sampleFive(){
-            const arr=[...allKnown];
+          // Build the puzzle FORWARD as five actual legal crafts.
+          // This guarantees there is a concrete 5-craft solution from exactly these starts.
+          // We also reject any target reachable in <5 crafts by BFS over full inventory states.
+          const pool=[...new Map([...STARTERS,...elements]
+            .filter(e=>!e.isKey&&!e.isTrophy&&!e.isSpeedrun&&!e.isBossDefeat&&!e.isExclusive)
+            .map(e=>[e.name,e])).values()];
+
+          function shuffledFive(){
+            const arr=[...pool];
             for(let i=arr.length-1;i>0;i--){const j=rng.next(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}
-            const out=[];for(const e of arr){if(!out.some(x=>x.name===e.name))out.push(e);if(out.length===5)break}
-            for(const e of STARTERS)if(out.length<5&&!out.some(x=>x.name===e.name))out.push(e);
-            return out.slice(0,5);
+            return arr.slice(0,5);
           }
-          function distances(starts){
-            const dist=new Map(starts.map(e=>[e.name,0]));
-            let changed=true,passes=0;
-            while(changed&&passes++<12){
-              changed=false;const names=[...dist.keys()];
+          function validResult(r,have){
+            return r&&!r.invalid&&!r.isError&&!r.isFatalError&&!r.isFinal&&r.name&&!have.has(r.name);
+          }
+          function shortestCrafts(starts,target,maxDepth=4){
+            const startNames=starts.map(e=>e.name).sort();
+            const seen=new Set([startNames.join('\\0')]),q=[[startNames,0]];
+            while(q.length){
+              const [names,d]=q.shift(); if(names.includes(target))return d; if(d>=maxDepth)continue;
+              const have=new Set(names);
               for(let i=0;i<names.length;i++)for(let j=i;j<names.length;j++){
-                const r=cmDailyRecipe(names[i],names[j]);
-                if(!r||r.invalid||r.isError||r.isFatalError||r.isFinal)continue;
-                const nd=Math.max(dist.get(names[i]),dist.get(names[j]))+1;
-                if(nd>5)continue;
-                if(!dist.has(r.name)||nd<dist.get(r.name)){dist.set(r.name,nd);changed=true}
+                const r=cmDailyRecipe(names[i],names[j]); if(!validResult(r,have))continue;
+                const next=[...names,r.name].sort(),key=next.join('\\0');
+                if(!seen.has(key)){seen.add(key);q.push([next,d+1])}
               }
             }
-            return dist;
+            return Infinity;
           }
-          for(let attempt=0;attempt<160;attempt++){
-            const starts=sampleFive(),d=distances(starts);
-            const targets=[...d].filter(([name,n])=>n===5&&!starts.some(e=>e.name===name));
-            if(targets.length){
-              const target=targets[rng.next(targets.length)][0];
-              return {key:rng.key,target,starts:starts.map(e=>structuredClone(e)),difficulty:'5-CRAFT',planned:5};
+          function makeRoute(starts){
+            const have=new Set(starts.map(e=>e.name)),steps=[];
+            for(let n=0;n<5;n++){
+              const names=[...have],opts=[];
+              for(let i=0;i<names.length;i++)for(let j=i;j<names.length;j++){
+                const r=cmDailyRecipe(names[i],names[j]);
+                if(validResult(r,have))opts.push({a:names[i],b:names[j],r});
+              }
+              if(!opts.length)return null;
+              // Prefer continuing from something crafted during this route so it feels like a chain.
+              const recent=new Set(steps.slice(-2).map(x=>x.r.name));
+              const chained=opts.filter(x=>recent.has(x.a)||recent.has(x.b));
+              const pick=(chained.length?chained:opts)[rng.next((chained.length?chained:opts).length)];
+              steps.push(pick);have.add(pick.r.name);
             }
+            return steps;
           }
 
-          // Deterministic fallback verified against the core recipe chain:
-          // Water+Air→Cloud (1), Cloud+Fire→Lightning (2),
-          // Water+Lightning→Energy (3), Earth+Energy→Life (4),
-          // Life+Stone→Human (5).
-          const fallbackNames=['Water','Fire','Earth','Air','Stone'];
-          const starts=fallbackNames.map(n=>elements.find(e=>e.name===n)||STARTERS.find(e=>e.name===n)||({name:n,emoji:'◇',color:'bg-gray-500'}));
-          return {key:rng.key,target:'Human',starts:starts.map(e=>structuredClone(e)),difficulty:'5-CRAFT',planned:5};
+          for(let attempt=0;attempt<240;attempt++){
+            const starts=shuffledFive(),steps=makeRoute(starts);
+            if(!steps||steps.length!==5)continue;
+            const target=steps[4].r.name;
+            // If the final target has any route in 0–4 crafts, reject this puzzle.
+            if(shortestCrafts(starts,target,4)!==Infinity)continue;
+            return {
+              key:rng.key,target,
+              starts:starts.map(e=>structuredClone(e)),
+              difficulty:'5-CRAFT',planned:5,
+              solution:steps.map(x=>[x.a,x.b,x.r.name])
+            };
+          }
+
+          // Safe fallback: search again from the four core starters + one known element,
+          // still using the same forward route + shortcut verification. Never invent a target.
+          for(const fifth of pool){
+            const starts=[...STARTERS.map(e=>structuredClone(e)),structuredClone(fifth)]
+              .filter((e,i,a)=>a.findIndex(x=>x.name===e.name)===i).slice(0,5);
+            if(starts.length!==5)continue;
+            const steps=makeRoute(starts); if(!steps||steps.length!==5)continue;
+            const target=steps[4].r.name;
+            if(shortestCrafts(starts,target,4)!==Infinity)
+              continue;
+            return {key:rng.key,target,starts,difficulty:'5-CRAFT',planned:5,solution:steps.map(x=>[x.a,x.b,x.r.name])};
+          }
+
+          // Extremely defensive fallback: don't launch a bogus/impossible Daily.
+          return {key:rng.key,target:null,starts:[],difficulty:'UNAVAILABLE',planned:5,solution:[]};
         }
         function cmSaveDaily(){
           if(!cmDailyState)return;
           try{localStorage.setItem(CM_DAILY_SAVE,JSON.stringify({state:cmDailyState,elements,combos,gs,sortMode:currentSort}))}catch(e){}
         }
         function cmEnterDaily(){
+          if(!cmDailyShopUnlocked()){notify('Daily Challenge locked','Discover 🛒 Shop first.','🔒',3800);return}
           if(speedrunState?.active||bossMode){notify('Daily Challenge locked','Finish the current challenge first.','🔒');return}
           const p=cmBuildDaily();
+          if(!p.target||p.starts.length!==5||p.solution.length!==5){
+            notify('Daily Challenge unavailable','Could not generate a verified 5-craft puzzle today.','⚠️',4200);
+            return;
+          }
           cmDailyMain={elements:structuredClone(elements),combos:structuredClone(combos),gs:structuredClone(gs),sortMode:currentSort};
           cmDailyState={active:true,key:p.key,target:p.target,difficulty:p.difficulty,mainNames:cmDailyMain.elements.map(e=>e.name.toLowerCase()),crafts:0};
           elements=p.starts.map(e=>structuredClone(e));combos=[];gs=baseGameState();fractionalCoins=0;
@@ -9640,21 +9679,19 @@ save();checkStarForgeUnlock();
         }
         function cmDailyTransferAndRestore(won){
           if(!cmDailyState||!cmDailyMain)return;
-          const mainNames=new Set(cmDailyState.mainNames),gained=elements.filter(e=>!mainNames.has(e.name.toLowerCase())&&!e.isKey&&!e.isTrophy&&!e.isSpeedrun&&!e.isBossDefeat).map(e=>structuredClone(e));
           const crafts=cmDailyState.crafts,target=cmDailyState.target,key=cmDailyState.key,dailyCoinReward=won?2500:0;
 
           // Show CLEAR while the Daily challenge DOM is still alive.
           // Previously this happened after restoring/rerendering the main game, which could
           // swallow the first animation frame completely.
           if(won){
-            cmShowDailyClear(dailyCoinReward,gained.length,target,crafts);
+            cmShowDailyClear(dailyCoinReward,0,target,crafts);
             document.documentElement.classList.add('cm-daily-clearing');
           }
 
           const finishRestore=()=>{
             elements=cmDailyMain.elements;combos=cmDailyMain.combos;gs=cmDailyMain.gs;currentSort=cmDailyMain.sortMode;
             let added=0;
-            for(const e of gained)if(!elements.some(x=>x.name.toLowerCase()===e.name.toLowerCase())){elements.push(e);try{recordMasteryDiscovery(e)}catch(_){}try{recordJournalElement(e)}catch(_){}added++}
             if(won){
               gs.coins=(Number(gs.coins)||0)+dailyCoinReward;
               try{localStorage.setItem(CM_DAILY_KEY,JSON.stringify({date:key,complete:true,crafts,target,rewardCoins:dailyCoinReward}))}catch(e){}
@@ -9663,7 +9700,7 @@ save();checkStarForgeUnlock();
             document.documentElement.classList.remove('cm-daily-mode','daily-challenge-enter','cm-daily-clearing');document.title='Craft Madness';
             if($('dailyGameHeading'))$('dailyGameHeading').hidden=true;if($('normalGameHeading'))$('normalGameHeading').hidden=false;
             save();renderEls();renderHistory();updateCount();updateProgressionUI();resetDZs();
-            if(!won)notify('Daily Challenge left',added?added+' undiscovered element'+(added===1?'':'s')+' added to your main collection.':'No new elements to transfer.','↩️',4300);
+            if(!won)notify('Daily Challenge left','Daily discoveries were challenge-only and were not added to your main collection.','↩️',4300);
           };
 
           if(won)setTimeout(finishRestore,2850);
@@ -9677,16 +9714,20 @@ save();checkStarForgeUnlock();
           document.documentElement.appendChild(fx);
           fx.querySelector('.daily-clear-target').textContent='✓ '+target+' · '+crafts+' discoveries';
           fx.querySelector('.daily-clear-reward').textContent='🪙 +'+Number(coins).toLocaleString()+' COINS';
-          fx.querySelector('.daily-clear-transfer').textContent=added?added+' new element'+(added===1?'':'s')+' ready to transfer':'No new collection elements';
+          fx.querySelector('.daily-clear-transfer').textContent='Daily discoveries stay in the challenge save';
           // Two RAFs guarantee the browser paints the initial state before the transition.
           requestAnimationFrame(()=>requestAnimationFrame(()=>fx.classList.add('show')));
           setTimeout(()=>fx.classList.add('leaving'),2450);
           setTimeout(()=>fx.remove(),3050);
         }
         function cmRenderDailyPreview(){
-          const p=cmBuildDaily();$('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleInfo').textContent='5-CRAFT · Exactly five starting elements. The target is five NEW discoveries deep. You will enter a separate fresh save with only Elements and Combine. Any elements your main save does not have are transferred back when you leave or win.';
+          const p=cmBuildDaily();$('dailyPuzzleTarget').textContent=p.target||'Unavailable';$('dailyPuzzleInfo').textContent='5-CRAFT · Exactly five starting elements. The target is five NEW discoveries deep. You will enter a separate fresh save with only Elements and Combine. Any elements your main save does not have are transferred back when you leave or win.';
         }
-        $('dailyPuzzleBtn').addEventListener('click',()=>{cmRenderDailyPreview();openModal('dailyPuzzleModal')});
+        function cmDailyShopUnlocked(){return elements.some(e=>String(e.name||'').toLowerCase()==='shop')}
+        $('dailyPuzzleBtn').addEventListener('click',()=>{
+          if(!cmDailyShopUnlocked()){notify('Daily Challenge locked','Discover 🛒 Shop first to unlock Daily Challenge.','🔒',3800);return}
+          cmRenderDailyPreview();openModal('dailyPuzzleModal')
+        });
         $('dailyPuzzleStart').addEventListener('click',cmEnterDaily);
         $('dailyLeaveBtn').addEventListener('click',()=>cmDailyTransferAndRestore(false));
         load();
