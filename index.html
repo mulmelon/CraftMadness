@@ -7881,15 +7881,6 @@ try{
 
             if(newEl.isEndGameTrigger){
                 addElement(newEl);
-            if(cmDailyState?.active){
-                cmDailyState.crafts++;
-                cmSaveDaily();
-                setTimeout(()=>{
-                    const card=[...document.querySelectorAll('#elGrid .el-card')].find(x=>x.textContent.includes(newEl.name));
-                    if(card){card.classList.add('cm-daily-new-discovery');setTimeout(()=>card.classList.remove('cm-daily-new-discovery'),950)}
-                },30);
-                if(newEl.name===cmDailyState.target){setTimeout(()=>cmDailyTransferAndRestore(true),700);}
-            }
                 if(!bossMode)setTimeout(showEnding,800);
                 else notify('ENDING SECURED','The ending has been earned. It will carry back to your normal save when the boss fight ends.','🎬',5000);
                 return;
@@ -7931,6 +7922,16 @@ try{
                 showResult(elements[exists],false);
             } else {
                 elements.push(newEl);
+                if(cmDailyState?.active){
+                    cmDailyState.crafts=(cmDailyState.crafts||0)+1;
+                    const cmDailyWon=String(newEl.name||'').toLowerCase()===String(cmDailyState.target||'').toLowerCase();
+                    cmSaveDaily();
+                    setTimeout(()=>{
+                        const card=[...document.querySelectorAll('#elGrid .el-card')].find(x=>x.getAttribute('data-name')===newEl.name);
+                        if(card){card.classList.add('cm-daily-new-discovery');setTimeout(()=>card.classList.remove('cm-daily-new-discovery'),950)}
+                    },50);
+                    if(cmDailyWon)setTimeout(()=>cmDailyTransferAndRestore(true),900);
+                }
                 if(speedrunState?.active&&speedrunState.runStats)speedrunState.runStats.discoveries++;
                 recordMasteryDiscovery(newEl);recordJournalElement(newEl);syncFirstRecords();
                 showResult(newEl,true);
@@ -9561,18 +9562,50 @@ save();checkStarForgeUnlock();
         function cmDailySeed(){const d=new Date(),k=[d.getFullYear(),d.getMonth()+1,d.getDate()].join('-');let h=2166136261;for(const c of k){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return {key:k,next:n=>{h^=h>>>13;h=Math.imul(h,1274126177);return n?((h>>>0)%n):0}}}
         function cmDailyRecipe(a,b){return recipes[a+'+'+b]||recipes[b+'+'+a]||null}
         function cmBuildDaily(){
-          const rng=cmDailySeed(),diff=cmDailyDifficulty(),base=STARTERS.map(e=>structuredClone(e)),local=base.map(e=>e.name),steps=[],wanted=diff.min+rng.next(diff.max-diff.min+1);
-          // Grow a deterministic route from the starter set, then choose five elements from that route's early pool.
-          for(let step=0;step<wanted+5;step++){
-            const choices=[];
-            for(let i=0;i<local.length;i++)for(let j=i;j<local.length;j++){const r=cmDailyRecipe(local[i],local[j]);if(r&&!r.invalid&&!r.isError&&!r.isFatalError&&!r.isFinal&&!local.includes(r.name))choices.push([local[i],local[j],r])}
-            if(!choices.length)break;const pick=choices[rng.next(choices.length)];steps.push(pick);local.push(pick[2].name);
+          const rng=cmDailySeed();
+
+          // EXACTLY five new discoveries from the five supplied elements.
+          // We simulate the actual recipe graph and only accept targets whose
+          // shortest new-discovery distance from that supplied set is exactly 5.
+          const allKnown=[...new Map([...STARTERS,...elements].filter(e=>!e.isKey&&!e.isTrophy&&!e.isSpeedrun&&!e.isBossDefeat&&!e.isExclusive).map(e=>[e.name,e])).values()];
+          function sampleFive(){
+            const arr=[...allKnown];
+            for(let i=arr.length-1;i>0;i--){const j=rng.next(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}
+            const out=[];for(const e of arr){if(!out.some(x=>x.name===e.name))out.push(e);if(out.length===5)break}
+            for(const e of STARTERS)if(out.length<5&&!out.some(x=>x.name===e.name))out.push(e);
+            return out.slice(0,5);
           }
-          const target=steps.length?steps[Math.min(steps.length-1,wanted-1)][2].name:'Life';
-          const sourceNames=[...new Set([...STARTERS.map(e=>e.name),...steps.slice(0,2).map(x=>x[2].name)])].slice(0,5);
-          const sourceEls=sourceNames.map(n=>elements.find(e=>e.name===n)||STARTERS.find(e=>e.name===n)||steps.find(x=>x[2].name===n)?.[2]).filter(Boolean).map(e=>structuredClone(e));
-          while(sourceEls.length<5){const e=STARTERS[sourceEls.length%STARTERS.length];if(!sourceEls.some(x=>x.name===e.name))sourceEls.push(structuredClone(e));else break}
-          return {key:rng.key,target,starts:sourceEls.slice(0,5),difficulty:diff.name};
+          function distances(starts){
+            const dist=new Map(starts.map(e=>[e.name,0]));
+            let changed=true,passes=0;
+            while(changed&&passes++<12){
+              changed=false;const names=[...dist.keys()];
+              for(let i=0;i<names.length;i++)for(let j=i;j<names.length;j++){
+                const r=cmDailyRecipe(names[i],names[j]);
+                if(!r||r.invalid||r.isError||r.isFatalError||r.isFinal)continue;
+                const nd=Math.max(dist.get(names[i]),dist.get(names[j]))+1;
+                if(nd>5)continue;
+                if(!dist.has(r.name)||nd<dist.get(r.name)){dist.set(r.name,nd);changed=true}
+              }
+            }
+            return dist;
+          }
+          for(let attempt=0;attempt<160;attempt++){
+            const starts=sampleFive(),d=distances(starts);
+            const targets=[...d].filter(([name,n])=>n===5&&!starts.some(e=>e.name===name));
+            if(targets.length){
+              const target=targets[rng.next(targets.length)][0];
+              return {key:rng.key,target,starts:starts.map(e=>structuredClone(e)),difficulty:'5-CRAFT',planned:5};
+            }
+          }
+
+          // Deterministic fallback verified against the core recipe chain:
+          // Water+Air→Cloud (1), Cloud+Fire→Lightning (2),
+          // Water+Lightning→Energy (3), Earth+Energy→Life (4),
+          // Life+Stone→Human (5).
+          const fallbackNames=['Water','Fire','Earth','Air','Stone'];
+          const starts=fallbackNames.map(n=>elements.find(e=>e.name===n)||STARTERS.find(e=>e.name===n)||({name:n,emoji:'◇',color:'bg-gray-500'}));
+          return {key:rng.key,target:'Human',starts:starts.map(e=>structuredClone(e)),difficulty:'5-CRAFT',planned:5};
         }
         function cmSaveDaily(){
           if(!cmDailyState)return;
@@ -9585,7 +9618,7 @@ save();checkStarForgeUnlock();
           cmDailyState={active:true,key:p.key,target:p.target,difficulty:p.difficulty,mainNames:cmDailyMain.elements.map(e=>e.name.toLowerCase()),crafts:0};
           elements=p.starts.map(e=>structuredClone(e));combos=[];gs=baseGameState();fractionalCoins=0;
           document.documentElement.classList.add('cm-daily-mode','daily-challenge-enter');document.title='Daily Challenge';
-          if($('dailyGameGoal'))$('dailyGameGoal').textContent=p.difficulty+' · Craft '+p.target;
+          if($('dailyGameGoal'))$('dailyGameGoal').textContent='EXACTLY 5 DISCOVERIES · Craft '+p.target;
           closeModal('dailyPuzzleModal');cmSaveDaily();renderEls();renderHistory();updateCount();updateProgressionUI();resetDZs();
           setTimeout(()=>document.documentElement.classList.remove('daily-challenge-enter'),700);
           notify('Daily Challenge started','Only Elements + Combine are available. Target: '+p.target,'🧩',3500);
@@ -9604,7 +9637,7 @@ save();checkStarForgeUnlock();
           notify(won?'Daily Challenge complete!':'Daily Challenge left',(won?'Target complete. ':'')+(added?added+' undiscovered element'+(added===1?'':'s')+' added to your main collection.':'No new elements to transfer.'),won?'🏆':'↩️',4300);
         }
         function cmRenderDailyPreview(){
-          const p=cmBuildDaily();$('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleInfo').textContent=p.difficulty+' · You will enter a separate fresh save with only five Elements and Combine. Any elements your main save does not have are transferred back when you leave or win.';
+          const p=cmBuildDaily();$('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleInfo').textContent='5-CRAFT · Exactly five starting elements. The target is five NEW discoveries deep. You will enter a separate fresh save with only Elements and Combine. Any elements your main save does not have are transferred back when you leave or win.';
         }
         $('dailyPuzzleBtn').addEventListener('click',()=>{cmRenderDailyPreview();openModal('dailyPuzzleModal')});
         $('dailyPuzzleStart').addEventListener('click',cmEnterDaily);
