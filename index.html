@@ -3055,8 +3055,8 @@ html.cm-daily-puzzle #shopBtn,html.cm-daily-puzzle #starForgeBtn,html.cm-daily-p
                 <button type="button" id="exclusiveToggle" aria-controls="exclusiveStorage" aria-expanded="false" aria-label="Show Exclusive Storage" title="Show Exclusive Storage">💎</button>
                 <button type="button" id="seasonalToggle" aria-controls="seasonalStorage" aria-expanded="false" aria-label="Show Seasonal Vault" title="Show Seasonal Vault">🎉</button>
                 <button type="button" id="aprilFoolsToggle" aria-controls="aprilFoolsStorage" aria-expanded="false" aria-label="Show April Fools Storer" title="Show April Fools Storer">🤡</button>
-                <button type="button" id="discoveryWebBtn" title="Discovery Web">🕸️ Web</button>
-                <button type="button" id="dailyPuzzleBtn" title="Daily Recipe Puzzle">🧩 Daily</button>
+                <button type="button" id="discoveryWebBtn" aria-label="Discovery Web" title="Discovery Web">🕸️</button>
+                <button type="button" id="dailyPuzzleBtn" aria-label="Daily Recipe Puzzle" title="Daily Recipe Puzzle">🧩</button>
                 <button id="exportBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(34,197,94,0.12);color:#16a34a">Export</button>
                 <button id="importBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style="background:rgba(59,130,246,0.12);color:#3b82f6">Import</button>
                 <button id="patchNotesBtn" class="settings-wide-btn"><span id="patchNewDot" class="patch-new-dot">NEW</span> 📰 Patch Notes</button><button id="settingsBtn" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" title="Settings">⚙️ Settings</button><button id="backupBtn" type="button" class="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" title="Automatic Save Backups">💾 Backup</button>
@@ -7068,11 +7068,15 @@ try{
         }
         function dailyRecipe(){
           const {key,rand}=dailySeed(),owned=new Set(STARTERS.map(e=>e.name.toLowerCase())),byResult=new Map();
+          const recipeNames=[...new Set([...rankedCatalog(),...elements.map(e=>e.name),...STARTERS.map(e=>e.name)])].sort((a,b)=>b.length-a.length);
           for(const [pair,res] of Object.entries(recipes)){
-            for(let i=pair.indexOf('+');i>=0;i=pair.indexOf('+',i+1)){
-              const a=pair.slice(0,i),b=pair.slice(i+1);if(!a||!b)continue;
-              const k=res.name;if(!byResult.has(k))byResult.set(k,[]);byResult.get(k).push([a,b]);
+            let found=null;
+            for(const a of recipeNames){
+              const prefix=a+'+';if(!pair.startsWith(prefix))continue;
+              const b=pair.slice(prefix.length);if(recipeNames.includes(b)){found=[a,b];break;}
             }
+            if(!found)continue;
+            const k=res.name;if(!byResult.has(k))byResult.set(k,[]);byResult.get(k).push(found);
           }
           // Generate reachable mini-puzzles: exactly five supplied elements, target 3–5 dependency crafts away.
           const catalog=rankedCatalog().filter(n=>!STARTERS.some(e=>e.name===n)),candidates=[];
@@ -7088,12 +7092,13 @@ try{
           const pool=[...new Set([...current,...STARTERS.map(e=>e.name)])];
           for(const target of catalog){
             for(let t=0;t<Math.min(16,pool.length);t++){
-              const starts=[...pool].sort(()=>rand()-.5).slice(0,5),plan=solve(target,new Set(starts.map(x=>x.toLowerCase())));
+              const shuffled=[...pool];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
+              const starts=shuffled.slice(0,5),plan=solve(target,new Set(starts.map(x=>x.toLowerCase())));
               const uniq=plan?new Set(plan.map(x=>x[2])).size:0;if(uniq>=3&&uniq<=5)candidates.push({target,starts,crafts:uniq});
             }
             if(candidates.length>30)break;
           }
-          if(!candidates.length)return {key,target:'Life',starts:['Water','Fire','Earth','Air','Energy'],crafts:3};
+          if(!candidates.length)return {key,target:'Energy',starts:['Water','Fire','Earth','Air','Cloud'],crafts:2};
           return {key,...candidates[Math.floor(rand()*candidates.length)]};
         }
         function renderDailyPuzzle(){
@@ -7109,7 +7114,7 @@ try{
           document.documentElement.classList.add('cm-daily-puzzle');closeModal('dailyPuzzleModal');renderEls();renderHistory();notify('Daily Puzzle started',p.target+' · '+p.crafts+' craft target','🧩');
         });
         function finishDailyPuzzle(completed=false){
-          if(!dailyPuzzleState)return;const gained=elements.filter(e=>!dailyPuzzleState.mainNames.has(e.name.toLowerCase())).map(e=>structuredClone(e)),crafts=dailyPuzzleState.crafts,p=dailyPuzzleState;
+          if(!dailyPuzzleState)return;const gained=elements.filter(e=>!dailyPuzzleState.mainNames.has(e.name.toLowerCase())&&!e.isSpeedrun&&!e.isBossDefeat&&!e.isBossMasteryTrophy&&!e.isMasteryExclusive&&!e.isSeasonalReward&&!e.isTrophy).map(e=>structuredClone(e)),crafts=dailyPuzzleState.crafts,p=dailyPuzzleState;
           elements=dailyPuzzleBackup.elements;combos=dailyPuzzleBackup.combos;gs=dailyPuzzleBackup.gs;currentSort=dailyPuzzleBackup.sort;
           for(const e of gained)if(!elements.some(x=>x.name.toLowerCase()===e.name.toLowerCase()))elements.push(e);
           if(completed)localStorage.setItem(DAILY_KEY,JSON.stringify({date:p.key,complete:true,crafts}));
@@ -7854,7 +7859,7 @@ try{
             }
 
             const newEl={...result,color:result.color||randColor()};
-            if(dailyPuzzleState){dailyPuzzleState.crafts++;if(newEl.name===dailyPuzzleState.target){addElement(newEl);setTimeout(()=>finishDailyPuzzle(true),250);return;}}
+            if(dailyPuzzleState){dailyPuzzleState.crafts++;if(newEl.name===dailyPuzzleState.target)setTimeout(()=>finishDailyPuzzle(true),300);}
             if(bossMode)rememberBossViewport();
             if(bossMode)queueBossMainUnlock(newEl);
             if(bossMode)applyBossMutations(newEl);
