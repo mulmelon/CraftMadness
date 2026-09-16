@@ -2792,14 +2792,30 @@ html.cm-first-mastery-run #bossBtn{display:none!important}
 .dw-level:not(:first-child) .dw-card::before{content:"";position:absolute;left:50%;top:-20px;width:1px;height:20px;background:#64748b88}
 .dw-level-label{position:absolute;top:-7px;left:10px;font:800 .43rem/1 ui-monospace,monospace;letter-spacing:.12em;color:#94a3b8;background:var(--bg-card);padding:0 5px}
 .dw-card{position:relative;width:138px;min-height:62px;text-align:center}
-.dw-card .dw-parents{display:block;margin-top:4px;font-size:.4rem;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dw-card,.dw-riddle,.dw-guide-row{padding:10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}.dw-card.owned{border-color:rgba(74,222,128,.35)}.dw-card.important{box-shadow:inset 0 0 16px rgba(167,139,250,.09)}.dw-card strong,.dw-riddle strong,.dw-guide-row strong{display:block;font-size:.62rem}.dw-card small,.dw-riddle p,.dw-guide-row p,.dw-note{font-size:.55rem;color:var(--text-secondary);line-height:1.5}.dw-riddle,.dw-guide-row{margin-bottom:8px}
+
+.dw-card,.dw-riddle{padding:10px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.025)}.dw-card.owned{border-color:rgba(74,222,128,.35)}.dw-card.important{box-shadow:inset 0 0 16px rgba(167,139,250,.09)}.dw-card strong,.dw-riddle strong strong{display:block;font-size:.62rem}.dw-card small,.dw-riddle p p,.dw-note{font-size:.55rem;color:var(--text-secondary);line-height:1.5}.dw-riddle{margin-bottom:8px}
 .daily-puzzle-box{max-width:650px!important}.daily-target{padding:12px;margin:10px 0;border:1px solid #a78bfa66;border-radius:12px;text-align:center}.daily-elements{display:flex;flex-wrap:wrap;gap:7px;max-height:45vh;overflow:auto;padding:5px}.daily-el{padding:8px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg-card);cursor:pointer}.daily-el.selected{border-color:#a78bfa;box-shadow:0 0 12px #a78bfa55}.daily-el.new{border-color:#4ade8066}.daily-actions{display:flex;gap:8px;justify-content:center;margin-top:12px}
 
 .dw-riddle details{margin-top:5px;font-size:.46rem}
 .dw-riddle details summary{font-size:.43rem;color:#facc15;cursor:pointer;list-style-position:inside}
 .dw-riddle details p{font-size:.46rem!important;line-height:1.45!important;margin-top:5px}
 .dw-riddle .dw-route-owned{font-size:.43rem;color:#86efac;margin-top:5px}
+
+/* Discovery Web exploration */
+.dw-card.fogged{filter:blur(3px) brightness(.55);opacity:.52;user-select:none}
+.dw-card.fogged strong{color:transparent;text-shadow:0 0 8px #94a3b8}
+.dw-card.classified{border-style:dashed;border-color:#a78bfa88!important;background:repeating-linear-gradient(135deg,rgba(167,139,250,.04) 0 6px,transparent 6px 12px)}
+.dw-card.unknown-branch{opacity:.48;border-style:dotted}
+.dw-card .dw-recipe{display:block;margin-top:5px;font-size:.4rem;line-height:1.35;color:#86efac;white-space:normal}
+.dw-card.discovery-reveal{animation:cmDiscoveryReveal 1.25s cubic-bezier(.2,.8,.2,1)}
+.dw-card.discovery-reveal strong{animation:cmNameShimmer 1.15s ease-out}
+@keyframes cmDiscoveryReveal{0%{transform:scale(.9);filter:brightness(.65)}35%{transform:scale(1.06);filter:brightness(1.75) drop-shadow(0 0 14px #c4b5fd)}100%{transform:none;filter:none}}
+@keyframes cmNameShimmer{0%{color:transparent;text-shadow:0 0 10px #fff}38%{color:#fff;text-shadow:0 0 18px #fff,0 0 28px #a78bfa}100%{color:inherit;text-shadow:none}}
+.dw-rare-banner{padding:8px 10px;margin-bottom:10px;border:1px solid #a78bfa77;border-radius:10px;font-size:.52rem;text-align:center;background:rgba(167,139,250,.06)}
+.daily-difficulty{display:inline-block;margin:0 0 8px;padding:4px 7px;border:1px solid var(--border);border-radius:999px;font-size:.45rem;letter-spacing:.1em}
+
+.dw-card.secret-unknown{filter:none;opacity:.82;border:1px dashed #facc1588!important;background:radial-gradient(circle at 50% 0,rgba(250,204,21,.08),transparent 70%)}
+.dw-card.secret-unknown strong{color:#fde68a;text-shadow:0 0 9px rgba(250,204,21,.25)}
 </style>
 
 </head>
@@ -3127,10 +3143,9 @@ html.cm-first-mastery-run #bossBtn{display:none!important}
           <div class="modal-box discovery-web-box">
             <button class="modal-close" data-close="discoveryWebModal">×</button>
             <h2>🕸️ Discovery Web</h2>
-            <div class="dw-tabs"><button class="dw-tab active" data-panel="dwMap">Map</button><button class="dw-tab" data-panel="dwRiddles">Riddles</button><button class="dw-tab" data-panel="dwGuide">Guide</button></div>
+            <div class="dw-tabs"><button class="dw-tab active" data-panel="dwMap">Map</button><button class="dw-tab" data-panel="dwRiddles">Riddles</button></div>
             <div id="dwMap" class="dw-panel"></div>
             <div id="dwRiddles" class="dw-panel" hidden></div>
-            <div id="dwGuide" class="dw-panel" hidden></div>
           </div>
         </div>
         <div id="dailyPuzzleModal" class="modal-overlay">
@@ -8969,7 +8984,7 @@ save();checkStarForgeUnlock();
         function updatePatchNewDot(){const d=$('patchNewDot');if(d)d.hidden=localStorage.getItem(CM_PATCH_SEEN)===CM_PATCH_VERSION}
         function markPatchNotesSeen(){try{localStorage.setItem(CM_PATCH_SEEN,CM_PATCH_VERSION)}catch(e){}updatePatchNewDot()}
         const CM_PATCH_NOTES=[
-          ['Discovery Web Update','Discovery Web with always-visible important riddles, integrated guide, and a self-contained Daily Recipe Puzzle.'],
+          ['Discovery Web Update','Discovery Web now has fogged exploration, classified nodes, unknown branches, discovery shimmer reveals, discovered-recipe labels, secret elements shown as anonymous ???? nodes, and rotating Daily Puzzle difficulty.'],
           ['Perfect Records Update','Perfect Diamond relics, Perfect Diamond profile title/banner, medal deterioration, evolving boss trophies, Personal Records, relic upgrade effects, and evolved loading screens.'],
           ['Vault & Archive Update','Split streaks, PB crowns, Trophy Sets, Vault levels, pedestal plaques, rare trophy effects, Discovery Journal, first records, profile titles/themes, Mastery capstones and near-completion alerts, Patch Notes NEW detection, intro variants, and rotating save backups.'],
           ['Chrono & Vault Update','Split PBs, PB Ghost improvements, medal progress, Run History, Trophy inspection, Mastery pinning, and Trophy Box displays.'],
@@ -9428,58 +9443,75 @@ save();checkStarForgeUnlock();
           ['A','🔤','Writing meets Fire.','Stone + Ink → Writing\nWriting + Fire → A'],
           ['The End Game','🎬','Find The End, then make it meet itself.','Philosophy + Balance → The End\nThe End + The End → The End Game']
         ];
-        function cmRenderDiscoveryWeb(){
-          const owned=new Set(elements.map(e=>e.name.toLowerCase())),missing=prestigeRequirements().missing,plans=missingCraftPlans(missing),pm=new Map(plans.map(x=>[x.name.toLowerCase(),x]));
-          const map=$('dwMap');map.replaceChildren();const tree=document.createElement('div');tree.className='dw-tree';map.appendChild(tree);
 
-          // A real dependency tree: group discoveries by their shortest dependency depth.
+        const CM_WEB_SEEN_KEY='cm_discovery_web_seen_v1';
+        function cmWebSeen(){try{return new Set(JSON.parse(localStorage.getItem(CM_WEB_SEEN_KEY)||'[]'))}catch(e){return new Set()}}
+        function cmSaveWebSeen(set){try{localStorage.setItem(CM_WEB_SEEN_KEY,JSON.stringify([...set]))}catch(e){}}
+        function cmSecretWebElement(name){
+          const el=elements.find(e=>e.name.toLowerCase()===String(name).toLowerCase());
+          return !!(el&&(el.isSecret||el.isExclusive||el.isDeveloper||el.devOnly||el.isAprilFools||el.secretElement));
+        }
+        function cmKnownRecipeFor(name){
+          const low=String(name).toLowerCase(),known=combos.slice().reverse().find(c=>String(c.result||c.resultName||'').toLowerCase()===low);
+          if(!known)return '';
+          const a=known.a||known.el1||known.left,b=known.b||known.el2||known.right;
+          return a&&b?a+' + '+b+' → '+name:'';
+        }
+        function cmDailyDifficulty(){
+          const day=new Date().getDay();
+          if(day===0||day===6)return {name:'WEEKEND · HARD',min:5,max:6};
+          if(day===5)return {name:'FRIDAY · TRICKY',min:4,max:5};
+          return {name:'NORMAL',min:3,max:5};
+        }
+        function cmRenderDiscoveryWeb(){
+          const owned=new Set(elements.map(e=>e.name.toLowerCase())),missing=prestigeRequirements().missing,plans=missingCraftPlans(missing),pm=new Map(plans.map(x=>[x.name.toLowerCase(),x])),seen=cmWebSeen(),newSeen=new Set(seen);
+          const map=$('dwMap');map.replaceChildren();const tree=document.createElement('div');tree.className='dw-tree';map.appendChild(tree);
           const rows=[];
           for(const name of [...new Set([...rankedCatalog(),...CM_DW_IMPORTANT.map(x=>x[0])])]){
-            const low=name.toLowerCase(),have=owned.has(low),p=pm.get(low),imp=CM_DW_IMPORTANT.some(x=>x[0]===name),el=elements.find(e=>e.name.toLowerCase()===low);
-            let depth=have?0:(p&&p.cost<=20?p.cost:21),parents=[];
-            if(p?.steps?.length){
-              const last=p.steps.at(-1),line=p.steps.recipeLines?.at(-1)||'';
-              if(line.includes(' → '))parents=line.split(' → ')[0].split(' + ');
-              depth=Math.min(20,p.steps.length);
-            }
-            rows.push({name,low,have,p,imp,el,depth,parents});
+            const low=name.toLowerCase(),have=owned.has(low);
+            const secret=cmSecretWebElement(name)&&!have;
+            const p=pm.get(low),imp=CM_DW_IMPORTANT.some(x=>x[0]===name),el=elements.find(e=>e.name.toLowerCase()===low);
+            let depth=have?0:(p&&p.cost<=20?p.cost:21);if(p?.steps?.length)depth=Math.min(20,p.steps.length);
+            rows.push({name,low,have,p,imp,el,depth,secret});
           }
-          const levels=new Map();
-          for(const row of rows){const k=row.depth>20?21:row.depth;if(!levels.has(k))levels.set(k,[]);levels.get(k).push(row)}
+          const visibleDepths=rows.filter(r=>r.have).map(r=>r.depth),frontier=Math.max(1,...visibleDepths)+2;
+          const levels=new Map();for(const row of rows){const k=row.depth>20?21:row.depth;if(!levels.has(k))levels.set(k,[]);levels.get(k).push(row)}
+          let rareReveal='';
           for(const [depth,list] of [...levels.entries()].sort((a,b)=>a[0]-b[0])){
-            const level=document.createElement('div');level.className='dw-level';
-            const lab=document.createElement('span');lab.className='dw-level-label';lab.textContent=depth===0?'DISCOVERED / ROOTS':depth===21?'DEEP / UNKNOWN':'DEPTH '+depth;level.appendChild(lab);
+            const level=document.createElement('div');level.className='dw-level';const lab=document.createElement('span');lab.className='dw-level-label';lab.textContent=depth===0?'DISCOVERED / ROOTS':depth===21?'UNKNOWN BRANCHES':'DEPTH '+depth;level.appendChild(lab);
             for(const row of list.slice(0,depth===0?80:45)){
-              const d=document.createElement('div');d.className='dw-card '+(row.have?'owned ':'')+(row.imp?'important':'');
-              d.innerHTML=`<strong>${row.el?.emoji||CM_DW_IMPORTANT.find(x=>x[0]===row.name)?.[1]||'◇'} ${row.name}</strong><small>${row.have?'DISCOVERED':row.depth>20?'UNKNOWN DISTANCE':row.depth+' CRAFT'+(row.depth===1?'':'S')+' AWAY'}</small>${row.parents.length?`<span class="dw-parents">↳ ${row.parents.join(' + ')}</span>`:''}`;
+              const justFound=row.have&&!seen.has(row.low),fog=!row.have&&!row.imp&&row.depth>frontier,classified=!row.have&&row.imp,unknown=!row.have&&(row.depth>20||fog),d=document.createElement('div');
+              d.className='dw-card '+(row.have?'owned ':'')+(row.imp?'important ':'')+(fog?'fogged ':'')+(classified?'classified ':'')+(unknown?'unknown-branch ':'')+(justFound?'discovery-reveal':'');
+              if(row.secret){
+                d.classList.add('secret-unknown');
+                d.innerHTML='<strong>✦ ????</strong><small>SECRET ELEMENT</small>';
+              }else if(fog){
+                d.innerHTML='<strong>◇ ???</strong><small>UNKNOWN BRANCH</small>';
+              }else if(classified){
+                d.innerHTML=`<strong>${row.imp?'◆':'◇'} [CLASSIFIED]</strong><small>IMPORTANT NODE · LOCKED</small>`;
+              }else{
+                const recipe=row.have?cmKnownRecipeFor(row.name):'';
+                d.innerHTML=`<strong>${row.el?.emoji||CM_DW_IMPORTANT.find(x=>x[0]===row.name)?.[1]||'◇'} ${row.name}</strong><small>${row.have?'DISCOVERED':row.depth>20?'UNKNOWN DISTANCE':row.depth+' CRAFT'+(row.depth===1?'':'S')+' AWAY'}</small>${recipe?`<span class="dw-recipe">${recipe}</span>`:''}`;
+              }
+              if(justFound){newSeen.add(row.low);if(row.imp||row.depth>=8)rareReveal='✦ NEW RARE DISCOVERY · '+row.name+' ✦'}
               level.appendChild(d);
-            }
-            tree.appendChild(level);
+            }tree.appendChild(level);
           }
+          if(rareReveal){const b=document.createElement('div');b.className='dw-rare-banner';b.textContent=rareReveal;map.prepend(b)}
+          cmSaveWebSeen(newSeen);
 
           $('dwRiddles').replaceChildren();
           for(const [n,e,c,r] of CM_DW_IMPORTANT){
-            const unlocked=recipeUnlocked(n),card=document.createElement('div');card.className='dw-riddle';
-            card.innerHTML=`<strong>${e} ${n}${owned.has(n.toLowerCase())?' · ✓':''}</strong><p>${c}</p>`;
-            if(unlocked){
-              const details=document.createElement('details'),summary=document.createElement('summary'),route=document.createElement('p');
-              summary.textContent='🔓 Reveal route';route.innerHTML=r.replaceAll('\n','<br>');details.append(summary,route);card.appendChild(details);
+            const have=owned.has(n.toLowerCase()),unlocked=recipeUnlocked(n),card=document.createElement('div');card.className='dw-riddle';
+            card.innerHTML=`<strong>${have?e:'◆'} ${have?n:'[CLASSIFIED]'}${have?' · ✓':''}</strong><p>${c}</p>`;
+            if(unlocked||have){
+              const details=document.createElement('details'),summary=document.createElement('summary'),route=document.createElement('p');summary.textContent='🔓 Reveal route';route.innerHTML=r.replaceAll('\n','<br>');details.append(summary,route);card.appendChild(details);
             }else{
-              const btn=document.createElement('button');btn.className='sort-btn';btn.style.cssText='font-size:.43rem;padding:3px 7px;margin-top:5px';
-              btn.textContent='🔒 Reveal route · 1 🔑';
-              btn.onclick=()=>{
-                if(totalKeys()<1){notify('Not enough keys','You need 1 key to reveal this route.','🔑');return}
-                if(!spendKeys(1))return;
-                if(!Array.isArray(gs.unlockedRecipes))gs.unlockedRecipes=[];
-                if(!gs.unlockedRecipes.includes(n))gs.unlockedRecipes.push(n);
-                save();notify('Route revealed',n+' route unlocked.','🔓');cmRenderDiscoveryWeb();
-              };
-              card.appendChild(btn);
+              const btn=document.createElement('button');btn.className='sort-btn';btn.style.cssText='font-size:.43rem;padding:3px 7px;margin-top:5px';btn.textContent='🔒 Reveal route · 1 🔑';
+              btn.onclick=()=>{if(totalKeys()<1){notify('Not enough keys','You need 1 key to reveal this route.','🔑');return}if(!spendKeys(1))return;if(!Array.isArray(gs.unlockedRecipes))gs.unlockedRecipes=[];if(!gs.unlockedRecipes.includes(n))gs.unlockedRecipes.push(n);save();notify('Route revealed',n+' route unlocked.','🔓');cmRenderDiscoveryWeb()};card.appendChild(btn);
             }
             $('dwRiddles').appendChild(card);
           }
-
-          $('dwGuide').innerHTML='<div class="dw-guide-row"><strong>📖 Crafting Guide</strong><p>The map is arranged as a dependency tree: roots/discovered elements at the top, then deeper targets below. Lines connect each depth layer. Normal undiscovered recipes stay hidden; important riddle routes cost 1 key to reveal.</p></div>'+plans.slice(0,150).map(r=>`<div class="dw-guide-row"><strong>${r.name}</strong><p>${r.cost>20?'Unknown distance / special method':r.cost+' craft'+(r.cost===1?'':'s')+' away'}</p></div>`).join('');
         }
         $('discoveryWebBtn').addEventListener('click',()=>{cmRenderDiscoveryWeb();openModal('discoveryWebModal')});
         document.querySelectorAll('.dw-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dw-tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('#discoveryWebModal .dw-panel').forEach(p=>p.hidden=p.id!==b.dataset.panel)}));
@@ -9493,19 +9525,19 @@ save();checkStarForgeUnlock();
           // Pick five deterministic owned elements, then walk 3–5 valid crafts using only the local set.
           const starts=[],used=new Set();while(starts.length<Math.min(5,base.length)){const e=base[rng.next(base.length)];if(!used.has(e.name)){used.add(e.name);starts.push(e)}}
           for(const e of STARTERS)if(starts.length<5&&!used.has(e.name)){used.add(e.name);starts.push(e)}
-          let local=starts.map(e=>e.name),steps=[],wanted=3+rng.next(3);
+          let local=starts.map(e=>e.name),steps=[],diff=cmDailyDifficulty(),wanted=diff.min+rng.next(diff.max-diff.min+1);
           for(let step=0;step<wanted;step++){
             const choices=[];
             for(let i=0;i<local.length;i++)for(let j=i;j<local.length;j++){const r=cmRecipe(local[i],local[j]);if(r&&!r.invalid&&!r.isError&&!r.isFatalError&&!r.isFinal&&!local.includes(r.name))choices.push([local[i],local[j],r])}
             if(!choices.length)break;const pick=choices[rng.next(choices.length)];steps.push(pick);local.push(pick[2].name);
           }
           // Starter fallback is guaranteed to have a short connected chain.
-          if(steps.length<3)return {key:rng.key,starts:STARTERS.map(e=>({...e})).concat([{name:'Cloud',emoji:'☁️',color:'bg-gray-400'}]).slice(0,5),target:'Life',planned:3};
-          return {key:rng.key,starts:starts.map(e=>structuredClone(e)),target:steps.at(-1)[2].name,planned:steps.length};
+          if(steps.length<3)return {key:rng.key,starts:STARTERS.map(e=>({...e})).concat([{name:'Cloud',emoji:'☁️',color:'bg-gray-400'}]).slice(0,5),target:'Life',planned:3,difficulty:cmDailyDifficulty().name};
+          return {key:rng.key,starts:starts.map(e=>structuredClone(e)),target:steps.at(-1)[2].name,planned:steps.length,difficulty:diff.name};
         }
         function cmRenderDaily(){
           const p=cmDaily||cmBuildDaily(),box=$('dailyPuzzleElements');box.replaceChildren();
-          $('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleInfo').textContent='Start with 5 elements. Reach the target in about '+p.planned+' crafts. New discoveries you did not own before are added to your collection when you leave or complete it.';
+          $('dailyPuzzleTarget').textContent=p.target;$('dailyPuzzleInfo').innerHTML='<span class="daily-difficulty">'+(p.difficulty||cmDailyDifficulty().name)+'</span><br>Start with 5 elements. Reach the target in about '+p.planned+' crafts. New discoveries you did not own before are added to your collection when you leave or complete it.';
           for(const e of p.local){const b=document.createElement('button');b.className='daily-el '+(p.mainNames.has(e.name.toLowerCase())?'':'new');b.textContent=(e.emoji||'◇')+' '+e.name;b.onclick=()=>cmDailyPick(e.name);box.appendChild(b)}
           $('dailyPuzzleResult').textContent=p.message||('Crafts: '+p.crafts);
         }
