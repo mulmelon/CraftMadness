@@ -2836,7 +2836,6 @@ html.cm-challenge-tools-locked #discoveryWebBtn,
 
 .cm-web-landmarks{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px;margin:8px 0 10px}.cm-landmark{padding:8px;border:1px solid var(--border);border-radius:11px;background:var(--bg-card);opacity:.34}.cm-landmark.earned{opacity:1;box-shadow:inset 0 0 18px rgba(125,211,252,.08)}.cm-landmark b{display:block;font-size:.55rem}.cm-landmark small{font-size:.42rem;color:var(--text-secondary)}
 .cm-web-regions{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0 10px}.cm-region-chip{font-size:.42rem;padding:4px 7px;border:1px solid var(--border);border-radius:999px;background:var(--bg-card)}.dw-card[data-region]::after{content:attr(data-region);position:absolute;right:5px;top:4px;font-size:.3rem;opacity:.42;letter-spacing:.06em}.dw-card{position:relative}
-#dwMap.cm-telescope .dw-tree{transform:scale(.48);transform-origin:top left;width:208%;max-height:1100px}#dwMap.cm-telescope .dw-card strong,#dwMap.cm-telescope .dw-card small,#dwMap.cm-telescope .dw-recipe,#dwMap.cm-telescope .dw-level-label{visibility:hidden}#dwMap.cm-telescope .dw-card{min-height:18px!important;height:18px!important;padding:0!important;border-radius:50%!important;min-width:18px!important;flex:0 0 18px!important}
 .cm-web-current-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:0}.cm-web-current-svg path{fill:none;stroke:rgba(125,211,252,.28);stroke-width:1.4;stroke-dasharray:4 8;animation:cmCurrent 3s linear infinite}@keyframes cmCurrent{to{stroke-dashoffset:-24}}@media(prefers-reduced-motion:reduce){.cm-web-current-svg path{animation:none}}
 
 
@@ -2847,7 +2846,6 @@ html.cm-challenge-tools-locked #discoveryWebBtn,
 
 .cm-id-preview{padding:22px;border:2px solid var(--border);border-radius:18px;text-align:center;background:linear-gradient(135deg,var(--bg-card),var(--bg));margin:12px 0}.cm-id-preview h1{margin:5px 0}.cm-legacy{font-size:1.2rem;font-weight:1000}
 
-.cm-disabled-look{opacity:.38!important;filter:saturate(.35)!important;cursor:not-allowed!important;box-shadow:none!important}
 .cm-username-editor{margin:8px 0 12px!important;padding:9px 10px!important;background:linear-gradient(135deg,rgba(125,211,252,.06),var(--bg-card))!important}
 .cm-username-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}.cm-username-title strong{font-size:.55rem;letter-spacing:.08em}.cm-username-title small{opacity:.72}
 .cm-profile-actions{justify-content:center;margin:8px 0 0!important}
@@ -2855,6 +2853,18 @@ html.cm-challenge-tools-locked #discoveryWebBtn,
 #dwMap.cm-currents-on .dw-card{box-shadow:0 0 0 1px rgba(125,211,252,.08),inset 0 -2px 0 rgba(125,211,252,.18)}
 
 
+
+/* Main progression toolbar: visual state is independent of old challenge-lock styling. */
+#elCount,#prestigeBtn,#masteryBtn,#playerStatsBtn,#discoveryJournalBtn,#speedrunBtn,#prestigeShopBtn,#viewRankBtn,#coinDisplay,#shopBtn,#bossBtn,#cyShopBtn,#cyMoneyDisplay{
+  opacity:1!important;filter:none!important;box-shadow:none;transform:none;
+}
+#prestigeBtn,#masteryBtn,#playerStatsBtn,#discoveryJournalBtn,#speedrunBtn,#prestigeShopBtn,#viewRankBtn,#shopBtn,#bossBtn,#cyShopBtn{
+  border:0!important;border-radius:9999px!important;min-height:28px;line-height:1rem;white-space:nowrap;
+}
+#elCount,#coinDisplay,#cyMoneyDisplay{border-radius:9999px!important;min-height:28px;align-items:center}
+#prestigeBtn:hover,#masteryBtn:hover,#playerStatsBtn:hover,#discoveryJournalBtn:hover,#speedrunBtn:hover,#prestigeShopBtn:hover,#viewRankBtn:hover,#shopBtn:hover,#bossBtn:hover,#cyShopBtn:hover{
+  transform:translateY(-1px)!important;
+}
 </style>
 
 </head>
@@ -3179,7 +3189,7 @@ html.cm-challenge-tools-locked #discoveryWebBtn,
             <button class="modal-close" data-close="discoveryWebModal">×</button>
             <h2>🕸️ Discovery Web</h2>
             <div class="dw-tabs"><button class="dw-tab active" data-panel="dwMap">Map</button><button class="dw-tab" data-panel="dwRiddles">Riddles</button></div>
-            <div class="cm-web-evolution-bar"><button id="cmTelescopeBtn" type="button">🔭 Telescope</button><button id="cmCurrentsBtn" type="button">〰 Web Currents: ON</button></div><div id="cmWebLandmarks" class="cm-web-landmarks"></div><div id="cmWebRegions" class="cm-web-regions"></div><div id="dwMap" class="dw-panel"></div>
+            <div class="cm-web-evolution-bar"><button id="cmCurrentsBtn" type="button">〰 Web Currents: ON</button></div><div id="cmWebLandmarks" class="cm-web-landmarks"></div><div id="cmWebRegions" class="cm-web-regions"></div><div id="dwMap" class="dw-panel"></div>
             <div id="dwRiddles" class="dw-panel" hidden></div>
           </div>
         </div>
@@ -9607,7 +9617,6 @@ save();checkStarForgeUnlock();
           }
           const visibleDepths=rows.filter(r=>r.have).map(r=>r.depth),frontier=Math.max(1,...visibleDepths)+2;
           const levels=new Map();for(const row of rows){const k=row.depth>20?21:row.depth;if(!levels.has(k))levels.set(k,[]);levels.get(k).push(row)}
-          let rareReveal='';
           for(const [depth,list] of [...levels.entries()].sort((a,b)=>a[0]-b[0])){
             const level=document.createElement('div');level.className='dw-level';const lab=document.createElement('span');lab.className='dw-level-label';lab.textContent=depth===0?'DISCOVERED / ROOTS':depth===21?'UNKNOWN BRANCHES':'DEPTH '+depth;level.appendChild(lab);
             for(const row of list.slice(0,depth===0?80:45)){
@@ -9631,7 +9640,7 @@ save();checkStarForgeUnlock();
                 const recipe=row.have?cmKnownRecipeFor(row.name):'';
                 d.innerHTML=`<strong>${row.el?.emoji||CM_DW_IMPORTANT.find(x=>x[0]===row.name)?.[1]||'◇'} ${row.name}</strong><small>${row.have?'DISCOVERED':row.depth>20?'UNKNOWN DISTANCE':row.depth+' CRAFT'+(row.depth===1?'':'S')+' AWAY'}</small>${recipe?`<span class="dw-recipe">${recipe}</span>`:''}`;
               }
-              if(justFound){newSeen.add(row.low);if(row.imp||row.depth>=8)rareReveal='✦ NEW RARE DISCOVERY · '+row.name+' ✦'}
+              if(justFound)newSeen.add(row.low);
               level.appendChild(d);
             }
             const complete=list.length&&list.every(x=>x.everHad),branchKey='depth-'+depth;
@@ -9643,7 +9652,6 @@ save();checkStarForgeUnlock();
             }
             tree.appendChild(level);
           }
-          if(rareReveal){const b=document.createElement('div');b.className='dw-rare-banner';b.textContent=rareReveal;map.prepend(b)}
           cmSaveWebSeen(newSeen);
 
           $('dwRiddles').replaceChildren();
@@ -9912,7 +9920,7 @@ function exportMilestone(idx=0){const L=legacy(),c=document.createElement('canva
 function renderStatsExtras(){const L=legacy(),b=$('profileBanner');if(b){let q=b.querySelector('.cm-legacy-banner');if(!q){q=document.createElement('div');q.className='cm-legacy-banner';b.appendChild(q)}q.innerHTML=`LEGACY LV. <b>${L.level}</b> · ${L.points} pts`}const heat=$('cmDiscoveryHeatmap');if(heat){const by={};journalEntries().forEach(e=>{const k=new Date(e.date).toISOString().slice(0,10);by[k]=(by[k]||0)+1});heat.innerHTML='';for(let i=181;i>=0;i--){const d=new Date(Date.now()-i*86400000),k=d.toISOString().slice(0,10),n=by[k]||0,v=n?Math.min(4,1+Math.floor(Math.log2(n))):0,q=document.createElement('div');q.className='cm-heat';q.dataset.v=v;q.title=`${k} · ${n} discoveries`;heat.appendChild(q)}}const ch=$('cmChronicle');if(ch){let a=jget(CHRON,[]);if(!a.length)a=journalEntries().slice(-30).reverse().map(e=>({emoji:e.emoji,text:'Discovered '+e.name,date:e.date}));ch.innerHTML=a.slice(0,80).map(e=>`<div class="cm-chronicle-entry"><span>${e.emoji||'✦'} ${e.text}</span><small>${new Date(e.date).toLocaleString()}</small></div>`).join('')||'<small>No chronicle entries yet.</small>'}const ms=$('cmMilestoneCards');if(ms){const done=new Set(Object.keys(masteryState?.completed||{}));ms.innerHTML=MASTERY_OBJECTIVES.map((o,i)=>`<div class="cm-milestone ${done.has(o.id)?'unlocked':''}" data-m="${i}"><b>🎴 ${i+1}. ${done.has(o.id)?o.name:'LOCKED'}</b><small>${done.has(o.id)?'Profile milestone achieved':'Complete the matching Mastery objective'}</small>${done.has(o.id)?'<button>PNG</button>':''}</div>`).join('');ms.querySelectorAll('.unlocked button').forEach(q=>q.onclick=()=>exportMilestone(+q.closest('[data-m]').dataset.m))}}
 function regionFor(name){const n=name.toLowerCase();if(/fire|lava|sun|spark|heat|volcan|ember/.test(n))return'EMBER';if(/water|ocean|sea|tide|rain|ice|snow/.test(n))return'TIDE';if(/earth|stone|mount|plant|tree|forest|island|nature/.test(n))return'WILD';if(/air|wind|cloud|storm|sky/.test(n))return'SKY';if(/star|moon|space|planet|meteor|cosmic|galaxy|night/.test(n))return'COSMOS';if(/computer|robot|tech|machine|internet|code|electric/.test(n))return'MACHINE';if(/void|null|abyss|dark|death|end/.test(n))return'VOID';if(/idea|philosophy|time|life|love|dream|music|art/.test(n))return'MIND';return'FRINGE'}
 function landmarks(){const L=legacy(),fr=firstRecords(),prog=jget('cm_discovery_web_progress_v2',[]),has=n=>elements.some(e=>e.name.toLowerCase()===n.toLowerCase())||prog.includes(n.toLowerCase());return[['🏪','MARKET GATE','Discover Shop',has('Shop')],['⭐','FORGE SPIRE','Unlock Star Forge',!!gs.sfUnlocked],['🏆','ASCENSION MONUMENT','First Prestige',L.prest>0||!!fr.prestige],['🌈','EVERYTHING BEACON','Discover Everything',has('Everything')||!!fr.everything],['⚔️','BOSS SCAR','First Boss victory',L.boss>0],['🌟','MASTERY SANCTUM','First Mastery',L.masteries>0],['💎','CHRONO OBELISK','Diamond speedrun',cmBestSpeedrunMedal?.()==='DIAMOND'||!!fr.diamond]]}
-function enhanceWeb(){const map=$('dwMap');if(!map)return;const land=$('cmWebLandmarks');if(land)land.innerHTML=landmarks().map(x=>`<div class="cm-landmark ${x[3]?'earned':''}"><b>${x[0]} ${x[1]}</b><small>${x[3]?'PERMANENT LANDMARK':'LOCKED · '+x[2]}</small></div>`).join('');const counts={};map.querySelectorAll('.dw-card').forEach(c=>{const name=(c.querySelector('strong')?.textContent||'').replace(/^[^A-Za-z0-9\[]+\s*/,'').trim(),reg=regionFor(name);c.dataset.region=reg;counts[reg]=(counts[reg]||0)+1});const rg=$('cmWebRegions');if(rg)rg.innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<span class="cm-region-chip">${n} · ${v}</span>`).join('');const tel=$('cmTelescopeBtn'),cur=$('cmCurrentsBtn');if(tel&&!tel.dataset.bound){tel.dataset.bound=1;tel.onclick=()=>{map.classList.toggle('cm-telescope');tel.textContent=map.classList.contains('cm-telescope')?'🔭 Exit Telescope':'🔭 Telescope'}}if(cur&&!cur.dataset.bound){cur.dataset.bound=1;cur.onclick=()=>{const on=localStorage.getItem(CUR)!=='0';localStorage.setItem(CUR,on?'0':'1');cur.textContent='〰 Web Currents: '+(on?'OFF':'ON');map.classList.toggle('cm-currents-on',!on)}}if(cur){const on=localStorage.getItem(CUR)!=='0';cur.textContent='〰 Web Currents: '+(on?'ON':'OFF');map.classList.toggle('cm-currents-on',on)}}
+function enhanceWeb(){const map=$('dwMap');if(!map)return;const land=$('cmWebLandmarks');if(land)land.innerHTML=landmarks().map(x=>`<div class="cm-landmark ${x[3]?'earned':''}"><b>${x[0]} ${x[1]}</b><small>${x[3]?'PERMANENT LANDMARK':'LOCKED · '+x[2]}</small></div>`).join('');const counts={};map.querySelectorAll('.dw-card').forEach(c=>{const name=(c.querySelector('strong')?.textContent||'').replace(/^[^A-Za-z0-9\[]+\s*/,'').trim(),reg=regionFor(name);c.dataset.region=reg;counts[reg]=(counts[reg]||0)+1});const rg=$('cmWebRegions');if(rg)rg.innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<span class="cm-region-chip">${n} · ${v}</span>`).join('');const cur=$('cmCurrentsBtn');if(cur&&!cur.dataset.bound){cur.dataset.bound=1;cur.onclick=()=>{const on=localStorage.getItem(CUR)!=='0';localStorage.setItem(CUR,on?'0':'1');cur.textContent='〰 Web Currents: '+(on?'OFF':'ON');map.classList.toggle('cm-currents-on',!on)}}if(cur){const on=localStorage.getItem(CUR)!=='0';cur.textContent='〰 Web Currents: '+(on?'ON':'OFF');map.classList.toggle('cm-currents-on',on)}}
 function refreshAll(){try{renderStatsExtras()}catch(e){console.warn('CM stats extras',e)}try{enhanceWeb()}catch(e){console.warn('CM web extras',e)}}
 document.addEventListener('click',e=>{if(e.target.closest('#playerStatsBtn,#profileBtn'))setTimeout(refreshAll,0);if(e.target.closest('#discoveryWebBtn'))setTimeout(enhanceWeb,0)});
 setTimeout(refreshAll,150);
