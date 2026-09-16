@@ -2854,6 +2854,31 @@ html.cm-daily-mode #elGrid .el-card{animation:cmDailyCardIn .34s ease-out both}
 /* Discovery Web + Daily are unavailable inside isolated Boss/Speedrun runs. */
 html.cm-challenge-tools-locked #discoveryWebBtn,
 html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-events:none!important}
+
+/* Discovery Web craft-distance colors (migrated from the retired Guide). */
+.dw-card[data-craft-distance="1"]{background:#d1fae5!important;color:#065f46!important;border-color:#34d399!important}
+.dw-card[data-craft-distance="2"]{background:#fef9c3!important;color:#713f12!important;border-color:#eab308!important}
+.dw-card[data-craft-distance="3"]{background:#ffedd5!important;color:#9a3412!important}
+.dw-card[data-craft-distance="4"]{background:#fed7aa!important;color:#7c2d12!important}
+.dw-card[data-craft-distance="5"]{background:#fecaca!important;color:#7f1d1d!important}
+.dw-card[data-craft-distance="6"]{background:#fbcfe8!important;color:#831843!important}
+.dw-card[data-craft-distance="7"]{background:#e9d5ff!important;color:#581c87!important}
+.dw-card[data-craft-distance="8"]{background:#c4b5fd!important;color:#3b0764!important}
+.dw-card[data-craft-distance="9"]{background:#7c3aed!important;color:#fff!important}
+.dw-card[data-craft-distance="10"]{background:#4c1d95!important;color:#fff!important}
+.dw-card[data-craft-distance] strong,.dw-card[data-craft-distance] small{color:inherit!important}
+.dw-distance-legend{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:0 0 10px;font-size:.43rem;color:var(--text-secondary)}
+.dw-distance-legend b{font-size:.42rem}
+.dw-distance-swatch{width:14px;height:10px;border-radius:4px;border:1px solid rgba(255,255,255,.22)}
+
+/* Web evolution + Daily medals/archive */
+.dw-card.previously-owned{outline:1px solid rgba(52,211,153,.35);opacity:.94}
+.dw-card.gravity-1{transform:scale(1.025)}.dw-card.gravity-2{transform:scale(1.065);font-weight:800}.dw-card.gravity-3{transform:scale(1.11);font-weight:900;box-shadow:0 0 17px rgba(147,197,253,.22)}
+.dw-card.web-distortion{animation:cmWebDistort 2.5s ease-in-out infinite;border-style:dashed!important}
+@keyframes cmWebDistort{0%,100%{filter:none}48%{filter:brightness(1.18);transform:skewX(-1deg)}52%{transform:skewX(1deg)}}
+.dw-level.collapsed .dw-card:not(.branch-summary){display:none!important}.dw-card.branch-summary{cursor:pointer;border-style:double!important}
+#dailyArchiveGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:9px}.daily-archive-day{min-height:47px;padding:5px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:.42rem}.daily-archive-day.done{background:rgba(49,46,129,.22)}
+.daily-medal-DIAMOND{color:#a5f3fc;text-shadow:0 0 12px rgba(103,232,249,.65)}.daily-medal-GOLD{color:#fde68a}.daily-medal-SILVER{color:#e2e8f0}.daily-medal-BRONZE{color:#fdba74}.daily-medal-showcase{margin:9px 0;padding:10px;border:1px solid #a78bfa66;border-radius:11px;text-align:center}
 </style>
 
 </head>
@@ -3198,7 +3223,7 @@ html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-ev
             <h2>🧩 Daily Challenge</h2>
             <p id="dailyPuzzleInfo" class="dw-note"></p>
             <div class="daily-target">TARGET · <strong id="dailyPuzzleTarget">—</strong></div>
-            <div class="daily-actions"><button id="dailyPuzzleStart">Start Daily Challenge</button></div>
+            <div class="daily-actions"><button id="dailyPuzzleStart">Start Daily Challenge</button><button id="dailyArchiveBtn" type="button">📅 Archive</button></div><div id="dailyArchivePanel" hidden><div class="daily-medal-showcase"><strong>DAILY MEDALS</strong><div id="dailyMedalSummary">No clears yet</div></div><div id="dailyArchiveGrid"></div></div>
           </div>
         </div>
 
@@ -4010,7 +4035,7 @@ html.cm-challenge-tools-locked #dailyPuzzleBtn{display:none!important;pointer-ev
             'Vegetable+Water':{name:'Soup',emoji:'🍲',description:'Liquid food from boiling'},
             'Animal+Water':{name:'Fish',emoji:'🐠',description:'Water creature',color:'bg-blue-400'},
             'Melon+Water':{name:'Watermelon',emoji:'🍉',description:'Large fruit with green rind'},
-            'Watermelon+YouTuber':{name:'MulMelon',emoji:'🍉',description:'YouTube channel for Roblox content',color:'bg-amber-500',isFinal:true,hasLink:true,link:'https://m.youtube.com/@Mulmelon_YT'},
+            'Watermelon+YouTuber':{name:'MulMelon',emoji:'🍉',description:'This game’s developer',color:'bg-amber-500',isFinal:true,hasLink:true,link:'https://m.youtube.com/@Mulmelon_YT'},
             'Fly+Air':{name:'Insect',emoji:'🐝',description:'Small arthropod'},
             'Med+Human':{name:'Doctor',emoji:'👨‍⚕️',description:'Person who practices medicine'},
             'Death+Human':{name:'Ghost',emoji:'👻',description:'Spirit of a dead person'},
@@ -9041,7 +9066,7 @@ save();checkStarForgeUnlock();
         const CM_PATCH_NOTES=[
           ['Daily Rewards Update','Clearing the Daily Challenge now awards 2,500 coins and plays a dedicated Challenge Clear reward animation.'],
           ['Daily Challenge Update','Daily Puzzle now runs as an isolated challenge save using the normal Elements + Combine interface, keeps Daily discoveries challenge-only, uses challenge animations, and changes the page title while active.'],
-          ['Discovery Web Update','Discovery Web now has fogged exploration, classified nodes, unknown branches, discovery shimmer reveals, discovered-recipe labels, secret elements shown as anonymous ???? nodes, and rotating Daily Puzzle difficulty.'],
+          ['Discovery Web Update','Discovery Web now has Guide-style craft-distance color coding, fogged exploration, classified nodes, unknown branches, discovery shimmer reveals, discovered-recipe labels, secret elements shown as anonymous ???? nodes, and rotating Daily Puzzle difficulty.'],
           ['Perfect Records Update','Perfect Diamond relics, Perfect Diamond profile title/banner, medal deterioration, evolving boss trophies, Personal Records, relic upgrade effects, and evolved loading screens.'],
           ['Vault & Archive Update','Split streaks, PB crowns, Trophy Sets, Vault levels, pedestal plaques, rare trophy effects, Discovery Journal, first records, profile titles/themes, Mastery capstones and near-completion alerts, Patch Notes NEW detection, intro variants, and rotating save backups.'],
           ['Chrono & Vault Update','Split PBs, PB Ghost improvements, medal progress, Run History, Trophy inspection, Mastery pinning, and Trophy Box displays.'],
@@ -9501,6 +9526,12 @@ save();checkStarForgeUnlock();
           ['The End Game','🎬','Find The End, then make it meet itself.','Philosophy + Balance → The End\nThe End + The End → The End Game']
         ];
 
+        const CM_WEB_PROGRESS_KEY='cm_discovery_web_progress_v2',CM_WEB_COLLAPSE_KEY='cm_discovery_web_collapsed_v1';
+        function cmWebProgress(){try{return new Set(JSON.parse(localStorage.getItem(CM_WEB_PROGRESS_KEY)||'[]'))}catch(e){return new Set()}}
+        function cmSaveWebProgress(v){try{localStorage.setItem(CM_WEB_PROGRESS_KEY,JSON.stringify([...v]))}catch(e){}}
+        function cmWebCollapsed(){try{return new Set(JSON.parse(localStorage.getItem(CM_WEB_COLLAPSE_KEY)||'[]'))}catch(e){return new Set()}}
+        function cmSaveWebCollapsed(v){try{localStorage.setItem(CM_WEB_COLLAPSE_KEY,JSON.stringify([...v]))}catch(e){}}
+        function cmWebLinks(name){let n=0,l=String(name).toLowerCase();for(const k of Object.keys(recipes))if(k.split('+').some(x=>x.toLowerCase()===l))n++;return n}
         const CM_WEB_SEEN_KEY='cm_discovery_web_seen_v1';
         function cmWebSeen(){try{return new Set(JSON.parse(localStorage.getItem(CM_WEB_SEEN_KEY)||'[]'))}catch(e){return new Set()}}
         function cmSaveWebSeen(set){try{localStorage.setItem(CM_WEB_SEEN_KEY,JSON.stringify([...set]))}catch(e){}}
@@ -9522,14 +9553,21 @@ save();checkStarForgeUnlock();
         }
         function cmRenderDiscoveryWeb(){
           const owned=new Set(elements.map(e=>e.name.toLowerCase())),missing=prestigeRequirements().missing,plans=missingCraftPlans(missing),pm=new Map(plans.map(x=>[x.name.toLowerCase(),x])),seen=cmWebSeen(),newSeen=new Set(seen);
-          const map=$('dwMap');map.replaceChildren();const tree=document.createElement('div');tree.className='dw-tree';map.appendChild(tree);
+          const permanentProgress=cmWebProgress(),collapsedBranches=cmWebCollapsed();
+          for(const e of elements)if(e?.name)permanentProgress.add(e.name.toLowerCase());
+          cmSaveWebProgress(permanentProgress);
+          const map=$('dwMap');map.replaceChildren();
+          const legend=document.createElement('div');legend.className='dw-distance-legend';
+          legend.innerHTML='<b>CRAFT DISTANCE</b><span class="dw-distance-swatch" style="background:#d1fae5"></span>1 <span class="dw-distance-swatch" style="background:#fef9c3"></span>2 <span class="dw-distance-swatch" style="background:#ffedd5"></span>3 <span class="dw-distance-swatch" style="background:#fecaca"></span>5 <span class="dw-distance-swatch" style="background:#c4b5fd"></span>8 <span class="dw-distance-swatch" style="background:#4c1d95"></span>10+';
+          map.appendChild(legend);
+          const tree=document.createElement('div');tree.className='dw-tree';map.appendChild(tree);
           const rows=[];
           for(const name of [...new Set([...rankedCatalog(),...CM_DW_IMPORTANT.map(x=>x[0])])]){
-            const low=name.toLowerCase(),have=owned.has(low);
+            const low=name.toLowerCase(),have=owned.has(low),everHad=have||permanentProgress.has(low);
             const secret=cmSecretWebElement(name)&&!have;
             const p=pm.get(low),imp=CM_DW_IMPORTANT.some(x=>x[0]===name),el=elements.find(e=>e.name.toLowerCase()===low);
             let depth=have?0:(p&&p.cost<=20?p.cost:21);if(p?.steps?.length)depth=Math.min(20,p.steps.length);
-            rows.push({name,low,have,p,imp,el,depth,secret});
+            rows.push({name,low,have,everHad,p,imp,el,depth,secret});
           }
           const visibleDepths=rows.filter(r=>r.have).map(r=>r.depth),frontier=Math.max(1,...visibleDepths)+2;
           const levels=new Map();for(const row of rows){const k=row.depth>20?21:row.depth;if(!levels.has(k))levels.set(k,[]);levels.get(k).push(row)}
@@ -9538,7 +9576,14 @@ save();checkStarForgeUnlock();
             const level=document.createElement('div');level.className='dw-level';const lab=document.createElement('span');lab.className='dw-level-label';lab.textContent=depth===0?'DISCOVERED / ROOTS':depth===21?'UNKNOWN BRANCHES':'DEPTH '+depth;level.appendChild(lab);
             for(const row of list.slice(0,depth===0?80:45)){
               const justFound=row.have&&!seen.has(row.low),fog=!row.have&&!row.imp&&row.depth>frontier,classified=!row.have&&row.imp,unknown=!row.have&&(row.depth>20||fog),d=document.createElement('div');
-              d.className='dw-card '+(row.have?'owned ':'')+(row.imp?'important ':'')+(fog?'fogged ':'')+(classified?'classified ':'')+(unknown?'unknown-branch ':'')+(justFound?'discovery-reveal':'');
+              d.className='dw-card '+(row.have?'owned ':(row.everHad?'previously-owned ':''))+(row.imp?'important ':'')+(fog?'fogged ':'')+(classified?'classified ':'')+(unknown?'unknown-branch ':'')+(justFound?'discovery-reveal':'');
+              const links=cmWebLinks(row.name);
+              if(links>=18)d.classList.add('gravity-3');else if(links>=9)d.classList.add('gravity-2');else if(links>=4)d.classList.add('gravity-1');
+              if(!row.have&&!row.secret&&!classified&&!fog&&row.depth===1)d.classList.add('web-distortion');
+              if(!row.have&&!row.secret&&!fog&&!classified&&row.depth>=1&&row.depth<=20){
+                d.dataset.craftDistance=String(Math.min(10,row.depth));
+                if(row.depth>10){d.style.background=`hsl(${25+(row.depth-3)*15} 65% 24%)`;d.style.color='#fff'}
+              }
               if(row.secret){
                 d.classList.add('secret-unknown');
                 d.innerHTML='<strong>✦ ????</strong><small>SECRET ELEMENT</small>';
@@ -9552,7 +9597,15 @@ save();checkStarForgeUnlock();
               }
               if(justFound){newSeen.add(row.low);if(row.imp||row.depth>=8)rareReveal='✦ NEW RARE DISCOVERY · '+row.name+' ✦'}
               level.appendChild(d);
-            }tree.appendChild(level);
+            }
+            const complete=list.length&&list.every(x=>x.everHad),branchKey='depth-'+depth;
+            if(complete&&depth!==0){
+              const summary=document.createElement('button');summary.className='dw-card branch-summary';
+              summary.innerHTML='<strong>✓ BRANCH COMPLETE</strong><small>'+list.length+' nodes · '+(collapsedBranches.has(branchKey)?'EXPAND':'COLLAPSE')+'</small>';
+              summary.onclick=()=>{collapsedBranches.has(branchKey)?collapsedBranches.delete(branchKey):collapsedBranches.add(branchKey);cmSaveWebCollapsed(collapsedBranches);cmRenderDiscoveryWeb()};
+              level.prepend(summary);if(collapsedBranches.has(branchKey))level.classList.add('collapsed');
+            }
+            tree.appendChild(level);
           }
           if(rareReveal){const b=document.createElement('div');b.className='dw-rare-banner';b.textContent=rareReveal;map.prepend(b)}
           cmSaveWebSeen(newSeen);
@@ -9576,6 +9629,12 @@ save();checkStarForgeUnlock();
         document.querySelectorAll('.dw-tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.dw-tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('#discoveryWebModal .dw-panel').forEach(p=>p.hidden=p.id!==b.dataset.panel)}));
 
         const CM_DAILY_KEY='cm_daily_recipe_v3';
+        const CM_DAILY_ARCHIVE_KEY='cm_daily_archive_v1';
+        function cmDailyArchive(){try{return JSON.parse(localStorage.getItem(CM_DAILY_ARCHIVE_KEY)||'{}')}catch(e){return {}}}
+        function cmDailyMedal(c){c=Number(c)||999;return c<=5?'DIAMOND':c<=6?'GOLD':c<=8?'SILVER':'BRONZE'}
+        function cmRecordDaily(k,t,c,r){const a=cmDailyArchive(),m=cmDailyMedal(c),o=a[k];if(!o||c<o.crafts)a[k]={target:t,crafts:c,medal:m,reward:r,cleared:true};localStorage.setItem(CM_DAILY_ARCHIVE_KEY,JSON.stringify(a))}
+        function cmRenderDailyArchive(){const a=cmDailyArchive(),g=$('dailyArchiveGrid');if(!g)return;g.replaceChildren();const n=new Date(),y=n.getFullYear(),m=n.getMonth(),days=new Date(y,m+1,0).getDate(),first=new Date(y,m,1).getDay(),cnt={DIAMOND:0,GOLD:0,SILVER:0,BRONZE:0};Object.values(a).forEach(x=>x?.medal&&cnt[x.medal]++);$('dailyMedalSummary').innerHTML=`<span class="daily-medal-DIAMOND">◆ ${cnt.DIAMOND}</span> · <span class="daily-medal-GOLD">● ${cnt.GOLD}</span> · <span class="daily-medal-SILVER">● ${cnt.SILVER}</span> · <span class="daily-medal-BRONZE">● ${cnt.BRONZE}</span>`;for(let i=0;i<first;i++)g.appendChild(document.createElement('div'));for(let d=1;d<=days;d++){const k=[y,m+1,d].join('-'),r=a[k],c=document.createElement('div');c.className='daily-archive-day'+(r?' done':'');c.innerHTML='<strong>'+d+'</strong>'+(r?`<div class="daily-medal-${r.medal}">${r.medal}</div><small>${r.crafts} crafts</small>`:'<div>—</div>');g.appendChild(c)}}
+
         const CM_DAILY_SAVE='cm_daily_challenge_save_v1';
         let cmDailyState=null,cmDailyMain=null;
 
@@ -9708,6 +9767,7 @@ save();checkStarForgeUnlock();
             if(won){
               gs.coins=(Number(gs.coins)||0)+dailyCoinReward;
               try{localStorage.setItem(CM_DAILY_KEY,JSON.stringify({date:key,complete:true,crafts,target,rewardCoins:dailyCoinReward}))}catch(e){}
+              cmRecordDaily(key,target,crafts,dailyCoinReward);
             }
             cmDailyState=cmDailyMain=null;try{localStorage.removeItem(CM_DAILY_SAVE)}catch(e){}
             document.documentElement.classList.remove('cm-daily-mode','daily-challenge-enter','cm-daily-clearing');document.title='Craft Madness';
@@ -9725,7 +9785,7 @@ save();checkStarForgeUnlock();
           fx=document.createElement('div');fx.id='cmDailyClearFx';
           fx.innerHTML='<div class="daily-clear-rays"></div><div class="daily-clear-card"><div class="daily-clear-kicker">DAILY CHALLENGE</div><h2>CHALLENGE CLEAR!</h2><div class="daily-clear-target"></div><div class="daily-clear-reward"></div><div class="daily-clear-transfer"></div></div>';
           document.documentElement.appendChild(fx);
-          fx.querySelector('.daily-clear-target').textContent='✓ '+target+' · '+crafts+' discoveries';
+          fx.querySelector('.daily-clear-target').innerHTML='✓ '+target+' · '+crafts+' crafts · <span class="daily-medal-'+cmDailyMedal(crafts)+'">'+cmDailyMedal(crafts)+'</span>';
           fx.querySelector('.daily-clear-reward').textContent='🪙 +'+Number(coins).toLocaleString()+' COINS';
           fx.querySelector('.daily-clear-transfer').textContent='Daily discoveries stay in the challenge save';
           // Two RAFs guarantee the browser paints the initial state before the transition.
@@ -9752,6 +9812,7 @@ save();checkStarForgeUnlock();
           cmRenderDailyPreview();openModal('dailyPuzzleModal')
         });
         $('dailyPuzzleStart').addEventListener('click',cmEnterDaily);
+        $('dailyArchiveBtn').addEventListener('click',()=>{const p=$('dailyArchivePanel');p.hidden=!p.hidden;if(!p.hidden)cmRenderDailyArchive()});
         $('dailyLeaveBtn').addEventListener('click',()=>cmDailyTransferAndRestore(false));
 
         function cmPurgeExclusiveTrophiesFromInventory(){
