@@ -7287,6 +7287,8 @@ journal:localStorage.getItem('cm_discovery_journal_v1')||'',
 firstRecords:localStorage.getItem('cm_first_records_v1')||'',
 profile:localStorage.getItem('cm_profile_prefs_v1')||'',
 username:localStorage.getItem('cm_profile_username_v1')||'',
+developerProfile:localStorage.getItem('cm_developer_profile_v1')||'',
+playTesterProfile:localStorage.getItem('cm_playtester_profile_v1')||'',
 masteryPins:localStorage.getItem('cm_mastery_pins_v1')||''};
           const list=cmJSON(CM_BACKUPS,[]);list.unshift(snap);cmSetJSON(CM_BACKUPS,list.slice(0,5));cmLastBackupAt=now;return true;
         }
@@ -7300,6 +7302,8 @@ try{
  if(b.firstRecords)localStorage.setItem('cm_first_records_v1',b.firstRecords);
  if(b.profile)localStorage.setItem('cm_profile_prefs_v1',b.profile);
  if(b.username)localStorage.setItem('cm_profile_username_v1',b.username);
+ if(b.developerProfile)localStorage.setItem('cm_developer_profile_v1',b.developerProfile);
+ if(b.playTesterProfile)localStorage.setItem('cm_playtester_profile_v1',b.playTesterProfile);
  if(b.masteryPins)localStorage.setItem('cm_mastery_pins_v1',b.masteryPins);
 }catch(e){}
           loadNamedSave(false);renderEls();rebuildHistory();updateCount();updateCoinDisplay();updateCyMoneyDisplay();renderBackupList();notify('BACKUP RESTORED','The selected snapshot is now active.','💾',3500);
@@ -9439,7 +9443,9 @@ try{
     speedrunHistory:localStorage.getItem('cm_speedrun_history_v1')||'',
     speedrunState:localStorage.getItem('cm_speedrun_state_v1')||'',
     profile:localStorage.getItem('cm_profile_prefs_v1')||'',
-    username:localStorage.getItem('cm_profile_username_v1')||''
+    username:localStorage.getItem('cm_profile_username_v1')||'',
+    developerProfile:localStorage.getItem('cm_developer_profile_v1')||'',
+    playTesterProfile:localStorage.getItem('cm_playtester_profile_v1')||''
   }
 });
                 const encrypted=await secureEncrypt(data,pw);
@@ -9503,6 +9509,8 @@ try{
   restoreAux('cm_speedrun_state_v1',d.aux.speedrunState);
   restoreAux('cm_profile_prefs_v1',d.aux.profile);
   restoreAux('cm_profile_username_v1',d.aux.username);
+  restoreAux('cm_developer_profile_v1',d.aux.developerProfile);
+  restoreAux('cm_playtester_profile_v1',d.aux.playTesterProfile);
   // Keep the live Mastery object in sync with the imported permanent Mastery save.
   try{
     const importedMastery=JSON.parse(d.aux.mastery||'null');
