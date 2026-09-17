@@ -2719,6 +2719,13 @@ body.april-fools-mode #speedrunBtn:hover{transform:rotate(7deg) skewY(-5deg) sca
 .trophy-set-board{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:8px 0 12px}.trophy-set{padding:8px;border:1px solid var(--border);border-radius:9px;font-size:.48rem;background:rgba(255,255,255,.025)}.trophy-set.complete{border-color:rgba(250,204,21,.45);box-shadow:0 0 14px rgba(250,204,21,.09)}.trophy-set strong{display:flex;justify-content:space-between;font-size:.55rem}.trophy-set i{display:block;height:3px;margin-top:5px;border-radius:99px;background:#fde68a}
 .pedestal-plaque{margin:8px auto 0;padding:7px 12px;max-width:280px;border:1px solid rgba(250,204,21,.24);border-radius:4px;background:linear-gradient(#5b451c,#2c210d);color:#fde68a;font:700 .5rem/1.35 Georgia,serif;box-shadow:inset 0 1px rgba(255,255,255,.12)}.plaque-editor{text-align:center;margin:-8px 0 12px}.plaque-editor input{width:min(300px,90%);padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,.18);color:var(--text-primary);font-size:.5rem}
 .trophy-vault-element.ultra-rare .emoji{animation:ultraFloat 2.3s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(250,204,21,.45))}.trophy-vault-element.ultra-rare .vault-glow{opacity:.8!important;animation:ultraGlow 2s ease-in-out infinite}.trophy-vault-element.ultra-rare:before{content:"✦";position:absolute;right:9px;top:28px;color:#fde68a;animation:ultraSpark 1.7s ease-in-out infinite}@keyframes ultraFloat{50%{transform:translateY(-4px) scale(1.04)}}@keyframes ultraGlow{50%{filter:brightness(1.7)}}@keyframes ultraSpark{50%{opacity:.25;transform:scale(.7) rotate(45deg)}}
+/* Locked Trophy Box silhouettes + ultra-rare first-discovery presentation */
+.trophy-locked{cursor:default!important;filter:saturate(.2);opacity:.62!important;border-style:dashed!important;background:linear-gradient(145deg,rgba(15,23,42,.12),rgba(0,0,0,.08))!important}
+.trophy-locked .emoji{filter:grayscale(1) brightness(.35)!important;text-shadow:0 0 10px rgba(255,255,255,.12);font-size:1.55rem!important}.trophy-locked .name{letter-spacing:.12em;font-weight:900!important}.trophy-locked .vault-type{opacity:.6}.trophy-locked:hover{opacity:.76!important}
+.cm-ultra-discovery{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;pointer-events:none;background:radial-gradient(circle,rgba(250,204,21,.13),rgba(0,0,0,.82) 58%,rgba(0,0,0,.94));animation:cmUltraFade 2.8s ease forwards}
+.cm-ultra-discovery-card{text-align:center;transform:scale(.35);animation:cmUltraReveal 2.8s cubic-bezier(.2,.85,.2,1) forwards;filter:drop-shadow(0 0 30px rgba(250,204,21,.5))}.cm-ultra-discovery-kicker{font:900 clamp(.7rem,2vw,1rem)/1 ui-monospace,monospace;letter-spacing:.34em;color:#fde68a;margin-bottom:14px}.cm-ultra-discovery-emoji{font-size:clamp(4rem,16vw,9rem);animation:cmUltraFloat 1.1s ease-in-out infinite alternate}.cm-ultra-discovery-name{font:900 clamp(1.5rem,6vw,3.8rem)/1.05 'Righteous',cursive;color:white;margin-top:12px;text-shadow:0 0 22px rgba(255,255,255,.22)}.cm-ultra-spark{position:absolute;left:50%;top:50%;font-size:1.2rem;color:#fde68a;animation:cmUltraSparkOut 1.5s ease-out forwards}
+@keyframes cmUltraFade{0%{opacity:0}12%,78%{opacity:1}100%{opacity:0}}@keyframes cmUltraReveal{0%{transform:scale(.25) rotate(-7deg);opacity:0}22%{transform:scale(1.12) rotate(1deg);opacity:1}38%,78%{transform:scale(1) rotate(0)}100%{transform:scale(.96);opacity:0}}@keyframes cmUltraFloat{to{transform:translateY(-8px) scale(1.04)}}@keyframes cmUltraSparkOut{from{opacity:1;transform:translate(-50%,-50%) rotate(var(--r)) translateY(0) scale(.4)}to{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) translateY(-180px) scale(1.4)}}
+@media(prefers-reduced-motion:reduce){.cm-ultra-discovery,.cm-ultra-discovery-card,.cm-ultra-discovery-emoji,.cm-ultra-spark{animation-duration:.8s!important}}
 .mastery-card.capstone{border-color:rgba(250,204,21,.3);background:linear-gradient(135deg,rgba(250,204,21,.06),rgba(168,85,247,.05))}.mastery-card.capstone .mastery-tier:after{content:" · CAPSTONE";color:#fde68a}
 .backup-box{background:radial-gradient(circle at 50% 0,rgba(34,197,94,.12),transparent 35%),var(--bg-secondary)!important}.backup-head{text-align:center}.backup-list{display:grid;gap:7px;margin-top:10px}.backup-entry{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:9px;border:1px solid var(--border);border-radius:10px}.backup-entry strong{display:block;font-size:.6rem}.backup-entry small{font-size:.46rem;color:var(--text-secondary)}.backup-entry button{font-size:.48rem;padding:5px 8px;border-radius:8px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.08);color:#86efac}
 .split-streak{font:1000 .5rem/1 ui-monospace,monospace;color:#fde68a;text-align:center;margin-top:5px;letter-spacing:.08em}.history-pb-crown{filter:drop-shadow(0 0 7px #facc15)}
@@ -8860,7 +8867,9 @@ try{
         let frozenTutShown=false;
         let finalTutShown=false;
         let permafrostTutShown=false;
-        let secretTutShown=false;
+        const CM_SECRET_TUT_SEEN='cm_secret_tutorial_seen_v1';
+        let secretTutShown=(()=>{try{return localStorage.getItem(CM_SECRET_TUT_SEEN)==='1'}catch(e){return false}})();
+        function markSecretTutorialSeen(){secretTutShown=true;try{localStorage.setItem(CM_SECRET_TUT_SEEN,'1')}catch(e){}}
         let errorTutShown=false;
         let fatalErrorTutShown=false;
         let penaltyTutShown=false;
@@ -9275,16 +9284,40 @@ try{
                 else if(hasPenaltyMod(newEl)){notify('⚠️ PENALTY!',newEl.name+' — debuffs your coin earn!','☠️');if(!penaltyTutShown){penaltyTutShown=true;openModal('penaltyTutModal');}}
                 else if(newEl.isFinal){notify('FINAL Element!','Discovered '+newEl.name+'!','⭐');if(!finalTutShown){finalTutShown=true;openModal('finalTutModal');}}
                 else if(newEl.isPermafrost){notify('PERMAFROST!',newEl.name+' — permanently frozen!','🔒');if(!permafrostTutShown){permafrostTutShown=true;openModal('permafrostTutModal');}}
-                else if(newEl.isSecret){notify('SECRET Found!',newEl.name+' discovered!','🔮');if(!secretTutShown){secretTutShown=true;openModal('secretTutModal');}}
+                else if(newEl.isSecret){notify('SECRET Found!',newEl.name+' discovered!','🔮');if(!secretTutShown){markSecretTutorialSeen();openModal('secretTutModal');}}
                 else if(newEl.isBasic)notify('BASIC Element!',newEl.name+' discovered!','💚');
                 else if(newEl.isFrozen){notify('Frozen!',newEl.name+' is frozen — use heat!','❄️');if(!frozenTutShown){frozenTutShown=true;openModal('frozenTutModal');}}
                 else if(newEl.isSuperHot)notify('SUPER HOT!',newEl.name+' — melts ice fast!','🔥');
                 else if(newEl.isHot)notify('Hot Element!',newEl.name+' created!','🔥');
                 else if(newEl.isQuestion)notify('Mysterious!',newEl.name+' discovered!','❓');
+                if(cmIsUltraRareDiscovery(newEl))setTimeout(()=>cmShowUltraRareDiscovery(newEl),120);
             }
             if(bossMode&&(['Shop','Star Forge'].includes(newEl.name)))bossProgressionCraftMessage(newEl);
             if(bossMode&&bossAfterCraft(exists!==-1?elements[exists]:newEl,exists===-1))return;
             resetDZs();
+        }
+
+        const CM_ULTRA_SEEN_KEY='cm_ultra_rare_seen_v1';
+        function cmUltraSeen(){try{const v=JSON.parse(localStorage.getItem(CM_ULTRA_SEEN_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
+        function cmUltraWasSeen(el){return !!el&&cmUltraSeen().includes(String(el.name||'').toLowerCase())}
+        function cmMarkUltraSeen(el){if(!el||!el.name)return;try{const key=String(el.name).toLowerCase(),seen=cmUltraSeen();if(!seen.includes(key)){seen.push(key);localStorage.setItem(CM_ULTRA_SEEN_KEY,JSON.stringify(seen))}}catch(e){}}
+        function cmResetUltraSeen(){try{localStorage.removeItem(CM_ULTRA_SEEN_KEY)}catch(e){}}
+        function cmIsUltraRareDiscovery(el){
+            if(!el||el.isDeveloper||el.isPlayTester||bossMode||window.speedrunSaveMode||cmUltraWasSeen(el))return false;
+            const modCount=Object.keys(MODIFIER_STYLES).reduce((n,k)=>n+(el[k]?1:0),0);
+            return !!(el.isSecret||el.isEverything||el.isFatalError||el.isLegendary||el.isDivine||el.isCelestial||el.isParadox||modCount>=4);
+        }
+        function cmShowUltraRareDiscovery(el){
+            if(!el||cmUltraWasSeen(el)||document.querySelector('.cm-ultra-discovery'))return;
+            cmMarkUltraSeen(el);
+            const fx=document.createElement('div');fx.className='cm-ultra-discovery';
+            const card=document.createElement('div');card.className='cm-ultra-discovery-card';
+            const kicker=document.createElement('div');kicker.className='cm-ultra-discovery-kicker';kicker.textContent='✦ ULTRA RARE DISCOVERY ✦';
+            const emoji=document.createElement('div');emoji.className='cm-ultra-discovery-emoji';emoji.textContent=el.emoji||'✦';
+            const name=document.createElement('div');name.className='cm-ultra-discovery-name';name.textContent=el.name||'Unknown';
+            card.append(kicker,emoji,name);fx.appendChild(card);
+            for(let i=0;i<14;i++){const sp=document.createElement('span');sp.className='cm-ultra-spark';sp.textContent=i%3===0?'✦':'·';sp.style.setProperty('--r',(i*360/14)+'deg');fx.appendChild(sp)}
+            document.body.appendChild(fx);setTimeout(()=>fx.remove(),3000);
         }
 
         function cmDiscoveryRarity(el){
@@ -9790,6 +9823,8 @@ save();checkStarForgeUnlock();
         // ─── RESET ───
         function resetForPrestige(){
             if(ascensionBusy&&!prestigeReset)return;
+            // Ultra-rare presentations are once per Prestige run, so a Prestige makes them discoverable again.
+            if(prestigeReset)cmResetUltraSeen();
             // Permanent collections survive Prestige: Exclusives, Boss trophies, Seasonal discoveries and April Fools discoveries.
             const kept=elements.filter(e=>
  e.isDeveloper||e.isPlayTester||e.isExclusive||e.isSpeedrun||e.isBossDefeat||e.isBossMasteryTrophy||
@@ -10409,7 +10444,6 @@ save();checkStarForgeUnlock();
           renderTrophyWings();
           const all=trophyRoomElements(),g=$('trophyRoomGrid');const stats=$('trophyRoomStats');if(stats){stats.replaceChildren();stats.hidden=true;}
           g.replaceChildren();
-          if(!all.length){g.innerHTML='<div class="trophy-empty"><b>🏛️ THE VAULT IS EMPTY</b><span>Your permanent relic elements will be stored here.</span></div>';return;}
           all.forEach(el=>{
             const w=document.createElement('div');
             const bossWins=Number(el.amountOfBossDefeat||0),bossEvolution=el.isBossDefeat?(bossWins>=25?' boss-evo-4':bossWins>=10?' boss-evo-3':bossWins>=5?' boss-evo-2':bossWins>=2?' boss-evo-1':''):'';w.className='element trophy-vault-element '+(typeof elementClass==='function'?elementClass(el):'')+((el.speedrunMedal==='DIAMOND'||el.isBossMasteryTrophy||el.masteryRewardId==='season10'||el.masteryRewardId==='discover1000')?' ultra-rare':'')+bossEvolution;
@@ -10420,6 +10454,13 @@ save();checkStarForgeUnlock();
             w.addEventListener('click',()=>inspectTrophy(el));
             g.appendChild(w);
           });
+          // Tease undiscovered permanent relics without revealing their names or requirements.
+          const lockedCount=Math.max(3,Math.min(10,10-all.length));
+          for(let i=0;i<lockedCount;i++){
+            const w=document.createElement('div');w.className='element trophy-vault-element trophy-locked';w.setAttribute('aria-label','Unknown locked trophy');
+            w.innerHTML='<div class="emoji">🏆</div><div class="name">???</div><div class="vault-type">🔒 UNKNOWN RELIC</div><div class="vault-desc">Keep discovering.</div>';
+            w.title='Unknown trophy — requirements hidden';g.appendChild(w);
+          }
         }
         $('trophyRoomBtn').addEventListener('click',()=>{renderTrophyRoom();openModal('trophyRoomModal');});
         $('masteryBtn').addEventListener('click',()=>{renderMastery();openModal('masteryModal');});
@@ -11245,5 +11286,81 @@ setTimeout(refreshAll,150);
 }
 @media(prefers-reduced-motion:reduce){
   .el-card.playtester-el .card-stage>.el-emoji{animation:none!important;transform:translate(-50%,-50%)!important}
+}
+
+/* CM: post-revert Valid Combination layout correction.
+   Keep the showpiece roomy, keep every ceremonial layer on one shared center,
+   and never let the title split a word into a dangling final letter. */
+.el-card.valid-el.valid-showpiece{
+  min-height:132px!important;
+  padding:10px 7px 11px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+.el-card.valid-el.valid-showpiece .valid-vfx,
+.el-card.valid-el.valid-showpiece .vc-rays,
+.el-card.valid-el.valid-showpiece .vc-orbit,
+.el-card.valid-el.valid-showpiece .vc-laurel{
+  left:50%!important;
+  top:43px!important;
+}
+.el-card.valid-el.valid-showpiece .valid-vfx{left:4px!important;top:4px!important}
+.el-card.valid-el.valid-showpiece .valid-vfx::before{
+  left:50%!important;
+  top:39px!important;
+  transform:translate(-50%,-50%)!important;
+  transform-origin:center center!important;
+}
+.el-card.valid-el.valid-showpiece .vc-rays{
+  width:100px!important;height:100px!important;
+  transform:translate(-50%,-50%)!important;
+  transform-origin:center center!important;
+}
+.el-card.valid-el.valid-showpiece .vc-orbit{
+  width:90px!important;height:40px!important;
+  transform-origin:center center!important;
+}
+.el-card.valid-el.valid-showpiece .vc-laurel{
+  width:94px!important;height:64px!important;
+  transform:translate(-50%,-50%)!important;
+  transform-origin:center center!important;
+}
+.el-card.valid-el.valid-showpiece .el-emoji{
+  position:relative!important;
+  z-index:10!important;
+  flex:0 0 auto!important;
+  font-size:2rem!important;
+  line-height:1!important;
+  padding:5px 8px!important;
+  margin:12px 0 8px!important;
+}
+.el-card.valid-el.valid-showpiece .el-name{
+  position:relative!important;
+  z-index:11!important;
+  display:block!important;
+  width:calc(100% + 8px)!important;
+  max-width:none!important;
+  margin:0 -4px!important;
+  padding:0!important;
+  font-size:.61rem!important;
+  line-height:1.15!important;
+  letter-spacing:-.025em!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  overflow-wrap:normal!important;
+  word-break:keep-all!important;
+  hyphens:none!important;
+  text-align:center!important;
+}
+.el-card.valid-el.valid-showpiece .vc-divider{
+  flex:0 0 auto!important;
+  margin-top:7px!important;
+}
+@media(hover:hover) and (pointer:fine){
+  .el-card.valid-el.valid-showpiece:hover .el-emoji{transform:translateY(-2px) scale(1.04)!important}
 }
 </style>
