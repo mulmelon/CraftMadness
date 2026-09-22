@@ -11590,6 +11590,48 @@ setTimeout(refreshAll,150);
 
 
 
+
+<style id="cm-key-storage-v3-style">
+#cm-key-storage-v3{position:fixed;left:10px;bottom:12px;z-index:9997;font-family:inherit}
+#cm-key-storage-v3 *{box-sizing:border-box}
+#cm-key-storage-v3 .ks-tab{width:38px;height:38px;border:1px solid #555;border-radius:10px;background:#101010;color:#fff;cursor:pointer;font-size:19px;position:relative}
+#cm-key-storage-v3 .ks-count{position:absolute;right:-6px;top:-6px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#fff;color:#000;font:700 9px/17px sans-serif}
+#cm-key-storage-v3 .ks-panel{display:none;position:absolute;left:0;bottom:45px;width:190px;padding:9px;border:1px solid #444;border-radius:12px;background:#101010;color:#fff;box-shadow:0 5px 16px #0009}
+#cm-key-storage-v3.open .ks-panel{display:block}
+#cm-key-storage-v3 .ks-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:10px;font-weight:700;letter-spacing:.08em}
+#cm-key-storage-v3 .ks-close{border:0;background:transparent;color:#aaa;font-size:16px;cursor:pointer}
+#cm-key-storage-v3 .ks-grid{display:grid;grid-template-columns:1fr;gap:6px}
+#cm-key-storage-v3 .ks-card{display:flex;align-items:center;gap:9px;min-height:52px;padding:8px;border:1px solid #383838;border-radius:9px;background:#181818}
+#cm-key-storage-v3 .ks-emoji{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;background:#0d0d0d;font-size:22px;flex:none}
+#cm-key-storage-v3 .ks-info{min-width:0;flex:1}
+#cm-key-storage-v3 .ks-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cm-key-storage-v3 .ks-type{font-size:9px;opacity:.55;margin-top:2px}
+#cm-key-storage-v3 .ks-amount{font-size:12px;font-weight:700}
+#cm-key-storage-v3 .ks-empty{opacity:.45}
+</style>
+<script id="cm-key-storage-v3">
+(function(){
+  function isKey(e){return !!(e&&(e.isKey===true||String(e.name||'').toLowerCase()==='key'))}
+  function keys(){try{return Array.isArray(elements)?elements.filter(isKey):[]}catch(_){return []}}
+  function draw(){
+    let root=document.getElementById('cm-key-storage-v3');
+    if(!root){
+      root=document.createElement('div');root.id='cm-key-storage-v3';
+      root.innerHTML='<button class="ks-tab" type="button" aria-label="Key Storage">🔑<b class="ks-count">0</b></button><div class="ks-panel"><div class="ks-head"><span>KEY STORAGE</span><button class="ks-close" type="button">×</button></div><div class="ks-grid"></div></div>';
+      document.body.appendChild(root);
+      root.querySelector('.ks-tab').onclick=()=>root.classList.toggle('open');
+      root.querySelector('.ks-close').onclick=()=>root.classList.remove('open');
+    }
+    const arr=keys(),grid=root.querySelector('.ks-grid');
+    root.querySelector('.ks-count').textContent=arr.length;
+    const sample=arr[0]||{name:'Key',emoji:'🔑',isKey:true};
+    grid.innerHTML='<div class="ks-card '+(arr.length?'':'ks-empty')+'"><div class="ks-emoji">'+(sample.emoji||'🔑')+'</div><div class="ks-info"><div class="ks-name">'+String(sample.name||'Key')+'</div><div class="ks-type">KEY ELEMENT</div></div><div class="ks-amount">×'+arr.length+'</div></div>';
+  }
+  window.cmRenderKeyStorage=draw;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',draw);else draw();
+  setInterval(draw,1000);
+})();
+</script>
 </body>
 </html>
 
