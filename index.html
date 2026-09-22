@@ -11590,63 +11590,6 @@ setTimeout(refreshAll,150);
 
 
 
-<script id="cm-key-storage-system">
-(function(){
-  const MIGRATION='cm_key_storage_migrated_v2';
-
-  function isKeyElement(e){
-    return !!(e&&(e.isKey===true||String(e.name||'').toLowerCase()==='key'));
-  }
-  function migrateOldSave(){
-    try{
-      if(localStorage.getItem(MIGRATION)==='1'||!Array.isArray(elements))return;
-      // Preserve old-save Key ownership: mark existing legacy "Key" elements as isKey.
-      for(const e of elements)if(e&&String(e.name||'').toLowerCase()==='key')e.isKey=true;
-      localStorage.setItem(MIGRATION,'1');
-      try{if(typeof save==='function')save()}catch(_){}
-    }catch(_){}
-  }
-  function keyItems(){
-    try{return Array.isArray(elements)?elements.filter(isKeyElement):[]}catch(_){return []}
-  }
-  function renderKeyStorage(){
-    migrateOldSave();
-    let box=document.getElementById('cm-key-storage');
-    if(!box){
-      box=document.createElement('div');box.id='cm-key-storage';
-      box.innerHTML='<button class="cm-key-tab" type="button" aria-label="Keys"><span>🔑</span><b class="cm-key-badge">0</b></button><div class="cm-key-panel"><div class="cm-key-head"><span>🔑 KEYS</span><button class="cm-key-close" type="button">×</button></div><div class="cm-key-list"></div></div>';
-      document.body.appendChild(box);
-      box.querySelector('.cm-key-tab').onclick=()=>box.classList.toggle('open');
-      box.querySelector('.cm-key-close').onclick=()=>box.classList.remove('open');
-    }
-    const keys=keyItems(),badge=box.querySelector('.cm-key-badge'),list=box.querySelector('.cm-key-list');
-    badge.textContent=String(keys.length);
-    const counts=new Map();
-    for(const e of keys){
-      const name=String(e.name||'Key'),emoji=e.emoji||'🔑',id=name.toLowerCase();
-      if(!counts.has(id))counts.set(id,{name,emoji,count:0});
-      counts.get(id).count++;
-    }
-    if(!counts.size)counts.set('key',{name:'Key',emoji:'🔑',count:0});
-    list.innerHTML=[...counts.values()].map(k=>'<div class="cm-key-row"><span>'+k.emoji+' '+k.name+'</span><b>×'+k.count+'</b></div>').join('');
-  }
-  window.cmRenderKeyStorage=renderKeyStorage;
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',renderKeyStorage);else renderKeyStorage();
-  setInterval(renderKeyStorage,1000);
-})();
-</script>
-<style id="cm-key-storage-style">
-#cm-key-storage{position:fixed;left:10px;bottom:12px;z-index:9997;font-family:inherit;pointer-events:none}
-#cm-key-storage *{box-sizing:border-box}
-#cm-key-storage .cm-key-tab{pointer-events:auto;position:relative;width:34px;height:34px;padding:0;border:1px solid #555;border-radius:10px;background:#111;color:#fff;cursor:pointer;font-size:17px;box-shadow:0 2px 8px #0008}
-#cm-key-storage .cm-key-badge{position:absolute;right:-5px;top:-6px;min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:#fff;color:#000;font:700 9px/16px sans-serif;text-align:center}
-#cm-key-storage .cm-key-panel{pointer-events:auto;display:none;position:absolute;left:0;bottom:42px;width:150px;max-height:150px;overflow:auto;padding:7px;border:1px solid #444;border-radius:10px;background:#101010;color:#fff;box-shadow:0 4px 14px #0009}
-#cm-key-storage.open .cm-key-panel{display:block}
-#cm-key-storage .cm-key-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:5px;margin-bottom:4px;border-bottom:1px solid #333;font-size:10px;font-weight:700;letter-spacing:.06em}
-#cm-key-storage .cm-key-close{border:0;background:transparent;color:#aaa;cursor:pointer;font-size:15px;line-height:1;padding:0 2px}
-#cm-key-storage .cm-key-row{display:flex;justify-content:space-between;gap:8px;padding:4px 2px;font-size:11px}
-#cm-key-storage .cm-key-row b{font-size:10px}
-</style>
 </body>
 </html>
 
