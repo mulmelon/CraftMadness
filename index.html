@@ -3746,6 +3746,20 @@ html.cm-challenge-tools-locked #discoveryWebBtn,
   background:none!important;box-shadow:none!important;filter:none!important;
 }
 </style>
+<style id="cm-depth-mastery-milestones">
+#dwMap .dw-level.depth-mastered>.dw-level-label{border:1px solid currentColor!important;font-weight:700!important}
+#cm-web-completion-milestones{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px;font-size:11px}
+#cm-web-completion-milestones span{border:1px solid currentColor;border-radius:999px;padding:3px 7px;opacity:.42}
+#cm-web-completion-milestones span.reached{opacity:1;font-weight:700}
+</style>
+<style id="cm-milestone-emoji-rewards">
+#cm-web-completion-milestones button{
+  appearance:none;background:transparent;color:inherit;border:1px solid currentColor;
+  border-radius:8px;padding:5px 8px;cursor:pointer;font:inherit;opacity:.42;
+}
+#cm-web-completion-milestones button.reached{opacity:1;font-size:16px}
+#cm-web-completion-milestones button small{font-size:9px;vertical-align:middle}
+</style>
 </head>
 
 <div id="cmBootLoader" role="status" aria-live="polite" aria-label="Craft Madness loading">
@@ -11180,12 +11194,28 @@ save();checkStarForgeUnlock();
           const visibleDepths=rows.filter(r=>r.have&&r.starterDepth!==null).map(r=>r.starterDepth),frontier=Math.max(1,...visibleDepths)+2;
           const levels=new Map();for(const row of rows){const k=row.starterDepth!==null?row.starterDepth:(row.depth>20?21:row.depth);if(!levels.has(k))levels.set(k,[]);levels.get(k).push(row)}
           let rareReveal='';
+          const cmMilestoneRows=rows.filter(r=>!r.secret||r.have),cmMilestoneTotal=cmMilestoneRows.length,cmMilestoneFound=cmMilestoneRows.filter(r=>r.have).length,cmCompletion=cmMilestoneTotal?Math.floor(cmMilestoneFound/cmMilestoneTotal*100):0;
+          const cmMilestoneRewards=[
+            [25,'🌱','Web Sprout','A small sign that your Discovery Web has begun to grow.'],
+            [50,'🧭','Pathfinder','Half the visible Web has been discovered.'],
+            [75,'💎','Deep Discovery','Most of the visible Web is now yours.'],
+            [90,'🌌','Web Voyager','Only a small part of the visible Web remains.'],
+            [100,'👑','Web Master','Every currently visible element in the Web has been discovered.']
+          ];
+          const cmMilestones=document.createElement('div');cmMilestones.id='cm-web-completion-milestones';
+          cmMilestones.innerHTML=cmMilestoneRewards.map(([n,emoji,name])=>'<button type="button" class="'+(cmCompletion>=n?'reached':'locked')+'" data-milestone="'+n+'" aria-label="'+n+'% completion milestone">'+(cmCompletion>=n?emoji:'?')+' <small>'+n+'%</small></button>').join('');
+          cmMilestones.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{
+            const n=Number(btn.dataset.milestone),reward=cmMilestoneRewards.find(x=>x[0]===n),earned=cmCompletion>=n;
+            if(!reward)return;
+            alert(earned?reward[1]+' '+reward[2]+'\n\n'+reward[3]+'\n\nUnlocked at '+n+'% Web completion.':'? LOCKED MILESTONE\n\nReach '+n+'% Web completion to reveal this reward.');
+          }));
+          tree.appendChild(cmMilestones);
           for(const [depth,list] of [...levels.entries()].sort((a,b)=>a[0]-b[0])){
             list.sort((a,b)=>{
               const colorRank=r=>r.have?0:(r.depth>=1&&r.depth<=10?r.depth:(r.depth>10?11:40));
               return colorRank(a)-colorRank(b)||a.name.localeCompare(b.name);
             });
-            const level=document.createElement('div');level.className='dw-level';const lab=document.createElement('span');lab.className='dw-level-label';const depthFound=list.filter(r=>r.have).length,depthTotal=list.length;lab.textContent=(depth===0?'ROOT':depth===21?'UNKNOWN BRANCHES':'DEPTH '+depth)+' · '+depthFound+'/'+depthTotal+' DISCOVERED';level.appendChild(lab);
+            const level=document.createElement('div');level.className='dw-level';const lab=document.createElement('span');lab.className='dw-level-label';const depthVisible=list.filter(r=>!r.secret||r.have);const depthFound=depthVisible.filter(r=>r.have).length,depthTotal=depthVisible.length;const depthMastered=depthTotal>0&&depthFound===depthTotal;if(depthMastered)level.classList.add('depth-mastered');lab.textContent=(depth===0?'ROOT':depth===21?'UNKNOWN BRANCHES':'DEPTH '+depth)+(depthMastered?' · ✓ MASTERED':' · '+depthFound+'/'+depthTotal+' DISCOVERED');level.appendChild(lab);
             for(const row of list.slice(0,depth===0?80:45)){
               const justFound=row.have&&!seen.has(row.low),fog=!row.have&&!row.imp&&row.depth>frontier,classified=!row.have&&row.imp,unknown=!row.have&&(row.depth>20||fog),d=document.createElement('div');
               d.className='dw-card '+(row.have?'owned ':(row.everHad?'previously-owned ':''))+(row.imp?'important ':'')+(fog?'fogged ':'')+(classified?'classified ':'')+(unknown?'unknown-branch ':'')+(justFound?'discovery-reveal':'');
