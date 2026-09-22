@@ -1129,6 +1129,7 @@ body.cm-dev-recipe .drop-zone.has-element{box-shadow:inset 0 0 0 1px rgba(103,23
 @keyframes cmTrophyBoxPulse{0%,100%{filter:none}50%{filter:brightness(1.035)}}
 @keyframes cmTrophyQuestion{0%,78%,100%{opacity:0}80%,86%{opacity:1}87%,92%{opacity:.2}93%,97%{opacity:.8}}
 
+#cm-key-storage .cm-key-row{display:flex;gap:5px;align-items:center;font-size:12px}#cm-key-storage .cm-key-row span{margin-left:auto}
 </style>
 <style>/* Craft Madness: observatory interface */
 body {background:var(--bg-primary);background-image:radial-gradient(ellipse at 15% 0%,rgba(99,102,241,.14),transparent 50%),radial-gradient(ellipse at 90% 40%,rgba(20,184,166,.09),transparent 45%);}
@@ -10580,14 +10581,6 @@ save();checkStarForgeUnlock();
             }
         }
 
-        // Null random discovery
-        setInterval(()=>{
-            if(elements.find(e=>e.name==='Null'))return;
-            if(Math.random()<0.001){
-                elements.push({...SPECIAL_ELEMENTS.null});updateCount();renderEls();save();
-                notify('BASIC Element!','Null appeared from the void!','⚫');
-            }
-        },1000);
         // ─── CHANGELOG ───
 
         const CM_FAVORITE_TROPHY='cm_favorite_trophy_v1';
@@ -11596,6 +11589,48 @@ setTimeout(refreshAll,150);
 
 
 
+
+<script id="cm-key-storage-system">
+(function(){
+  function keyItems(){
+    try{
+      if(!Array.isArray(elements))return [];
+      return elements.filter(e=>e&&e.isKey===true);
+    }catch(_){return []}
+  }
+  function renderKeyStorage(){
+    let box=document.getElementById('cm-key-storage');
+    if(!box){
+      box=document.createElement('div');box.id='cm-key-storage';
+      box.innerHTML='<button class="cm-key-tab" type="button" aria-label="Key storage">🔑</button><div class="cm-key-panel"><div class="cm-key-title">KEY STORAGE</div><div class="cm-key-list"></div></div>';
+      document.body.appendChild(box);
+      box.querySelector('.cm-key-tab').onclick=()=>box.classList.toggle('open');
+    }
+    const list=box.querySelector('.cm-key-list'),keys=keyItems();
+    if(!keys.length){list.innerHTML='<div class="cm-key-row">🔑 Key <span>× 0</span></div>';return}
+    const counts=new Map();
+    for(const e of keys){
+      const name=String(e.name||'Key').replace(/Key/gi,'Key');
+      const emoji=e.emoji||'🔑',id=name.toLowerCase();
+      if(!counts.has(id))counts.set(id,{name,emoji,count:0});
+      counts.get(id).count++;
+    }
+    list.innerHTML=[...counts.values()].map(k=>'<div class="cm-key-row">'+k.emoji+' '+k.name+' <span>× '+k.count+'</span></div>').join('');
+  }
+  window.cmRenderKeyStorage=renderKeyStorage;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',renderKeyStorage);
+  else renderKeyStorage();
+  setInterval(renderKeyStorage,1000);
+})();
+</script>
+<style id="cm-key-storage-style">
+#cm-key-storage{position:fixed;left:8px;top:50%;transform:translateY(-50%);z-index:9997;display:flex;align-items:center;font-family:inherit}
+#cm-key-storage .cm-key-tab{width:36px;height:36px;border:1px solid currentColor;border-radius:8px;background:#111;color:#fff;cursor:pointer;font-size:18px;padding:0}
+#cm-key-storage .cm-key-panel{display:none;margin-left:6px;min-width:132px;padding:9px;border:1px solid #777;border-radius:8px;background:#111;color:#fff;box-shadow:none}
+#cm-key-storage.open .cm-key-panel{display:block}
+#cm-key-storage .cm-key-title{font-size:10px;letter-spacing:.08em;margin-bottom:6px}
+#cm-key-storage .cm-key-list{font-size:13px;margin-bottom:7px}
+</style>
 </body>
 </html>
 
