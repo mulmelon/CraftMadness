@@ -3717,6 +3717,35 @@ html.cm-challenge-tools-locked #discoveryWebBtn,
 #dwMap .cm-depth-jump-bar,
 #dwMap [class*="depth-jump"]{display:none!important}
 </style>
+
+<style id="cm-discovery-web-zero-blur-final">
+#discoveryWebModal,#discoveryWebModal *,#dwMap,#dwMap *,.dw-modal,.dw-modal *{
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#dwMap .secret-web-node::before,#dwMap .secret-unknown::before{
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+</style>
+
+<style id="cm-secret-aura-off-final">
+#dwMap .secret-web-node,#dwMap .secret-unknown{
+  background:#000!important;color:#fff!important;border:1px solid #fff!important;
+  box-shadow:none!important;text-shadow:none!important;filter:none!important;
+}
+#dwMap .secret-web-node strong,#dwMap .secret-web-node small,
+#dwMap .secret-unknown strong,#dwMap .secret-unknown small{
+  color:#fff!important;text-shadow:none!important;
+}
+#dwMap .secret-web-node::before,#dwMap .secret-web-node::after,
+#dwMap .secret-unknown::before,#dwMap .secret-unknown::after{
+  content:none!important;display:none!important;animation:none!important;
+  background:none!important;box-shadow:none!important;filter:none!important;
+}
+</style>
 </head>
 
 <div id="cmBootLoader" role="status" aria-live="polite" aria-label="Craft Madness loading">
@@ -11156,7 +11185,7 @@ save();checkStarForgeUnlock();
               const colorRank=r=>r.have?0:(r.depth>=1&&r.depth<=10?r.depth:(r.depth>10?11:40));
               return colorRank(a)-colorRank(b)||a.name.localeCompare(b.name);
             });
-            const level=document.createElement('div');level.className='dw-level';const lab=document.createElement('span');lab.className='dw-level-label';lab.textContent=depth===0?'ROOT':depth===21?'UNKNOWN BRANCHES':'DEPTH '+depth;level.appendChild(lab);
+            const level=document.createElement('div');level.className='dw-level';const lab=document.createElement('span');lab.className='dw-level-label';const depthFound=list.filter(r=>r.have).length,depthTotal=list.length;lab.textContent=(depth===0?'ROOT':depth===21?'UNKNOWN BRANCHES':'DEPTH '+depth)+' · '+depthFound+'/'+depthTotal+' DISCOVERED';level.appendChild(lab);
             for(const row of list.slice(0,depth===0?80:45)){
               const justFound=row.have&&!seen.has(row.low),fog=!row.have&&!row.imp&&row.depth>frontier,classified=!row.have&&row.imp,unknown=!row.have&&(row.depth>20||fog),d=document.createElement('div');
               d.className='dw-card '+(row.have?'owned ':(row.everHad?'previously-owned ':''))+(row.imp?'important ':'')+(fog?'fogged ':'')+(classified?'classified ':'')+(unknown?'unknown-branch ':'')+(justFound?'discovery-reveal':'');
